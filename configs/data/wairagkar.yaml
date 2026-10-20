@@ -1,0 +1,122 @@
+# Wairagkar et al. 2025 -- Dryad dataset manifest
+#
+# Every size / digest / URL / version / license value below was read from the
+# Dryad REST API v2 (https://datadryad.org/api/v2/) on 2026-10-20:
+#   GET /datasets/doi%3A10.5061%2Fdryad.2280gb64f      -> dataset record
+#   GET /versions/441124                                -> latest version record
+#   GET /versions/441124/files?per_page=100             -> file list (3 files)
+# Paper bibliographic details (volume/issue/pages/date) come from the Crossref
+# API (GET https://api.crossref.org/works/10.1038/s41586-025-09127-3).
+# Sum of the three file sizes == dataset storageSize == 26869317202 bytes.
+#
+# Consumed by scripts/fetch_wairagkar_data.py.  All target paths are relative to
+# the repository root.  If Dryad publishes a newer version, re-query the API
+# and update this file (the digests are what the fetch script verifies).
+
+dataset:
+  name: wairagkar2025
+  citation: >-
+    Wairagkar, M., Card, N.S., Singer-Clark, T., Hou, X., Iacobacci, C.,
+    Miller, L.M., Hochberg, L.R., Brandman, D.M. & Stavisky, S.D.
+    An instantaneous voice-synthesis neuroprosthesis. Nature 644(8075),
+    145-152 (2025). https://doi.org/10.1038/s41586-025-09127-3
+  paper:
+    title: An instantaneous voice-synthesis neuroprosthesis
+    journal: Nature
+    volume: 644
+    issue: 8075
+    pages: 145-152
+    published: "2025-06-12"
+    doi: 10.1038/s41586-025-09127-3
+    url: https://doi.org/10.1038/s41586-025-09127-3
+    preprint_doi: 10.1101/2024.08.14.607690
+    code_url: https://github.com/Neuroprosthetics-Lab/brain-to-voice-2025
+  dryad:
+    title: "Data for: An instantaneous voice synthesis neuroprosthesis"
+    doi: 10.5061/dryad.2280gb64f
+    doi_url: https://doi.org/10.5061/dryad.2280gb64f
+    landing_url: https://datadryad.org/dataset/doi:10.5061/dryad.2280gb64f
+    api_dataset_url: https://datadryad.org/api/v2/datasets/doi%3A10.5061%2Fdryad.2280gb64f
+    api_files_url: https://datadryad.org/api/v2/versions/441124/files
+    version_number: 7
+    version_id: 441124
+    version_publication_date: "2026-05-08"
+    license: CC0-1.0
+    license_url: https://spdx.org/licenses/CC0-1.0.html
+    total_size_bytes: 26869317202
+    api_queried_on: "2026-10-20"
+    # Version history seen via the API: v5 (2025-05-14) held only README.md and
+    # t15_control_experiment.zip; v7 (2026-05-08) added t15_neural_data.zip.
+    # t15_control_experiment.zip has the same sha-256 in v5 and v7.
+
+# How files are fetched.  Dryad file downloads (/api/v2/files/{id}/download)
+# answered HTTP 401 {"error":"Unauthorized, must have current bearer token"}
+# to an anonymous request on 2026-10-20 (tested on the 4.6 KB README only).
+# See the docstring of scripts/fetch_wairagkar_data.py for how to get a token
+# and for the manual browser download route.
+download:
+  requires_auth: true
+  auth: oauth2-bearer-token
+  token_env_var: DRYAD_API_TOKEN
+  client_id_env_var: DRYAD_CLIENT_ID
+  client_secret_env_var: DRYAD_CLIENT_SECRET
+  token_url: https://datadryad.org/oauth/token
+  api_docs_url: https://github.com/datadryad/dryad-app/blob/main/documentation/apis/api_accounts.md
+  # Files at or above this size need --i-confirm-large-download.
+  large_file_threshold_bytes: 1000000000
+
+paths:
+  zips_dir: data/raw/wairagkar/zips
+  extract_dir: data/raw/wairagkar
+
+files:
+  - name: README.md
+    dryad_file_id: 4750573
+    description: Dryad dataset README.
+    kind: document
+    size_bytes: 4635
+    digest: f9d05e8a8390579e025489146ecc4d2334c42a531c1e66fd222dffe147f69d70
+    digest_type: sha-256
+    mime_type: text/markdown
+    download_url: https://datadryad.org/api/v2/files/4750573/download
+    target_path: data/raw/wairagkar/README.md
+    extract: false
+    extracted_dir: null
+    extracted_size_bytes: null
+
+  - name: t15_control_experiment.zip
+    dryad_file_id: 4750563
+    description: >-
+      Control-experiment neural data (the alternative neural_data_path in
+      third_party/brain_to_voice/configs/config.yaml).
+    kind: archive
+    size_bytes: 710843261
+    digest: c1ed4ea95f552901cb3bfe9220600a0657d0bba81caed57950c49ed5479f09bc
+    digest_type: sha-256
+    mime_type: application/zip
+    download_url: https://datadryad.org/api/v2/files/4750563/download
+    target_path: data/raw/wairagkar/zips/t15_control_experiment.zip
+    extract: true
+    extract_to: data/raw/wairagkar
+    extracted_dir: data/raw/wairagkar/t15_control_experiment
+    # Not exposed by the Dryad API; would need the zip's central directory.
+    extracted_size_bytes: null
+
+  - name: t15_neural_data.zip
+    dryad_file_id: 4750565
+    description: >-
+      Individual trials of neural features recorded during the speech task,
+      plus the pre-trained brain-to-voice decoders (per
+      third_party/brain_to_voice/README.md, "Data setup").
+    kind: archive
+    size_bytes: 26158469306
+    digest: 26e40f7aa693345a181ad175d9f0b3dbadadc45a82a9461711da2fdc0e1292dc
+    digest_type: sha-256
+    mime_type: application/zip
+    download_url: https://datadryad.org/api/v2/files/4750565/download
+    target_path: data/raw/wairagkar/zips/t15_neural_data.zip
+    extract: true
+    extract_to: data/raw/wairagkar
+    extracted_dir: data/raw/wairagkar/t15_neural_data
+    # Not exposed by the Dryad API; would need the zip's central directory.
+    extracted_size_bytes: null
