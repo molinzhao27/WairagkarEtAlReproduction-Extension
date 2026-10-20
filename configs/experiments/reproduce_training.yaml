@@ -1,0 +1,114 @@
+# Reproduce Wairagkar et al. 2025 decoder training (their training.ipynb), with our session-correct
+# batching (notes/WAIRAGKAR_CODE.md §1b, §3.7). Deep-merged over configs/default.yaml (seed, runtime,
+# paths). Run: python -I scripts/train.py --config configs/experiments/reproduce_training.yaml
+#
+# Values marked "theirs" are copied from third_party/brain_to_voice/configs/config.yaml and
+# configs/training_data_args.yaml at commit cff4875. Values marked "ours" have no upstream equivalent
+# or replace an upstream bug.
+
+run_name: reproduce_training
+
+paths:
+  # One SessionData .npz per session: <training_sessions>/<session>.npz (wvx.session.SessionData.save),
+  # targets already scaled and smoothed (see the target contract in src/wvx/training.py).
+  training_sessions: data/processed/wairagkar
+
+# Sizes and architecture (theirs) come from configs/default.yaml `model`.
+model:
+  n_session_layers: null     # ours: null = max(session_layer) + 1 (theirs: session_layers[-1] + 1 = 21)
+
+training:
+  # theirs: config.yaml "training"
+  batch_size: 1024
+  epochs: 15
+  early_stopping_patience: 10
+  learning_rate: 0.0005
+  adam_beta_1: 0.9
+  adam_beta_2: 0.98
+  adam_epsilon: 1.0e-9
+  huber_delta: 1.35
+
+  # theirs: config.yaml "data" (augmentation; windowing is model.window_len / model.step_size)
+  n_augmentations: 3         # augmented copies per training trial
+  augmentation_params:
+    sd_gaussian_noise: 1.2
+    sd_constant_offset: 0.6
+    offset_aug_factor_for_thresh: 0.67
+    sd_cumulative_noise: 0.02
+
+  # ours: replaces their hard-coded validation_range_start/end/total_trials (5770/8184/8184) and
+  # random_seed "None". Their range [5770, 8184) is exactly sessions day165-day193 (cumulative trial
+  # counts in training.ipynb), so we name those sessions as the pool and draw 50 trials with `seed`.
+  validation:
+    n_trials: 50             # theirs: n_validation_trials
+    fraction: null           # alternative to n_trials (set exactly one)
+    pool: [t15_day165, t15_day172, t15_day174, t15_day179, t15_day181, t15_day186, t15_day188, t15_day193]
+
+  # theirs: EarlyStopping / ModelCheckpoint(save_best_only) on val_loss, mode min (training.ipynb c8)
+  monitor: val_loss
+  monitor_mode: min
+
+  # ours: batching and augmentation schedule. false/false = theirs (one fixed trial and batch order,
+  # augmented copies drawn once). drop_remainder: false keeps each session's last, smaller batch.
+  reshuffle_each_epoch: false
+  resample_augmentations_each_epoch: false
+  drop_remainder: false
+
+  # Outputs under <paths.checkpoints>/<run_name>/ and <paths.results>/<run_name>/
+  save_best_checkpoint: true   # best.tf (theirs: ModelCheckpoint, same path as the final save)
+  save_final_checkpoint: true  # final.tf (theirs: training.ipynb c9)
+  export_weights: final        # final | best: weights in the inference .h5 (theirs: final)
+  export_layers: null          # null = every layer used by the sessions; theirs exported layer 20 only
+  overwrite: false             # refuse to write into a non-empty run directory
+  verbose: 2                   # Keras fit verbosity (2 = one line per epoch)
+
+  # Starting weights. source: null (from scratch, as here) | inference_h5 (Dryad-style single-layer
+  # .h5; every input layer starts as its input layer) | checkpoint (our full .tf; theirs: load_model_path).
+  init:
+    source: null
+    path: null
+    freeze_base: false
+
+  # theirs: training_data_args.yaml. Layers are per week, not per session or list position.
+  sessions:
+    - {session: t15_day025, session_layer: 0}
+    - {session: t15_day027, session_layer: 0}
+    - {session: t15_day032, session_layer: 1}
+    - {session: t15_day034, session_layer: 1}
+    - {session: t15_day039, session_layer: 2}
+    - {session: t15_day041, session_layer: 2}
+    - {session: t15_day046, session_layer: 3}
+    - {session: t15_day048, session_layer: 3}
+    - {session: t15_day067, session_layer: 4}
+    - {session: t15_day069, session_layer: 4}
+    - {session: t15_day074, session_layer: 5}
+    - {session: t15_day076, session_layer: 5}
+    - {session: t15_day081, session_layer: 6}
+    - {session: t15_day088, session_layer: 7}
+    - {session: t15_day090, session_layer: 7}
+    - {session: t15_day095, session_layer: 8}
+    - {session: t15_day097, session_layer: 8}
+    - {session: t15_day102, session_layer: 9}
+    - {session: t15_day104, session_layer: 9}
+    - {session: t15_day109, session_layer: 10}
+    - {session: t15_day110, session_layer: 10}
+    - {session: t15_day123, session_layer: 11}
+    - {session: t15_day132, session_layer: 12}
+    - {session: t15_day137, session_layer: 13}
+    - {session: t15_day139, session_layer: 13}
+    - {session: t15_day144, session_layer: 14}
+    - {session: t15_day146, session_layer: 14}
+    - {session: t15_day153, session_layer: 15}
+    - {session: t15_day165, session_layer: 16}
+    - {session: t15_day172, session_layer: 17}
+    - {session: t15_day174, session_layer: 17}
+    - {session: t15_day179, session_layer: 18}
+    - {session: t15_day181, session_layer: 18}
+    - {session: t15_day186, session_layer: 19}
+    - {session: t15_day188, session_layer: 19}
+    - {session: t15_day193, session_layer: 20}
+
+  # theirs: "last session t15_day195 (session_layer 20) is held out for testing". Never trained on;
+  # evaluate it with inference_layer20.h5.
+  held_out_sessions:
+    - {session: t15_day195, session_layer: 20}
