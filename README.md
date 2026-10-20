@@ -38,6 +38,11 @@ against `third_party/brain_to_voice.sha256`. Full provenance and license details
 
 > The Software used in this research was created by Maitreyee Wairagkar of The University of California, Davis. © 2025.
 
+LPCNet (xiph) is committed in `third_party/LPCNet/` under a BSD-3-Clause license.
+It is built from source by `scripts/build_lpcnet.sh`, which produces the
+`lpcnet_demo` binary used for feature extraction and speech synthesis. Provenance
+is in `third_party/PROVENANCE.md`.
+
 ## Where things run
 
 Code is edited and unit-tested on a Mac. **Data and all data-touching compute live on a
@@ -80,7 +85,39 @@ python scripts/fetch_third_party.py
 pytest
 ```
 
-<!-- ENVIRONMENT: to be filled in -->
+### Mac (Apple silicon, CPU)
+
+```bash
+mamba env create -f environment.yml           # creates env "wvx" (TF 2.21 + tf-keras, CPU)
+mamba run -n wvx bash scripts/build_lpcnet.sh # builds third_party/LPCNet/lpcnet_demo
+mamba run -n wvx python scripts/check_env.py  # forward pass, fit step, LPCNet smoke test
+```
+
+TF 2.21 is the only TF/Keras-2 version reported to run on the Blackwell GPU
+(see `notes/DECISIONS.md`, D-012). The same version is used on both machines to
+avoid skew.
+
+### GPU host (Linux, CUDA)
+
+Inside the `wvx` container, `scripts/remote/setup_env.sh` creates a project
+`.venv` from `requirements-linux-cuda.txt`, builds LPCNet, and runs the CPU
+tests. Pending GPU verification.
+
+```bash
+docker exec wvx bash /workspace/WairagkarEtAlReproduction-Extension/scripts/remote/setup_env.sh
+```
+
+## Pipeline
+
+Scripts that touch data run on the GPU host. Use `scripts/remote/gpu_job.sh` for
+GPU work.
+
+- `scripts/extract_kunz_subset.py` — extract the Kunz T15 2024.03.03 files from the Dryad archive.
+- `scripts/fetch_wairagkar_data.py` — download and verify the Wairagkar Dryad dataset (dry run by default).
+- `scripts/prepare_kunz.py` — convert Kunz `.mat` files into decoder-layout SessionData (`.npz`).
+- `scripts/run_inference.py` — reproduce offline inference on a held-out session and score the output.
+- `scripts/train.py` — train the brain-to-voice decoder on prepared sessions.
+- `scripts/inspect_mat.py` — generic `.mat` dumper (shapes, dtypes, value summaries).
 
 ## License
 
@@ -91,13 +128,13 @@ under `third_party/` retains its own licenses; see
 ## Layout
 
 ```
-src/wvx/           project code (config, seeding)
+src/wvx/            project code (config, seeding, data adapters, inference, training, metrics, synthesis)
 scripts/            pipeline entry points + remote host scripts
 configs/            all settings (default.yaml, data/, third_party.yaml)
 tests/              fast CPU tests
-notes/              PLAN.md, DATA_FORMATS.md, WAIRAGKAR_CODE.md, DECISIONS.md
+notes/              PLAN.md, DATA_FORMATS.md, WAIRAGKAR_CODE.md, DECISIONS.md, METRICS.md
 results/            small outputs only
 figures/            small outputs only
-third_party/        brain_to_voice (fetched), PROVENANCE.md
+third_party/        brain_to_voice (fetched), LPCNet (BSD-3-Clause), PROVENANCE.md
 data/               GPU host only; MANIFEST.md is tracked
 ```
