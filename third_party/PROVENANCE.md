@@ -84,4 +84,25 @@ Other files present at audit time: `aud/README.md`, `data/README.md`, `dependenc
 
 ## LPCNet
 
-_To be filled in by the toolchain step._
+- **What:** LPCNet neural vocoder (Valin & Skoglund, ICASSP 2019), used by brain_to_voice to turn
+  decoded features into audio (`lpcnet_demo -synthesis`) and to encode audio (`lpcnet_demo -features`).
+- **Source:** https://github.com/xiph/LPCNet
+- **Commit:** `7dc99429e246cca614708b5aa4990d827bacce2c` (2024-09-20; `git describe` v0.1-297-g7dc9942)
+- **Clone date:** 2026-10-20
+- **Path in this repo:** `third_party/LPCNet/` (sources committed: 106 upstream files)
+- **License:** BSD-3-Clause (`third_party/LPCNet/COPYING`, unchanged). Redistribution is allowed with
+  the copyright notice and license.
+- **Pretrained model (not committed):** `scripts/build_lpcnet.sh` downloads
+  `https://media.xiph.org/lpcnet/data/lpcnet_data-2ddc476.tar.gz` (102,536,511 bytes,
+  SHA-256 `2d8866d60bbc6e15839c913b3c026799fea3f039e4e4e2e73826c3391ca787f0`), the default model of
+  this commit. The generated model sources (~163 MB) are gitignored.
+- **Which LPCNet brain_to_voice used:** their config points at an `LPCNet-master` download of unknown
+  date, so the exact commit and model they used are unknown. This commit is upstream master at clone time.
+
+### Local modifications
+
+- The upstream `.git` directory was removed at clone time (2026-10-20).
+- **Added** `package_version` (records the upstream commit, so the build doesn't try to derive a
+  version from this repo's git tags).
+- No source edits: all 106 upstream files are byte-identical after the build. Build outputs, autotools
+  files and the model data are generated in place and gitignored.

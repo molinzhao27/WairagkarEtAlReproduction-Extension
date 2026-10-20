@@ -1,0 +1,77 @@
+# wvx: development / CPU-test environment for the Wairagkar et al. 2025 brain-to-voice reproduction (macOS arm64).
+#
+#   mamba env create -f environment.yml        # creates $MAMBA_ROOT_PREFIX/envs/wvx; MAMBA_ROOT_PREFIX must be set
+#                                              # (micromamba otherwise falls back to its own install prefix)
+#
+# TensorFlow choice (tested 2026-10-20 on an Apple M5 Pro, macOS 27, with throwaway probe envs that ran the vendored
+# code through 8 steps: build, forward, one fit step with ModelCheckpoint(.tf), save .tf, reload .tf via
+# load_model_weights, save_inference_model .h5, reload .h5 via `from keras.models import load_model`, reload .h5 via
+# tf.keras; plus CPU-vs-GPU comparisons and loading models saved by TF 2.10):
+#   * TF 2.21.0 + tf-keras 2.21.0 (Keras 2 API via TF_USE_LEGACY_KERAS=1). This is the SAME TF/Keras version as the
+#     GPU-host files (requirements-linux-cuda.txt for the host venv, environment.linux-cuda.yml as a conda
+#     alternative): 2.21.0 is the first TF release reported to run on Blackwell (sm_120).
+#   * Their unmodified models/brain2voice.py + lib/model_utils.py pass build / forward / fit-step with their
+#     ModelCheckpoint(.tf) / save .tf / reload via load_model_weights / save .h5 / reload .h5 with tf.keras;
+#     models saved by TF 2.10 (their version) load with max abs diff <= 4.8e-7.
+#   * Caveat: in TF >= 2.16 a bare `import keras` is Keras 3. lib/inference_utils.py and inference.ipynb do
+#     `from keras.models import load_model`, which fails on their .h5 (Unknown layer 'TFOpLambda') unless our code
+#     aliases it first:  import sys, tf_keras, tf_keras.models; sys.modules["keras"] = tf_keras;
+#     sys.modules["keras.models"] = tf_keras.models   (with the alias, the .h5 reload passes: 8/8).
+#   * TensorFlow comes from PyPI, not conda-forge: conda-forge's osx-arm64 tensorflow 2.21.0 (cpu_py312) fails
+#     model.fit under their MirroredStrategy ("MLIR Graph Optimizer failed ... AutoShardDataset"); the PyPI wheel passes.
+#   * CPU only. tensorflow-metal 1.2.0 cannot load with TF 2.21 (missing _pywrap_tensorflow_internal.so).
+#     (For the record: TF 2.15.1 + tensorflow-metal 1.1.0 gives WRONG graph-mode results on this Mac.)
+#   * h5py is capped at <3.15 by tensorflow 2.21.0.
+name: wvx
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12.15
+  - pip=26.2.2
+  # numerics / IO
+  - numpy=2.5.4
+  - scipy=1.18.1
+  - h5py=3.14.0
+  - pyyaml=6.0.3
+  - pandas=3.0.6
+  - matplotlib-base=3.11.2
+  - scikit-learn=1.9.1
+  # audio
+  - librosa=1.0.0
+  - pysoundfile=0.14.0
+  - ffmpeg=9.0.2
+  # notebooks / tests
+  - pytest=9.1.1
+  - ipykernel=7.4.0
+  - jupyter=1.1.1
+  # LPCNet build tools (C compiler: Xcode command-line tools clang)
+  - autoconf=2.72
+  - automake=1.19
+  - libtool=2.5.4
+  - make=4.4.1
+  - pkg-config=0.29.2
+  - pip:
+      # direct
+      - tensorflow==2.21.0
+      - tf-keras==2.21.0
+      # transitive (pinned for reproducibility; same versions as environment.linux-cuda.yml)
+      - absl-py==2.5.1
+      - astunparse==1.6.3
+      - flatbuffers==25.12.19
+      - gast==0.7.0
+      - google_pasta==0.2.0
+      - grpcio==1.84.0
+      - keras==3.15.1
+      - libclang==18.1.1
+      - markdown-it-py==4.2.0
+      - mdurl==0.1.2
+      - ml_dtypes==0.6.0
+      - namex==0.1.0
+      - opt_einsum==3.4.0
+      - optree==0.20.0
+      - protobuf==7.36.2
+      - rich==15.0.0
+      - termcolor==3.3.0
+      - wrapt==2.5.1
+variables:
+  TF_USE_LEGACY_KERAS: "1"

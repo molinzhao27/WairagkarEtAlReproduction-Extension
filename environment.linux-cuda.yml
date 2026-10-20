@@ -1,0 +1,114 @@
+# UNTESTED — not yet verified on the RTX PRO 6000
+#
+# wvx-cuda: training / inference environment for the remote Linux GPU host (DRAFT).
+#   Target: linux-64 inside our own micromamba prefix in the per-project container (image worm-train:py312-cu132),
+#           NVIDIA RTX PRO 6000 Blackwell Workstation Edition (compute capability 12.0 = sm_120), driver 595.58.03 (CUDA 13.2).
+#   Create: micromamba env create -f environment.linux-cuda.yml        (env name: wvx-cuda)
+#   Check:  micromamba run -n wvx-cuda python scripts/check_env.py     (compares CPU vs GPU outputs + gradients)
+#
+# Same TensorFlow/Keras/Python/numpy versions as the Mac env (environment.yml) to avoid test/train version skew:
+# TF 2.21.0 + tf-keras 2.21.0 (Keras 2 API via TF_USE_LEGACY_KERAS=1), Python 3.12.15, numpy 2.5.4.
+# Verified only on the Mac (CPU): the conda part solves for linux-64 (micromamba --platform linux-64 --dry-run) and
+# the pip part resolves for manylinux x86_64 / cp312 (pip --dry-run --platform). Nothing here has run on Linux or a GPU.
+#
+# Why TF 2.21.0 for Blackwell (sm_120) — evidence as of 2026-10-20:
+#  * No official TensorFlow wheel (2.15 ... 2.22.0rc0) contains native sm_120 SASS. The 2.17-2.21 wheels are built
+#    with CUDA 12.5.1 for sm_60,70,80,89 + compute_90 PTX (.bazelrc at the release tags), so on sm_120 every kernel is
+#    JIT-compiled from compute_90 PTX by the driver at first use (slow first run; cached in ~/.nv/ComputeCache).
+#  * TF 2.15-2.20 fail on sm_120 GPUs (RTX 50-series) with CUDA_ERROR_INVALID_PTX / CUDA_ERROR_INVALID_HANDLE on
+#    basic ops: tensorflow/tensorflow issues #89272, #90291, #97387, #99592, #101746. TF 2.15-2.17 are also tied to
+#    cuDNN 8.9, which predates Blackwell (cuDNN 9.7.0 is the first release supporting CC 12.0).
+#  * A TF maintainer states (issue #97387) that the fix (commit f7327b2) is in 2.21.0; one user reports TF 2.21
+#    [and-cuda] running on an RTX 5080 (sm_120). That is the whole evidence base, hence UNTESTED.
+#  * tf-keras 2.21.0 (requires tensorflow>=2.21,<2.22) keeps the Keras 2 API. On the Mac, TF 2.21.0 + tf-keras ran
+#    the unmodified vendored model code through build/forward/fit/save .tf/.h5/reload, and loaded TF-2.10-saved
+#    .h5/.tf models with max abs diff <= 4.8e-7.
+#  * CUDA libraries come from pip (nvidia-*-cu12, pinned exactly below; the CUDA 12.9.1 component set + cuDNN 9.10.2.21,
+#    >= 9.7 for sm_120). A CUDA 13.2 driver runs CUDA 12.x user-space libraries (driver backward compatibility).
+#  * conda-forge's tensorflow 2.21.0 cuda129/cuda130 linux builds were NOT chosen: their arch list stops at
+#    sm_90/compute_90 too, they are unreported on sm_120, and the conda-forge osx-arm64 2.21.0 build failed model.fit
+#    under the vendored MirroredStrategy (MLIR AutoShardDataset error) where the PyPI wheel passed.
+#
+# Runtime notes for the GPU host:
+#  * Keep TF_USE_LEGACY_KERAS=1 (set below). A bare `import keras` is Keras 3; alias it to tf_keras before importing
+#    lib/inference_utils.py:  sys.modules["keras"] = tf_keras; sys.modules["keras.models"] = tf_keras.models
+#  * If the container exports LD_LIBRARY_PATH pointing at its CUDA 13 / cuDNN libs, unset it for this env so TF loads
+#    the pip CUDA 12 / cuDNN 9.10 libraries (`env -u LD_LIBRARY_PATH micromamba run -n wvx-cuda ...`).
+#  * Let the PTX JIT cache persist between runs: export CUDA_CACHE_MAXSIZE=4294967296 (and keep ~/.nv on a volume).
+#  * XLA is not used by default (tf-keras compile(jit_compile=None) -> off). If XLA is ever enabled, put the pip ptxas
+#    first on PATH (it is CUDA 12.9, which knows sm_120):
+#      export PATH="$(python -c 'import nvidia.cuda_nvcc, os; print(os.path.dirname(nvidia.cuda_nvcc.__file__))')/bin:$PATH"
+#  * check_env.py disables TF32 for its CPU/GPU comparison; training itself uses TF's default (TF32 on for Ampere+).
+#
+# If TF 2.21.0 still fails on sm_120: (1) build TF 2.21.0 from source with TF_CUDA_COMPUTE_CAPABILITIES=sm_120 against
+# CUDA 12.8.1+/cuDNN 9.8+ (e.g. github.com/Syraxius/TensorflowDockerBuilder) and keep tf-keras==2.21.0; (2) TF 2.22
+# (rc0 adds a CUDA 13 build config with compute_120) once it is released together with a matching tf-keras 2.22;
+# (3) last resort: NGC container nvcr.io/nvidia/tensorflow:25.02-tf2-py3 (TF 2.17, CUDA 12.8, cuDNN 9.7; the final NGC
+# TF release; mixed sm_120 reports; would need a matching tf-keras 2.17 and breaks the single-version rule).
+name: wvx-cuda
+channels:
+  - conda-forge
+dependencies:
+  - python=3.12.15
+  - pip=26.2.2
+  # numerics / IO (same pins as environment.yml)
+  - numpy=2.5.4
+  - scipy=1.18.1
+  - h5py=3.14.0
+  - pyyaml=6.0.3
+  - pandas=3.0.6
+  - matplotlib-base=3.11.2
+  - scikit-learn=1.9.1
+  # audio
+  - librosa=1.0.0
+  - pysoundfile=0.14.0
+  - ffmpeg=9.0.2
+  # notebooks / tests
+  - pytest=9.1.1
+  - ipykernel=7.4.0
+  - jupyter=1.1.1
+  # LPCNet build tools (scripts/build_lpcnet.sh builds an AVX2 (x86-64-v3) lpcnet_demo here)
+  - autoconf=2.72
+  - automake=1.19
+  - libtool=2.5.4
+  - make=4.4.1
+  - pkg-config=0.29.2
+  - c-compiler=2.0.0
+  - pip:
+      # direct
+      - tensorflow[and-cuda]==2.21.0
+      - tf-keras==2.21.0
+      # CUDA 12.9.1 user-space libraries + cuDNN 9.10.2.21 + NCCL 2.27.7 (exact pins inside TF 2.21.0's and-cuda ranges)
+      - nvidia-cublas-cu12==12.9.1.4
+      - nvidia-cuda-cupti-cu12==12.9.79
+      - nvidia-cuda-nvcc-cu12==12.9.86
+      - nvidia-cuda-nvrtc-cu12==12.9.86
+      - nvidia-cuda-runtime-cu12==12.9.79
+      - nvidia-cudnn-cu12==9.10.2.21
+      - nvidia-cufft-cu12==11.4.1.4
+      - nvidia-curand-cu12==10.3.10.19
+      - nvidia-cusolver-cu12==11.7.5.82
+      - nvidia-cusparse-cu12==12.5.10.65
+      - nvidia-nccl-cu12==2.27.7
+      - nvidia-nvjitlink-cu12==12.9.86
+      # transitive (same versions as environment.yml)
+      - absl-py==2.5.1
+      - astunparse==1.6.3
+      - flatbuffers==25.12.19
+      - gast==0.7.0
+      - google_pasta==0.2.0
+      - grpcio==1.84.0
+      - keras==3.15.1
+      - libclang==18.1.1
+      - markdown-it-py==4.2.0
+      - mdurl==0.1.2
+      - ml_dtypes==0.6.0
+      - namex==0.1.0
+      - opt_einsum==3.4.0
+      - optree==0.20.0
+      - protobuf==7.36.2
+      - rich==15.0.0
+      - termcolor==3.3.0
+      - wrapt==2.5.1
+variables:
+  TF_USE_LEGACY_KERAS: "1"

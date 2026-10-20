@@ -1,0 +1,8 @@
+# package_version for LPCNet, in the format written by ./update_version.
+# This file may be sourced into a shell script or makefile.
+# Added by the WairagkarEtAlReproduction-Extension import because the upstream .git was removed.
+# Upstream HEAD: 7dc99429e246cca614708b5aa4990d827bacce2c (2024-09-20); `git describe` = v0.1-297-g7dc9942.
+# AUTO_UPDATE=no so the version is never re-derived from the parent repository's git tags.
+AUTO_UPDATE=no
+
+PACKAGE_VERSION="0.1-297-g7dc9942"
