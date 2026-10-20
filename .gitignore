@@ -51,6 +51,9 @@ dist/
 .DS_Store
 __MACOSX/
 
+# ---- Third-party code we may not redistribute (fetched by scripts/fetch_third_party.py) ----
+third_party/brain_to_voice/
+
 # ---- Claude Code: machine-local settings ----
 .claude/settings.local.json
 

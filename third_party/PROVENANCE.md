@@ -15,7 +15,10 @@ the path(s), the reason, and a short description or diff summary under that comp
 - **Commit:** `cff4875decd35ff0f98a944035377a25b43ba79c`
 - **Commit date:** 2026-07-22T23:25:06-07:00
 - **Clone date:** 2026-10-20
-- **Path in this repo:** `third_party/brain_to_voice/`
+- **Not committed to this repo.** Its license only allows passing copies to academic or nonprofit
+  researchers, and this repo is public. `scripts/fetch_third_party.py` clones the commit above into
+  `third_party/brain_to_voice/` (gitignored), removes `.git`, and checks every file against
+  `third_party/brain_to_voice.sha256`. Pin: `configs/third_party.yaml`.
 - **Not vendored:** the Dryad dataset and pretrained models (doi:10.5061/dryad.2280gb64f), and
   the LPCNet vocoder (the upstream README says to install it into
   `third_party/brain_to_voice/dependencies/`. We will not do that; see the LPCNet section).
@@ -44,14 +47,13 @@ include:
 
 ### Local modifications
 
-- The upstream `.git` directory was removed at vendoring time (2026-10-20).
+- The upstream `.git` directory is removed by the fetch script.
 - No source edits. No other file has been added, changed or removed.
-
-Note: the vendored `third_party/brain_to_voice/.gitignore` stays in place, so it also applies inside this
-repository's git tree for that subtree. It ignores `*.mat`, `*.h5`, `*.tf`, `*.wav`, `*.pcm`, `*.f32`,
-`ckpt/`, `aud/*/`, `data/*/` and `dependencies/*/`.
+  `python scripts/fetch_third_party.py --verify` detects any drift.
 
 ### Integrity reference (SHA-256 at audit time, 2026-10-20)
+
+Machine-readable copy: `third_party/brain_to_voice.sha256` (22 files).
 
 Use these hashes to detect unlogged edits. Paths are relative to `third_party/brain_to_voice/`.
 

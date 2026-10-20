@@ -1,0 +1,10 @@
+# Third-party code fetched at setup by scripts/fetch_third_party.py (not committed to this repo).
+# Paths are relative to the repo root.
+
+brain_to_voice:
+  # Academic, non-commercial UC license: only academic/nonprofit researchers may receive copies,
+  # so this repo doesn't redistribute it. See third_party/PROVENANCE.md.
+  url: "https://github.com/Neuroprosthetics-Lab/brain-to-voice-2025"
+  commit: "cff4875decd35ff0f98a944035377a25b43ba79c"
+  dest: "third_party/brain_to_voice"
+  sha256_list: "third_party/brain_to_voice.sha256"
