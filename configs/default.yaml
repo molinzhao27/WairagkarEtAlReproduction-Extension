@@ -1,0 +1,21 @@
+# Base settings shared by every step. Experiment configs in configs/experiments/
+# are deep-merged on top of this file (see src/wvx/config.py).
+# All paths are relative to the repo root.
+
+seed: 42
+
+paths:
+  data_root: data
+  raw_kunz: data/raw/kunz/sentenceData
+  raw_wairagkar: data/raw/wairagkar
+  processed: data/processed
+  checkpoints: data/checkpoints        # never committed
+  results: results                     # small files only
+  figures: figures
+  brain_to_voice: third_party/brain_to_voice
+  lpcnet: third_party/LPCNet
+
+runtime:
+  # "auto" picks CUDA GPU > Apple Metal GPU > CPU; or force "cpu" / "gpu".
+  device: auto
+  deterministic_ops: true              # tf.config.experimental.enable_op_determinism()

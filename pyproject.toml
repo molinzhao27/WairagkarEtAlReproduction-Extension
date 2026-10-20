@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=64"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "wvx"
+version = "0.1.0"
+description = "Reproduction of Wairagkar et al. 2025 brain-to-voice decoding and its extension to inner speech (Kunz et al. 2025)."
+requires-python = ">=3.9"
+# Dependencies are pinned in environment.yml (mamba); install this package with
+#   pip install -e . --no-deps
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+addopts = "-q"
+markers = [
+    "data: needs files under data/ (skipped if absent)",
+]

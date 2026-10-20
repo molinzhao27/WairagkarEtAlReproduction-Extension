@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+# Enforces the repo's hard rules at commit time (activate with:
+#   git config core.hooksPath .githooks
+# ). Blocks: data/binary/checkpoint files, files over the size limit,
+# anything under data/ except the manifest, and absolute paths to a user's
+# home directory (the repo must stay standalone).
+set -euo pipefail
+
+MAX_BYTES=$((5 * 1024 * 1024))
+BLOCKED_EXT_RE='\.(mat|zip|wav|flac|mp3|f32|s16|pcm|raw|h5|hdf5|keras|ckpt|pt|pth|npz|npy|tfrecord|tar\.gz|tgz|pb)$'
+BLOCKED_PATH_RE='(^|/)(ckpt|checkpoints)/|\.tf/|(^|/)variables\.(index|data-)'
+ALLOWED_DATA_RE='^data/(MANIFEST|README)\.md$'
+# Split so this file doesn't match its own pattern.
+HOME_PATH_RE="/""Users/[A-Za-z0-9._-]+/|~/""Documents"
+
+fail=0
+while IFS= read -r -d '' f; do
+  if [[ "$f" =~ $BLOCKED_EXT_RE ]] || [[ "$f" =~ $BLOCKED_PATH_RE ]]; then
+    echo "pre-commit: blocked file type: $f" >&2; fail=1; continue
+  fi
+  if [[ "$f" == data/* ]] && ! [[ "$f" =~ $ALLOWED_DATA_RE ]]; then
+    echo "pre-commit: data/ is local-only (except MANIFEST.md/README.md): $f" >&2; fail=1; continue
+  fi
+  size=$(git cat-file -s ":$f" 2>/dev/null || echo 0)
+  if (( size > MAX_BYTES )); then
+    echo "pre-commit: file larger than $((MAX_BYTES / 1024 / 1024)) MB: $f ($size bytes)" >&2; fail=1
+  fi
+done < <(git diff --cached --name-only --diff-filter=ACMR -z)
+
+# Absolute home-directory paths in added lines (this hook file itself excepted).
+hits=$(git diff --cached -U0 --diff-filter=ACMR -- . ':(exclude).githooks/pre-commit' \
+  | grep -E '^\+[^+]' | grep -nE "$HOME_PATH_RE" || true)
+if [[ -n "$hits" ]]; then
+  echo "pre-commit: absolute home-directory path in staged changes (repo must be standalone):" >&2
+  echo "$hits" | head -20 >&2
+  fail=1
+fi
+
+if (( fail )); then
+  echo "pre-commit: commit rejected. See AGENTS.md > Hard rules." >&2
+  exit 1
+fi

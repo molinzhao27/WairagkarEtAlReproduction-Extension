@@ -1,0 +1,58 @@
+# ---- Data: everything under data/ stays local (MANIFEST.md is the exception) ----
+data/*
+!data/MANIFEST.md
+!data/README.md
+
+# ---- Never commit these anywhere in the repo ----
+*.mat
+*.zip
+*.wav
+*.flac
+*.mp3
+*.f32
+*.s16
+*.pcm
+*.raw
+*.h5
+*.hdf5
+*.keras
+*.ckpt
+*.ckpt.*
+*.pt
+*.pth
+*.npz
+*.npy
+*.tfrecord
+*.tar.gz
+*.tgz
+ckpt/
+checkpoints/
+*.tf/
+saved_model.pb
+variables.data-*
+variables.index
+
+# ---- Large outputs (results/ and figures/ hold small files only) ----
+results/**/large/
+results/audio/
+figures/**/large/
+
+# ---- Python / tooling ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.ipynb_checkpoints/
+.venv/
+
+# ---- OS ----
+.DS_Store
+__MACOSX/
+
+# ---- Claude Code: machine-local settings ----
+.claude/settings.local.json
+
+# GPU host SSH target (machine-local)
+scripts/remote/host.env
