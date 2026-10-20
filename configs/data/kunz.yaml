@@ -1,0 +1,40 @@
+# Kunz et al. 2025 (Cell) inner-speech dataset -- subset used by this project.
+# Consumed by scripts/extract_kunz_subset.py. Paths are relative to the repo root.
+
+dataset:
+  name: "Kunz et al. 2025 inner speech BCI data"
+  # Title as given in the Dryad dataset README; full author list not reproduced here.
+  citation: >-
+    Kunz EM, et al. (2025). Inner speech in motor cortex and implications for
+    speech neuroprostheses. Cell. Dataset: Dryad.
+  doi: "10.5061/dryad.gf1vhhn1j"
+  url: "https://doi.org/10.5061/dryad.gf1vhhn1j"
+
+archive:
+  name: "sentenceData.zip"
+  # From the Dryad API (dataset version 2, 2025-07-30, CC0-1.0); verified against the local copy 2026-10-20.
+  size_bytes: 3932159336
+  sha256: "a92c1e47f87858c1f17f9175c474eefaf78b2988ec513c8376eb1adfd26945c6"
+
+# Exact member names inside the archive to extract (nothing else is extracted).
+members:
+  - "sentenceData/sentences_readme.txt"
+  - "sentenceData/t15.2024.03.03_attempted_50words.mat"
+  - "sentenceData/t15.2024.03.03_imagined_50words.mat"
+  - "sentenceData/t15.2024.03.03_imagined_50words_eval.mat"
+
+# Members are written flat (basename only) into this directory.
+output_dir: "data/raw/kunz/sentenceData"
+
+# Manifest written after extraction.
+manifest: "data/MANIFEST.md"
+
+# Core experiment: participant T15, session 2024.03.03 -- fit on attempted, test on imagined.
+core_experiment:
+  participant: "T15"
+  session: "2024.03.03"
+  files:
+    readme: "sentences_readme.txt"
+    attempted: "t15.2024.03.03_attempted_50words.mat"
+    imagined: "t15.2024.03.03_imagined_50words.mat"
+    imagined_eval: "t15.2024.03.03_imagined_50words_eval.mat"

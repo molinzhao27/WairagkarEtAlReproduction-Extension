@@ -1,0 +1,876 @@
+{
+ "file": "t15.2024.03.03_imagined_50words.mat",
+ "bytes": 718057376,
+ "format": "MATLAB v5-family (v6/v7); see container.first_element_compressed (True => v7 compressed)",
+ "scipy_matfile_version": [
+  1,
+  0
+ ],
+ "container": {
+  "header_text": "MATLAB 5.0 MAT-file, Platform: MACI64, Created on: Wed Jul  9 14:32:11 2025",
+  "header_version_field": "0x100",
+  "endian_indicator": "IM",
+  "first_element_type": 15,
+  "first_element_compressed": true
+ },
+ "whosmat": [
+  {
+   "name": "chanSets",
+   "shape": [
+    1,
+    4
+   ],
+   "class": "cell"
+  },
+  {
+   "name": "chanSetNames",
+   "shape": [
+    1,
+    4
+   ],
+   "class": "cell"
+  },
+  {
+   "name": "binnedTX",
+   "shape": [
+    381777,
+    256
+   ],
+   "class": "double"
+  },
+  {
+   "name": "spikePow",
+   "shape": [
+    381777,
+    256
+   ],
+   "class": "double"
+  },
+  {
+   "name": "blockNum",
+   "shape": [
+    381777,
+    1
+   ],
+   "class": "double"
+  },
+  {
+   "name": "goTrialEpochs",
+   "shape": [
+    200,
+    2
+   ],
+   "class": "double"
+  },
+  {
+   "name": "delayTrialEpochs",
+   "shape": [
+    200,
+    2
+   ],
+   "class": "double"
+  },
+  {
+   "name": "binSize",
+   "shape": [
+    1,
+    1
+   ],
+   "class": "int64"
+  },
+  {
+   "name": "sentenceText",
+   "shape": [
+    200,
+    1
+   ],
+   "class": "cell"
+  },
+  {
+   "name": "decodedSentenceText",
+   "shape": [
+    200,
+    1
+   ],
+   "class": "cell"
+  },
+  {
+   "name": "sentenceFeatures",
+   "shape": [
+    200,
+    1
+   ],
+   "class": "cell"
+  },
+  {
+   "name": "sentenceDurations",
+   "shape": [
+    200,
+    1
+   ],
+   "class": "double"
+  }
+ ],
+ "variables": {
+  "binSize": {
+   "kind": "numeric",
+   "shape": [
+    1,
+    1
+   ],
+   "dtype": "int64",
+   "summary": {
+    "n_nan": 0,
+    "min": 10.0,
+    "max": 10.0,
+    "mean": 10.0,
+    "std": 0.0,
+    "all_integer_valued": true,
+    "frac_zero": 0.0,
+    "first_elems_colmajor": [
+     10
+    ],
+    "n_unique": 1,
+    "unique_counts": {
+     "10": 1
+    }
+   }
+  },
+  "binnedTX": {
+   "kind": "numeric",
+   "shape": [
+    381777,
+    256
+   ],
+   "dtype": "uint8",
+   "summary": {
+    "n_nan": 0,
+    "min": 0.0,
+    "max": 10.0,
+    "mean": 0.18393884674495845,
+    "std": 0.4882314809403561,
+    "all_integer_valued": true,
+    "frac_zero": 0.8546334497134452,
+    "first_elems_colmajor": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0
+    ],
+    "per_column": {
+     "n_columns": 256,
+     "mean_of_col_means": 0.18393884674495845,
+     "col_mean_min_median_max": [
+      0.0031877247712669963,
+      0.16668762130772674,
+      0.5684863153097227
+     ],
+     "col_std_min_median_max": [
+      0.05931337201067054,
+      0.4674752882829786,
+      0.7631613411652332
+     ],
+     "n_constant_columns": 0
+    }
+   }
+  },
+  "blockNum": {
+   "kind": "numeric",
+   "shape": [
+    381777,
+    1
+   ],
+   "dtype": "uint8",
+   "summary": {
+    "n_nan": 0,
+    "min": 4.0,
+    "max": 12.0,
+    "mean": 7.8647849398994705,
+    "std": 2.8965148100513547,
+    "all_integer_valued": true,
+    "frac_zero": 0.0,
+    "first_elems_colmajor": [
+     4,
+     4,
+     4,
+     4,
+     4,
+     4,
+     4,
+     4
+    ],
+    "n_unique": 4,
+    "unique_counts": {
+     "4": 102340,
+     "7": 90163,
+     "9": 103065,
+     "12": 86209
+    }
+   }
+  },
+  "chanSetNames": {
+   "kind": "cell",
+   "shape": [
+    1,
+    4
+   ],
+   "n_elements": 4,
+   "element_summary": {
+    "all_char": true
+   },
+   "strings": {
+    "n_strings": 4,
+    "n_unique": 4,
+    "n_empty": 0,
+    "first_values": [
+     "i6v",
+     "M1",
+     "55b",
+     "s6v"
+    ],
+    "most_common": [
+     [
+      "i6v",
+      1
+     ],
+     [
+      "M1",
+      1
+     ],
+     [
+      "55b",
+      1
+     ],
+     [
+      "s6v",
+      1
+     ]
+    ],
+    "length_min_max": [
+     2,
+     3
+    ]
+   }
+  },
+  "chanSets": {
+   "kind": "cell",
+   "shape": [
+    1,
+    4
+   ],
+   "n_elements": 4,
+   "element_summary": {
+    "kinds": {
+     "array": 4
+    },
+    "dtypes": {
+     "uint8": 3,
+     "uint16": 1
+    }
+   },
+   "element_shapes": {
+    "ndim_counts": {
+     "2": 4
+    },
+    "dim0": {
+     "min": 1,
+     "max": 1,
+     "mean": 1.0,
+     "n_unique": 1
+    },
+    "dim1": {
+     "min": 64,
+     "max": 64,
+     "mean": 64.0,
+     "n_unique": 1
+    }
+   },
+   "elements": {
+    "{0}": {
+     "kind": "numeric",
+     "shape": [
+      1,
+      64
+     ],
+     "dtype": "uint8",
+     "summary": {
+      "n_nan": 0,
+      "min": 1.0,
+      "max": 64.0,
+      "mean": 32.5,
+      "std": 18.472953201911167,
+      "all_integer_valued": true,
+      "frac_zero": 0.0,
+      "first_elems_colmajor": [
+       1,
+       2,
+       3,
+       4,
+       5,
+       6,
+       7,
+       8
+      ],
+      "n_unique": 64
+     }
+    },
+    "{1}": {
+     "kind": "numeric",
+     "shape": [
+      1,
+      64
+     ],
+     "dtype": "uint8",
+     "summary": {
+      "n_nan": 0,
+      "min": 65.0,
+      "max": 128.0,
+      "mean": 96.5,
+      "std": 18.472953201911167,
+      "all_integer_valued": true,
+      "frac_zero": 0.0,
+      "first_elems_colmajor": [
+       65,
+       66,
+       67,
+       68,
+       69,
+       70,
+       71,
+       72
+      ],
+      "n_unique": 64
+     }
+    },
+    "{2}": {
+     "kind": "numeric",
+     "shape": [
+      1,
+      64
+     ],
+     "dtype": "uint8",
+     "summary": {
+      "n_nan": 0,
+      "min": 129.0,
+      "max": 192.0,
+      "mean": 160.5,
+      "std": 18.472953201911167,
+      "all_integer_valued": true,
+      "frac_zero": 0.0,
+      "first_elems_colmajor": [
+       129,
+       130,
+       131,
+       132,
+       133,
+       134,
+       135,
+       136
+      ],
+      "n_unique": 64
+     }
+    },
+    "{3}": {
+     "kind": "numeric",
+     "shape": [
+      1,
+      64
+     ],
+     "dtype": "uint16",
+     "summary": {
+      "n_nan": 0,
+      "min": 193.0,
+      "max": 256.0,
+      "mean": 224.5,
+      "std": 18.472953201911167,
+      "all_integer_valued": true,
+      "frac_zero": 0.0,
+      "first_elems_colmajor": [
+       193,
+       194,
+       195,
+       196,
+       197,
+       198,
+       199,
+       200
+      ],
+      "n_unique": 64
+     }
+    }
+   }
+  },
+  "decodedSentenceText": {
+   "kind": "cell",
+   "shape": [
+    200,
+    1
+   ],
+   "n_elements": 200,
+   "element_summary": {
+    "all_char": true
+   },
+   "strings": {
+    "n_strings": 200,
+    "n_unique": 100,
+    "n_empty": 100,
+    "first_values": [
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     ""
+    ],
+    "most_common": [
+     [
+      "",
+      100
+     ],
+     [
+      "they are coming.",
+      2
+     ],
+     [
+      "you hope they are my need.",
+      1
+     ],
+     [
+      "you hope my nurse is good.",
+      1
+     ],
+     [
+      "my very is okay.",
+      1
+     ]
+    ],
+    "length_min_max": [
+     0,
+     38
+    ]
+   }
+  },
+  "delayTrialEpochs": {
+   "kind": "numeric",
+   "shape": [
+    200,
+    2
+   ],
+   "dtype": "int32",
+   "summary": {
+    "n_nan": 0,
+    "min": 1.0,
+    "max": 380768.0,
+    "mean": 194070.755,
+    "std": 112033.17921577953,
+    "all_integer_valued": true,
+    "frac_zero": 0.0,
+    "first_elems_colmajor": [
+     1,
+     1517,
+     2667,
+     4593,
+     6778,
+     8548,
+     10102,
+     11493
+    ],
+    "n_unique": 400,
+    "per_column": {
+     "n_columns": 2,
+     "mean_of_col_means": 194070.755,
+     "col_mean_min_median_max": [
+      193871.17,
+      194070.755,
+      194270.34
+     ],
+     "col_std_min_median_max": [
+      112032.98296216654,
+      112033.00143717657,
+      112033.0199121866
+     ],
+     "n_constant_columns": 0
+    }
+   }
+  },
+  "goTrialEpochs": {
+   "kind": "numeric",
+   "shape": [
+    200,
+    2
+   ],
+   "dtype": "int32",
+   "summary": {
+    "n_nan": 0,
+    "min": 400.0,
+    "max": 381776.0,
+    "mean": 194893.9675,
+    "std": 111998.26757622835,
+    "all_integer_valued": true,
+    "frac_zero": 0.0,
+    "first_elems_colmajor": [
+     400,
+     1917,
+     3067,
+     4993,
+     7178,
+     8948,
+     10502,
+     11893
+    ],
+    "n_unique": 400,
+    "per_column": {
+     "n_columns": 2,
+     "mean_of_col_means": 194893.9675,
+     "col_mean_min_median_max": [
+      194271.34,
+      194893.9675,
+      195516.595
+     ],
+     "col_std_min_median_max": [
+      111960.04197704187,
+      111996.53094461423,
+      112033.0199121866
+     ],
+     "n_constant_columns": 0
+    }
+   }
+  },
+  "sentenceDurations": {
+   "kind": "numeric",
+   "shape": [
+    200,
+    1
+   ],
+   "dtype": "uint16",
+   "summary": {
+    "n_nan": 0,
+    "min": 465.0,
+    "max": 2625.0,
+    "mean": 1245.255,
+    "std": 413.1261308305249,
+    "all_integer_valued": true,
+    "frac_zero": 0.0,
+    "first_elems_colmajor": [
+     1067,
+     700,
+     1476,
+     1734,
+     1319,
+     1104,
+     941,
+     1324
+    ],
+    "n_unique": 189
+   }
+  },
+  "sentenceFeatures": {
+   "kind": "cell",
+   "shape": [
+    200,
+    1
+   ],
+   "n_elements": 200,
+   "element_summary": {
+    "kinds": {
+     "array": 200
+    },
+    "dtypes": {
+     "float64": 200
+    }
+   },
+   "element_shapes": {
+    "ndim_counts": {
+     "2": 200
+    },
+    "dim0": {
+     "min": 466,
+     "max": 2626,
+     "mean": 1246.255,
+     "n_unique": 189
+    },
+    "dim1": {
+     "min": 512,
+     "max": 512,
+     "mean": 512.0,
+     "n_unique": 1
+    }
+   },
+   "elements": {
+    "{0}": {
+     "kind": "numeric",
+     "shape": [
+      1068,
+      512
+     ],
+     "dtype": "float64",
+     "summary": {
+      "n_nan": 0,
+      "min": 0.0,
+      "max": 37336.5078125,
+      "mean": 734.0985361934545,
+      "std": 1578.0761041113622,
+      "all_integer_valued": false,
+      "frac_zero": 0.41580531659644193,
+      "first_elems_colmajor": [
+       0.0,
+       0.0,
+       1.0,
+       1.0,
+       0.0,
+       0.0,
+       0.0,
+       1.0
+      ],
+      "per_column": {
+       "n_columns": 512,
+       "mean_of_col_means": 734.0985361934545,
+       "col_mean_min_median_max": [
+        0.0046816479400749065,
+        25.2440617414896,
+        15212.88670823458
+       ],
+       "col_std_min_median_max": [
+        0.06826221584918041,
+        7.524339930840342,
+        5829.12444747802
+       ],
+       "n_constant_columns": 0
+      }
+     }
+    },
+    "{1}": {
+     "kind": "numeric",
+     "shape": [
+      701,
+      512
+     ],
+     "dtype": "float64",
+     "summary": {
+      "n_nan": 0,
+      "min": 0.0,
+      "max": 34344.87890625,
+      "mean": 674.7741772148349,
+      "std": 1467.7410451394933,
+      "all_integer_valued": false,
+      "frac_zero": 0.42290310716833096,
+      "first_elems_colmajor": [
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0
+      ],
+      "per_column": {
+       "n_columns": 512,
+       "mean_of_col_means": 674.774177214835,
+       "col_mean_min_median_max": [
+        0.0014265335235378032,
+        23.974516323051507,
+        14237.376134679253
+       ],
+       "col_std_min_median_max": [
+        0.037742529401777324,
+        5.101181432343782,
+        5634.193823228743
+       ],
+       "n_constant_columns": 0
+      }
+     }
+    },
+    "{2}": {
+     "kind": "numeric",
+     "shape": [
+      1477,
+      512
+     ],
+     "dtype": "float64",
+     "summary": {
+      "n_nan": 0,
+      "min": 0.0,
+      "max": 36234.6484375,
+      "mean": 667.2008380554869,
+      "std": 1447.723016379987,
+      "all_integer_valued": false,
+      "frac_zero": 0.4239444926371022,
+      "first_elems_colmajor": [
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0
+      ],
+      "per_column": {
+       "n_columns": 512,
+       "mean_of_col_means": 667.2008380554869,
+       "col_mean_min_median_max": [
+        0.002031144211238998,
+        24.33103198656458,
+        14468.747442556703
+       ],
+       "col_std_min_median_max": [
+        0.04502242401772863,
+        6.508447962810223,
+        5600.322002045977
+       ],
+       "n_constant_columns": 0
+      }
+     }
+    },
+    "{3}": {
+     "kind": "numeric",
+     "shape": [
+      1735,
+      512
+     ],
+     "dtype": "float64",
+     "summary": {
+      "n_nan": 0,
+      "min": 0.0,
+      "max": 39797.046875,
+      "mean": 637.4335011097729,
+      "std": 1415.6665956132726,
+      "all_integer_valued": false,
+      "frac_zero": 0.4283749099423631,
+      "first_elems_colmajor": [
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0,
+       0.0
+      ],
+      "per_column": {
+       "n_columns": 512,
+       "mean_of_col_means": 637.4335011097729,
+       "col_mean_min_median_max": [
+        0.0023054755043227667,
+        23.773465782077583,
+        14224.464825175612
+       ],
+       "col_std_min_median_max": [
+        0.04795998631173423,
+        5.050819603811437,
+        5583.713362029146
+       ],
+       "n_constant_columns": 0
+      }
+     }
+    }
+   }
+  },
+  "sentenceText": {
+   "kind": "cell",
+   "shape": [
+    200,
+    1
+   ],
+   "n_elements": 200,
+   "element_summary": {
+    "all_char": true
+   },
+   "strings": {
+    "n_strings": 200,
+    "n_unique": 200,
+    "n_empty": 0,
+    "first_values": [
+     "I hope it is you.",
+     "You up?",
+     "Is my nurse very hungry?",
+     "They need it coming.",
+     "I need good glasses.",
+     "Bring my music here, please.",
+     "Am I right?",
+     "I do feel it."
+    ],
+    "most_common": [
+     [
+      "I hope it is you.",
+      1
+     ],
+     [
+      "You up?",
+      1
+     ],
+     [
+      "Is my nurse very hungry?",
+      1
+     ],
+     [
+      "They need it coming.",
+      1
+     ],
+     [
+      "I need good glasses.",
+      1
+     ]
+    ],
+    "length_min_max": [
+     7,
+     38
+    ]
+   }
+  },
+  "spikePow": {
+   "kind": "numeric",
+   "shape": [
+    381777,
+    256
+   ],
+   "dtype": "float64",
+   "summary": {
+    "n_nan": 0,
+    "min": 17.315061569213867,
+    "max": 50000.0,
+    "mean": 1289.9124326463616,
+    "std": 1841.6797234577339,
+    "all_integer_valued": false,
+    "frac_zero": 0.0,
+    "first_elems_colmajor": [
+     375.1217346191406,
+     494.46197509765625,
+     376.0649108886719,
+     553.1865844726562,
+     696.2059326171875,
+     452.5321350097656,
+     432.690185546875,
+     522.1005859375
+    ],
+    "per_column": {
+     "n_columns": 256,
+     "mean_of_col_means": 1289.9124326463616,
+     "col_mean_min_median_max": [
+      52.492208590436675,
+      982.7064378147913,
+      15270.085871855597
+     ],
+     "col_std_min_median_max": [
+      20.141281991150798,
+      665.2858010513075,
+      6608.962319152777
+     ],
+     "n_constant_columns": 0
+    }
+   }
+  }
+ },
+ "mat_meta": {
+  "__globals__": "[]",
+  "__header__": "MATLAB 5.0 MAT-file, Platform: MACI64, Created on: Wed Jul  9 14:32:11 2025",
+  "__version__": "1.0"
+ }
+}
