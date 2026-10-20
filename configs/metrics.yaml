@@ -1,0 +1,83 @@
+# Objective evaluation metrics for synthesized speech (src/wvx/metrics.py).
+# Every setting is explained in notes/METRICS.md. Tags:
+#   [PAPER]  stated in Wairagkar et al. 2025 (Nature, PMC12369848), Methods "Automated evaluation
+#            metrics of synthesized speech" or the figure legends
+#   [LIT]    taken from the MCD literature the paper most likely meant (Kubichek 1993, via
+#            Metzger et al. 2023; Kominek et al. 2008, via Anumanchipalli et al. 2019)
+#   [CHOICE] not stated anywhere; our decision
+# The whole file is one `metrics:` section, so it can also be merged into the main config with
+# wvx.config.load_config(experiment="configs/metrics.yaml").
+
+metrics:
+  sample_rate: 16000            # [PAPER] metrics computed on 16 kHz audio; other rates are resampled
+
+  resample:                     # [CHOICE] scipy.signal.resample_poly (exact rational ratio)
+    kaiser_beta: 5.0            # scipy's default anti-aliasing window ("kaiser", 5.0)
+
+  stft:                         # shared front end for every spectral metric
+    win_ms: 50.0                # [PAPER] 50 ms Hanning window
+    hop_ms: 10.0                # [CHOICE] paper says "10 ms overlap"; read as a 10 ms hop (METRICS.md §2.3)
+    n_fft: null                 # [CHOICE] null = window length (800 samples at 16 kHz), no zero padding
+    window: hann                # [PAPER] Hanning (periodic Hann, librosa/scipy convention)
+    center: true                # [CHOICE] frame t is centred at t * hop
+    pad_mode: constant          # [CHOICE] zero padding at the edges
+
+  mel:                          # filterbank shared by both metrics (only n_mels differs)
+    fmin: 0.0                   # [CHOICE]
+    fmax: null                  # [CHOICE] null = sample_rate / 2
+    htk: false                  # [CHOICE] Slaney mel scale (librosa default)
+    norm: slaney                # [CHOICE] provably irrelevant to both metrics (METRICS.md §5)
+
+  db:                           # power -> dB, 10*log10(max(P, amin) / ref), floored at max - top_db
+    ref: 1.0                    # [CHOICE] irrelevant to both metrics (constant offset)
+    amin: 1.0e-10               # [CHOICE] librosa default
+    top_db: 80.0                # [CHOICE] librosa default; null disables the floor
+
+  silence:                      # "silences between words were removed ... independently" [PAPER]
+    method: relative_energy     # [CHOICE] frame is silent if its STFT energy is < (loudest frame - threshold_db)
+    threshold_db: 40.0          # [CHOICE] sensitivity to be checked on real data (METRICS.md §2.4)
+    min_silence_ms: 0.0         # [CHOICE] silent runs shorter than this are kept as speech; 0 = drop every silent frame
+    amin: 1.0e-10               # [CHOICE] energy floor; frames at the floor are always silent
+
+  alignment:
+    without_dtw: truncate       # [CHOICE] when a metric's dtw flag is false: truncate to the shorter | error
+    dtw:                        # [PAPER] DTW after silence removal; cost and steps [CHOICE]
+      metric: euclidean         # frame distance (scipy cdist name)
+      step_sizes: [[1, 1], [0, 1], [1, 0]]
+      weights_add: [0.0, 0.0, 0.0]
+      weights_mul: [1.0, 1.0, 1.0]
+      global_constraints: false # true = Sakoe-Chiba band of radius band_rad (fraction of length)
+      band_rad: 0.25
+
+  min_frames: 2                 # fewer speech frames than this in either signal -> metric is NaN
+
+  mel_corr:                     # Pearson correlation of dB mel spectrograms [PAPER]
+    n_mels: 40                  # [PAPER] 40 Mel-frequency bands
+    remove_silence: true        # [PAPER] final Nature version (the preprint did not mention it)
+    dtw: true                   # [PAPER] final Nature version (the preprint did not mention it)
+    dtw_feature_norm: mean      # [CHOICE] DTW runs on dB mel with each band's mean (per signal) removed,
+                                #   so the alignment, like Pearson r, ignores level/EQ: none | mean | zscore
+    constant_band: skip         # [CHOICE] band with zero variance in either signal: skip | nan (whole metric NaN)
+
+  mcd:                          # mel-cepstral distortion; formula [LIT], see METRICS.md §3
+    n_mels: 25                  # [PAPER] Extended Data Fig. 2a: "25 Mel-frequency bands"
+    n_ceps: 25                  # [LIT] 25 coefficients c0..c24 (Anumanchipalli 2019, Kominek 2008)
+    include_c0: false           # [LIT] c0 (overall level) excluded: sum over d = 1..24
+    log_spectrum: amplitude     # [LIT] cepstrum of ln|X| (SPTK convention): amplitude | power
+    cepstrum_scale: sptk        # [LIT] one-sided cepstrum scale that Kubichek's constant assumes: sptk | ortho
+    constant: kubichek          # [LIT] kubichek = 10*sqrt(2)/ln(10); or a number (1.0 = plain Euclidean)
+    remove_silence: true        # [PAPER] "after removing silences between words"
+    dtw: true                   # [LIT] Metzger 2023 / Kominek 2008 MCD on DTW-aligned mel-cepstra
+    dtw_feature_norm: none      # [LIT] align on the same cepstra MCD measures (path minimizes MCD)
+
+  evaluate:
+    mel_corr_framewise: true    # also report mel_corr without silence removal or DTW (preprint-style)
+
+  text:                         # normalization for word_error_rate / char_error_rate [CHOICE]
+    unicode_form: NFKC
+    apostrophes: ["’", "‘", "`", "´"]   # mapped to ' before anything else
+    lowercase: true
+    hyphens_to_space: true      # "well-known" -> "well known"
+    remove_punctuation: true    # every Unicode punctuation character (category P*) ...
+    keep_apostrophes: true      # ... except ' inside words ("don't" stays one token)
+    cer_count_spaces: true      # CER counts the single spaces between words as characters
