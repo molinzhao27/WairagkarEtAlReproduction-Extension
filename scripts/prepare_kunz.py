@@ -16,7 +16,7 @@ import numpy as np
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
-from wvx.config import load_yaml, resolve_path  # noqa: E402
+from wvx.config import load_config, load_yaml, resolve_path  # noqa: E402
 from wvx.kunz import load_condition  # noqa: E402
 
 
@@ -31,7 +31,7 @@ def main() -> int:
     for cond, spec in adapter["conditions"].items():
         name = f"t15.{cfg['core_experiment']['session']}_{cond}"
         s = load_condition(raw / spec["file"], name, spec["layer"], adapter)
-        s.validate(n_features=adapter["n_features"], n_targets=0)
+        s.validate(n_features=load_config()["model"]["n_features"], n_targets=0)
         lengths = np.array([t.neural.shape[0] for t in s.trials])
         x = np.concatenate([t.neural for t in s.trials])
         s.save(out / f"{name}.npz")

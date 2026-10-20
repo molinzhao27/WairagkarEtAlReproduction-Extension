@@ -16,7 +16,6 @@ GO = 30        # go-period bins
 def _adapter(**kw):
     a = {
         "bin_ms": 10,
-        "n_features": 2 * C,
         "pre_go_bins": 0,
         "clip_spikepow": None,
         "channel_permutation": None,

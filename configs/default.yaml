@@ -15,6 +15,20 @@ paths:
   brain_to_voice: third_party/brain_to_voice
   lpcnet: third_party/LPCNet
 
+# The decoder, shared by every step (data adapters, training, inference). Values are theirs:
+# third_party/brain_to_voice/configs/config.yaml at commit cff4875.
+model:
+  n_features: 512          # 256 spike-band power, then 256 threshold crossings, per 10 ms bin
+  n_targets: 20            # LPCNet: 18 cepstra + pitch period + pitch correlation
+  window_len: 60           # their time_steps: 600 ms of context per prediction
+  step_size: 1             # 10 ms between predictions
+  transformer_input_shape: [30, 128]
+  head_size: 128
+  n_heads: 4
+  n_transformer_blocks: 8
+  mlp_units: [1024, 512]
+  dropout: 0.5
+
 runtime:
   # "auto" picks CUDA GPU > Apple Metal GPU > CPU; or force "cpu" / "gpu".
   device: auto

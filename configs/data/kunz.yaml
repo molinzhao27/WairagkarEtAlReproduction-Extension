@@ -33,7 +33,6 @@ manifest: "data/MANIFEST.md"
 # Wairagkar's released features (notes/DATA_FORMATS.md, "Mismatches vs Wairagkar input").
 adapter:
   bin_ms: 10                    # must equal the file's binSize
-  n_features: 512               # 256 spike-band power + 256 threshold crossings
   pre_go_bins: 0                # PROVISIONAL: context bins before the go cue (never crosses a block)
   clip_spikepow: null           # PROVISIONAL: e.g. 50000 if the 50000.0 values are a clip
   channel_permutation: null     # PROVISIONAL: JSON list (0-based) mapping Kunz columns to decoder order
