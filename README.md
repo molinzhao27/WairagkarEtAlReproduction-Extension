@@ -1,78 +1,103 @@
 # Wairagkar et al. 2025 — reproduction and inner-speech extension
 
-1. **Reproduce** the offline brain-to-voice decoder from Wairagkar et al. 2025.
-2. **Extend** it to inner speech with the Kunz et al. 2025 data. Train on *attempted* 50-word sentences
-   and test on *imagined* 50-word sentences from the same session (T15, 2024.03.03). Because the day,
-   arrays and sentence set are the same, any drop in performance reflects speech mode, not drift.
+Reproduce the offline brain-to-voice decoder from Wairagkar et al. 2025 (*Nature*),
+then extend it to inner speech using Kunz et al. 2025 (*Cell*) data.
 
-Agents and contributors: start with [AGENTS.md](AGENTS.md). The plan is in [notes/PLAN.md](notes/PLAN.md).
+**Core experiment:** participant T15, session 2024.03.03. Train on attempted 50-word
+sentences, test on imagined 50-word sentences from the same day. The arrays and sentence
+set are identical across conditions, so any drop in performance reflects speech mode rather
+than day-to-day drift.
+
+**Status:** setup only — no results yet. See [notes/PLAN.md](notes/PLAN.md) for phases.
 
 ## Citations
-- Wairagkar M, Card NS, Singer-Clark T, Hou X, Iacobacci C, Miller LM, Hochberg LR, Brandman DM,
-  Stavisky SD. **An instantaneous voice-synthesis neuroprosthesis.** *Nature* (2025).
-  doi:[10.1038/s41586-025-09127-3](https://doi.org/10.1038/s41586-025-09127-3).
+
+- Wairagkar M, Card NS, Singer-Clark T, Hou X, Iacobacci C, Miller LM, Hochberg LR,
+  Brandman DM, Stavisky SD. **An instantaneous voice-synthesis neuroprosthesis.** *Nature*
+  (2025). doi:[10.1038/s41586-025-09127-3](https://doi.org/10.1038/s41586-025-09127-3).
   Code: <https://github.com/Neuroprosthetics-Lab/brain-to-voice-2025>.
   Data: Dryad doi:[10.5061/dryad.2280gb64f](https://doi.org/10.5061/dryad.2280gb64f).
-- Kunz EM, et al. **Inner speech in motor cortex and implications for speech neuroprostheses.**
-  *Cell* (2025). doi:[10.1016/j.cell.2025.06.015](https://doi.org/10.1016/j.cell.2025.06.015).
+- Kunz EM, et al. **Inner speech in motor cortex and implications for speech
+  neuroprostheses.** *Cell* (2025).
+  doi:[10.1016/j.cell.2025.06.015](https://doi.org/10.1016/j.cell.2025.06.015).
   Data: Dryad doi:[10.5061/dryad.gf1vhhn1j](https://doi.org/10.5061/dryad.gf1vhhn1j).
-- Valin J-M, Skoglund J. **LPCNet: Improving neural speech synthesis through linear prediction.**
-  ICASSP 2019. Code: <https://github.com/xiph/LPCNet>.
+- Valin J-M, Skoglund J. **LPCNet: Improving neural speech synthesis through linear
+  prediction.** ICASSP 2019. Code: <https://github.com/xiph/LPCNet>.
 
-**Required acknowledgment** (license of `third_party/brain_to_voice`) in any publication using this work:
+## Third-party code
+
+The Wairagkar et al. code is **not committed** to this repo. Their license
+(academic, non-commercial UC license) only allows copies to go to academic or nonprofit
+researchers. Instead, `scripts/fetch_third_party.py` clones their pinned commit
+(`configs/third_party.yaml`) into `third_party/brain_to_voice/` and verifies every file
+against `third_party/brain_to_voice.sha256`. Full provenance and license details are in
+`third_party/PROVENANCE.md`; the license text is in
+`third_party/brain_to_voice/LICENCE.md` (after fetching).
+
+**Required acknowledgment** in any publication using this work:
+
 > The Software used in this research was created by Maitreyee Wairagkar of The University of California, Davis. © 2025.
 
-The vendored brain-to-voice code is under an academic, non-commercial license
-([LICENCE.md](third_party/brain_to_voice/LICENCE.md)). See [third_party/PROVENANCE.md](third_party/PROVENANCE.md).
-
-## Setup
-```bash
-git clone <this repo> && cd WairagkarEtAlReproduction-Extension
-git config core.hooksPath .githooks          # enables the pre-commit guard (not cloned automatically)
-mamba env create -f environment.yml          # creates env "wvx" (Apple silicon)
-mamba run -n wvx pip install -e . --no-deps
-mamba run -n wvx bash scripts/build_lpcnet.sh
-mamba run -n wvx python scripts/check_env.py
-mamba run -n wvx pytest
-```
-For the Linux CUDA training machine, use `environment.linux-cuda.yml` instead (see its header).
-
 ## Where things run
-Code is edited and unit-tested on a Mac. **Data and all data-touching compute live on a GPU host**
-(RTX PRO 6000), inside this project's Docker container `wvx`. See [AGENTS.md → Where things run](AGENTS.md#where-things-run).
-```bash
-cp scripts/remote/host.env.example scripts/remote/host.env    # then set WVX_HOST=user@host
-ssh "$WVX_HOST" 'bash -s' < scripts/remote/setup_container.sh # one time, on the host
-scripts/remote/sync.sh push                                   # code -> container
-scripts/remote/sync.sh pull                                   # results/, figures/ <- container
-```
-GPU jobs go through `scripts/remote/gpu_job.sh` (run on the host), which takes the host's shared GPU lock.
+
+Code is edited and unit-tested on a Mac. **Data and all data-touching compute live on a
+remote GPU host** inside a Docker container. The host is never named in tracked files;
+configure it in `scripts/remote/host.env` (gitignored; template:
+`scripts/remote/host.env.example`).
+
+- `scripts/remote/setup_container.sh` — one-time container setup on the host.
+- `scripts/remote/sync.sh push` / `pull` — sync code up, results down.
+- `scripts/remote/gpu_job.sh` — run GPU jobs under the host's shared lock.
 
 ## Data
-All data lives under `data/` on the GPU host, and `data/` is gitignored. Checksums are in [data/MANIFEST.md](data/MANIFEST.md).
 
-**Kunz et al. 2025** (T15 2024.03.03 subset). Download `sentenceData.zip` from the Dryad record (SHA-256 is
-in `configs/data/kunz.yaml` / MANIFEST). Then extract only the files this project needs, on the host:
+All data lives under `data/` on the GPU host only. `data/` is gitignored; checksums are
+in [data/MANIFEST.md](data/MANIFEST.md). Dataset configs are in `configs/data/kunz.yaml`
+and `configs/data/wairagkar.yaml`.
+
+**Kunz et al. 2025** — T15, session 2024.03.03. Download `sentenceData.zip` from the
+Dryad record, then extract the subset this project needs:
+
 ```bash
 python -I scripts/extract_kunz_subset.py --zip /path/to/sentenceData.zip
 ```
 
-**Wairagkar et al. 2025.** `t15_neural_data.zip` is 26.16 GB and `t15_control_experiment.zip` is 711 MB.
-Dryad now requires an API token for downloads (`DRYAD_API_TOKEN`). The default run is a dry run that checks
-sizes and free disk space:
+**Wairagkar et al. 2025** — `t15_neural_data.zip` (26.16 GB) and
+`t15_control_experiment.zip` (711 MB). Dryad now requires an API token for downloads.
+The default run is a dry run that checks sizes and free disk:
+
 ```bash
 python scripts/fetch_wairagkar_data.py
 ```
 
-## Pipeline
-| Step | Command | Status |
-|---|---|---|
-| Inspect a `.mat` file | `python -I scripts/inspect_mat.py <file>` | ✅ |
-| Check environment | `python scripts/check_env.py` | ✅ |
-| Reproduce Wairagkar (inference, then training) | — | Phase 1 |
-| Generate Kunz target speech | — | Phase 2 |
-| Kunz → decoder input adapter | — | Phase 3 |
-| Attempted → imagined experiment | — | Phase 4 |
+## Setup
+
+```bash
+git clone git@github.com:molinzhao27/WairagkarEtAlReproduction-Extension.git
+cd WairagkarEtAlReproduction-Extension
+git config core.hooksPath .githooks
+python scripts/fetch_third_party.py
+pytest
+```
+
+<!-- ENVIRONMENT: to be filled in -->
+
+## License
+
+This repo's own code is released under the [MIT License](LICENSE). Third-party code
+under `third_party/` retains its own licenses; see
+[third_party/PROVENANCE.md](third_party/PROVENANCE.md) for details.
 
 ## Layout
-See [AGENTS.md → Layout](AGENTS.md#layout).
+
+```
+src/wvx/           project code (config, seeding)
+scripts/            pipeline entry points + remote host scripts
+configs/            all settings (default.yaml, data/, third_party.yaml)
+tests/              fast CPU tests
+notes/              PLAN.md, DATA_FORMATS.md, WAIRAGKAR_CODE.md, DECISIONS.md
+results/            small outputs only
+figures/            small outputs only
+third_party/        brain_to_voice (fetched), PROVENANCE.md
+data/               GPU host only; MANIFEST.md is tracked
+```
