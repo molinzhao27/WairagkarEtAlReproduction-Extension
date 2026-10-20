@@ -46,7 +46,9 @@ def verify(dest: Path, expected: dict[str, str]) -> list[str]:
     """Return a list of problems (empty if dest matches expected exactly)."""
     if not dest.is_dir():
         return [f"missing directory {dest.relative_to(REPO_ROOT)}"]
-    present = {p.relative_to(dest).as_posix() for p in dest.rglob("*") if p.is_file()}
+    # Python bytecode caches appear when their modules are imported; they are not edits.
+    present = {p.relative_to(dest).as_posix() for p in dest.rglob("*")
+               if p.is_file() and "__pycache__" not in p.parts}
     problems = [f"missing: {r}" for r in sorted(expected.keys() - present)]
     problems += [f"extra: {r}" for r in sorted(present - expected.keys())]
     problems += [f"changed: {r}" for r in sorted(expected.keys() & present)
