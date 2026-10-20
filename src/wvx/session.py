@@ -8,7 +8,9 @@ the decoder's normalized LPCNet features, one row per bin. Sizes come from the c
 
 from __future__ import annotations
 
+import json
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Optional
 
 import numpy as np
@@ -44,3 +46,37 @@ class SessionData:
                     )
                 if t.target.dtype != np.float32:
                     raise ValueError(f"{where}: target dtype {t.target.dtype}, want float32")
+
+    def save(self, path) -> None:
+        """Write to one compressed .npz (trials concatenated, metadata as JSON)."""
+        lengths = [t.neural.shape[0] for t in self.trials]
+        has_target = [t.target is not None for t in self.trials]
+        arrays = {"neural": np.concatenate([t.neural for t in self.trials])}
+        if any(has_target):
+            arrays["target"] = np.concatenate([t.target for t in self.trials if t.target is not None])
+        header = {
+            "name": self.name,
+            "layer": self.layer,
+            "trials": [
+                {"length": n, "has_target": h, "text": t.text, "block": t.block, "meta": t.meta}
+                for n, h, t in zip(lengths, has_target, self.trials)
+            ],
+        }
+        Path(path).parent.mkdir(parents=True, exist_ok=True)
+        np.savez_compressed(path, header=np.array(json.dumps(header)), **arrays)
+
+    @classmethod
+    def load(cls, path) -> "SessionData":
+        with np.load(path, allow_pickle=False) as z:
+            header = json.loads(str(z["header"]))
+            neural, target = z["neural"], z["target"] if "target" in z else None
+        trials, row, trow = [], 0, 0
+        for h in header["trials"]:
+            n = h["length"]
+            tgt = None
+            if h["has_target"]:
+                tgt, trow = target[trow:trow + n], trow + n
+            trials.append(Trial(neural=neural[row:row + n], target=tgt, text=h["text"],
+                                block=h["block"], meta=h["meta"]))
+            row += n
+        return cls(name=header["name"], layer=header["layer"], trials=trials)

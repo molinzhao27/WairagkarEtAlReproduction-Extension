@@ -29,6 +29,24 @@ output_dir: "data/raw/kunz/sentenceData"
 # Manifest written after extraction.
 manifest: "data/MANIFEST.md"
 
+# Kunz file -> decoder input (src/wvx/kunz.py). Items marked PROVISIONAL wait on inspecting
+# Wairagkar's released features (notes/DATA_FORMATS.md, "Mismatches vs Wairagkar input").
+adapter:
+  bin_ms: 10                    # must equal the file's binSize
+  n_features: 512               # 256 spike-band power + 256 threshold crossings
+  pre_go_bins: 0                # PROVISIONAL: context bins before the go cue (never crosses a block)
+  clip_spikepow: null           # PROVISIONAL: e.g. 50000 if the 50000.0 values are a clip
+  channel_permutation: null     # PROVISIONAL: JSON list (0-based) mapping Kunz columns to decoder order
+  normalization:
+    method: none                # PROVISIONAL: none | zscore_file | zscore_block
+    eps: 1.0e-6
+  # Same day, same arrays: attempted and imagined share one session input layer.
+  conditions:
+    attempted:     {file: t15.2024.03.03_attempted_50words.mat,     layer: 0}
+    imagined:      {file: t15.2024.03.03_imagined_50words.mat,      layer: 0}
+    imagined_eval: {file: t15.2024.03.03_imagined_50words_eval.mat, layer: 0}
+  processed_dir: data/processed/kunz
+
 # Core experiment: participant T15, session 2024.03.03 -- fit on attempted, test on imagined.
 core_experiment:
   participant: "T15"
