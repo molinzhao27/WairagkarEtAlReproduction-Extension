@@ -1,0 +1,82 @@
+# Reproduce Wairagkar et al. 2025 offline inference (their inference.ipynb) on the held-out session
+# t15_day195 with their pretrained model, then synthesize predicted and target audio with LPCNet and
+# score them. Deep-merged on top of configs/default.yaml (see src/wvx/config.py).
+#
+#   python scripts/run_inference.py --config configs/experiments/reproduce_inference.yaml
+#
+# Runs on the GPU host only (the data is never on the Mac). PROVISIONAL until checked on real files:
+# see the docstring of src/wvx/wairagkar_data.py. All paths are relative to the repo root.
+
+run_name: reproduce_inference_t15_day195
+
+paths:
+  # Dryad t15_neural_data.zip extracts to data/raw/wairagkar/t15_neural_data/<session>/...
+  wairagkar_neural_data: data/raw/wairagkar/t15_neural_data
+  # Their notebook's pretrained model for t15_day195 (inference.ipynb cell 3): trained up to day193,
+  # stored in the folder of the session it is used on.
+  pretrained_model: data/raw/wairagkar/t15_neural_data/t15_day195/brain2voice_t15_day193.h5
+  # Their session -> input-layer table (read with their dataloader.get_sessions).
+  b2v_session_layers: third_party/brain_to_voice/configs/training_data_args.yaml
+  # Their LPCNet min/max for scaling targets/outputs to [-1, 1] (data_utils.load_lpc_norm).
+  lpc_norm: third_party/brain_to_voice/dependencies/T15_lpcnet_features_norm_macOS_TTS.json
+  # Permutation used by their reorder_channels (pretrained models day025-day195 only).
+  electrode_mapping: third_party/brain_to_voice/dependencies/T15_electrode_mapping_256.json
+
+# Decoder sizes (n_features, n_targets, window_len, step_size) come from configs/default.yaml `model`.
+
+# File layout of their release, exactly as their loaders read it (lib/dataloader.py:58-70,
+# lib/inference_utils.py:38-51). Change these only if the real files disagree.
+wairagkar_data:
+  neural_file: "{session}_neural_data.mat"
+  target_file: "{session}_target_speech_feats.mat"
+  keys:
+    spikepow: spikepow_trials
+    threshcross: threshcross_trials
+    cues: cues                     # padded with spaces in their notebook output; we strip
+    cues_fallback: sentences       # inference_utils.py:50-51 (control-experiment blocks)
+    target: target_speech_feats_word
+  # Sessions missing from their training_data_args.yaml. Its header comment says:
+  # "last session t15_day195 (session_layer 20) is held out for testing".
+  held_out_session_layers:
+    t15_day195: 20
+  # required: error if the target file is missing; optional: targets None if missing; skip: never load.
+  targets: required
+  # Target preprocessing = their get_speech_features_from_single_trial defaults, as used in training
+  # (data_utils.py:112-147): keep 18 cepstra + 2 pitch, scale to [-1, 1], Gaussian sigma 2 frames.
+  n_cepstral_coeff: 18
+  target_smoothing: true
+  target_smoothing_sigma: 2.0
+
+inference:
+  session: t15_day195
+  # Their inference.ipynb flag using_pretrained_models_day25_to_day195: True for the provided
+  # models of day025-day195 (this one), False for newly trained models and later/control models.
+  reorder_channels: true
+  batch_size: 256                  # windows per forward pass (memory only; results don't depend on it)
+  max_trials: null                 # null = every trial; an int for smoke runs
+  synthesize: true                 # LPCNet audio for predictions and targets
+  save_predictions: true           # normalized (T-59, 20) predictions -> predictions.npz next to the audio
+  # Reference audio for metrics: LPCNet resynthesis of the target features over the same frames
+  # as the predictions. raw = features as stored in the file (unsmoothed);
+  # decoder_target = the smoothed, scaled training target, mapped back to LPCNet's range.
+  target_audio_source: raw
+  audio_subdir: audio              # audio -> <paths.results>/<audio_subdir>/<run_name>/ (gitignored)
+
+synthesis:
+  lpcnet_binary: lpcnet_demo       # relative to paths.lpcnet
+  # Bare name: looked up next to the running Python (the env's bin/) first, then on PATH.
+  ffmpeg: ffmpeg
+  # LPCNet constants (include/lpcnet.h: NB_TOTAL_FEATURES 36, LPCNET_FRAME_SIZE 160 at 16 kHz).
+  sample_rate: 16000
+  samples_per_frame: 160
+  n_frame_floats: 36
+  encode_tmp_wav_subtype: PCM_24   # their encode writes the temp wav as PCM_24 (speech_processor.py:55)
+  wav_subtype: PCM_16              # saved audio; LPCNet output is 16-bit, so this is lossless
+  timeout_s: 600                   # per LPCNet/ffmpeg call (their retry loops never give up)
+  preflight_timeout_s: 30
+  tmp_root: null                   # null = system temp dir; one fresh dir per call
+  keep_tmp: false
+  strip_ld_library_path: true      # as their code does (speech_processor.py:58-59,156-157)
+
+# Passed unchanged to wvx.metrics.evaluate(ref_wav, est_wav, sr, cfg["metrics"]).
+metrics: {}
