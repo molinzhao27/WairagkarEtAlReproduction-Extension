@@ -7,8 +7,12 @@ Facts used here are documented in notes/DATA_FORMATS.md (Kunz section):
 - ``sentenceFeatures`` holds threshold crossings first; the decoder wants spike-band power first, so we
   build trials from the continuous arrays in [spikePow, binnedTX] order instead.
 
-PROVISIONAL until Wairagkar's released features are inspected (DATA_FORMATS.md, mismatches 5, 6, 8):
-channel permutation (default identity), normalization (default none) and pre-go context.
+Normalization ``wairagkar`` (the configured default) reproduces the released features' log -> rolling
+z-score -> causal sigmoid smoothing (``wvx.preprocess``). It runs on each block's continuous arrays before
+trials are cut, so the rolling statistics see the delay and inter-trial bins of the same block, and
+nothing carries over from one block to the next (blocks are separate recordings).
+
+PROVISIONAL (DATA_FORMATS.md, mismatches 5, 8): channel permutation (default identity) and pre-go context.
 """
 
 from __future__ import annotations
@@ -21,6 +25,7 @@ import numpy as np
 import scipy.io
 
 from wvx.config import resolve_path
+from wvx.preprocess import wairagkar_transform
 from wvx.session import SessionData, Trial
 
 
@@ -38,10 +43,17 @@ def _permutation(path: Optional[str], n_channels: int) -> np.ndarray:
     return perm
 
 
-def _normalize(x: np.ndarray, blocks: np.ndarray, method: str, eps: float) -> np.ndarray:
-    """Normalize continuous features (T x C). 'zscore_block' uses each block's own statistics."""
+def _normalize(x: np.ndarray, blocks: np.ndarray, feature: str, norm: dict, bin_ms: float) -> np.ndarray:
+    """Normalize continuous features (T x C) of one type ('spikepow' or 'threshcross').
+
+    'zscore_block' uses each block's own statistics; 'wairagkar' is the causal per-block pipeline of
+    ``wvx.preprocess`` with ``norm['params']``.
+    """
+    method, eps = norm["method"], norm.get("eps")
     if method == "none":
         return x
+    if method == "wairagkar":
+        return wairagkar_transform(x, blocks, feature, norm["params"], bin_ms)
     if method == "zscore_file":
         return (x - x.mean(0)) / (x.std(0) + eps)
     if method == "zscore_block":
@@ -75,8 +87,8 @@ def load_condition(path, name: str, layer: int, adapter: dict) -> SessionData:
         sp = np.minimum(sp, adapter["clip_spikepow"])
     perm = _permutation(adapter.get("channel_permutation"), sp.shape[1])
     norm = adapter["normalization"]
-    sp = _normalize(sp[:, perm], blocks, norm["method"], norm["eps"])
-    tx = _normalize(tx[:, perm], blocks, norm["method"], norm["eps"])
+    sp = _normalize(sp[:, perm], blocks, "spikepow", norm, adapter["bin_ms"])
+    tx = _normalize(tx[:, perm], blocks, "threshcross", norm, adapter["bin_ms"])
     x = np.concatenate([sp, tx], axis=1).astype(np.float32)   # spike-band power first
 
     trials = []

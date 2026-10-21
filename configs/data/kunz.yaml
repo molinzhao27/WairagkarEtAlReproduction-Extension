@@ -34,11 +34,83 @@ manifest: "data/MANIFEST.md"
 adapter:
   bin_ms: 10                    # must equal the file's binSize
   pre_go_bins: 0                # PROVISIONAL: context bins before the go cue (never crosses a block)
-  clip_spikepow: null           # PROVISIONAL: e.g. 50000 if the 50000.0 values are a clip
-  channel_permutation: null     # PROVISIONAL: JSON list (0-based) mapping Kunz columns to decoder order
+  # Wairagkar readme/Methods: spike-band power "was clipped at 50k uV2 to avoid outliers". Kunz spikePow
+  # peaks at exactly 50000.0, so this is a no-op kept for safety.
+  clip_spikepow: 50000
+  # Identity: Kunz columns are already in the order of Wairagkar's released features (measured vs
+  # day195, D-024). Their old-model reorder_channels is applied at inference, exactly as for their data.
+  channel_permutation: null
   normalization:
-    method: none                # PROVISIONAL: none | zscore_file | zscore_block
-    eps: 1.0e-6
+    # none | zscore_file | zscore_block | wairagkar. "wairagkar" = src/wvx/preprocess.py, applied to the
+    # continuous arrays of each block (reset at block boundaries) BEFORE trials are cut.
+    method: wairagkar
+    eps: 1.0e-6                 # zscore_file / zscore_block only
+    # Text (readme, Methods): "Each bin was log-transformed, normalized using rolling means and s.d. from the
+    # past 10 s and then causally smoothed using a sigmoid kernel of length 1.5 s of the past activity."
+    # The text gives no offset, kernel shape or edge rule. The values below were identified from
+    # Wairagkar's released day-482 features themselves (scripts/compare_features.py, "identification" in
+    # results/data_inspection/feature_comparison.json), never from the Kunz-vs-Wairagkar comparison.
+    params:
+      # log(x + offset). Threshold-crossing count levels in the released features are spaced like
+      # log(n + 1e-4) (n = 0, 1, 2, ...), not log(n + 1) or n. Spike-band power is >= 16 uV2, so its offset
+      # has no effect; the same offset is used for both (one log over all 512 features).
+      log_offset: {spikepow: 1.0e-4, threshcross: 1.0e-4}
+      rolling:
+        window_ms: 10000          # text: "past 10 s"; data: 1000 bins fits best (990-1010 tested)
+        include_current: true     # window = the last 1000 bins including the current one (data: best fit)
+        ddof: 0                   # population s.d. (data: ddof 0 fits better than 1)
+        min_std: 1.0e-8           # s.d. at or below this (a constant window) ...
+        zero_std_value: 1.0       # ... is replaced by this, as in BRAND's z_window node
+      smoothing:
+        kernel: sigmoid           # w_k = 1 / (1 + exp((k - center) / scale)), k = lag in bins, sum w = 1
+        # DATA vs TEXT: the impulse response of the released features is exactly this sigmoid over
+        # 15 bins (150 ms; center 7 bins, scale 2 bins), then zero. The text says "length 1.5 s".
+        # Set length_ms: 1500 to follow the text literally (with these center/scale it adds 0.6% weight).
+        length_ms: 150
+        center_ms: 70
+        scale_ms: 20
+  # scripts/compare_features.py only: Kunz processed go-period trials vs Wairagkar's released features
+  # (GPU host, CPU only), plus the identification of their preprocessing from the released features.
+  feature_check:
+    wairagkar_dir: data/raw/wairagkar/t15_control_experiment
+    wairagkar_glob: "t15_day482_block*.mat"
+    wairagkar_arrays: [v6v, M1, 55b, d6v]   # control_experiment_readme.txt, column order of both features
+    channels_per_array: 64
+    conditions: [attempted, imagined]
+    out: results/data_inspection/feature_comparison.json
+    lags: [1, 10]
+    quantiles: [0.01, 0.05, 0.25, 0.5, 0.75, 0.95, 0.99]
+    variants:                      # Kunz sensitivity runs: dotted keys into normalization.params
+      tx_log1p: {log_offset.threshcross: 1.0}
+    channel_order:                 # Kunz columns as-is vs reordered with their electrode mapping
+      wairagkar_file: data/raw/wairagkar/t15_neural_data/t15_day195/t15_day195_neural_data.mat
+      mapping: third_party/brain_to_voice/dependencies/T15_electrode_mapping_256.json
+      n_null: 200                  # random within-array shuffles for the chance level
+    identification:
+      # Impulse response: an isolated threshold crossing = an upward step > jump_min in a channel's
+      # trace, preceded by plateau_bins of steps below plateau_tol * jump and followed by post_bins with no
+      # rise above post_tol * jump. The response is (y[t0+k] - y[t0-1]) / jump.
+      jump_min: 0.02
+      plateau_bins: 30
+      plateau_tol: 0.01
+      post_bins: 60
+      post_tol: 0.02
+      response_pre_bins: 2         # lags before the step also kept in the response (should be 0)
+      after_support_bins: 10       # bins after the kernel support used for the rolling-stats offset
+      # Deconvolution with the configured kernel; the first burn_bins of each trial are dropped (unknown
+      # pre-trial history; the inverse filter's slowest pole decays as 0.78^k).
+      burn_bins: 60
+      level_window_bins: 50        # count levels are clustered in windows this long (stats ~constant)
+      level_gap: 0.05              # sorted values further apart than this start a new level
+      min_level_size: 3
+      offset_grid_log10: [-12, 3, 3001]   # np.logspace grid on which the spacing ratio is inverted
+      offset_quantiles: [0.05, 0.25, 0.5, 0.75, 0.95]
+      # Rolling-statistics hypotheses, tested on long trials against counts recovered from the levels.
+      long_trial_margin_bins: 110  # need window + margin bins after burn-in
+      windows_bins: [990, 999, 1000, 1001, 1010]
+      offsets: [1.0e-5, 1.0e-4, 1.0e-3, 1.0]
+      max_count: 12                # highest count level considered when recovering counts
+      min_events: 50               # channels with fewer recovered crossings in a trial are skipped
   # Same day, same arrays: attempted and imagined share one session input layer.
   conditions:
     attempted:     {file: t15.2024.03.03_attempted_50words.mat,     layer: 0}

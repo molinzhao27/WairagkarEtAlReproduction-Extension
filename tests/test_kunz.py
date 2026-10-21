@@ -6,7 +6,9 @@ import numpy as np
 import pytest
 import scipy.io
 
+from wvx.config import load_yaml, resolve_path
 from wvx.kunz import load_condition
+from wvx.preprocess import wairagkar_transform
 
 C = 8          # channels per feature type (256 in the real files)
 DELAY = 20     # delay-period bins (~400 in the real files)
@@ -109,3 +111,25 @@ def test_bin_size_mismatch_raises(kunz_file):
     path, *_ = kunz_file
     with pytest.raises(ValueError):
         load_condition(path, "t", 0, _adapter(bin_ms=20))
+
+
+def test_wairagkar_normalization_runs_per_block_before_slicing(kunz_file):
+    """Trials are slices of the per-block processed continuous arrays (delay/ITI history included)."""
+    path, sp, tx, blocks, go, _ = kunz_file
+    norm = load_yaml(resolve_path("configs/data/kunz.yaml"))["adapter"]["normalization"]
+    assert norm["method"] == "wairagkar"
+    s = load_condition(path, "t", 0, _adapter(clip_spikepow=50000, normalization=norm))
+    s.validate(n_features=2 * C, n_targets=20)
+    exp_sp = wairagkar_transform(np.minimum(sp, 50000), blocks, "spikepow", norm["params"], 10)
+    exp_tx = wairagkar_transform(tx, blocks, "threshcross", norm["params"], 10)
+    for tr, (g0, g1) in zip(s.trials, go):
+        assert tr.neural.dtype == np.float32
+        np.testing.assert_allclose(tr.neural[:, :C], exp_sp[g0 - 1:g1], rtol=1e-5, atol=1e-5)
+        np.testing.assert_allclose(tr.neural[:, C:], exp_tx[g0 - 1:g1], rtol=1e-5, atol=1e-5)
+    # Block reset: block 6's trials do not change when block 3's data change.
+    b3 = blocks == 3
+    sp2 = sp.copy()
+    sp2[b3] *= 3.0
+    alt = wairagkar_transform(sp2, blocks, "spikepow", norm["params"], 10)
+    np.testing.assert_array_equal(alt[~b3], exp_sp[~b3])
+    assert not np.allclose(alt[b3], exp_sp[b3])
