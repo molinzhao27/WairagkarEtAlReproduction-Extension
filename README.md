@@ -1,5 +1,8 @@
 # Wairagkar et al. 2025 — reproduction and inner-speech extension
 
+> 🚧 **Work in progress.** Setup and the offline inference reproduction are done. The inner-speech
+> experiment hasn't been run yet, so there are no results to cite.
+
 Reproduce the offline brain-to-voice decoder from Wairagkar et al. 2025 (*Nature*),
 then extend it to inner speech using Kunz et al. 2025 (*Cell*) data.
 
@@ -8,7 +11,7 @@ sentences, test on imagined 50-word sentences from the same day. The arrays and 
 set are identical across conditions, so any drop in performance reflects speech mode rather
 than day-to-day drift.
 
-**Status:** setup only — no results yet. See [notes/PLAN.md](notes/PLAN.md) for phases.
+**Status:** see [notes/PLAN.md](notes/PLAN.md) for phases.
 
 ## Citations
 
