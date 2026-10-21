@@ -1,0 +1,1126 @@
+{
+  "analysis": "neural_match",
+  "question": "On the same day, does the neural activity of an IMAGINED trial resemble the ATTEMPTED trial of the same sentence more than attempted trials of other sentences?",
+  "preregistration": "notes/DECISIONS.md D-032",
+  "direction": "imagined -> attempted",
+  "seed": 42,
+  "settings": {
+    "output_dir": "results/neural_match",
+    "attempted_file": "{kunz_processed}/t15.2024.03.03_attempted.npz",
+    "imagined_file": "{kunz_processed}/t15.2024.03.03_imagined.npz",
+    "pairs": {
+      "3": 4,
+      "6": 7,
+      "11": 9,
+      "13": 12
+    },
+    "pool_bins": 5,
+    "drop_partial_window": true,
+    "pca": {
+      "n_components": 32,
+      "standardize": true,
+      "min_std": 1e-08
+    },
+    "dtw": {
+      "metric": "cosine",
+      "step_sizes": [
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          0
+        ]
+      ],
+      "weights_add": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "weights_mul": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "global_constraints": false,
+      "band_rad": 0.25
+    },
+    "length_matched_k": 10,
+    "n_permutations": 10000,
+    "additional_baselines": {
+      "length_block_normalized": true
+    },
+    "cue_duration": {
+      "tts_voice": null,
+      "tts_corpus": null,
+      "method": "speech_span",
+      "threshold_db": 30.0
+    }
+  },
+  "deviations_from_preregistration": [],
+  "additions_to_preregistration": [
+    {
+      "measure": "length_norm",
+      "key": "additional_baselines.length_block_normalized",
+      "label": "block-normalized (added 2026-10-21 before any run)",
+      "description": "Length-only baseline on durations divided by the median go-window duration of the trial's own block: -|log((attempted / median of its block) / (imagined / median of its block))|; same rank statistics (length-matched and all). Imagined trials are ~1.5x longer than attempted ones, so the raw ratio favours long attempted trials rather than the proportionally matched one."
+    }
+  ],
+  "implementation_choices": [
+    "Go window = every bin from the go cue (meta go_offset) to the trial end.",
+    "Trailing partial pooling window dropped: True.",
+    "Cue TTS speech duration: speech_span on the TTS LPCNet c0 (threshold 30.0 dB below the loudest frame); no LPCNet synthesis.",
+    "Length-matched candidates: ties in |TTS duration difference| go to the earlier attempted trial.",
+    "Secondary similarity uses the unpooled go-window bins; length-only baseline uses go-window bins.",
+    "Ranks: 1 = most similar; ties share the mid-rank; top-1 = rank exactly 1 (a tie for best is not top-1). Candidates with an undefined similarity would be left out (counted as n_undefined).",
+    "p_perm = (1 + #{null mean rank <= observed}) / (1 + n_permutations), one-sided; the same draws give pooled and per-pair p; each measure x candidate set has its own seeded stream. p_exact: the same null by convolution (check).",
+    "PCA axes from the covariance eigendecomposition of the standardized training frames; the projection uses the training mean and s.d. (no re-standardization of the components)."
+  ],
+  "cue_duration": {
+    "method": "speech_span",
+    "threshold_db": 30.0,
+    "voice": "Aman (English (India))",
+    "corpus": "kunz_50words",
+    "file": "data/processed/tts/aman_english_india/kunz_50words.npz",
+    "sha256": "195f398c571cb08548ba2d199429bee7714783fe2066fcbc4fd41d2e4eaccbb2",
+    "n_cues": 200,
+    "seconds": {
+      "n": 200,
+      "n_nan": 0,
+      "mean": 1.0826,
+      "sd": 0.31297444787893725,
+      "median": 1.045,
+      "q25": 0.86,
+      "q75": 1.255
+    },
+    "min_s": 0.52,
+    "max_s": 1.98
+  },
+  "data": {
+    "attempted_trials": 200,
+    "imagined_trials": 200,
+    "go_bins": {
+      "attempted": {
+        "n": 200,
+        "n_nan": 0,
+        "mean": 845.07,
+        "sd": 309.72162099627917,
+        "median": 756.0,
+        "q25": 644.0,
+        "q75": 945.0
+      },
+      "imagined": {
+        "n": 200,
+        "n_nan": 0,
+        "mean": 1246.255,
+        "sd": 414.162835423739,
+        "median": 1148.0,
+        "q25": 935.25,
+        "q75": 1480.25
+      }
+    }
+  },
+  "results": {
+    "pca": {
+      "A03-I04": {
+        "n_train_frames": 62246,
+        "n_components": 32,
+        "explained_variance_total": 0.49305643250938935,
+        "explained_variance_ratio": [
+          0.20873522565396596,
+          0.06947233524128968,
+          0.023279089756984502,
+          0.01748930718079197,
+          0.015489396284612442,
+          0.013369882637873448,
+          0.009619351230693579,
+          0.008364165456098051,
+          0.007731911411188623,
+          0.007530387615046206,
+          0.007140691320794014,
+          0.006916954507492622,
+          0.006349433748107189,
+          0.006275368873566018,
+          0.006023705831524886,
+          0.005822475318771643,
+          0.0055639288720901086,
+          0.005358720742080587,
+          0.005324060922044153,
+          0.005047258148976198,
+          0.004978121906595678,
+          0.004736683859819845,
+          0.004697918112758592,
+          0.00456021326446926,
+          0.004439980220086386,
+          0.004340827006704796,
+          0.0041828750324277904,
+          0.004160641619800306,
+          0.004110715767292276,
+          0.004016183872225495,
+          0.003973561100493286,
+          0.003955059992723696
+        ],
+        "n_train_trials": 300,
+        "train_blocks": [
+          6,
+          7,
+          9,
+          11,
+          12,
+          13
+        ]
+      },
+      "A06-I07": {
+        "n_train_frames": 60144,
+        "n_components": 32,
+        "explained_variance_total": 0.49219756471627835,
+        "explained_variance_ratio": [
+          0.20875323643335633,
+          0.06964717450132898,
+          0.023468572350133752,
+          0.017512109502986026,
+          0.015084056004568825,
+          0.01302077450154992,
+          0.009318646761669653,
+          0.008435640511039856,
+          0.007614640143413605,
+          0.007558666193878344,
+          0.0072802354490646565,
+          0.006657283907486759,
+          0.006480212237806706,
+          0.006162572972733443,
+          0.00596364425460521,
+          0.0058447174574830525,
+          0.005651111546106125,
+          0.0053772798748140775,
+          0.005242116771199178,
+          0.004932482960981599,
+          0.004909927405812578,
+          0.004776821876477439,
+          0.004621442077883603,
+          0.004527774567623207,
+          0.004430672696640007,
+          0.004337054366885978,
+          0.004254291325392691,
+          0.0042363622359184,
+          0.00412907134158824,
+          0.004053247862419904,
+          0.003993973024100449,
+          0.003921751599329732
+        ],
+        "n_train_trials": 300,
+        "train_blocks": [
+          3,
+          4,
+          9,
+          11,
+          12,
+          13
+        ]
+      },
+      "A11-I09": {
+        "n_train_frames": 61837,
+        "n_components": 32,
+        "explained_variance_total": 0.4808942687452284,
+        "explained_variance_ratio": [
+          0.21117964999266722,
+          0.057097215039279926,
+          0.020832767378625862,
+          0.01651105543933709,
+          0.016339542104603387,
+          0.013574709817113114,
+          0.00986243009641775,
+          0.007874024841571589,
+          0.007682957708782669,
+          0.007479381957372303,
+          0.00714572820047465,
+          0.006815399391898155,
+          0.006461612192612887,
+          0.0061947744178527525,
+          0.006015988360348836,
+          0.005950181203609273,
+          0.005791821758089638,
+          0.005473085740538269,
+          0.005413440203788643,
+          0.0049099511957267266,
+          0.004859420489020412,
+          0.004748148475953075,
+          0.0046867676921731605,
+          0.004612714067781073,
+          0.004506427215036651,
+          0.004375014679667383,
+          0.004254075891281681,
+          0.004137845743148039,
+          0.0040750489637882215,
+          0.004066063182870312,
+          0.0040389650433423074,
+          0.003928060260455323
+        ],
+        "n_train_trials": 300,
+        "train_blocks": [
+          3,
+          4,
+          6,
+          7,
+          12,
+          13
+        ]
+      },
+      "A13-I12": {
+        "n_train_frames": 66237,
+        "n_components": 32,
+        "explained_variance_total": 0.47769554792945274,
+        "explained_variance_ratio": [
+          0.20234941646809612,
+          0.06059172974612309,
+          0.022274581116828313,
+          0.016225870758961675,
+          0.016141971312518277,
+          0.013970113654484102,
+          0.00945055710085784,
+          0.00811007963527867,
+          0.007655710742030611,
+          0.007495427671368106,
+          0.007359920246999078,
+          0.0067152642260709244,
+          0.006579595457002498,
+          0.0063977604981093495,
+          0.005974321246632399,
+          0.005852513796801371,
+          0.0057762388782037575,
+          0.005437096303159542,
+          0.005275152999380022,
+          0.005055115458981934,
+          0.004934895026114543,
+          0.0048816192955002564,
+          0.004729355934776613,
+          0.004574848006219444,
+          0.004572965467304283,
+          0.004420600873391082,
+          0.004294767550795541,
+          0.0042676726236444,
+          0.004171723372731345,
+          0.004144902087755298,
+          0.00403654402586054,
+          0.003977216347471696
+        ],
+        "n_train_trials": 300,
+        "train_blocks": [
+          3,
+          4,
+          6,
+          7,
+          9,
+          11
+        ]
+      }
+    },
+    "measures": [
+      "dtw",
+      "pattern",
+      "length",
+      "length_norm"
+    ],
+    "block_median_go_bins": {
+      "A03": 837.5,
+      "I04": 1220.5,
+      "A06": 935.5,
+      "I07": 1325.0,
+      "A11": 708.5,
+      "I09": 1320.0,
+      "A13": 646.5,
+      "I12": 1009.5
+    },
+    "dtw": {
+      "length_matched": {
+        "pooled": {
+          "n_trials": 200,
+          "mean_n_candidates": 11.0,
+          "mean_rank": 2.48,
+          "chance_mean_rank": 6.0,
+          "median_rank": 1.0,
+          "top1_rate": 0.545,
+          "top1_chance": 0.09090909090909091,
+          "mean_normalized_rank": 0.14800000000000002,
+          "p_perm": 9.999000099990002e-05,
+          "p_exact": 1.751265688179163e-65,
+          "n_permutations": 10000,
+          "n_undefined": 0
+        },
+        "per_pair": {
+          "A03-I04": {
+            "n_trials": 50,
+            "mean_n_candidates": 11.0,
+            "mean_rank": 2.06,
+            "chance_mean_rank": 6.0,
+            "median_rank": 1.0,
+            "top1_rate": 0.56,
+            "top1_chance": 0.09090909090909091,
+            "mean_normalized_rank": 0.10600000000000001,
+            "p_perm": 9.999000099990002e-05,
+            "p_exact": 6.364534767238718e-23,
+            "n_permutations": 10000
+          },
+          "A06-I07": {
+            "n_trials": 50,
+            "mean_n_candidates": 11.0,
+            "mean_rank": 3.32,
+            "chance_mean_rank": 6.0,
+            "median_rank": 2.0,
+            "top1_rate": 0.42,
+            "top1_chance": 0.09090909090909091,
+            "mean_normalized_rank": 0.23199999999999998,
+            "p_perm": 9.999000099990002e-05,
+            "p_exact": 2.7847006202245456e-10,
+            "n_permutations": 10000
+          },
+          "A11-I09": {
+            "n_trials": 50,
+            "mean_n_candidates": 11.0,
+            "mean_rank": 2.94,
+            "chance_mean_rank": 6.0,
+            "median_rank": 1.0,
+            "top1_rate": 0.54,
+            "top1_chance": 0.09090909090909091,
+            "mean_normalized_rank": 0.19399999999999998,
+            "p_perm": 9.999000099990002e-05,
+            "p_exact": 3.1636767329647355e-13,
+            "n_permutations": 10000
+          },
+          "A13-I12": {
+            "n_trials": 50,
+            "mean_n_candidates": 11.0,
+            "mean_rank": 1.6,
+            "chance_mean_rank": 6.0,
+            "median_rank": 1.0,
+            "top1_rate": 0.66,
+            "top1_chance": 0.09090909090909091,
+            "mean_normalized_rank": 0.06,
+            "p_perm": 9.999000099990002e-05,
+            "p_exact": 7.5551882301107455e-31,
+            "n_permutations": 10000
+          }
+        },
+        "own_minus_others_mean": {
+          "n": 200,
+          "n_nan": 0,
+          "mean": 0.052960771237664336,
+          "sd": 0.04191827599719306,
+          "median": 0.055599076762301844,
+          "q25": 0.019798265903897418,
+          "q75": 0.08523663575738795,
+          "frac_a_gt_b": 0.875,
+          "wilcoxon_p": 1.8563824156164522e-29
+        }
+      },
+      "all": {
+        "pooled": {
+          "n_trials": 200,
+          "mean_n_candidates": 50.0,
+          "mean_rank": 8.195,
+          "chance_mean_rank": 25.5,
+          "median_rank": 2.0,
+          "top1_rate": 0.405,
+          "top1_chance": 0.019999999999999997,
+          "mean_normalized_rank": 0.14683673469387756,
+          "p_perm": 9.999000099990002e-05,
+          "p_exact": 4.016645419407901e-78,
+          "n_permutations": 10000,
+          "n_undefined": 0
+        },
+        "per_pair": {
+          "A03-I04": {
+            "n_trials": 50,
+            "mean_n_candidates": 50.0,
+            "mean_rank": 6.76,
+            "chance_mean_rank": 25.5,
+            "median_rank": 2.0,
+            "top1_rate": 0.4,
+            "top1_chance": 0.02,
+            "mean_normalized_rank": 0.11755102040816326,
+            "p_perm": 9.999000099990002e-05,
+            "p_exact": 2.2576494214598203e-25,
+            "n_permutations": 10000
+          },
+          "A06-I07": {
+            "n_trials": 50,
+            "mean_n_candidates": 50.0,
+            "mean_rank": 12.72,
+            "chance_mean_rank": 25.5,
+            "median_rank": 7.5,
+            "top1_rate": 0.26,
+            "top1_chance": 0.02,
+            "mean_normalized_rank": 0.2391836734693878,
+            "p_perm": 9.999000099990002e-05,
+            "p_exact": 3.402856445174619e-11,
+            "n_permutations": 10000
+          },
+          "A11-I09": {
+            "n_trials": 50,
+            "mean_n_candidates": 50.0,
+            "mean_rank": 9.52,
+            "chance_mean_rank": 25.5,
+            "median_rank": 2.5,
+            "top1_rate": 0.42,
+            "top1_chance": 0.02,
+            "mean_normalized_rank": 0.17387755102040817,
+            "p_perm": 9.999000099990002e-05,
+            "p_exact": 1.685404548281601e-17,
+            "n_permutations": 10000
+          },
+          "A13-I12": {
+            "n_trials": 50,
+            "mean_n_candidates": 50.0,
+            "mean_rank": 3.78,
+            "chance_mean_rank": 25.5,
+            "median_rank": 1.0,
+            "top1_rate": 0.54,
+            "top1_chance": 0.02,
+            "mean_normalized_rank": 0.056734693877551014,
+            "p_perm": 9.999000099990002e-05,
+            "p_exact": 1.9614577235876573e-39,
+            "n_permutations": 10000
+          }
+        },
+        "own_minus_others_mean": {
+          "n": 200,
+          "n_nan": 0,
+          "mean": 0.056183049329064746,
+          "sd": 0.04176637803987834,
+          "median": 0.05873185006513333,
+          "q25": 0.028170589791938164,
+          "q75": 0.08840913072881897,
+          "frac_a_gt_b": 0.885,
+          "wilcoxon_p": 3.3859130631430534e-30
+        }
+      }
+    },
+    "pattern": {
+      "length_matched": {
+        "pooled": {
+          "n_trials": 200,
+          "mean_n_candidates": 11.0,
+          "mean_rank": 4.075,
+          "chance_mean_rank": 6.0,
+          "median_rank": 3.0,
+          "top1_rate": 0.345,
+          "top1_chance": 0.09090909090909091,
+          "mean_normalized_rank": 0.3075,
+          "p_perm": 9.999000099990002e-05,
+          "p_exact": 9.349186230457162e-19,
+          "n_permutations": 10000,
+          "n_undefined": 0
+        },
+        "per_pair": {
+          "A03-I04": {
+            "n_trials": 50,
+            "mean_n_candidates": 11.0,
+            "mean_rank": 4.42,
+            "chance_mean_rank": 6.0,
+            "median_rank": 3.5,
+            "top1_rate": 0.28,
+            "top1_chance": 0.09090909090909091,
+            "mean_normalized_rank": 0.34199999999999997,
+            "p_perm": 0.00039996000399960006,
+            "p_exact": 0.00019563161984868186,
+            "n_permutations": 10000
+          },
+          "A06-I07": {
+            "n_trials": 50,
+            "mean_n_candidates": 11.0,
+            "mean_rank": 5.12,
+            "chance_mean_rank": 6.0,
+            "median_rank": 4.5,
+            "top1_rate": 0.2,
+            "top1_chance": 0.09090909090909091,
+            "mean_normalized_rank": 0.412,
+            "p_perm": 0.024997500249975,
+            "p_exact": 0.025760418183638813,
+            "n_permutations": 10000
+          },
+          "A11-I09": {
+            "n_trials": 50,
+            "mean_n_candidates": 11.0,
+            "mean_rank": 3.62,
+            "chance_mean_rank": 6.0,
+            "median_rank": 2.0,
+            "top1_rate": 0.4,
+            "top1_chance": 0.09090909090909091,
+            "mean_normalized_rank": 0.262,
+            "p_perm": 9.999000099990002e-05,
+            "p_exact": 2.4885040459435244e-08,
+            "n_permutations": 10000
+          },
+          "A13-I12": {
+            "n_trials": 50,
+            "mean_n_candidates": 11.0,
+            "mean_rank": 3.14,
+            "chance_mean_rank": 6.0,
+            "median_rank": 1.5,
+            "top1_rate": 0.5,
+            "top1_chance": 0.09090909090909091,
+            "mean_normalized_rank": 0.21400000000000002,
+            "p_perm": 9.999000099990002e-05,
+            "p_exact": 1.322637642635332e-11,
+            "n_permutations": 10000
+          }
+        },
+        "own_minus_others_mean": {
+          "n": 200,
+          "n_nan": 0,
+          "mean": 0.048609286450283645,
+          "sd": 0.13063812453708462,
+          "median": 0.0568937029839956,
+          "q25": -0.0003327764671390565,
+          "q75": 0.10217971356253619,
+          "frac_a_gt_b": 0.745,
+          "wilcoxon_p": 8.372802757263379e-11
+        }
+      },
+      "all": {
+        "pooled": {
+          "n_trials": 200,
+          "mean_n_candidates": 50.0,
+          "mean_rank": 16.355,
+          "chance_mean_rank": 25.5,
+          "median_rank": 10.0,
+          "top1_rate": 0.14,
+          "top1_chance": 0.019999999999999997,
+          "mean_normalized_rank": 0.31336734693877555,
+          "p_perm": 9.999000099990002e-05,
+          "p_exact": 2.923138203734629e-20,
+          "n_permutations": 10000,
+          "n_undefined": 0
+        },
+        "per_pair": {
+          "A03-I04": {
+            "n_trials": 50,
+            "mean_n_candidates": 50.0,
+            "mean_rank": 17.7,
+            "chance_mean_rank": 25.5,
+            "median_rank": 13.0,
+            "top1_rate": 0.1,
+            "top1_chance": 0.02,
+            "mean_normalized_rank": 0.3408163265306123,
+            "p_perm": 0.00029997000299970003,
+            "p_exact": 5.5795273866893936e-05,
+            "n_permutations": 10000
+          },
+          "A06-I07": {
+            "n_trials": 50,
+            "mean_n_candidates": 50.0,
+            "mean_rank": 20.92,
+            "chance_mean_rank": 25.5,
+            "median_rank": 22.0,
+            "top1_rate": 0.06,
+            "top1_chance": 0.02,
+            "mean_normalized_rank": 0.40653061224489795,
+            "p_perm": 0.013498650134986502,
+            "p_exact": 0.0124196385263683,
+            "n_permutations": 10000
+          },
+          "A11-I09": {
+            "n_trials": 50,
+            "mean_n_candidates": 50.0,
+            "mean_rank": 14.98,
+            "chance_mean_rank": 25.5,
+            "median_rank": 6.5,
+            "top1_rate": 0.16,
+            "top1_chance": 0.02,
+            "mean_normalized_rank": 0.28530612244897957,
+            "p_perm": 9.999000099990002e-05,
+            "p_exact": 6.286048977362747e-08,
+            "n_permutations": 10000
+          },
+          "A13-I12": {
+            "n_trials": 50,
+            "mean_n_candidates": 50.0,
+            "mean_rank": 11.82,
+            "chance_mean_rank": 25.5,
+            "median_rank": 3.0,
+            "top1_rate": 0.24,
+            "top1_chance": 0.02,
+            "mean_normalized_rank": 0.22081632653061228,
+            "p_perm": 9.999000099990002e-05,
+            "p_exact": 9.635101061338068e-13,
+            "n_permutations": 10000
+          }
+        },
+        "own_minus_others_mean": {
+          "n": 200,
+          "n_nan": 0,
+          "mean": 0.05123378081808418,
+          "sd": 0.12976166972498263,
+          "median": 0.0661852364310054,
+          "q25": -0.008724947999537568,
+          "q75": 0.10463879958555611,
+          "frac_a_gt_b": 0.715,
+          "wilcoxon_p": 1.8690931527860312e-10
+        }
+      }
+    },
+    "length": {
+      "length_matched": {
+        "pooled": {
+          "n_trials": 200,
+          "mean_n_candidates": 11.0,
+          "mean_rank": 5.91,
+          "chance_mean_rank": 6.0,
+          "median_rank": 6.0,
+          "top1_rate": 0.075,
+          "top1_chance": 0.09045454545454547,
+          "mean_normalized_rank": 0.49099999999999994,
+          "p_perm": 0.3448655134486551,
+          "p_exact": 0.3457883936494475,
+          "n_permutations": 10000,
+          "n_undefined": 0
+        },
+        "per_pair": {
+          "A03-I04": {
+            "n_trials": 50,
+            "mean_n_candidates": 11.0,
+            "mean_rank": 6.0,
+            "chance_mean_rank": 6.0,
+            "median_rank": 6.0,
+            "top1_rate": 0.06,
+            "top1_chance": 0.09090909090909091,
+            "mean_normalized_rank": 0.5,
+            "p_perm": 0.5073492650734927,
+            "p_exact": 0.5047419352503326,
+            "n_permutations": 10000
+          },
+          "A06-I07": {
+            "n_trials": 50,
+            "mean_n_candidates": 11.0,
+            "mean_rank": 5.86,
+            "chance_mean_rank": 6.0,
+            "median_rank": 6.0,
+            "top1_rate": 0.1,
+            "top1_chance": 0.0890909090909091,
+            "mean_normalized_rank": 0.486,
+            "p_perm": 0.3842615738426157,
+            "p_exact": 0.3816841430191762,
+            "n_permutations": 10000
+          },
+          "A11-I09": {
+            "n_trials": 50,
+            "mean_n_candidates": 11.0,
+            "mean_rank": 5.94,
+            "chance_mean_rank": 6.0,
+            "median_rank": 6.0,
+            "top1_rate": 0.06,
+            "top1_chance": 0.09090909090909091,
+            "mean_normalized_rank": 0.494,
+            "p_perm": 0.45025497450254975,
+            "p_exact": 0.45562083264356135,
+            "n_permutations": 10000
+          },
+          "A13-I12": {
+            "n_trials": 50,
+            "mean_n_candidates": 11.0,
+            "mean_rank": 5.84,
+            "chance_mean_rank": 6.0,
+            "median_rank": 6.0,
+            "top1_rate": 0.08,
+            "top1_chance": 0.09090909090909091,
+            "mean_normalized_rank": 0.484,
+            "p_perm": 0.36696330366963303,
+            "p_exact": 0.3652251139136832,
+            "n_permutations": 10000
+          }
+        },
+        "own_minus_others_mean": {
+          "n": 200,
+          "n_nan": 0,
+          "mean": 0.003742900883962734,
+          "sd": 0.1788984843627512,
+          "median": 0.007495779856501392,
+          "q25": -0.10338003228656287,
+          "q75": 0.11147574334871543,
+          "frac_a_gt_b": 0.525,
+          "wilcoxon_p": 0.6898964096387092
+        }
+      },
+      "all": {
+        "pooled": {
+          "n_trials": 200,
+          "mean_n_candidates": 50.0,
+          "mean_rank": 24.895,
+          "chance_mean_rank": 25.5,
+          "median_rank": 25.5,
+          "top1_rate": 0.005,
+          "top1_chance": 0.019999999999999997,
+          "mean_normalized_rank": 0.48765306122448976,
+          "p_perm": 0.2782721727827217,
+          "p_exact": 0.2771611837126026,
+          "n_permutations": 10000,
+          "n_undefined": 0
+        },
+        "per_pair": {
+          "A03-I04": {
+            "n_trials": 50,
+            "mean_n_candidates": 50.0,
+            "mean_rank": 23.62,
+            "chance_mean_rank": 25.5,
+            "median_rank": 21.5,
+            "top1_rate": 0.02,
+            "top1_chance": 0.02,
+            "mean_normalized_rank": 0.4616326530612244,
+            "p_perm": 0.1860813918608139,
+            "p_exact": 0.1796251227063954,
+            "n_permutations": 10000
+          },
+          "A06-I07": {
+            "n_trials": 50,
+            "mean_n_candidates": 50.0,
+            "mean_rank": 24.8,
+            "chance_mean_rank": 25.5,
+            "median_rank": 26.5,
+            "top1_rate": 0.0,
+            "top1_chance": 0.02,
+            "mean_normalized_rank": 0.4857142857142857,
+            "p_perm": 0.36266373362663734,
+            "p_exact": 0.36710425919412315,
+            "n_permutations": 10000
+          },
+          "A11-I09": {
+            "n_trials": 50,
+            "mean_n_candidates": 50.0,
+            "mean_rank": 26.48,
+            "chance_mean_rank": 25.5,
+            "median_rank": 26.0,
+            "top1_rate": 0.0,
+            "top1_chance": 0.02,
+            "mean_normalized_rank": 0.52,
+            "p_perm": 0.6836316368363163,
+            "p_exact": 0.6848654703617855,
+            "n_permutations": 10000
+          },
+          "A13-I12": {
+            "n_trials": 50,
+            "mean_n_candidates": 50.0,
+            "mean_rank": 24.68,
+            "chance_mean_rank": 25.5,
+            "median_rank": 25.5,
+            "top1_rate": 0.0,
+            "top1_chance": 0.02,
+            "mean_normalized_rank": 0.48326530612244895,
+            "p_perm": 0.3431656834316568,
+            "p_exact": 0.3452484238409913,
+            "n_permutations": 10000
+          }
+        },
+        "own_minus_others_mean": {
+          "n": 200,
+          "n_nan": 0,
+          "mean": 0.007699275239419068,
+          "sd": 0.21351336905313006,
+          "median": 0.006717099283452654,
+          "q25": -0.12333300138088867,
+          "q75": 0.15410684525562235,
+          "frac_a_gt_b": 0.515,
+          "wilcoxon_p": 0.5589098486250618
+        }
+      }
+    },
+    "length_norm": {
+      "length_matched": {
+        "pooled": {
+          "n_trials": 200,
+          "mean_n_candidates": 11.0,
+          "mean_rank": 5.51,
+          "chance_mean_rank": 6.0,
+          "median_rank": 5.0,
+          "top1_rate": 0.115,
+          "top1_chance": 0.09045454545454547,
+          "mean_normalized_rank": 0.451,
+          "p_perm": 0.016798320167983202,
+          "p_exact": 0.014359799728895145,
+          "n_permutations": 10000,
+          "n_undefined": 0
+        },
+        "per_pair": {
+          "A03-I04": {
+            "n_trials": 50,
+            "mean_n_candidates": 11.0,
+            "mean_rank": 5.92,
+            "chance_mean_rank": 6.0,
+            "median_rank": 5.0,
+            "top1_rate": 0.06,
+            "top1_chance": 0.09090909090909091,
+            "mean_normalized_rank": 0.49200000000000005,
+            "p_perm": 0.43995600439956006,
+            "p_exact": 0.43387639295169433,
+            "n_permutations": 10000
+          },
+          "A06-I07": {
+            "n_trials": 50,
+            "mean_n_candidates": 11.0,
+            "mean_rank": 5.84,
+            "chance_mean_rank": 6.0,
+            "median_rank": 6.0,
+            "top1_rate": 0.14,
+            "top1_chance": 0.09090909090909091,
+            "mean_normalized_rank": 0.48400000000000004,
+            "p_perm": 0.37136286371362864,
+            "p_exact": 0.36479328184418297,
+            "n_permutations": 10000
+          },
+          "A11-I09": {
+            "n_trials": 50,
+            "mean_n_candidates": 11.0,
+            "mean_rank": 5.58,
+            "chance_mean_rank": 6.0,
+            "median_rank": 5.5,
+            "top1_rate": 0.12,
+            "top1_chance": 0.09090909090909091,
+            "mean_normalized_rank": 0.458,
+            "p_perm": 0.16748325167483252,
+            "p_exact": 0.18013751801429445,
+            "n_permutations": 10000
+          },
+          "A13-I12": {
+            "n_trials": 50,
+            "mean_n_candidates": 11.0,
+            "mean_rank": 4.7,
+            "chance_mean_rank": 6.0,
+            "median_rank": 4.5,
+            "top1_rate": 0.14,
+            "top1_chance": 0.0890909090909091,
+            "mean_normalized_rank": 0.37000000000000005,
+            "p_perm": 0.0014998500149985001,
+            "p_exact": 0.0017946102125507683,
+            "n_permutations": 10000
+          }
+        },
+        "own_minus_others_mean": {
+          "n": 200,
+          "n_nan": 0,
+          "mean": 0.018345615418455908,
+          "sd": 0.228222111189828,
+          "median": 0.06342380599324204,
+          "q25": -0.044102042347817144,
+          "q75": 0.15068986522814473,
+          "frac_a_gt_b": 0.645,
+          "wilcoxon_p": 0.0009359588727928084
+        }
+      },
+      "all": {
+        "pooled": {
+          "n_trials": 200,
+          "mean_n_candidates": 50.0,
+          "mean_rank": 20.58,
+          "chance_mean_rank": 25.5,
+          "median_rank": 17.5,
+          "top1_rate": 0.02,
+          "top1_chance": 0.0197,
+          "mean_normalized_rank": 0.39959183673469384,
+          "p_perm": 9.999000099990002e-05,
+          "p_exact": 6.31646494332554e-07,
+          "n_permutations": 10000,
+          "n_undefined": 0
+        },
+        "per_pair": {
+          "A03-I04": {
+            "n_trials": 50,
+            "mean_n_candidates": 50.0,
+            "mean_rank": 22.74,
+            "chance_mean_rank": 25.5,
+            "median_rank": 19.5,
+            "top1_rate": 0.0,
+            "top1_chance": 0.019200000000000005,
+            "mean_normalized_rank": 0.4436734693877551,
+            "p_perm": 0.09249075092490751,
+            "p_exact": 0.088765054016226,
+            "n_permutations": 10000
+          },
+          "A06-I07": {
+            "n_trials": 50,
+            "mean_n_candidates": 50.0,
+            "mean_rank": 24.94,
+            "chance_mean_rank": 25.5,
+            "median_rank": 26.5,
+            "top1_rate": 0.04,
+            "top1_chance": 0.02,
+            "mean_normalized_rank": 0.4885714285714286,
+            "p_perm": 0.39036096390360964,
+            "p_exact": 0.3931494393501111,
+            "n_permutations": 10000
+          },
+          "A11-I09": {
+            "n_trials": 50,
+            "mean_n_candidates": 50.0,
+            "mean_rank": 20.1,
+            "chance_mean_rank": 25.5,
+            "median_rank": 15.5,
+            "top1_rate": 0.04,
+            "top1_chance": 0.02,
+            "mean_normalized_rank": 0.3897959183673469,
+            "p_perm": 0.0036996300369963003,
+            "p_exact": 0.003972211725622575,
+            "n_permutations": 10000
+          },
+          "A13-I12": {
+            "n_trials": 50,
+            "mean_n_candidates": 50.0,
+            "mean_rank": 14.54,
+            "chance_mean_rank": 25.5,
+            "median_rank": 10.5,
+            "top1_rate": 0.0,
+            "top1_chance": 0.019600000000000003,
+            "mean_normalized_rank": 0.2763265306122449,
+            "p_perm": 9.999000099990002e-05,
+            "p_exact": 1.6549071448754258e-08,
+            "n_permutations": 10000
+          }
+        },
+        "own_minus_others_mean": {
+          "n": 200,
+          "n_nan": 0,
+          "mean": 0.053947098337285816,
+          "sd": 0.24190726761693132,
+          "median": 0.10393221986864486,
+          "q25": -0.04354324612991443,
+          "q75": 0.19346220318520047,
+          "frac_a_gt_b": 0.7,
+          "wilcoxon_p": 2.03293439271449e-06
+        }
+      }
+    },
+    "primary": {
+      "measure": "dtw",
+      "candidates": "length_matched",
+      "pooled": {
+        "n_trials": 200,
+        "mean_n_candidates": 11.0,
+        "mean_rank": 2.48,
+        "chance_mean_rank": 6.0,
+        "median_rank": 1.0,
+        "top1_rate": 0.545,
+        "top1_chance": 0.09090909090909091,
+        "mean_normalized_rank": 0.14800000000000002,
+        "p_perm": 9.999000099990002e-05,
+        "p_exact": 1.751265688179163e-65,
+        "n_permutations": 10000,
+        "n_undefined": 0
+      },
+      "per_pair": {
+        "A03-I04": {
+          "n_trials": 50,
+          "mean_n_candidates": 11.0,
+          "mean_rank": 2.06,
+          "chance_mean_rank": 6.0,
+          "median_rank": 1.0,
+          "top1_rate": 0.56,
+          "top1_chance": 0.09090909090909091,
+          "mean_normalized_rank": 0.10600000000000001,
+          "p_perm": 9.999000099990002e-05,
+          "p_exact": 6.364534767238718e-23,
+          "n_permutations": 10000
+        },
+        "A06-I07": {
+          "n_trials": 50,
+          "mean_n_candidates": 11.0,
+          "mean_rank": 3.32,
+          "chance_mean_rank": 6.0,
+          "median_rank": 2.0,
+          "top1_rate": 0.42,
+          "top1_chance": 0.09090909090909091,
+          "mean_normalized_rank": 0.23199999999999998,
+          "p_perm": 9.999000099990002e-05,
+          "p_exact": 2.7847006202245456e-10,
+          "n_permutations": 10000
+        },
+        "A11-I09": {
+          "n_trials": 50,
+          "mean_n_candidates": 11.0,
+          "mean_rank": 2.94,
+          "chance_mean_rank": 6.0,
+          "median_rank": 1.0,
+          "top1_rate": 0.54,
+          "top1_chance": 0.09090909090909091,
+          "mean_normalized_rank": 0.19399999999999998,
+          "p_perm": 9.999000099990002e-05,
+          "p_exact": 3.1636767329647355e-13,
+          "n_permutations": 10000
+        },
+        "A13-I12": {
+          "n_trials": 50,
+          "mean_n_candidates": 11.0,
+          "mean_rank": 1.6,
+          "chance_mean_rank": 6.0,
+          "median_rank": 1.0,
+          "top1_rate": 0.66,
+          "top1_chance": 0.09090909090909091,
+          "mean_normalized_rank": 0.06,
+          "p_perm": 9.999000099990002e-05,
+          "p_exact": 7.5551882301107455e-31,
+          "n_permutations": 10000
+        }
+      },
+      "own_minus_others_mean": {
+        "n": 200,
+        "n_nan": 0,
+        "mean": 0.052960771237664336,
+        "sd": 0.04191827599719306,
+        "median": 0.055599076762301844,
+        "q25": 0.019798265903897418,
+        "q75": 0.08523663575738795,
+        "frac_a_gt_b": 0.875,
+        "wilcoxon_p": 1.8563824156164522e-29
+      }
+    }
+  },
+  "limitations": [
+    "No within-mode positive control: no sentence repeats within a condition on this day, so the analysis has no same-sentence ceiling (how well a trial matches another trial of the same sentence in the same mode is unknown).",
+    "At chance is NOT evidence of no shared code: single-trial matching may simply be too noisy.",
+    "Direction imagined -> attempted only; trials are matched within a block pair (same day, same arrays)."
+  ],
+  "interpretation_rule": "Fixed in advance (D-032): above chance = imagined and attempted share sentence-specific neural structure on this day; at chance = not evidence of no shared code (no positive control).",
+  "inputs": {
+    "attempted": {
+      "file": "data/processed/kunz/t15.2024.03.03_attempted.npz",
+      "sha256": "fea869772c959296ba13f04b036d1d030261cc88a99a309b012378b2ee16d501",
+      "name": "t15.2024.03.03_attempted"
+    },
+    "imagined": {
+      "file": "data/processed/kunz/t15.2024.03.03_imagined.npz",
+      "sha256": "ec06ee656ff195fb33c24fcdb83b265d313257d13eca9552a461c2095165b75c",
+      "name": "t15.2024.03.03_imagined"
+    }
+  },
+  "code_version": {
+    "source": "sync",
+    "commit": "34145ae770f31bbf86bffa65777bb61d9bdf85aa",
+    "dirty": false,
+    "diff_sha256": null,
+    "pushed_at": "2026-10-21T09:48:45Z"
+  },
+  "config_file": "configs/experiments/neural_match.yaml",
+  "config_sha256": "61e7833a417e29499ca1c731590611daa9ed2236c46b00a3ed0ae1ba048da7c3",
+  "runtime": {
+    "threads": {
+      "omp": 2,
+      "intra_op": null,
+      "inter_op": null
+    },
+    "env": {
+      "OMP_NUM_THREADS": "2",
+      "MKL_NUM_THREADS": "2",
+      "OPENBLAS_NUM_THREADS": "2",
+      "NUMBA_NUM_THREADS": "2"
+    },
+    "nice": 19,
+    "CUDA_VISIBLE_DEVICES": "",
+    "tensorflow_loaded": false,
+    "python": "3.12.14",
+    "numpy": "2.5.4",
+    "platform": "Linux-5.15.0-191-generic-x86_64-with-glibc2.39",
+    "elapsed_s": 13.4
+  }
+}
