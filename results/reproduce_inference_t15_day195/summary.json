@@ -1,0 +1,389 @@
+{
+  "run_name": "reproduce_inference_t15_day195",
+  "config_file": "configs/experiments/reproduce_inference.yaml",
+  "git_commit": null,
+  "session": "t15_day195",
+  "layer": 20,
+  "seed": 42,
+  "model": {
+    "path": "data/raw/wairagkar/t15_neural_data/t15_day195/brain2voice_t15_day193.h5",
+    "sha256": "fd476519fb7f0a7880efb1cbcd328a4915cd1473a23a2eb8d4939d6f34ad006b"
+  },
+  "reorder_channels": true,
+  "target_audio_source": "raw",
+  "n_trials_in_session": 305,
+  "n_trials_run": 5,
+  "metrics_available": true,
+  "n_metrics_errors": 0,
+  "aggregate": {
+    "n_bins": {
+      "mean": 959.6,
+      "sd": 230.1804509509876,
+      "median": 999.0,
+      "n": 5
+    },
+    "n_frames": {
+      "mean": 900.6,
+      "sd": 230.1804509509876,
+      "median": 940.0,
+      "n": 5
+    },
+    "t_predict_s": {
+      "mean": 0.6645008087158203,
+      "sd": 0.2200707336522004,
+      "median": 0.629561185836792,
+      "n": 5
+    },
+    "feat_mse": {
+      "mean": 0.021680570393800735,
+      "sd": 0.004393631725761952,
+      "median": 0.019304804503917694,
+      "n": 5
+    },
+    "feat_corr_mean": {
+      "mean": 0.6431722222807753,
+      "sd": 0.0890870983648339,
+      "median": 0.6369210735941939,
+      "n": 5
+    },
+    "t_synth_s": {
+      "mean": 1.2858745098114013,
+      "sd": 0.3249582305218313,
+      "median": 1.3194074630737305,
+      "n": 5
+    },
+    "mel_corr": {
+      "mean": 0.7967189714786717,
+      "sd": 0.05905379387623496,
+      "median": 0.7542581555015639,
+      "n": 5
+    },
+    "mcd": {
+      "mean": 5.093337153809458,
+      "sd": 0.6426948413137195,
+      "median": 5.404153965074518,
+      "n": 5
+    },
+    "mel_corr_framewise": {
+      "mean": 0.8665480416917968,
+      "sd": 0.021295709194396332,
+      "median": 0.8683009470207651,
+      "n": 5
+    },
+    "ref_speech_fraction": {
+      "mean": 0.46358643419344475,
+      "sd": 0.052179914065985274,
+      "median": 0.445371142618849,
+      "n": 5
+    },
+    "est_speech_fraction": {
+      "mean": 0.44737276757805616,
+      "sd": 0.06624090674432816,
+      "median": 0.42720510095642933,
+      "n": 5
+    }
+  },
+  "data_files": {
+    "neural": {
+      "file": "t15_day195_neural_data.mat",
+      "bytes": 961075896,
+      "variables": [
+        {
+          "name": "participant",
+          "shape": [
+            1
+          ],
+          "class": "char"
+        },
+        {
+          "name": "session",
+          "shape": [
+            1
+          ],
+          "class": "char"
+        },
+        {
+          "name": "neural_bin_size_ms",
+          "shape": [
+            1,
+            1
+          ],
+          "class": "int64"
+        },
+        {
+          "name": "trial_description",
+          "shape": [
+            305
+          ],
+          "class": "char"
+        },
+        {
+          "name": "spikepow_trials",
+          "shape": [
+            1,
+            305
+          ],
+          "class": "cell"
+        },
+        {
+          "name": "threshcross_trials",
+          "shape": [
+            1,
+            305
+          ],
+          "class": "cell"
+        },
+        {
+          "name": "cues",
+          "shape": [
+            305
+          ],
+          "class": "char"
+        },
+        {
+          "name": "brain2voice_pred_audio_16kHz",
+          "shape": [
+            1,
+            305
+          ],
+          "class": "cell"
+        },
+        {
+          "name": "brain2voice_decoder",
+          "shape": [
+            1
+          ],
+          "class": "char"
+        }
+      ]
+    },
+    "target": {
+      "file": "t15_day195_target_speech_feats.mat",
+      "bytes": 65229144,
+      "variables": [
+        {
+          "name": "participant",
+          "shape": [
+            1
+          ],
+          "class": "char"
+        },
+        {
+          "name": "session",
+          "shape": [
+            1
+          ],
+          "class": "char"
+        },
+        {
+          "name": "target_speech_feats_word",
+          "shape": [
+            1,
+            305
+          ],
+          "class": "cell"
+        },
+        {
+          "name": "target_speech_feats_syl",
+          "shape": [
+            1,
+            305
+          ],
+          "class": "cell"
+        }
+      ]
+    }
+  },
+  "data_checks": {
+    "session": "t15_day195",
+    "layer": 20,
+    "n_trials": 305,
+    "n_bins": {
+      "min": 552,
+      "median": 1268.0,
+      "max": 4234
+    },
+    "neural_dtypes": [
+      "float32"
+    ],
+    "cue_keys": [
+      "cues"
+    ],
+    "neural_moments": {
+      "spikepow": {
+        "mean_of_channel_means": 0.08301614969968796,
+        "mean_of_channel_sds": 0.48214423656463623,
+        "min": -3.253906011581421,
+        "max": 5.802940368652344
+      },
+      "threshcross": {
+        "mean_of_channel_means": 0.02402137964963913,
+        "mean_of_channel_sds": 0.3688353896141052,
+        "min": -1.889399528503418,
+        "max": 8.367620468139648
+      }
+    },
+    "targets": {
+      "n_trials": 305,
+      "dtypes": [
+        "float32"
+      ],
+      "columns": [
+        20
+      ],
+      "training_target_fraction_outside_unit_range": 1.104386623669214e-06
+    },
+    "raw_targets": {
+      "min": [
+        -12.48528003692627,
+        -9.493697166442871,
+        -4.248213291168213,
+        -4.653319358825684,
+        -4.533952236175537,
+        -3.3765485286712646,
+        -2.8777856826782227,
+        -3.1633474826812744,
+        -1.9830199480056763,
+        -2.377180337905884,
+        -2.6421866416931152,
+        -1.4396800994873047,
+        -1.5156155824661255,
+        -1.1202353239059448,
+        -1.192299485206604,
+        -1.065754771232605,
+        -1.4329575300216675,
+        -0.9438638687133789,
+        -1.340000033378601,
+        -0.7203139662742615
+      ],
+      "max": [
+        15.377458572387695,
+        7.345376968383789,
+        5.756130218505859,
+        5.197731018066406,
+        3.442929267883301,
+        3.197833776473999,
+        2.1345465183258057,
+        2.477971076965332,
+        2.4788453578948975,
+        2.1404945850372314,
+        1.3618087768554688,
+        1.7162176370620728,
+        1.3636020421981812,
+        1.3952962160110474,
+        1.4822206497192383,
+        1.0006201267242432,
+        1.131097674369812,
+        1.1605652570724487,
+        3.0999999046325684,
+        0.45416826009750366
+      ],
+      "fraction_outside_unit_range_after_scaling": 7.7307063656845e-06
+    }
+  },
+  "lpcnet": {
+    "path": "third_party/LPCNet/lpcnet_demo",
+    "sha256": "c25900477cf1395be05161fa9f73b599618f873130a45b1c8d69cddbca8c7dc5"
+  },
+  "versions": {
+    "python": "3.12.14",
+    "numpy": "2.5.4",
+    "tensorflow": "2.21.0",
+    "keras": "2.21.0",
+    "platform": "Linux-5.15.0-191-generic-x86_64-with-glibc2.39",
+    "devices": [
+      "/physical_device:CPU:0"
+    ]
+  },
+  "warnings": [],
+  "outputs": {
+    "csv": "results/reproduce_inference_t15_day195/per_trial_metrics.csv",
+    "audio_dir": "results/audio/reproduce_inference_t15_day195"
+  },
+  "wall_time_s": 14.857884168624878,
+  "config": {
+    "seed": 42,
+    "paths": {
+      "data_root": "data",
+      "raw_kunz": "data/raw/kunz/sentenceData",
+      "raw_wairagkar": "data/raw/wairagkar",
+      "processed": "data/processed",
+      "checkpoints": "data/checkpoints",
+      "results": "results",
+      "figures": "figures",
+      "brain_to_voice": "third_party/brain_to_voice",
+      "lpcnet": "third_party/LPCNet",
+      "wairagkar_neural_data": "data/raw/wairagkar/t15_neural_data",
+      "pretrained_model": "data/raw/wairagkar/t15_neural_data/t15_day195/brain2voice_t15_day193.h5",
+      "b2v_session_layers": "third_party/brain_to_voice/configs/training_data_args.yaml",
+      "lpc_norm": "third_party/brain_to_voice/dependencies/T15_lpcnet_features_norm_macOS_TTS.json",
+      "electrode_mapping": "third_party/brain_to_voice/dependencies/T15_electrode_mapping_256.json"
+    },
+    "model": {
+      "n_features": 512,
+      "n_targets": 20,
+      "window_len": 60,
+      "step_size": 1,
+      "transformer_input_shape": [
+        30,
+        128
+      ],
+      "head_size": 128,
+      "n_heads": 4,
+      "n_transformer_blocks": 8,
+      "mlp_units": [
+        1024,
+        512
+      ],
+      "dropout": 0.5
+    },
+    "runtime": {
+      "device": "auto",
+      "deterministic_ops": true
+    },
+    "run_name": "reproduce_inference_t15_day195",
+    "wairagkar_data": {
+      "neural_file": "{session}_neural_data.mat",
+      "target_file": "{session}_target_speech_feats.mat",
+      "keys": {
+        "spikepow": "spikepow_trials",
+        "threshcross": "threshcross_trials",
+        "cues": "cues",
+        "cues_fallback": "sentences",
+        "target": "target_speech_feats_word"
+      },
+      "held_out_session_layers": {
+        "t15_day195": 20
+      },
+      "targets": "required",
+      "n_cepstral_coeff": 18,
+      "target_smoothing": true,
+      "target_smoothing_sigma": 2.0
+    },
+    "inference": {
+      "session": "t15_day195",
+      "reorder_channels": true,
+      "batch_size": 256,
+      "max_trials": 5,
+      "synthesize": true,
+      "save_predictions": true,
+      "target_audio_source": "raw",
+      "audio_subdir": "audio"
+    },
+    "synthesis": {
+      "lpcnet_binary": "lpcnet_demo",
+      "ffmpeg": "ffmpeg",
+      "sample_rate": 16000,
+      "samples_per_frame": 160,
+      "n_frame_floats": 36,
+      "encode_tmp_wav_subtype": "PCM_24",
+      "wav_subtype": "PCM_16",
+      "timeout_s": 600,
+      "preflight_timeout_s": 30,
+      "tmp_root": null,
+      "keep_tmp": false,
+      "strip_ld_library_path": true
+    },
+    "metrics": {}
+  }
+}
