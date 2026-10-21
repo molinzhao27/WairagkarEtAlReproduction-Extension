@@ -1,0 +1,64 @@
+{
+  "variant": "theirs",
+  "targets": "their target_speech_feats_word (scaled + smoothed by their loader)",
+  "freeze_base": true,
+  "init": "data/raw/wairagkar/t15_neural_data/t15_day195/brain2voice_t15_day193.h5",
+  "n_train_trials": 143,
+  "n_validation_trials": 15,
+  "validation_trials": [
+    12,
+    14,
+    30,
+    64,
+    81,
+    95,
+    105,
+    112,
+    113,
+    114,
+    119,
+    127,
+    245,
+    247,
+    249
+  ],
+  "validation_types": {
+    "Training data (50-word vocab)": 12,
+    "Training data": 3
+  },
+  "excluded_too_short": [],
+  "epochs_configured": 5,
+  "epochs_run": 5,
+  "initial_validation": {
+    "loss": 0.011000972241163254,
+    "accuracy": 0.0
+  },
+  "history": {
+    "loss": [
+      0.0076030557975173,
+      0.0069439164362847805,
+      0.00656402250751853,
+      0.006268918979912996,
+      0.006036311853677034
+    ],
+    "val_loss": [
+      0.009597903117537498,
+      0.009448623284697533,
+      0.009378736838698387,
+      0.009354157373309135,
+      0.009321318008005619
+    ],
+    "val_accuracy": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "loss_note": "loss = their train_step loss (Huber + 1.5 x Huber on features 4-9; dropout on; augmented data); val_loss = plain Huber, dropout off (Keras test_step); initial_validation = val_loss before training",
+  "export_weights": "final",
+  "wall_time_s": 6026.585236549377,
+  "exported": "data/checkpoints/sanity_train_day195/train_theirs/inference_layer00.h5",
+  "exported_sha256": "2da437138b1a7c9583e4e4373112f9bbabc29a291de3dec449ce4120cfd05346"
+}

@@ -1,0 +1,78 @@
+# Training-code sanity check after the Kunz pilot (D-029): the pilot made held-out attempted decoding slightly
+# WORSE than the zero-shot day-193 decoder. Here the EXACT pilot recipe (one new input layer copied from the
+# day-193 .h5, frozen base, 5 epochs, their optimizer/augmentation, 15 validation trials, reorder_channels ON
+# before training and every decode) runs on THEIR held-out session t15_day195 with THEIR real targets.
+# trained >= zero-shot -> training code/recipe OK (the Kunz problem is targets or data);
+# trained <  zero-shot -> suspect the training code/recipe first.
+# Optional variant "ours": the same training with OUR option-(b) targets for the same trials (D-020/D-027),
+# so the difference to "theirs" isolates target quality. Every model is scored against THEIR targets.
+#
+#   host (CPU only, niced, detached; see scripts/sanity_train_day195.py):
+#   CUDA_VISIBLE_DEVICES= .venv/bin/python -I scripts/sanity_train_day195.py \
+#       --config configs/experiments/sanity_train_day195.yaml [--smoke]
+#
+# Everything not set here is the pilot's (kunz_pilot.yaml -> kunz_full.yaml -> kunz_targets.yaml +
+# reproduce_training.yaml): runtime (cpu, 12/2/12 threads, nice 19), model (n_session_layers 1),
+# training (epochs 5, lr 5e-4, batch 1024, 3 augmented copies, validation 15 trials seeded from the
+# training trials, init from the day-193 .h5, export final), metrics ({} = configs/metrics.yaml, as in
+# reproduce_inference.yaml), wairagkar_data (targets = target_speech_feats_word, scaled + smoothed as their loader).
+
+base_experiment: configs/experiments/kunz_pilot.yaml
+
+run_name: sanity_train_day195
+
+training:
+  epochs: 5                                   # = pilot
+  validation: {n_trials: 15, fraction: null, pool: null}   # = pilot: 15 trials, seeded, from the training trials
+  init:
+    source: inference_h5                      # = pilot: ONE new input layer, a copy of the day-193 input layer
+    path: data/raw/wairagkar/t15_neural_data/t15_day195/brain2voice_t15_day193.h5
+    freeze_base: true                         # = pilot variant "frozen"
+  overwrite: false
+
+experiment:
+  # Read by wvx.kunz_experiment.prepare_neural, the pilot's single input transform: their day <= 195
+  # models expect the old electrode order (D-022: feature corr 0.62 with reorder, 0.00 without).
+  reorder_channels: true
+
+sanity:
+  name: sanity_train_day195                   # outputs: results/<name>/, results/audio/<name>/, data/checkpoints/<name>/
+  results_root: results
+  audio_root: results/audio                   # gitignored: wavs and saved predictions (.npz)
+  checkpoints_root: data/checkpoints
+  targets_root: data/processed                # our option-(b) targets (cache): <targets_root>/<name>/
+  session: t15_day195
+  data_dir: data/raw/wairagkar/t15_neural_data
+  layer: 0                                    # index of the ONE new input layer (model.n_session_layers 1)
+  train_session_name: t15_day195_train        # same name for every target variant -> identical validation draw
+  # Zero-shot baseline AND the initialisation of the new input layer (= training.init.path).
+  zero_shot_model: data/raw/wairagkar/t15_neural_data/t15_day195/brain2voice_t15_day193.h5
+  description_key: trial_description          # per-trial type, read from the neural .mat (DATA_FORMATS.md)
+  train_types: ["Training data (50-word vocab)", "Training data"]
+  test_types: ["Evaluation trial", "Evaluation trial (free response)", "Evaluation trial (mimed speech)"]
+  expected_counts: {train: 158, test: 147}    # checked on load (DATA_FORMATS.md, t15_day195)
+  target_variants: [theirs]                   # theirs = main check (D-034). ours = optional (option-b targets):
+                                              #   not run (stopped by user decision once theirs did not help)
+
+  ours_targets:
+    voice: null                               # null = tts.voice (Aman, D-027)
+    corpus: t15_day195                        # TTS corpus <tts_features>/<voice_slug>/<corpus>.npz (on the host)
+    decoder: data/raw/wairagkar/t15_neural_data/t15_day195/brain2voice_t15_day193.h5   # aligns, as for Kunz (D-027)
+
+  evaluation:
+    n_workers: 8                              # threads for LPCNet synthesis + metrics (<= runtime.threads.intra_op)
+    save_audio: true                          # wavs of every model's output and of the target audio
+    progress_every: 25
+    asr:
+      enabled: true
+      # wvx.asr.evaluate_wav's cfg (merged over configs/asr.yaml there), as in the pilot. Unconstrained WER is
+      # reported; constrained scores are NaN whenever the reference has out-of-vocabulary words.
+      cfg: {asr: {cpu_threads: 4, model: {allow_download: false}, per: {allow_download: false}}}
+      target_audio: true                      # also transcribe the target audio (ceiling)
+
+  smoke:                                      # --smoke: tiny end-to-end check (outputs under <name>_smoke; not a result)
+    max_train_trials: 6
+    val_trials: 2
+    epochs: 1
+    max_test_per_type: 2
+    log_every_batches: 5
