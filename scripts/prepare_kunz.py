@@ -18,12 +18,14 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from wvx.config import load_config, load_yaml, resolve_path  # noqa: E402
 from wvx.kunz import load_condition  # noqa: E402
+from wvx.seeding import set_seed  # noqa: E402
 
 
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--config", default="configs/data/kunz.yaml")
     args = ap.parse_args()
+    set_seed(int(load_config()["seed"]))  # nothing here is random; AGENTS.md rule 7
     cfg = load_yaml(resolve_path(args.config))
     adapter = cfg["adapter"]
     raw = resolve_path(cfg["output_dir"])

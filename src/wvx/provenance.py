@@ -57,6 +57,8 @@ def code_version(root: Path = REPO_ROOT) -> dict:
     return {"source": None, "commit": None, "dirty": None, "diff_sha256": None}
 
 
-def config_sha256(cfg: Mapping[str, Any]) -> str:
-    """SHA-256 of the resolved config (keys sorted, non-JSON values stringified)."""
-    return hashlib.sha256(json.dumps(cfg, sort_keys=True, default=str).encode()).hexdigest()
+def config_sha256(cfg: Mapping[str, Any], root: Path = REPO_ROOT) -> str:
+    """SHA-256 of the resolved config (keys sorted, non-JSON values stringified). The repo's absolute location is
+    replaced by ``<repo>`` first, so the same config hashes the same on the Mac and on the host."""
+    text = json.dumps(cfg, sort_keys=True, default=str).replace(str(Path(root)), "<repo>")
+    return hashlib.sha256(text.encode()).hexdigest()

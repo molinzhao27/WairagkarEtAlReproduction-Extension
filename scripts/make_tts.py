@@ -45,6 +45,7 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from wvx.config import REPO_ROOT  # noqa: E402
+from wvx.provenance import code_version, config_sha256  # noqa: E402
 from wvx.seeding import set_seed  # noqa: E402
 from wvx import synthesis, targets  # noqa: E402
 
@@ -263,6 +264,8 @@ def cmd_rank(cfg, args) -> int:
         "skipped_voices": skipped,
         "ranking": rows,
         "voice_id_config": cfg["voice_id"],
+        "code_version": code_version(),
+        "config_sha256": config_sha256(cfg),
     }
     path = Path(cfg["paths"]["alignment_validation"]) / "voice_ranking.json"
     path.parent.mkdir(parents=True, exist_ok=True)

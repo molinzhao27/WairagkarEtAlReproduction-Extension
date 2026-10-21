@@ -26,7 +26,6 @@ from pathlib import Path
 os.environ.setdefault("TF_USE_LEGACY_KERAS", "1")
 os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "2")
 
-SEED = 42
 BATCH = 64
 REL_TOL = 1e-4  # max|GPU - CPU| / max|CPU| allowed for outputs and gradients (TF32 disabled for the comparison)
 
@@ -34,6 +33,13 @@ R = Path(__file__).resolve().parents[1]
 B2V = R / "third_party" / "brain_to_voice"
 LPCNET_DIR = R / "third_party" / "LPCNet"
 sys.path.insert(0, str(B2V))
+sys.path.insert(0, str(R / "src"))
+
+from wvx.config import load_config  # noqa: E402
+from wvx.seeding import set_seed  # noqa: E402
+
+SEED = int(load_config()["seed"])  # configs/default.yaml (AGENTS.md rule 7)
+set_seed(SEED)
 
 failures: list[str] = []
 

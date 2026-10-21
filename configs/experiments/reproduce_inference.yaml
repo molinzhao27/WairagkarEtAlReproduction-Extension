@@ -69,6 +69,11 @@ closed_loop:
   description_key: trial_description
   sample_rate: 16000
   bin_ms: 10                       # live audio is (window_len - 1) bins longer: it starts at trial onset
+  # The configured trim, (window_len - 1) bins, stays the primary comparison. compare_closed_loop.py also scans
+  # trims of (window_len - 1 + lag) bins for lag in [-N, N] and reports the lag with the best mean frame-wise
+  # ours-vs-live mel_corr (over all trials with live audio), with every metric at that lag. An audit found the
+  # frame-wise agreement 0.974 at the configured trim and 0.986 two frames later.
+  lag_search_frames: 10            # [CHOICE] N, in 10 ms frames (+-100 ms)
 
 synthesis:
   lpcnet_binary: lpcnet_demo       # relative to paths.lpcnet

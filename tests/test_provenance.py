@@ -37,3 +37,9 @@ def test_git_dirty_flag_and_diff_hash(tmp_path):
 def test_config_hash_is_order_independent():
     assert provenance.config_sha256({"a": 1, "b": {"c": 2}}) == provenance.config_sha256({"b": {"c": 2}, "a": 1})
     assert provenance.config_sha256({"a": 1}) != provenance.config_sha256({"a": 2})
+
+
+def test_config_hash_ignores_repo_location(tmp_path):
+    a = {"paths": {"data": str(tmp_path / "x" / "data")}}
+    b = {"paths": {"data": "/elsewhere/repo/data"}}
+    assert provenance.config_sha256(a, root=tmp_path / "x") == provenance.config_sha256(b, root="/elsewhere/repo")

@@ -21,6 +21,7 @@ sys.dont_write_bytecode = True
 
 from wvx import b2v  # noqa: E402,F401  (must precede TensorFlow)
 from wvx.config import deep_merge, load_config, load_yaml, resolve_path  # noqa: E402
+from wvx.provenance import code_version, config_sha256  # noqa: E402
 from wvx.seeding import set_seed  # noqa: E402
 from wvx.session import SessionData  # noqa: E402
 from wvx.training import n_windows, train  # noqa: E402
@@ -42,7 +43,7 @@ def main() -> int:
     cfg["training"]["sessions"] = [{"session": sess.name, "session_layer": b["layer"]}]
     n_aug = cfg["training"]["n_augmentations"]
 
-    report = {"device": None, "variants": {}}
+    report = {"device": None, "variants": {}, "code_version": code_version(), "config_sha256": config_sha256(cfg)}
     for variant in b["variants"]:
         vcfg = deep_merge(cfg, {
             "run_name": f"{cfg['run_name']}_{variant}",

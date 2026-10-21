@@ -45,6 +45,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from wvx.config import load_config, load_yaml, resolve_path  # noqa: E402
 from wvx.kunz import load_condition  # noqa: E402
 from wvx.preprocess import block_runs, rolling_zscore, sigmoid_kernel  # noqa: E402
+from wvx.provenance import code_version, config_sha256  # noqa: E402
 from wvx.seeding import set_seed  # noqa: E402
 
 FEATS = ("spikepow", "threshcross")
@@ -425,6 +426,7 @@ def main() -> int:
             result["comparison"][f"kunz_{cond}_{vname}"] = {"threshcross": describe(k["threshcross"], fc, kunz_arrays)}
             del k
     result["kunz_arrays"] = kunz_arrays
+    result["code_version"], result["config_sha256"] = code_version(), config_sha256(cfg)
 
     out = resolve_path(fc["out"])
     out.parent.mkdir(parents=True, exist_ok=True)

@@ -408,6 +408,7 @@ def main(argv=None) -> int:
 
     b2v.use_keras2()
     from wvx import targets as tg
+    from wvx.provenance import code_version, config_sha256
     from wvx.seeding import set_seed
 
     cfg = tg.load_targets_config(args.config, overrides=json.loads(args.override) if args.override else None)
@@ -418,6 +419,7 @@ def main(argv=None) -> int:
             continue
         voice = args.voice or cfg["tts"]["voice"]
         out = run(cfg, session, voice, args)
+        out["code_version"], out["config_sha256"] = code_version(), config_sha256(cfg)
         name = f"{session}_{tg.voice_slug(voice)}" + (f"_{args.tag}" if args.tag else "") + ".json"
         path = Path(cfg["paths"]["alignment_validation"]) / name
         path.parent.mkdir(parents=True, exist_ok=True)

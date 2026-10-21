@@ -7,13 +7,24 @@
 set -euo pipefail
 
 MAX_BYTES=$((5 * 1024 * 1024))
-BLOCKED_EXT_RE='\.(mat|zip|wav|flac|mp3|f32|s16|pcm|raw|h5|hdf5|keras|ckpt|pt|pth|npz|npy|tfrecord|tar\.gz|tgz|pb)$'
-BLOCKED_PATH_RE='(^|/)(ckpt|checkpoints)/|\.tf/|(^|/)variables\.(index|data-)'
+# File-name rules are matched case-insensitively (a.MAT, b.Wav and m.H5 are blocked too; nocasematch below).
+# Groups: data / raw signals; audio; pickles; models and weights; archives; data tables.
+BLOCKED_EXT_RE='\.('\
+'mat|f32|s16|pcm|raw|tfrecord|pb|'\
+'wav|flac|mp3|aiff|aif|ogg|m4a|opus|'\
+'pkl|pickle|joblib|'\
+'safetensors|bin|onnx|pt|pth|ckpt|keras|h5|hdf5|'\
+'zip|tar|gz|tgz|7z|bz2|xz|'\
+'parquet|feather|npy|npz'\
+')$'
+# Checkpoint directories, TensorFlow SavedModel / checkpoint shards (model.ckpt.index, ckpt-1.data-00000-of-00001).
+BLOCKED_PATH_RE='(^|/)(ckpt|checkpoints)/|\.tf/|(^|/)variables\.(index|data-)|\.ckpt\.|\.data-[0-9]+-of-[0-9]+$'
 ALLOWED_DATA_RE='^data/(MANIFEST|README)\.md$'
 # Split so this file doesn't match its own pattern.
 HOME_PATH_RE="/""Users/[A-Za-z0-9._-]+/|~/""Documents"
 
 fail=0
+shopt -s nocasematch   # [[ == ]] and [[ =~ ]] below ignore case (bash >= 3.1, incl. macOS /bin/bash 3.2)
 while IFS= read -r -d '' f; do
   if [[ "$f" =~ $BLOCKED_EXT_RE ]] || [[ "$f" =~ $BLOCKED_PATH_RE ]]; then
     echo "pre-commit: blocked file type: $f" >&2; fail=1; continue
@@ -26,6 +37,7 @@ while IFS= read -r -d '' f; do
     echo "pre-commit: file larger than $((MAX_BYTES / 1024 / 1024)) MB: $f ($size bytes)" >&2; fail=1
   fi
 done < <(git diff --cached --name-only --diff-filter=ACMR -z)
+shopt -u nocasematch
 
 # Absolute home-directory paths in added lines (this hook file itself excepted).
 hits=$(git diff --cached -U0 --diff-filter=ACMR -- . ':(exclude).githooks/pre-commit' \

@@ -13,7 +13,7 @@ Usage:
     python -I scripts/extract_kunz_subset.py --zip /path/to/sentenceData.zip
         [--out data/raw/kunz/sentenceData] [--config configs/data/kunz.yaml]
 
-Dependencies: Python stdlib + PyYAML.
+Dependencies: Python stdlib + PyYAML (+ numpy, through wvx.seeding).
 """
 
 from __future__ import annotations
@@ -31,6 +31,11 @@ from pathlib import Path, PurePosixPath
 import yaml
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(REPO_ROOT / "src"))
+
+from wvx.config import load_config  # noqa: E402
+from wvx.seeding import set_seed  # noqa: E402
+
 DEFAULT_CONFIG = REPO_ROOT / "configs" / "data" / "kunz.yaml"
 CHUNK = 8 * 1024 * 1024
 
@@ -140,6 +145,7 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--manifest", type=Path, default=None,
                     help="manifest path (default: manifest from config, relative to repo root)")
     args = ap.parse_args(argv)
+    set_seed(int(load_config()["seed"]))  # nothing here is random; AGENTS.md rule 7
 
     with open(args.config, "r", encoding="utf-8") as f:
         cfg = yaml.safe_load(f)

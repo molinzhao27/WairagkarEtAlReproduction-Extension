@@ -8,7 +8,8 @@ holding an ``asr`` section, or the section itself, deep-merged over the file.
 Public API
 - ``transcribe(wav, sr, cfg) -> str``: raw Whisper text, UNCONSTRAINED decoding (no prompt, no LM).
 - ``evaluate_wav(wav, sr, reference_text, cfg) -> dict``: transcribe, then ``score_text``. Adds the
-  transcript diagnostics (``avg_logprob``, ``no_speech_prob``, ``n_segments``) and timing (``audio_s``, ``asr_s``).
+  transcript diagnostics (``avg_logprob``, ``no_speech_prob``, ``n_segments``, ``skipped_silent``, ``speech_frames``,
+  ``asr_seed``, ``asr_sampled``) and timing (``audio_s``, ``asr_s``).
 - ``score_text(reference_text, hypothesis_text, cfg, constrained_hypothesis_text=None) -> dict``: no model needed.
   Keys: ``ref``, ``hyp``, ``hyp_constrained`` (normalized token strings); ``wer``, ``cer``, ``per`` (unconstrained)
   and ``wer_constrained``, ``cer_constrained``, ``per_constrained``; the raw counts behind each rate
@@ -16,7 +17,8 @@ Public API
   can pool rates over trials (sum of errors / sum of reference units); ``ref_oov_words``.
 - ``normalize(text, cfg) -> str``, ``snap_to_vocabulary(tokens, vocabulary, cfg) -> list``,
   ``number_to_words(n) -> str``, ``phonemes(text, cfg) -> list``, ``vocabulary(cfg) -> list``,
-  ``load_asr_config(path, overrides) -> dict``.
+  ``load_asr_config(path, overrides) -> dict``, ``speech_frames(wav, sr, cfg) -> int``,
+  ``clip_seed(audio, seed) -> int``, ``effective_settings(cfg) -> dict`` (everything that determines a score).
 
 Definitions
 - Text normalization (reference and hypothesis alike): digits -> words, then ``wvx.metrics.normalize_text`` with
@@ -32,6 +34,18 @@ Definitions
   (unless ``snap.max_normalized_distance`` is set), so snapping can only change substitutions. Alternatives:
   ``prompt`` (decode again with the vocabulary as Whisper's initial prompt) and ``prompt_snap`` (both). When the
   reference itself has out-of-vocabulary words the constrained scores are NaN (``oov_reference: nan``).
+- SILENT CLIPS (``silence.skip_silent``): a clip with no speech frame under ``wvx.metrics.speech_frame_mask`` (the
+  silence detector the mel_corr/MCD metrics use, configs/metrics.yaml) is not sent to Whisper, which transcribes
+  digital silence as "you". Its transcript is "" (``skipped_silent`` True), i.e. every reference word is a deletion.
+  The detector is relative to the loudest frame, so in practice only (near-)digital silence is skipped.
+- SEEDING (temperature fallback samples): every clip gets its own seed, ``clip_seed`` = SHA-256 of the config seed
+  and the exact samples Whisper is given, so a transcript depends only on the audio and the config, never on clip
+  order, threads or earlier decodes. CTranslate2 keeps one RNG per worker thread, seeded once, at that thread's first
+  use, from the global seed (``ctranslate2.set_random_seed``; src/random.cc, unchanged up to 4.8.3), and has no
+  per-call seed, so reseeding does not reset the generators of a loaded model's worker threads. A decode that
+  samples (recorded by wrapping the CTranslate2 model's ``generate``) is therefore discarded and redone on a freshly
+  loaded model, with fresh worker threads, right after ``set_random_seed(clip seed)``, under one lock. Beam-search
+  decodes draw no random numbers and are kept as they are.
 
 Heavy dependencies (faster_whisper, g2p_en/nltk) are imported lazily, so the rest of the repo and the pure text
 functions work without them. Model files and NLTK data live inside the repo (``data/processed/models``).
@@ -336,6 +350,12 @@ def score_text(reference_text: str, hypothesis_text: str, cfg: ConfigLike = None
 
 _MODELS: dict = {}
 _MODEL_LOCK = threading.Lock()
+# One Whisper decode at a time: the CTranslate2 seed is process-global, and a sampled decode must run on the fresh
+# model right after its seed is set (module docstring, SEEDING).
+_DECODE_LOCK = threading.Lock()
+SEEDING = "per_clip_sha256_v1"  # recorded in effective_settings(); bump if clip_seed or the scheme changes
+# CTranslate2's "no seed set" value (src/random.cc: default_seed = unsigned(-1) -> std::random_device): never used.
+_CT2_UNSEEDED = 2**32 - 1
 
 
 def _sha256(path: Path) -> str:
@@ -383,7 +403,35 @@ def ensure_model(cfg: ConfigLike = None) -> Path:
     return d
 
 
+class _SamplingRecorder:
+    """Stands in for ``WhisperModel.model`` (a ``ctranslate2.models.Whisper``) and records whether a ``generate`` call
+    drew random numbers: CTranslate2 samples whenever ``sampling_topk`` != 1 (default 1 = argmax / beam search);
+    faster-whisper passes ``sampling_topk=0`` with ``sampling_temperature`` > 0 for each temperature-fallback step."""
+
+    def __init__(self, inner):
+        self._inner = inner
+        self.sampled = False
+
+    def generate(self, *args, **kwargs):
+        if int(kwargs.get("sampling_topk", 1)) != 1:
+            self.sampled = True
+        return self._inner.generate(*args, **kwargs)
+
+    def __getattr__(self, name):
+        return getattr(self._inner, name)
+
+
+def _load_whisper(c: dict, d: Path):
+    from faster_whisper import WhisperModel
+
+    m = WhisperModel(str(d), device="cpu", compute_type=c["compute_type"], cpu_threads=int(c["cpu_threads"]),
+                     num_workers=int(c["num_workers"]), local_files_only=True)
+    m.model = _SamplingRecorder(m.model)
+    return m
+
+
 def _model(c: dict):
+    """The cached model (one per settings), used for every decode; its sampled decodes are redone (``_fresh_model``)."""
     key = (str(model_dir(c)), c["device"], c["compute_type"], int(c["cpu_threads"]), int(c["num_workers"]))
     with _MODEL_LOCK:
         if key not in _MODELS:
@@ -391,25 +439,69 @@ def _model(c: dict):
                 raise ValueError("asr.device must be 'cpu' (the GPU is never used for ASR)")
             d = ensure_model(c)
             _set_cache_env(c)
-            from faster_whisper import WhisperModel
-
-            import ctranslate2
-
-            from wvx.config import load_config
-
-            # CTranslate2's RNG matters only for sampling (temperature > 0 fallback); seeded once per process.
-            ctranslate2.set_random_seed(int(c["seed"] if c["seed"] is not None else load_config()["seed"]))
-            _MODELS[key] = WhisperModel(str(d), device="cpu", compute_type=c["compute_type"],
-                                        cpu_threads=int(c["cpu_threads"]), num_workers=int(c["num_workers"]),
-                                        local_files_only=True)
+            _MODELS[key] = _load_whisper(c, d)
         return _MODELS[key]
 
 
-def prepare_audio(wav: np.ndarray, sr: int, cfg: ConfigLike = None) -> np.ndarray:
-    """Mono float32 at Whisper's rate, full scale 1.0. Integer PCM is divided by ``audio.int_full_scale``; float
-    audio must already be in full-scale-1 units (int16-scaled floats, such as their closed-loop audio, are
-    rejected: divide them by ``audio.int_full_scale`` first)."""
-    c = _cfg(cfg)["audio"]
+def _fresh_model(c: dict):
+    """A newly loaded model: new CTranslate2 worker threads, whose RNGs are seeded at first use from the seed set just
+    before (``_set_random_seed``). Called only for decodes that sample, after ``_model(c)`` verified the files."""
+    _set_cache_env(c)
+    return _load_whisper(c, model_dir(c))
+
+
+def _set_random_seed(seed: int) -> None:
+    import ctranslate2
+
+    ctranslate2.set_random_seed(int(seed))
+
+
+def base_seed(cfg: ConfigLike = None) -> int:
+    """``asr.seed``, or configs/default.yaml ``seed`` when that is null."""
+    c = _cfg(cfg)
+    if c["seed"] is not None:
+        return int(c["seed"])
+    from wvx.config import load_config
+
+    return int(load_config()["seed"])
+
+
+def clip_seed(audio: np.ndarray, seed: int) -> int:
+    """Sampling seed of one clip: SHA-256 of the config ``seed`` and the samples Whisper is given (``prepare_audio``
+    output, as little-endian float32), reduced to [0, 2**32 - 2]. Nothing else enters: not the clip's position in a
+    run, the thread, or what was decoded before."""
+    a = np.ascontiguousarray(np.asarray(audio, dtype=np.float32).ravel()).astype("<f4", copy=False)
+    h = hashlib.sha256(f"wvx.asr clip seed {int(seed)}\n".encode())
+    h.update(a.tobytes())
+    return int.from_bytes(h.digest()[:8], "little") % _CT2_UNSEEDED
+
+
+def _silence_metrics_cfg(c: dict) -> dict:
+    return metrics.load_metrics_config(overrides=c["silence"].get("metrics_overrides") or None)
+
+
+def speech_frames(wav: np.ndarray, sr: int, cfg: ConfigLike = None) -> int:
+    """Speech frames of ``wav`` under ``wvx.metrics.speech_frame_mask`` (configs/metrics.yaml, plus
+    ``silence.metrics_overrides``), computed on the full-scale-1 signal as the metrics see it. 0 for an empty clip."""
+    c = _cfg(cfg)
+    x = _full_scale(wav, c["audio"])
+    if not x.size:
+        return 0
+    return int(np.count_nonzero(metrics.speech_frame_mask(x, sr, _silence_metrics_cfg(c))))
+
+
+def _decode(model, audio: np.ndarray, dec: dict):
+    """(segments, sampled): the decoded segments and whether any generate() call sampled."""
+    rec = model.model
+    rec.sampled = False
+    segments, _info = model.transcribe(audio, **dec)
+    segments = list(segments)  # the generator does the decoding
+    return segments, bool(rec.sampled)
+
+
+def _full_scale(wav: np.ndarray, c: dict) -> np.ndarray:
+    """1-D float64 in full-scale-1 units (``c`` = the ``audio`` section): integer PCM / int_full_scale; float audio
+    is checked against max_float_peak."""
     x = np.asarray(wav)
     if x.ndim != 1:
         raise ValueError(f"expected a 1-D (mono) signal, got shape {x.shape}")
@@ -422,6 +514,15 @@ def prepare_audio(wav: np.ndarray, sr: int, cfg: ConfigLike = None) -> np.ndarra
     elif x.size and np.abs(x).max() > c["max_float_peak"]:
         raise ValueError(f"float audio peaks at {np.abs(x).max():.4g} > audio.max_float_peak "
                          f"({c['max_float_peak']}): int16-scaled? divide by audio.int_full_scale first")
+    return x
+
+
+def prepare_audio(wav: np.ndarray, sr: int, cfg: ConfigLike = None) -> np.ndarray:
+    """Mono float32 at Whisper's rate, full scale 1.0. Integer PCM is divided by ``audio.int_full_scale``; float
+    audio must already be in full-scale-1 units (int16-scaled floats, such as their closed-loop audio, are
+    rejected: divide them by ``audio.int_full_scale`` first)."""
+    c = _cfg(cfg)["audio"]
+    x = _full_scale(wav, c)
     target = int(c["sample_rate"])
     if int(sr) != target:
         import scipy.signal
@@ -434,18 +535,40 @@ def prepare_audio(wav: np.ndarray, sr: int, cfg: ConfigLike = None) -> np.ndarra
     return x.astype(np.float32)
 
 
+DIAGNOSTICS = ("n_segments", "avg_logprob", "no_speech_prob", "max_compression_ratio", "max_temperature",
+               "skipped_silent", "speech_frames", "asr_seed", "asr_sampled")
+
+
 def transcribe_detailed(wav: np.ndarray, sr: int, cfg: ConfigLike = None,
                         initial_prompt: Optional[str] = None) -> dict:
     """Whisper transcript plus diagnostics: text, n_segments, avg_logprob (mean), no_speech_prob (max),
-    max_compression_ratio (gzip ratio of the text; > decode.compression_ratio_threshold flags repetition loops) and
-    max_temperature (> 0 = a temperature-fallback re-decode was used)."""
+    max_compression_ratio (gzip ratio of the text; > decode.compression_ratio_threshold flags repetition loops),
+    max_temperature (> 0 = a temperature-fallback re-decode was used), skipped_silent (no speech frame: Whisper not
+    called, text ""), speech_frames (None if silence.skip_silent is off), asr_seed (this clip's sampling seed; None
+    if skipped) and asr_sampled (a decode sampled, so the text comes from the seeded re-decode on a fresh model)."""
     c = _cfg(cfg)
+    n_speech = None
+    if c["silence"]["skip_silent"]:
+        n_speech = speech_frames(wav, sr, c)
+        if n_speech == 0:
+            nan = float("nan")
+            return {"text": "", "n_segments": 0, "avg_logprob": nan, "no_speech_prob": nan,
+                    "max_compression_ratio": nan, "max_temperature": nan, "skipped_silent": True,
+                    "speech_frames": 0, "asr_seed": None, "asr_sampled": False}
     audio = prepare_audio(wav, sr, c)
+    seed = clip_seed(audio, base_seed(c))
     dec = dict(c["decode"])
     if initial_prompt is not None:
         dec["initial_prompt"] = initial_prompt
-    segments, _info = _model(c).transcribe(audio, **dec)
-    segments = list(segments)  # the generator does the decoding
+    with _DECODE_LOCK:
+        segments, sampled = _decode(_model(c), audio, dec)
+        if sampled:  # redo with this clip's seed on fresh worker threads (module docstring, SEEDING)
+            _set_random_seed(seed)
+            fresh = _fresh_model(c)
+            try:
+                segments, sampled = _decode(fresh, audio, dec)
+            finally:
+                del fresh
     return {
         "text": " ".join(s.text.strip() for s in segments).strip(),
         "n_segments": len(segments),
@@ -453,6 +576,7 @@ def transcribe_detailed(wav: np.ndarray, sr: int, cfg: ConfigLike = None,
         "no_speech_prob": float(max(s.no_speech_prob for s in segments)) if segments else float("nan"),
         "max_compression_ratio": float(max(s.compression_ratio for s in segments)) if segments else float("nan"),
         "max_temperature": float(max(s.temperature for s in segments)) if segments else float("nan"),
+        "skipped_silent": False, "speech_frames": n_speech, "asr_seed": seed, "asr_sampled": sampled,
     }
 
 
@@ -463,22 +587,46 @@ def transcribe(wav: np.ndarray, sr: int, cfg: ConfigLike = None) -> str:
 
 def evaluate_wav(wav: np.ndarray, sr: int, reference_text: str, cfg: ConfigLike = None) -> dict:
     """Transcribe ``wav`` and score it against ``reference_text`` (keys: see ``score_text``, plus ``hyp_raw``,
-    ``hyp_raw_prompted`` (prompt methods only), the ``transcribe_detailed`` diagnostics, ``audio_s``, ``asr_s``)."""
+    ``hyp_raw_prompted`` and ``asr_sampled_prompted`` (prompt methods only), the ``transcribe_detailed`` diagnostics
+    (``DIAGNOSTICS``), ``audio_s``, ``asr_s``)."""
     c = _cfg(cfg)
     t0 = time.perf_counter()
     tr = transcribe_detailed(wav, sr, c)
-    constrained_raw = None
+    prompted = None
     if c["constrained"]["method"] in ("prompt", "prompt_snap"):
-        constrained_raw = transcribe_detailed(wav, sr, c, initial_prompt=vocabulary_prompt(c))["text"]
+        prompted = transcribe_detailed(wav, sr, c, initial_prompt=vocabulary_prompt(c))
+    constrained_raw = prompted["text"] if prompted is not None else None
     asr_s = time.perf_counter() - t0
     out = {"hyp_raw": tr["text"]}
-    if constrained_raw is not None:
+    if prompted is not None:
         out["hyp_raw_prompted"] = constrained_raw
+        out["asr_sampled_prompted"] = prompted["asr_sampled"]
     out.update(score_text(reference_text, tr["text"], c, constrained_hypothesis_text=constrained_raw))
-    out.update({k: tr[k] for k in ("n_segments", "avg_logprob", "no_speech_prob", "max_compression_ratio",
-                                   "max_temperature")})
+    out.update({k: tr[k] for k in DIAGNOSTICS})
     out.update({"audio_s": float(np.asarray(wav).size / sr), "asr_s": asr_s})
     return out
+
+
+def effective_settings(cfg: ConfigLike = None) -> dict:
+    """Every setting that determines a transcript or a score (JSON-ready), for provenance and overwrite checks.
+    Left out: cpu_threads / num_workers (meant to change speed only; result files record them separately), download
+    and cache locations."""
+    import copy
+
+    c = copy.deepcopy(_cfg(cfg))
+    det = _silence_metrics_cfg(c)
+    return {
+        "engine": c["engine"],
+        "model": {k: c["model"].get(k) for k in ("name", "repo_id", "revision", "sha256")},
+        "device": c["device"], "compute_type": c["compute_type"],
+        "seed": base_seed(c), "seeding": SEEDING,
+        "audio": c["audio"], "decode": c["decode"],
+        "silence": {"skip_silent": bool(c["silence"]["skip_silent"]),
+                    "detector": {k: det[k] for k in ("sample_rate", "resample", "stft", "silence")}},
+        "text": c["text"], "metrics_text": copy.deepcopy(_metrics_cfg()["text"]),
+        "constrained": {k: v for k, v in c["constrained"].items() if k != "vocabulary_source"},
+        "per": {k: c["per"][k] for k in ("enabled", "engine", "strip_stress")},
+    }
 
 
 def versions() -> dict:

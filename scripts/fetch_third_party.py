@@ -22,6 +22,11 @@ from pathlib import Path
 import yaml
 
 REPO_ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(REPO_ROOT / "src"))
+
+from wvx.config import load_config  # noqa: E402
+from wvx.seeding import set_seed  # noqa: E402
+
 CONFIG = REPO_ROOT / "configs" / "third_party.yaml"
 
 
@@ -69,6 +74,7 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--verify", action="store_true", help="only verify the existing copy")
     args = ap.parse_args()
+    set_seed(int(load_config()["seed"]))  # nothing here is random; AGENTS.md rule 7
 
     cfg = yaml.safe_load(CONFIG.read_text())["brain_to_voice"]
     dest = REPO_ROOT / cfg["dest"]

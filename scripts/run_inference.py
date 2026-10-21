@@ -8,12 +8,18 @@ pair with ``wvx.metrics.evaluate`` when that module exists (skipped with a warni
 
 Outputs:
     <paths.results>/<run_name>/per_trial_metrics.csv
-    <paths.results>/<run_name>/summary.json      (config, versions, hashes, data checks, means)
+    <paths.results>/<run_name>/summary.json      (config, versions, hashes, data checks, means, run_settings,
+                                                  code_version, config_sha256)
     <paths.results>/<inference.audio_subdir>/<run_name>/   wavs + predictions.npz (gitignored)
+
+A results directory holding a run with different ``run_settings`` (session, max_trials, model path and sha256,
+channel reordering, target audio source, synthesis, seed, metrics overrides) is never overwritten silently: the
+script stops before loading anything unless --overwrite is given (a smoke run once replaced a quoted 5-trial run
+this way). Summaries written before run_settings existed are compared on the same fields, which they all record.
 
 Usage, on the GPU host inside the wvx container (via scripts/remote/gpu_job.sh):
     python -I scripts/run_inference.py --config configs/experiments/reproduce_inference.yaml
-    python -I scripts/run_inference.py --config ... --max-trials 5      # smoke run
+    python -I scripts/run_inference.py --config ... --max-trials 5      # smoke run (use another run_name)
 """
 
 from __future__ import annotations
@@ -24,7 +30,6 @@ import hashlib
 import importlib
 import json
 import platform
-import subprocess
 import sys
 import time
 import warnings
@@ -33,7 +38,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from wvx import b2v  # noqa: E402  (must set up Keras 2 before TensorFlow is imported)
-from wvx.config import REPO_ROOT, load_config  # noqa: E402
+from wvx.config import REPO_ROOT, deep_merge, load_config  # noqa: E402
+from wvx.provenance import code_version, config_sha256  # noqa: E402
 
 DEFAULT_CONFIG = "configs/experiments/reproduce_inference.yaml"
 
@@ -51,14 +57,6 @@ def _sha256(path: Path) -> str:
         return hashlib.file_digest(f, "sha256").hexdigest()
 
 
-def _git_commit() -> str | None:
-    try:
-        out = subprocess.run(["git", "rev-parse", "HEAD"], cwd=REPO_ROOT, capture_output=True, check=True)
-    except (OSError, subprocess.CalledProcessError):
-        return None
-    return out.stdout.decode().strip()
-
-
 def _jsonable(obj):
     if isinstance(obj, dict):
         return {str(k): _jsonable(v) for k, v in obj.items()}
@@ -69,6 +67,59 @@ def _jsonable(obj):
     if hasattr(obj, "item") and getattr(obj, "ndim", None) == 0:
         return obj.item()
     return obj
+
+
+OUTPUTS = ("per_trial_metrics.csv", "summary.json")
+
+
+def run_settings(cfg: dict, model_path: Path, model_sha256: str) -> dict:
+    """What identifies a run's outputs (JSON-normalized)."""
+    icfg = cfg["inference"]
+    return json.loads(json.dumps(_jsonable({
+        "session": icfg["session"], "max_trials": icfg["max_trials"],
+        "model": {"path": _rel(model_path), "sha256": model_sha256},
+        "reorder_channels": bool(icfg["reorder_channels"]), "target_audio_source": icfg["target_audio_source"],
+        "synthesize": bool(icfg["synthesize"]), "seed": cfg["seed"], "metrics": cfg.get("metrics") or {},
+    })))
+
+
+def recorded_run_settings(summary: dict) -> dict:
+    """``run_settings`` of an existing summary.json; rebuilt from its other fields if it predates the key."""
+    if "run_settings" in summary:
+        return summary["run_settings"]
+    c = summary.get("config") or {}
+    ic = c.get("inference") or {}
+    return {"session": summary.get("session"), "max_trials": ic.get("max_trials"), "model": summary.get("model"),
+            "reorder_channels": summary.get("reorder_channels"), "target_audio_source": summary.get("target_audio_source"),
+            "synthesize": ic.get("synthesize"), "seed": summary.get("seed"), "metrics": c.get("metrics") or {}}
+
+
+def check_existing(out_dir: Path, settings: dict, overwrite: bool) -> tuple[str | None, dict | None]:
+    """(refusal message or None, previous run record or None). Writing is fine if the directory holds no outputs, or
+    outputs with the same run_settings (a faithful re-run), or ``overwrite``."""
+    present = [n for n in OUTPUTS if (out_dir / n).exists()]
+    if not present:
+        return None, None
+    summary_path = out_dir / "summary.json"
+    old = json.loads(summary_path.read_text()) if summary_path.exists() else None
+    recorded = recorded_run_settings(old) if old is not None else None
+    if recorded == settings:
+        return None, None
+    others = sorted(p.name for p in out_dir.iterdir() if p.name not in OUTPUTS)
+    previous = {"run_settings": recorded, "n_trials_run": (old or {}).get("n_trials_run"),
+                "code_version": (old or {}).get("code_version"), "derived_files_now_stale": others}
+    if overwrite:
+        return None, previous
+    if recorded is None:
+        why = "per_trial_metrics.csv exists without summary.json (interrupted run?), so its settings are unknown"
+    else:
+        diff = [f"  {k}: {recorded.get(k)!r} -> {settings.get(k)!r}" for k in sorted(set(recorded) | set(settings))
+                if recorded.get(k) != settings.get(k)]
+        why = (f"it holds a run with different settings (n_trials_run {previous['n_trials_run']}):\n"
+               + "\n".join(diff))
+    msg = (f"refusing to overwrite {_rel(out_dir)}: {why}\nUse another run_name, or pass --overwrite"
+           + (f" (files derived from the old run would then be stale: {', '.join(others)})" if others else "") + ".")
+    return msg, previous
 
 
 def _metrics_module():
@@ -111,12 +162,24 @@ def _aggregate(rows: list[dict]) -> dict:
     return out
 
 
-def run(cfg: dict, config_path: str | None = None) -> dict:
+def run(cfg: dict, config_path: str | None = None, overwrite: bool = False) -> dict:
+    """Raises FileExistsError (before loading anything) if the results directory holds a run with different
+    run_settings and ``overwrite`` is false."""
     t_start = time.time()
     b2v.use_keras2()
     from wvx.seeding import set_seed
 
     set_seed(int(cfg["seed"]), deterministic_ops=bool(cfg["runtime"]["deterministic_ops"]))
+
+    model_path = Path(cfg["paths"]["pretrained_model"])
+    model_sha256 = _sha256(model_path)
+    settings = run_settings(cfg, model_path, model_sha256)
+    refusal, previous = check_existing(Path(cfg["paths"]["results"]) / cfg["run_name"], settings, overwrite)
+    if refusal:
+        raise FileExistsError(refusal)
+    if previous is not None:
+        print(f"[run_inference] --overwrite: replacing a run with different settings; now stale: "
+              f"{previous['derived_files_now_stale']}", file=sys.stderr)
 
     import numpy as np
     import tensorflow as tf
@@ -147,7 +210,6 @@ def run(cfg: dict, config_path: str | None = None) -> dict:
         if any(t.target is not None for t in sess.trials):
             raw_targets = wairagkar_data.load_raw_targets(data_dir, session, cfg)
         data_checks = wairagkar_data.describe_session(sess, cfg, raw_targets)
-        model_path = Path(cfg["paths"]["pretrained_model"])
         model = inference.load_model(model_path, cfg)
         metrics = _metrics_module()
         if icfg["synthesize"]:
@@ -212,14 +274,19 @@ def run(cfg: dict, config_path: str | None = None) -> dict:
             w.writerow({k: (json.dumps(v) if isinstance(v, (list, dict)) else v) for k, v in r.items()})
 
     lp = synthesis.lpcnet_binary(cfg)
+    version = code_version()
     summary = {
         "run_name": run_name,
         "config_file": config_path,
-        "git_commit": _git_commit(),
+        "code_version": version,
+        "git_commit": version.get("commit"),
+        "config_sha256": config_sha256(cfg),
+        "run_settings": settings,
+        "replaced_previous_run": previous,
         "session": session,
         "layer": layer,
         "seed": cfg["seed"],
-        "model": {"path": _rel(model_path), "sha256": _sha256(model_path)},
+        "model": {"path": _rel(model_path), "sha256": model_sha256},
         "reorder_channels": bool(icfg["reorder_channels"]),
         "target_audio_source": icfg["target_audio_source"],
         "n_trials_in_session": len(sess.trials),
@@ -255,10 +322,21 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     ap.add_argument("--config", default=DEFAULT_CONFIG, help="experiment YAML merged onto default.yaml")
     ap.add_argument("--max-trials", type=int, default=None, help="override inference.max_trials")
+    ap.add_argument("--run-name", default=None, help="override run_name (results directory), e.g. for smoke runs")
+    ap.add_argument("--overwrite", action="store_true",
+                    help="replace a results directory that holds a run with different settings")
     args = ap.parse_args(argv)
-    overrides = {"inference": {"max_trials": args.max_trials}} if args.max_trials is not None else None
-    cfg = load_config(args.config, overrides=overrides)
-    run(cfg, config_path=args.config)
+    overrides = {}
+    if args.max_trials is not None:
+        overrides = deep_merge(overrides, {"inference": {"max_trials": args.max_trials}})
+    if args.run_name is not None:
+        overrides["run_name"] = args.run_name
+    cfg = load_config(args.config, overrides=overrides or None)
+    try:
+        run(cfg, config_path=args.config, overwrite=args.overwrite)
+    except FileExistsError as e:
+        print(f"[run_inference] {e}", file=sys.stderr)
+        return 2
     return 0
 
 

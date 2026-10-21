@@ -223,3 +223,25 @@ def test_transcribe_silence_and_bookkeeping():
     res = asr.evaluate_wav(silence, sr, "I hope it is you.", cfg)
     assert res["hyp_raw"] == text and res["audio_s"] == pytest.approx(2.0)
     assert res["wer"] == pytest.approx(res["word_errors"] / 5)
+    # digital silence never reaches Whisper (it would say "you"): empty transcript, flagged
+    assert text == "" and res["skipped_silent"] is True and res["wer"] == 1.0
+    res = asr.evaluate_wav(silence, sr, "I hope it is you.", {**cfg, "silence": {"skip_silent": False}})
+    assert res["skipped_silent"] is False and res["asr_seed"] is not None
+
+
+@pytest.mark.skipif(not _whisper_ready(), reason="faster-whisper or the small.en model not installed here")
+def test_sampled_transcripts_depend_only_on_the_clip():
+    """Forced sampling (temperature 1.0 only): a clip's transcript is the same whether it is decoded first or after
+    other sampled clips (the loaded model's thread-local RNG has then moved on)."""
+    cfg = {**NO_PER, "model": {"allow_download": False, "verify_sha256": False}, "decode": {"temperature": [1.0]}}
+    sr = 16000
+    rng = np.random.default_rng(0)
+    t = np.arange(3 * sr) / sr
+    clips = [0.1 * np.sin(2 * np.pi * f * t) * (1 + np.sin(2 * np.pi * 3 * t)) + 0.02 * rng.standard_normal(t.size)
+             for f in (180.0, 260.0)]
+    first = asr.transcribe_detailed(clips[0], sr, cfg)
+    other = asr.transcribe_detailed(clips[1], sr, cfg)
+    again = asr.transcribe_detailed(clips[0], sr, cfg)
+    assert first["asr_sampled"] and other["asr_sampled"] and again["asr_sampled"]
+    assert first["asr_seed"] == again["asr_seed"] != other["asr_seed"]
+    assert first["text"] == again["text"]

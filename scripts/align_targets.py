@@ -56,6 +56,7 @@ def main(argv=None) -> int:
     import numpy as np
 
     from wvx import inference, synthesis, targets
+    from wvx.provenance import code_version, config_sha256
     from wvx.seeding import set_seed
     from wvx.session import SessionData
 
@@ -117,6 +118,8 @@ def main(argv=None) -> int:
             "target_mean": tgt.mean(0).tolist(),
             "target_sd": tgt.std(0).tolist(),
             "alignment_config": cfg["alignment"],
+            "code_version": code_version(),
+            "config_sha256": config_sha256(cfg),
             "wall_time_s": time.time() - t0,
         }
         sp = Path(cfg["paths"]["alignment_validation"]) / (f"kunz_{cond}_summary" + (f"_{args.tag}" if args.tag else "") + ".json")

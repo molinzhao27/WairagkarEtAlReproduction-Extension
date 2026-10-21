@@ -133,6 +133,11 @@ except ImportError:
     sys.exit(2)
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(REPO_ROOT / "src"))
+
+from wvx.config import load_config as load_repo_config  # noqa: E402  (load_config below reads the dataset YAML)
+from wvx.seeding import set_seed  # noqa: E402
+
 DEFAULT_CONFIG = REPO_ROOT / "configs" / "data" / "wairagkar.yaml"
 
 EXIT_OK, EXIT_FAIL, EXIT_USAGE, EXIT_REFUSED, EXIT_INTERRUPTED = 0, 1, 2, 3, 130
@@ -927,6 +932,7 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
+    set_seed(int(load_repo_config()["seed"]))  # nothing here is random; AGENTS.md rule 7
     try:
         if args.extract_size_factor <= 0:
             raise FetchError("--extract-size-factor must be > 0", EXIT_USAGE)

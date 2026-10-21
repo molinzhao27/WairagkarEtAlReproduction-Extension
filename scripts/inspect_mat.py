@@ -30,6 +30,12 @@ from pathlib import Path
 
 import numpy as np
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
+
+from wvx.config import load_config  # noqa: E402
+from wvx.provenance import code_version, config_sha256  # noqa: E402
+from wvx.seeding import set_seed  # noqa: E402
+
 
 # ----------------------------------------------------------------------------- helpers
 
@@ -369,10 +375,15 @@ def main(argv=None) -> int:
     ap.add_argument("--max-depth", type=int, default=6)
     ap.add_argument("--quiet", action="store_true", help="do not print the text dump")
     opts = ap.parse_args(argv)
+    set_seed(int(load_config()["seed"]))  # nothing here is random; AGENTS.md rule 7
+    # Provenance for the JSON output: code version and the hash of the dump options (no YAML config here).
+    provenance = {"code_version": code_version(),
+                  "config_sha256": config_sha256({k: v for k, v in vars(opts).items() if k not in ("files", "json")})}
 
     entries = []
     for p in opts.files:
         entry = inspect_file(p, opts)
+        entry["provenance"] = provenance
         entries.append(entry)
         if not opts.quiet:
             print(f"===== {entry['file']} ({entry['bytes']} bytes)")

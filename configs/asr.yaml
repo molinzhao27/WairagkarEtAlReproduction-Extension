@@ -24,8 +24,16 @@ asr:
     hf_home: data/processed/models/hf_home        # HF_HOME for huggingface_hub (locks, xet cache): never ~/.cache
     allow_download: true            # false = fail if the model is not already in cache_dir
 
-  seed: null                        # CTranslate2 RNG (used only by sampling, i.e. temperature > 0 fallback);
-                                    #   null = configs/default.yaml seed
+  seed: null                        # base of the per-clip sampling seed; null = configs/default.yaml seed.
+                                    #   Randomness enters only through sampling (the temperature > 0 fallback steps).
+                                    #   Each clip's seed = SHA-256(seed, the 16 kHz float32 samples Whisper gets),
+                                    #   so a transcript depends on the audio and this config only, not on clip order,
+                                    #   threads or earlier decodes (wvx.asr.clip_seed; recorded as asr_seed).
+                                    #   CTranslate2 4.8.3 keeps one RNG per worker thread, seeded once at that
+                                    #   thread's first use from ctranslate2.set_random_seed (src/random.cc), with no
+                                    #   per-call seed, so a decode that sampled is redone on a freshly loaded model
+                                    #   right after set_random_seed(clip seed) (asr_sampled = true; costs one model
+                                    #   load + one extra decode for those clips only).
   device: cpu                       # never the GPU (also launch with CUDA_VISIBLE_DEVICES= empty)
   compute_type: int8                # CTranslate2 int8 weights on CPU (supported: int8, int8_float32, float32)
   cpu_threads: 8                    # <= 8 on the shared host (another project trains on CPU)
@@ -46,8 +54,9 @@ asr:
     patience: 1.0                   # [LIB]
     length_penalty: 1.0             # [LIB]
     temperature: [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]   # [LIB] default temperature fallback: a degenerate decode
-                                    #   (repetition loop) is retried with sampling; `seed` keeps it reproducible.
-                                    #   Applied identically to every audio condition (D-028). Beam-only variant: [0.0]
+                                    #   (repetition loop or avg logprob < -1) is retried with sampling, seeded per
+                                    #   clip (see `seed`). Applied identically to every audio condition (D-028).
+                                    #   Beam only: [0.0] (variant `beam`)
     compression_ratio_threshold: 2.4   # [LIB] with one temperature this only flags loops (max_compression_ratio)
     log_prob_threshold: -1.0        # [LIB]
     no_speech_threshold: 0.6        # [LIB] a window judged silent (and low-confidence) is dropped -> empty transcript
@@ -56,6 +65,17 @@ asr:
     suppress_blank: true            # [LIB]
     vad_filter: false               # [LIB] no voice-activity detection
     initial_prompt: null            # UNCONSTRAINED decoding: no prompt, no language model, no vocabulary
+
+  silence:
+    skip_silent: true               # [CHOICE] a clip with no speech frame under wvx.metrics.speech_frame_mask (the
+                                    #   silence detector of mel_corr/MCD, configs/metrics.yaml `silence`, run on the
+                                    #   full-scale-1 signal) is not sent to Whisper: transcript "", skipped_silent:
+                                    #   true, so every reference word counts as a deletion. Whisper transcribes digital
+                                    #   silence as "you" (all 405 zero-speech clips in results/kunz_zeroshot). The
+                                    #   detector is relative to the loudest frame (threshold_db), so a clip with any
+                                    #   frame above the energy floor (silence.amin) has speech frames: in practice only
+                                    #   (near-)digital silence is skipped, e.g. LPCNet output for minimal c0.
+    metrics_overrides: {}           # merged over configs/metrics.yaml for this detector only ({} = the metrics' own)
 
   text:
     # Both reference and hypothesis: (1) digits -> words, (2) wvx.metrics.normalize_text with configs/metrics.yaml
@@ -114,8 +134,11 @@ asr:
   variants:                         # scripts/asr_eval.py --variant NAME: deep-merged over this section; the
                                     #   output files get the suffix _NAME. Sensitivity checks, not the primary result.
     fallback:                       # faster-whisper's default temperature fallback: a decode that looks degenerate
-      decode:                       #   (compression ratio > 2.4 or avg logprob < -1) is redone with seeded sampling
-        temperature: [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]
+      decode:                       #   (compression ratio > 2.4 or avg logprob < -1) is redone with seeded sampling.
+        temperature: [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]   # Now the same as the default `decode` (kept for the _fallback files)
+    beam:                           # beam search only, no sampling. The committed unsuffixed asr_per_trial.csv /
+      decode:                       #   asr_summary.json in results/reproduce_inference_t15_day195 were made with
+        temperature: [0.0]          #   these decode settings, before silent-clip skipping existed
     prompt:                         # alternative constrained method: vocabulary as initial prompt, then snapping
       constrained:
         method: prompt_snap
@@ -131,6 +154,7 @@ asr:
     live_source: live               # closed-loop audio from the neural .mat (needs --experiment with `closed_loop`)
     live_trim_lead_in: false        # [CHOICE] false = score the whole live clip, as it was heard; true = drop the
                                     #   first (window_len - 1) bins so it covers the same frames as the offline audio
-    out_per_trial: asr_per_trial.csv
-    out_summary: asr_summary.json
+    out_per_trial: asr_per_trial.csv         # existing outputs are only replaced when their summary records the same
+    out_summary: asr_summary.json            #   effective settings (wvx.asr.effective_settings + sources, types,
+                                             #   max_trials, live trim), or with --overwrite
     progress_every: 20              # clips between progress lines

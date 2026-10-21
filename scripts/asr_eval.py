@@ -19,6 +19,10 @@ Trial type: the CSV's type column if present, else the .mat trial_description, e
 Output (next to the input; small files): asr_per_trial.csv (one row per trial x source, written as it goes)
 and asr_summary.json (per source and trial type: n, mean, median, sd of per-trial rates, and pooled rates =
 sum of errors / sum of reference units; constrained rates only over trials whose reference is in-vocabulary).
+The summary records the effective settings (``effective_settings``: wvx.asr.effective_settings plus sources, type
+filter, max_trials and live trim), the code version and the config hash. Existing outputs are replaced only when
+their summary records the same effective settings; otherwise the script stops before decoding anything (pass
+--overwrite to replace them, or use --variant/--tag for a new file name).
 Every setting is in configs/asr.yaml; wvx.asr documents the definitions.
 """
 
@@ -42,6 +46,7 @@ sys.dont_write_bytecode = True
 
 from wvx import asr  # noqa: E402
 from wvx.config import deep_merge, load_config, resolve_path  # noqa: E402
+from wvx.provenance import code_version, config_sha256  # noqa: E402
 from wvx.seeding import set_seed  # noqa: E402
 
 RATES = ("wer", "cer", "per", "wer_constrained", "cer_constrained", "per_constrained")
@@ -55,7 +60,9 @@ FIELDS = ["trial", "type", "source", "text", "hyp_raw", "hyp_raw_prompted", "ref
           *RATES, "ref_words", "word_errors", "word_errors_constrained", "ref_chars", "char_errors",
           "char_errors_constrained", "ref_phones", "phone_errors", "phone_errors_constrained", "ref_oov_words",
           "hyp_words", "hyp_empty", "n_segments", "avg_logprob", "no_speech_prob", "max_compression_ratio",
-          "max_temperature", "audio_s", "asr_s", "wav"]
+          "max_temperature", "skipped_silent", "speech_frames", "asr_seed", "asr_sampled", "asr_sampled_prompted",
+          "audio_s", "asr_s", "wav"]
+NOT_RECORDED = "<not recorded>"
 
 
 def _finite(v):
@@ -88,9 +95,80 @@ def summarize(rows, cr_threshold):
                            "repetition_flag_fraction": round(float(np.mean(
                                [r["max_compression_ratio"] > cr_threshold for r in rs])), 4),
                            "fallback_used_fraction": round(float(np.mean([r["max_temperature"] > 0 for r in rs])), 4),
+                           "sampled_fraction": round(float(np.mean([bool(r.get("asr_sampled")) for r in rs])), 4),
+                           "skipped_silent_fraction": round(float(np.mean([bool(r.get("skipped_silent"))
+                                                                           for r in rs])), 4),
                            "asr_s_mean": round(float(np.mean([r["asr_s"] for r in rs])), 3),
                            "audio_s_mean": round(float(np.mean([r["audio_s"] for r in rs])), 3)}
     return out
+
+
+def run_settings(acfg: dict, sources, keep_types, max_trials) -> dict:
+    """Everything that determines the outputs of one run (JSON-normalized, so it compares equal to a reloaded copy)."""
+    s = {"asr": asr.effective_settings(acfg), "sources": list(sources),
+         "types_filter": sorted(keep_types) if keep_types else None, "max_trials": max_trials,
+         "live_trim_lead_in": acfg["eval"]["live_trim_lead_in"]}
+    return json.loads(json.dumps(s))
+
+
+def legacy_settings(summary: dict) -> dict:
+    """The parts of ``run_settings`` that a summary written before ``effective_settings`` existed recorded (for the
+    message only: such a summary never counts as matching, since silent-clip skipping and per-clip seeding are new)."""
+    a = summary.get("asr") or {}
+    m = a.get("model") or {}
+    return {"asr": {"engine": a.get("engine"), "model": {k: m.get(k) for k in ("name", "repo_id", "revision", "sha256")},
+                    "device": a.get("device"), "compute_type": a.get("compute_type"), "audio": a.get("audio"),
+                    "decode": a.get("decode"), "text": a.get("text"), "constrained": summary.get("constrained"),
+                    "per": summary.get("per")},
+            "sources": summary.get("sources"), "types_filter": summary.get("types_filter"),
+            "max_trials": summary.get("max_trials"), "live_trim_lead_in": summary.get("live_trim_lead_in")}
+
+
+def _flatten(d, prefix=""):
+    if isinstance(d, dict) and d:
+        out = {}
+        for k, v in d.items():
+            out.update(_flatten(v, f"{prefix}{k}."))
+        return out
+    return {prefix[:-1]: d}
+
+
+def settings_diff(old: dict, new: dict) -> list:
+    """'key: old -> new' for every changed setting; keys present on one side only are listed by group at the end."""
+    fo, fn = _flatten(old), _flatten(new)
+    changed, one_sided = [], set()
+    for k in sorted(set(fo) | set(fn)):
+        if k not in fo or k not in fn:
+            one_sided.add(".".join(k.split(".")[:2]))
+        elif fo[k] != fn[k]:
+            changed.append(f"{k}: {fo[k]!r} -> {fn[k]!r}")
+    if one_sided:
+        changed.append(f"{NOT_RECORDED} on one side: " + ", ".join(sorted(one_sided)))
+    return changed
+
+
+def check_existing(out_csv: Path, out_json: Path, settings: dict, overwrite: bool):
+    """None if writing is fine; else why not. Fine = no previous outputs, or a previous summary with the same
+    effective settings (a faithful re-run), or ``overwrite``."""
+    if overwrite or not (out_csv.exists() or out_json.exists()):
+        return None
+    if not out_json.exists():
+        return (f"{out_csv.name} exists without {out_json.name} (interrupted run?), so its settings are unknown. "
+                f"Pass --overwrite to replace it, or --tag NAME to write new files.")
+    old = json.loads(out_json.read_text())
+    recorded = old.get("effective_settings")
+    if recorded == settings:
+        return None
+    if recorded is None:
+        why = (f"{out_json.name} predates effective-settings recording (no silent-clip skip, per-process seeding); "
+               "differences in what it recorded:")
+        diff = settings_diff(legacy_settings(old), settings)
+    else:
+        why = f"{out_json.name} was produced with different effective settings:"
+        diff = settings_diff(recorded, settings)
+    return "\n".join([f"refusing to overwrite {out_csv.name} / {out_json.name}. {why}", *(f"  {d}" for d in diff[:30]),
+                      *(["  ..."] if len(diff) > 30 else []),
+                      "Pass --overwrite to replace them, or --variant/--tag to write new files."])
 
 
 def derive_vocabulary(acfg: dict) -> int:
@@ -138,6 +216,8 @@ def main() -> int:
     ap.add_argument("--variant", default=None, help="name in asr.variants, merged over the config (tags outputs)")
     ap.add_argument("--tag", default=None, help="suffix for the output file names (default: the variant name)")
     ap.add_argument("--derive-vocabulary", action="store_true", help="print the Kunz vocabulary and check the config")
+    ap.add_argument("--overwrite", action="store_true",
+                    help="replace existing outputs even if they were produced with different effective settings")
     args = ap.parse_args()
 
     acfg = asr.load_asr_config(args.asr_config)
@@ -177,6 +257,11 @@ def main() -> int:
     sfx = f"_{tag}" if tag else ""
     out_csv = run_dir / ev["out_per_trial"].replace(".csv", f"{sfx}.csv")
     out_json = run_dir / ev["out_summary"].replace(".json", f"{sfx}.json")
+    settings = run_settings(acfg, sources, keep_types, args.max_trials)
+    refusal = check_existing(out_csv, out_json, settings, args.overwrite)
+    if refusal:
+        print(refusal, file=sys.stderr)
+        return 2
     model_path = asr.ensure_model(acfg)  # download (once) + sha256 check before the clock starts
     print(f"{len(todo)} trials x {sources}; model {model_path.name}, {acfg['compute_type']}, "
           f"{acfg['cpu_threads']} threads, constrained={acfg['constrained']['method']}", flush=True)
@@ -217,10 +302,12 @@ def main() -> int:
     total_s = time.perf_counter() - t_start
     summary = {
         "results_dir": str(Path(args.results_dir)), "variant": args.variant,
+        "effective_settings": settings,
+        "code_version": code_version(), "config_sha256": config_sha256(acfg),
         "sources": sources, "types_filter": sorted(keep_types) if keep_types else None,
         "max_trials": args.max_trials,
         "asr": {k: acfg[k] for k in ("engine", "model", "seed", "device", "compute_type", "cpu_threads", "audio",
-                                     "decode", "text")},
+                                     "decode", "silence", "text")},
         "constrained": {k: v for k, v in acfg["constrained"].items() if k != "vocabulary_source"},
         "per": {k: acfg["per"][k] for k in ("enabled", "engine", "strip_stress")},
         "live_trim_lead_in": ev["live_trim_lead_in"],
