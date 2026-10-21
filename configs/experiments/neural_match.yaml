@@ -1,0 +1,95 @@
+# Same-day neural matching, imagined -> attempted, NO decoder (pre-registered: notes/DECISIONS.md D-032).
+# Does an IMAGINED trial's neural activity (Kunz T15 2024.03.03) resemble the ATTEMPTED trial of the same
+# sentence more than attempted trials of other sentences? Design: src/wvx/neural_match.py (module docstring).
+#
+#   host (CPU only, 2 threads, niced; after `scripts/remote/sync.sh push`), from the Mac:
+#   source scripts/remote/host.env; ssh $WVX_HOST 'docker exec wvx bash -c "cd /workspace/WairagkarEtAlReproduction-Extension && CUDA_VISIBLE_DEVICES= nice -n 19 .venv/bin/python -I scripts/neural_match.py --config configs/experiments/neural_match.yaml"'
+#
+#   i.e. inside the container:
+#   CUDA_VISIBLE_DEVICES= nice -n 19 .venv/bin/python -I scripts/neural_match.py --config configs/experiments/neural_match.yaml
+#
+# Writes results/neural_match/{per_trial.csv, summary.json, summary.md}. Reads the processed Kunz inputs
+# (scripts/prepare_kunz.py) and the cue TTS features (scripts/make_tts.py); no LPCNet, no TensorFlow.
+#
+# Merged over kunz_targets.yaml (-> reproduce_inference.yaml -> default.yaml) for paths.kunz_processed,
+# paths.tts_features, tts.voice, kunz.corpus, and the alignment/synthesis settings the cue durations use.
+
+base_experiment: configs/experiments/kunz_targets.yaml
+
+run_name: neural_match
+
+runtime:
+  device: cpu
+  # Applied by scripts/neural_match.py before numpy loads (OMP/MKL/OpenBLAS/numba env vars). The host is
+  # shared: at most 2 threads. No TensorFlow is imported, so its pools are left unset.
+  threads:
+    omp: 2
+    intra_op: null
+    inter_op: null
+  # Absolute niceness the script raises itself to (the wvx container starts processes at -5).
+  nice: 19
+
+neural_match:
+  output_dir: results/neural_match
+  attempted_file: "{kunz_processed}/t15.2024.03.03_attempted.npz"
+  imagined_file: "{kunz_processed}/t15.2024.03.03_imagined.npz"
+  # notes/DATA_FORMATS.md §8: attempted block -> imagined block with the same 50 cues (checked on load).
+  pairs: {3: 4, 6: 7, 11: 9, 13: 12}
+
+  # 1. Representation: go window (bins from the go cue to the trial end), mean-pooled over non-overlapping
+  #    windows, then PCA fitted per pair on the pooled frames of the OTHER three pairs (both conditions).
+  pool_bins: 5                 # 5 x 10 ms = 50 ms
+  drop_partial_window: true    # [CHOICE] a trailing window of < pool_bins bins is dropped (<= 40 ms per trial)
+  pca:
+    n_components: 32
+    standardize: true          # each feature z-scored by the PCA training frames before the PCA
+    min_std: 1.0e-8            # [CHOICE] features with a training s.d. at or below this are only centred
+
+  # 2. Primary similarity: DTW on the 32-dim trajectories, then the mean over components of the Pearson r of
+  #    the aligned sequences (mel_corr analogue). Keys as in configs/metrics.yaml alignment.dtw.
+  dtw:
+    metric: cosine             # scipy cdist name: cosine distance = 1 - cosine similarity
+    step_sizes: [[1, 1], [0, 1], [1, 0]]   # standard symmetric steps, as in configs/metrics.yaml
+    weights_add: [0.0, 0.0, 0.0]
+    weights_mul: [1.0, 1.0, 1.0]
+    global_constraints: false  # no band
+    band_rad: 0.25             # used only if global_constraints is true
+
+  # 4. Identification: own attempted trial + the k attempted trials of the pair whose cues are closest in TTS
+  #    speech duration (ties: earlier trial first). Also reported among all 50.
+  length_matched_k: 10
+  n_permutations: 10000        # seeded relabelings for the one-sided p (seed: top-level `seed`)
+
+  # ADDED 2026-10-21, before any run (NOT pre-registered; reported as an addition next to the pre-registered
+  # raw length-only baseline, which stays unchanged). Imagined trials are ~1.5x longer than attempted ones, so
+  # the raw -|log(attempted / imagined)| favours long attempted trials over the proportionally matched one.
+  additional_baselines:
+    length_block_normalized: true   # each trial's go-window duration / its block's median, then -|log ratio|
+
+  # Per-cue TTS speech duration, from the TTS LPCNet features of make_tts.py (no synthesis needed):
+  # <paths.tts_features>/<voice slug>/<corpus>.npz.
+  cue_duration:
+    tts_voice: null            # null = tts.voice (the voice the alignment targets were made with)
+    tts_corpus: null           # null = kunz.corpus
+    # [CHOICE] speech_span = first to last TTS frame whose c0 power is within threshold_db of the loudest
+    # frame (wvx.alignment.speech_bounds, as in the alignment validation; the TTS speaks each cue as one
+    # phrase) | speech_frames = frames in the alignment's speech mask (pauses excluded).
+    method: speech_span
+    threshold_db: 30.0         # = validation.speech_mask_db
+
+  # Frozen copy of the pre-registered values (D-032 and its specification). The script reports every
+  # setting above that differs from these as a deviation in summary.json and summary.md. Do not edit.
+  preregistered:
+    pool_bins: 5
+    pca:
+      n_components: 32
+      standardize: true
+    dtw:
+      metric: cosine
+      step_sizes: [[1, 1], [0, 1], [1, 0]]
+      weights_add: [0.0, 0.0, 0.0]
+      weights_mul: [1.0, 1.0, 1.0]
+      global_constraints: false
+    length_matched_k: 10
+    n_permutations: 10000
+    pairs: {3: 4, 6: 7, 11: 9, 13: 12}
