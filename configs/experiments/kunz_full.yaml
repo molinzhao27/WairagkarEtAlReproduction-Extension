@@ -1,0 +1,119 @@
+# Core experiment, full design (TEMPLATE; not run yet -- needs the GPU or ~2 days of CPU):
+# fit on ATTEMPTED, test on IMAGINED, Kunz T15 2024.03.03 (notes/PLAN.md Phase 3 c/d).
+# 4 folds (held-out attempted block 3 / 6 / 11 / 13) x {frozen base, fine-tuned base}, plus the
+# day-193 decoder zero-shot as a baseline, all evaluated on the same sets.
+#
+#   host: python -I scripts/kunz_experiment.py --config configs/experiments/kunz_full.yaml
+#
+# Merged over the base experiments in order (each over configs/default.yaml):
+#   kunz_targets.yaml (-> reproduce_inference.yaml): paths, synthesis, wairagkar_data, inference, TTS voice;
+#   reproduce_training.yaml: their training hyperparameters and augmentation.
+# Tags: [THEIRS] their code/config; [CHOICE] ours; [PLAN] notes/PLAN.md.
+
+base_experiment:
+  - configs/experiments/kunz_targets.yaml
+  - configs/experiments/reproduce_training.yaml
+
+run_name: kunz_full
+
+runtime:
+  device: cpu                  # CPU runs; a GPU run must go through scripts/remote/gpu_job.sh (D-025)
+  deterministic_ops: true
+  # Applied by scripts/kunz_experiment.py BEFORE TensorFlow initializes (env vars + tf.config.threading),
+  # so runs on the shared host never take more than these. null = library default.
+  threads:
+    intra_op: 12               # TF intra-op pool (and TF_NUM_INTRAOP_THREADS)
+    inter_op: 2                # TF inter-op pool (and TF_NUM_INTEROP_THREADS)
+    omp: 12                    # OMP/MKL/OpenBLAS/numba threads (oneDNN uses OMP)
+  # Absolute niceness the script raises itself to at start (children such as LPCNet inherit it). Processes in the
+  # wvx container start at -5, so a `nice -n 19` prefix alone ends at 14. null = leave as launched.
+  nice: 19
+
+model:
+  n_session_layers: 1          # [CHOICE] ONE new input layer for 2024.03.03 (attempted and imagined share it)
+
+training:
+  # [THEIRS] epochs / early stopping / optimizer / augmentation from reproduce_training.yaml:
+  # epochs 15, early_stopping_patience 10 on val_loss, lr 5e-4, batch 1024, 3 augmented copies.
+  epochs: 15
+  early_stopping_patience: 10
+  # [CHOICE] validation: 15 of the fold's 150 attempted training trials (10 %), seeded draw from all of
+  # them (pool: null). Never from the held-out block or from imagined data.
+  validation: {n_trials: 15, fraction: null, pool: null}
+  init:
+    source: inference_h5       # their day-193 single-layer model -> the new input layer starts as its
+    path: data/raw/wairagkar/t15_neural_data/t15_day195/brain2voice_t15_day193.h5   # input layer
+    freeze_base: true          # overridden per variant (experiment.variants)
+  export_weights: final        # [THEIRS] final weights go into the inference .h5
+  overwrite: false
+  verbose: 2
+  log_every_batches: 50        # progress line inside each epoch (CPU runs are slow)
+  sessions: []                 # unused here (scripts/train.py only)
+  held_out_sessions: []
+
+experiment:
+  name: kunz_full                          # outputs under <results_root>/<name>/, <checkpoints_root>/<name>/, ...
+  results_root: results                    # per-trial CSV, summary JSON, training history (small)
+  checkpoints_root: data/checkpoints       # host only
+  audio_root: results/audio                # gitignored; also holds the saved predictions (.npz)
+  session: t15.2024.03.03
+  # Inputs (host): attempted WITH aligned targets (scripts/align_targets.py); imagined without targets.
+  attempted_file: "{kunz_targets}/t15.2024.03.03_attempted.npz"
+  imagined_file: "{kunz_processed}/t15.2024.03.03_imagined.npz"
+  imagined_eval_file: "{kunz_processed}/t15.2024.03.03_imagined_eval.npz"
+  zero_shot_model: data/raw/wairagkar/t15_neural_data/t15_day195/brain2voice_t15_day193.h5
+  # D-024: Kunz columns are in Wairagkar's release order; their day <= 195 models expect the old order.
+  # Applied to every Kunz trial before training AND before every decode (wvx.kunz_experiment.prepare_neural).
+  reorder_channels: true
+  # notes/DATA_FORMATS.md §8: attempted block -> imagined block with the same 50 cues (checked on load).
+  pairs: {3: 4, 6: 7, 11: 9, 13: 12}
+  eval_block: 14                           # imagined_eval file: closed-loop imagined, 48/50 cues novel
+  include_leaky: true                      # also test the imagined blocks whose cues were trained on
+  folds: [3, 6, 11, 13]                    # [PLAN] leave one attempted block out
+  variants:                                # [PLAN] both reported
+    frozen: {freeze_base: true}
+    finetuned: {freeze_base: false}
+  run_variants: [frozen, finetuned]
+  zero_shot: true                          # baseline: the day-193 decoder as is (reorder ON), no training
+  max_train_trials: null                   # smoke runs only
+  max_trials_per_set: null                 # smoke runs only
+  smoke:                                   # --smoke: tiny end-to-end check (outputs under <name>_smoke; not a result)
+    max_train_trials: 6
+    max_trials_per_set: 3
+    epochs: 1
+    val_trials: 2
+    log_every_batches: 5
+
+  nulls:
+    shuffled_trial: true                   # output vs the TTS of another trial's cue, same set (seeded)
+    # Which models also decode time-shuffled inputs (seeded permutation of the bins within each trial).
+    shuffled_time_models: [trained, zero_shot]   # "trained" = every trained variant
+
+  evaluation:
+    n_workers: 8                           # threads for LPCNet synthesis + metrics (<= runtime.threads.intra_op)
+    tts_voice: null                        # null = tts.voice (the voice the targets were made with)
+    tts_corpus: null                       # null = kunz.corpus
+    # Metric settings for comparisons with the TTS (target-free; different length and timing, so the
+    # frame-wise variant is meaningless and switched off). Merged over configs/metrics.yaml.
+    tts_metrics: {evaluate: {mel_corr_framewise: false}}
+    # Held-out attempted trials only: their aligned target (decoder_target = the smoothed, scaled training
+    # target mapped back to LPCNet's range; the unsmoothed stretched TTS is not stored), resynthesized.
+    target_metrics: {}
+    save_audio:                            # wavs under <audio_root>/<name>/<fold>/ (gitignored)
+      predictions: [trained]               # real-input predictions of these models ("trained", "zero_shot")
+      references: true                     # TTS references and aligned-target audio
+    progress_every: 50
+    # ASR hook (extension metric; configs/asr.yaml): used when this module/function exists at scoring time;
+    # columns stay empty otherwise (then re-run with --stage score). The hypothesis is also re-scored against
+    # the shuffled-trial partner's cue (null; no second transcription). Calls are serialized (one model).
+    asr:
+      enabled: true
+      module: wvx.asr
+      function: evaluate_wav               # (wav, sr, reference_text, cfg) -> dict
+      rescore_function: score_text         # (reference_text, hypothesis_text, cfg) -> dict, for the null
+      hypothesis_key: hyp_raw              # raw transcript in evaluate_wav's output
+      # Passed as its `cfg` (merged over configs/asr.yaml there). Threads: 4 + the LPCNet/metric workers
+      # stay within runtime.threads; never download during an experiment run.
+      cfg: {asr: {cpu_threads: 4, model: {allow_download: false}, per: {allow_download: false}}}
+      inputs: [real, shuffled_time]        # which decoder outputs are transcribed
+      references: true                     # also transcribe the TTS and aligned-target audio (ceiling)

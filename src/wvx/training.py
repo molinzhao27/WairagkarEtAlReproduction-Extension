@@ -426,8 +426,11 @@ def _portable(obj: Any) -> Any:
     return obj
 
 
-def train(sessions: list[SessionData], cfg: dict) -> TrainResult:
-    """Train a Voiceformer on ``sessions``, each using its own ``SessionData.layer`` input layer."""
+def train(sessions: list[SessionData], cfg: dict, extra_callbacks: Sequence[Any] = ()) -> TrainResult:
+    """Train a Voiceformer on ``sessions``, each using its own ``SessionData.layer`` input layer.
+
+    ``extra_callbacks`` (e.g. progress logging) are appended to the Keras callbacks.
+    """
     configure_device(cfg["runtime"]["device"])
     set_seed(cfg["seed"], cfg["runtime"].get("deterministic_ops", False))
     model_utils = b2v.load("lib.model_utils")
@@ -486,6 +489,7 @@ def train(sessions: list[SessionData], cfg: dict) -> TrainResult:
         callbacks.append(tf.keras.callbacks.ModelCheckpoint(
             str(best), monitor=t["monitor"], mode=t["monitor_mode"], save_best_only=True
         ))
+    callbacks.extend(extra_callbacks)
     history = model.fit(
         train_b.dataset(m["n_features"], m["n_targets"]),
         epochs=t["epochs"],

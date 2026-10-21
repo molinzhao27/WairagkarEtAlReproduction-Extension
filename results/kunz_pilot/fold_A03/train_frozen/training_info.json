@@ -1,0 +1,101 @@
+{
+  "variant": "frozen",
+  "freeze_base": true,
+  "init": "data/raw/wairagkar/t15_neural_data/t15_day195/brain2voice_t15_day193.h5",
+  "n_train_trials": 135,
+  "n_validation_trials": 15,
+  "validation_trials": [
+    {
+      "block": 6,
+      "trial_index": 62
+    },
+    {
+      "block": 6,
+      "trial_index": 63
+    },
+    {
+      "block": 6,
+      "trial_index": 79
+    },
+    {
+      "block": 11,
+      "trial_index": 110
+    },
+    {
+      "block": 11,
+      "trial_index": 111
+    },
+    {
+      "block": 11,
+      "trial_index": 126
+    },
+    {
+      "block": 11,
+      "trial_index": 140
+    },
+    {
+      "block": 11,
+      "trial_index": 149
+    },
+    {
+      "block": 13,
+      "trial_index": 156
+    },
+    {
+      "block": 13,
+      "trial_index": 157
+    },
+    {
+      "block": 13,
+      "trial_index": 158
+    },
+    {
+      "block": 13,
+      "trial_index": 163
+    },
+    {
+      "block": 13,
+      "trial_index": 171
+    },
+    {
+      "block": 13,
+      "trial_index": 191
+    },
+    {
+      "block": 13,
+      "trial_index": 193
+    }
+  ],
+  "excluded_too_short": [],
+  "epochs_configured": 5,
+  "epochs_run": 5,
+  "early_stopped": false,
+  "best_epoch_by_val_loss": 5,
+  "export_weights": "final",
+  "history": {
+    "loss": [
+      0.016978267580270767,
+      0.015616875141859055,
+      0.015020550228655338,
+      0.014585888013243675,
+      0.014232045970857143
+    ],
+    "val_loss": [
+      0.023769419640302658,
+      0.023541735485196114,
+      0.023158904165029526,
+      0.022866226732730865,
+      0.02272055298089981
+    ],
+    "val_accuracy": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "wall_time_s": 3204.9244072437286,
+  "exported": "data/checkpoints/kunz_pilot/fold_A03/train_frozen/inference_layer00.h5",
+  "exported_sha256": "6ac6a5e98fea3be2647986b9420846c342a806336b88dd10b1b9a93088c570b6"
+}

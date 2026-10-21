@@ -1,0 +1,24 @@
+# CPU pilot of the core experiment (user-approved, ~1.5 h of training): ONE fold (held-out attempted
+# block 3, tested on its paired imagined block 4, eval block 14 and the leaky imagined blocks 7/9/12),
+# frozen base, 5 epochs. Everything else is the full design (kunz_full.yaml).
+#
+#   host (CPU only, niced, detached; see scripts/kunz_experiment.py):
+#   CUDA_VISIBLE_DEVICES= nice -n 19 .venv/bin/python -I scripts/kunz_experiment.py \
+#       --config configs/experiments/kunz_pilot.yaml
+
+base_experiment: configs/experiments/kunz_full.yaml
+
+run_name: kunz_pilot
+
+training:
+  epochs: 5                    # pilot budget (~17-22 min per epoch on 12 CPU threads); early stopping
+                               # (patience 10) therefore cannot trigger
+
+experiment:
+  name: kunz_pilot
+  folds: [3]
+  run_variants: [frozen]
+  nulls:
+    # Pilot budget: the trained model gets the shuffled-time null on every set; the zero-shot baseline
+    # gets the (free) shuffled-trial null only. The full design decodes both.
+    shuffled_time_models: [trained]
