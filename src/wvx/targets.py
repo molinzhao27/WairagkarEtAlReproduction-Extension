@@ -321,11 +321,16 @@ def lpcnet_callables(cfg: Mapping[str, Any]):
 
 
 def align_trials(model, trials: Sequence, corpus: TTSCorpus, cfg: Mapping[str, Any], reorder: bool,
-                 log=print) -> tuple[list[np.ndarray], list]:
+                 log=print, preds: Optional[Sequence[np.ndarray]] = None,
+                 tts_segments: Optional[Sequence[Optional[np.ndarray]]] = None,
+                 pred_segments: Optional[Sequence[Optional[np.ndarray]]] = None) -> tuple[list[np.ndarray], list]:
     """Decoder predictions and alignments for trials (anything with ``.neural`` and ``.text``).
 
     Predictions run in this process (TensorFlow); alignments run in ``alignment.n_workers`` threads,
     each calling LPCNet as a subprocess. Returns (normalized predictions, ``alignment.Alignment``s).
+    ``preds``: normalized predictions computed earlier (``model`` is then unused). ``tts_segments`` /
+    ``pred_segments``: per trial, syllables that replace the envelope-dip ones (``align_trial``); None, or
+    a None entry, keeps the envelope dips.
     """
     from concurrent.futures import ThreadPoolExecutor
 
@@ -336,18 +341,26 @@ def align_trials(model, trials: Sequence, corpus: TTSCorpus, cfg: Mapping[str, A
     missing = sorted({t.text for t in trials if t.text not in corpus})
     if missing:
         raise KeyError(f"{len(missing)} cues have no TTS features in {corpus.voice!r}, e.g. {missing[:3]}")
-    preds = []
-    for i, t in enumerate(trials):
-        preds.append(inference.predict_trial(model, t.neural, cfg, reorder=reorder))
-        if log and (i + 1) % 25 == 0:
-            log(f"predicted {i + 1}/{len(trials)} trials")
+    for name, seq in (("preds", preds), ("tts_segments", tts_segments), ("pred_segments", pred_segments)):
+        if seq is not None and len(seq) != len(trials):
+            raise ValueError(f"{name} has {len(seq)} entries for {len(trials)} trials")
+    if preds is None:
+        preds = []
+        for i, t in enumerate(trials):
+            preds.append(inference.predict_trial(model, t.neural, cfg, reorder=reorder))
+            if log and (i + 1) % 25 == 0:
+                log(f"predicted {i + 1}/{len(trials)} trials")
+    else:
+        preds = [np.asarray(p, dtype=np.float32) for p in preds]
 
     synth, encode = lpcnet_callables(cfg)
 
     def one(i):
         t = trials[i]
         pred_raw = prediction_timeline(preds[i], t.neural.shape[0], sil20, cfg)
-        return align_trial(pred_raw, reduce(corpus.lookup(t.text), cfg), sil20, cfg, synth=synth, encode=encode)
+        return align_trial(pred_raw, reduce(corpus.lookup(t.text), cfg), sil20, cfg, synth=synth, encode=encode,
+                           tts_segments=None if tts_segments is None else tts_segments[i],
+                           pred_segments=None if pred_segments is None else pred_segments[i])
 
     with ThreadPoolExecutor(max_workers=int(cfg["alignment"]["n_workers"])) as ex:
         results = list(ex.map(one, range(len(trials))))

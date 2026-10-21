@@ -148,3 +148,37 @@ def test_decoder_output_sanity(cfg):
     s = tg.decoder_output_sanity(trials, results, cfg)
     assert s["r_detected_syllables_vs_cue_words"] == pytest.approx(1.0)
     assert s["fraction_trials_without_speech"] == 0.0 and s["envelope_range_db_p95_minus_p5_median"] == pytest.approx(90.0)
+
+
+def _c0_frames(env_db):
+    """(n, 36) raw frames whose c0 is the given dB power (silence elsewhere), with a ramp in feature 1."""
+    f = np.tile(SILENCE36, (env_db.size, 1)).astype(np.float64)
+    f[:, 0] = env_db * np.sqrt(18.0) / 10.0 - 4.0
+    f[:, 1] = np.linspace(-1, 1, env_db.size)
+    return f.astype(np.float32)
+
+
+def _bumps(n, centres, width):
+    t = np.arange(n)[:, None]
+    return -20.0 + 40.0 * np.minimum(np.exp(-0.5 * ((t - np.asarray(centres)[None, :]) / width) ** 2).sum(1), 1.0)
+
+
+def test_align_trials_with_saved_predictions_and_segments(cfg):
+    from types import SimpleNamespace
+
+    w, T = cfg["model"]["window_len"], 320
+    corpus = tg.TTSCorpus("V", ["You up?"], [_c0_frames(_bumps(100, [30, 50], 5))], SILENCE36)
+    pred_raw = _c0_frames(_bumps(T, [150, 230], 12))[:, :20]
+    preds = [tg.scale(pred_raw[w - 1:], cfg)]
+    trials = [SimpleNamespace(neural=np.zeros((T, cfg["model"]["n_features"]), np.float32), text="You up?")]
+    _, ref = tg.align_trials(None, trials, corpus, cfg, reorder=False, log=None, preds=preds)
+    assert len(ref[0].tts_segments) == 2 and len(ref[0].pred_segments) == 2
+    _, got = tg.align_trials(None, trials, corpus, cfg, reorder=False, log=None, preds=preds,
+                             tts_segments=[ref[0].tts_segments], pred_segments=[ref[0].pred_segments])
+    np.testing.assert_array_equal(got[0].mapped_segments, ref[0].mapped_segments)
+    np.testing.assert_array_equal(got[0].target_raw, ref[0].target_raw)
+    one = np.array([[ref[0].tts_segments[0, 0], ref[0].tts_segments[-1, 1]]])          # one TTS syllable instead
+    _, merged = tg.align_trials(None, trials, corpus, cfg, reorder=False, log=None, preds=preds, tts_segments=[one])
+    assert merged[0].mapped_segments.shape == (1, 2)
+    with pytest.raises(ValueError):
+        tg.align_trials(None, trials, corpus, cfg, reorder=False, log=None, preds=preds * 2)

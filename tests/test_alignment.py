@@ -293,3 +293,51 @@ def test_speech_bounds_and_boundary_errors(base_cfg):
     err = al.boundary_errors(np.array([10, 31]), np.array([12, 30, 50]))
     np.testing.assert_array_equal(err, [-2, 1, -19])
     assert np.isnan(al.boundary_errors(np.array([]), np.array([1, 2]))).all()
+
+
+# ---------------------------------------------------------------- external syllables (D-033)
+
+
+def test_explicit_segments_reproduce_the_default(base_cfg):
+    cfg = _cfg(base_cfg, envelope={"source": "c0"})
+    tts_env = _bumps(110, [30, 50, 70], 5)
+    pred_env = np.full(500, -20.0)
+    for start in (200, 300, 400):
+        pred_env[start:start + 60] = _bumps(60, [30], 15)
+    tts, pred = _features_from_db(tts_env), _features_from_db(pred_env)
+    ref = al.align_trial(pred, tts, SILENCE20, cfg)
+    got = al.align_trial(pred, tts, SILENCE20, cfg, tts_segments=ref.tts_segments, pred_segments=ref.pred_segments)
+    np.testing.assert_array_equal(got.mapped_segments, ref.mapped_segments)
+    np.testing.assert_array_equal(got.target_raw, ref.target_raw)
+
+
+def test_external_tts_syllables_outside_the_speech_frames(base_cfg):
+    # forced alignment can put a syllable where the TTS envelope counts as silence (a weak final syllable,
+    # a fricative onset): speech-only DTW drops those frames; the syllable must still be mapped, in order
+    cfg = _cfg(base_cfg, envelope={"source": "c0"})
+    tts_env = _bumps(120, [30, 50], 5)
+    pred_env = np.full(400, -20.0)
+    pred_env[100:160] = _bumps(60, [30], 12)
+    pred_env[220:280] = _bumps(60, [30], 12)
+    tts, pred = _features_from_db(tts_env), _features_from_db(pred_env)
+    forced = np.array([[5, 22], [22, 40], [40, 62], [62, 70], [100, 115]])   # the last two lie in silence
+    res = al.align_trial(pred, tts, SILENCE20, cfg, tts_segments=forced)
+    m = res.mapped_segments
+    np.testing.assert_array_equal(res.tts_segments, forced)
+    assert m.shape == (5, 2) and np.all(m[:, 1] > m[:, 0]) and m.min() >= 0 and m.max() <= 400
+    assert np.all(np.diff(m[:, 0]) >= 0) and np.all(np.diff(m[:, 1]) >= 0)
+    assert np.all(m[1:3, 0] >= m[:2, 1])            # the syllables with speech frames stay disjoint, in order
+    # the existing mapping squeezes syllables without any speech frame onto the end of the last decoder speech
+    # region (D-033 reports how often: n_tts_syllables_without_speech); the stretch writes them in order
+    assert m[3, 0] < m[2, 1] or m[4, 0] < m[3, 1]
+    assert res.target_raw.shape == (400, 20)
+
+
+def test_external_segments_are_checked(base_cfg):
+    tts = _features_from_db(_bumps(60, [30], 5))
+    pred = _features_from_db(_bumps(100, [60], 8))
+    for bad in ([[10, 5]], [[0, 20], [10, 30]], [[0, 200]]):
+        with pytest.raises(ValueError):
+            al.align_trial(pred, tts, SILENCE20, base_cfg, pred_segments=np.array(bad))
+    with pytest.raises(ValueError):
+        al.align_trial(pred, tts, SILENCE20, base_cfg, tts_segments=np.zeros((0, 2), int))

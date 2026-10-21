@@ -127,6 +127,14 @@ alignment:
     silence_pitch: hold      # [THEIRS, observed] pitch in pauses = last speech frame's, as in their targets | code (3.1)
     audio_n_fft: 512         # audio domain: phase vocoder FFT size (32 ms at 16 kHz)
 
+# Which syllables the alignment uses (src/wvx/syllables.py). These defaults are D-027's method; the D-033
+# benchmark (configs/experiments/syllable_benchmark.yaml) adds forced-aligned TTS syllables and two more
+# decoder-side segmenters.
+syllables:
+  tts_side: envelope         # envelope = envelope dips of the TTS (D-027) | forced = MFA + maximal onset (D-033)
+  method: current            # decoder side: current = envelope dips (D-027) | nuclei | sylber (D-033)
+  count_constraint: false    # keep only the N strongest decoder syllables, N = number of TTS syllables
+
 # --------------------------------------------------------------------- validation on Wairagkar sessions
 validation:
   data_dir: data/raw/wairagkar/t15_neural_data

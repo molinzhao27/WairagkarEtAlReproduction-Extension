@@ -1,0 +1,137 @@
+# Syllable-timing benchmark for the decoder training targets (D-033, pre-registered 2026-10-21), and the
+# Kunz attempted targets v2 made with its winner. Code: src/wvx/syllables.py, src/wvx/syllable_segmenters.py,
+# scripts/syllable_*.py. Merged over kunz_targets.yaml (itself over reproduce_inference.yaml and default.yaml),
+# so the alignment / tts / validation / kunz sections there apply unchanged: only the syllables differ.
+#
+# Three environments on the host (requirements-syllables.txt):
+#   project .venv (TensorFlow, LPCNet): syllable_decode.py, syllable_tts.py audio, syllable_benchmark.py, align_targets.py
+#   syllable venv (Praat, PyTorch):     syllable_segment.py, syllable_tts.py syllabify
+#   MFA env (micromamba):               syllable_tts.py align --mfa-bin <env>/bin
+# They exchange files under paths.syllables (host only; audio never leaves the host).
+# Tags: [PUBLISHED] a tool's published default; [D-033] fixed in the pre-registration; [CHOICE] ours;
+# [MEASURED] measured on TTS only (never on their timings).
+
+base_experiment: configs/experiments/kunz_targets.yaml
+
+run_name: syllable_benchmark
+
+paths:
+  syllables: data/processed/syllables              # decoded/<cell>/, tts/<voice>/<corpus>/, segments/ (host only)
+  syllable_benchmark: results/syllable_benchmark   # small JSON only
+  mfa_root: data/processed/models/mfa              # MFA_ROOT_DIR: pretrained models, temp files, its global config
+  sylber_models: data/processed/models/sylber      # pinned Sylber checkpoint + HuBERT config (scripts/syllable_segment.py fetch)
+  kunz_targets: data/processed/kunz_targets_v2     # NEW targets; data/processed/kunz_targets (v1) stays untouched
+  alignment_validation: results/syllable_benchmark # align_targets.py summary goes here, next to the benchmark
+
+runtime:
+  threads:
+    intra_op: 8              # TF intra-op pool; also torch threads for Sylber
+    inter_op: 2
+    omp: 8                   # OMP/MKL/OpenBLAS/numba
+  nice: 19                   # absolute niceness the scripts raise themselves to (container processes start at -5)
+
+syllables:
+  tts_side: forced           # [D-033] forced alignment + maximal onset (envelope = D-027's envelope dips)
+  method: current            # decoder side for align_targets.py: current | nuclei | sylber. The benchmark runs
+                             #   all three; set this (or pass --method) to the winner for the Kunz v2 targets.
+  count_constraint: false    # [D-033] secondary variant only: keep the N strongest decoder syllables, N = TTS count
+  # [MEASURED] LPCNet synthesis delay: the content of feature frame k (nominally [10k, 10k + 10) ms) sits at
+  # [10k + lag, 10k + 10 + lag) ms of the synthesized audio, so audio times (aligner, nuclei, Sylber) are moved
+  # back by it onto the feature / neural timeline. Measured as the centre-to-centre delay between the c0 power
+  # contour and the audio's 10 ms power (both Gaussian-smoothed 15 ms, 1 ms grid, wvx.syllables.audio_feature_lag_ms)
+  # over all 294 t15_day195 TTS sentences (2026-10-21): median 15.0 ms, mean 15.1, IQR 13-17.75.
+  # scripts/syllable_tts.py audio re-measures it on every corpus and flags a median off by more than tolerance_ms.
+  audio_lag_ms: 15.0
+  lag_check: {resolution_ms: 1.0, max_lag_ms: 40.0, tolerance_ms: 3.0}
+
+  forced_alignment:          # [D-033] Montreal Forced Aligner, pretrained English ARPAbet model + dictionary
+    aligner: montreal-forced-aligner
+    version: 3.4.3
+    acoustic_model: english_us_arpa
+    acoustic_model_version: 3.0.0
+    acoustic_model_sha256: d35ce271ded357d833d2f4b8d1041dc3748b9538567ba13f2c697f4e4126711b
+    dictionary: english_us_arpa
+    dictionary_version: 3.0.0
+    dictionary_sha256: e8c6c7b036ae2b7c78d2768b8dc6b1f9359175b842956d00b48c53c9c332e6b0
+    # MFA defaults otherwise (beam 10, retry beam 40, its own text normalization). The TTS is one voice:
+    # --single_speaker. --clean/--final_clean: no stale temp files before, none left after.
+    args: [--clean, --final_clean, --single_speaker, --output_format, json]
+    num_jobs: 8
+    word_tier: words
+    phone_tier: phones
+    silence_labels: ["", sil, sp, "<eps>"]   # MFA 3 JSON omits silences; listed for TextGrid-style output
+    unknown_label: spn       # MFA's label for out-of-dictionary words (none in our three corpora: checked)
+    syllables_file: syllables.json
+  syllabification:
+    rule: maximal_onset      # [D-033] one syllable per vowel; intervocalic consonants to the next syllable as far
+                             #   as they form a legal onset; never across words
+    onset_source: cmudict    # pip package cmudict (version pinned), first pronunciation of every word
+    # [CHOICE] a cluster is a legal onset if at least this many CMUdict words begin with it: 1 = every attested
+    # word-initial cluster (146 clusters), the textbook definition with no threshold to set. It admits rare
+    # loan-word onsets (e.g. T S, Z W, NG); syllable COUNTS do not depend on it, only consonant placement.
+    min_onset_words: 1
+
+  segmenters:
+    nuclei:
+      # [PUBLISHED] de Jong & Wempe (2009) Behav Res Methods 41:385-390, doi:10.3758/BRM.41.2.385; their script
+      # "Praat Script Syllable Nuclei" (2008, updated 2010-09-17), form defaults for UNFILTERED sound (its
+      # comments: ignorance level 0 and minimum dip 2 dB for unfiltered, 2 and 4 for filtered sound).
+      ignorance_level_db: 0.0      # threshold = median intensity + this (floored at the minimum intensity)
+      min_dip_db: 2.0              # a peak counts if the intensity dips more than this before the next peak
+      intensity: {min_pitch_hz: 50.0, time_step_s: 0.0, subtract_mean: true}   # "To Intensity... 50 0 yes"
+      peak_extrema: {channel: Left, include_maxima: true, include_minima: false, interpolation: Sinc70}
+      peak_value_interpolation: Cubic
+      dip_interpolation: None
+      pitch_ac:                    # "To Pitch (ac)... 0.02 30 4 no 0.03 0.25 0.01 0.35 0.25 450"
+        time_step_s: 0.02
+        floor_hz: 30.0
+        max_candidates: 4
+        very_accurate: false
+        silence_threshold: 0.03
+        voicing_threshold: 0.25
+        octave_cost: 0.01
+        octave_jump_cost: 0.35
+        voiced_unvoiced_cost: 0.25
+        ceiling_hz: 450.0
+      pitch_query: {unit: Hertz, interpolation: Linear}
+      # [CHOICE] points -> segments (not part of the published method): cut between consecutive nuclei at the
+      # intensity minimum, same contour and interpolation as the dip test (src/wvx/syllables.py).
+      cut_interpolation: None
+    sylber:
+      # [PUBLISHED] Sylber (Cho et al., ICLR 2025, arXiv:2410.07168), package sylber 0.1.4, Segmenter defaults
+      # (sylber/model/sylber.py): HuBERT-base cut to 9 layers, released checkpoint; frames with feature norm
+      # >= 2.6 are speech, merged greedily while the cosine similarity is >= 0.8. Output frames are 20 ms.
+      hf_repo: cheoljun95/sylber
+      revision: 39451274641088bacc52c78a4bdc223086e6e92c
+      checkpoint: sylber.ckpt
+      checkpoint_sha256: c9841335bca1ab5d171e43f4f3cd87ca70978fb79bbd1ebb7066d1a58e36ba78   # 292,489,642 B
+      upstream_repo: facebook/hubert-base-ls960     # only its config.json is used (weights come from the checkpoint)
+      upstream_revision: dba3bb02fda4248b6e082697eee756de8fe8aa8a
+      upstream_config_sha256: 56be398848bbd9cbc720172b0d45b2f01cac7652f2968f0f31f5faf9f2986acc
+      encoding_layer: 9
+      merge_threshold: 0.8
+      norm_threshold: 2.6
+
+benchmark:
+  # [D-033] cells = (session, offline decoder). All models up to day 195 get reorder_channels (D-024; the
+  # validation.reorder_until_day rule). Ages in days between the decoder's last training session and the session.
+  cells:
+    day195_m172: {session: t15_day195, model: data/raw/wairagkar/t15_neural_data/t15_day174/brain2voice_t15_day172.h5, age_days: 23, role: primary}
+    day195_m165: {session: t15_day195, model: data/raw/wairagkar/t15_neural_data/t15_day172/brain2voice_t15_day165.h5, age_days: 30, role: primary}
+    day195_m193: {session: t15_day195, model: data/raw/wairagkar/t15_neural_data/t15_day195/brain2voice_t15_day193.h5, age_days: 2, role: continuity}
+    day193_m165: {session: t15_day193, model: data/raw/wairagkar/t15_neural_data/t15_day172/brain2voice_t15_day165.h5, age_days: 28, role: confirmation}
+    # Kunz attempted trials with the Kunz decoder (must equal kunz.decoder; checked): input for the v2 targets.
+    kunz_attempted: {kunz_condition: attempted, model: data/raw/wairagkar/t15_neural_data/t15_day195/brain2voice_t15_day193.h5, role: kunz}
+  methods: [current, nuclei, sylber]
+  onset_tolerance_ms: 100    # [D-033] headline: share of their syllable onsets with a mapped onset within this
+  # [D-033] choice rule, fixed before any result: the method with the highest mean target r over the primary
+  # cells (free variant, forced TTS side) wins; methods within tie_tolerance of the best are tied, and the tie
+  # goes to the earliest (simplest) in simplicity_order. Every cell is reported regardless.
+  choice:
+    primary_cells: [day195_m172, day195_m165]
+    metric: target_r_mean
+    tie_tolerance: 0.01
+    simplicity_order: [current, nuclei, sylber]
+  # Reference rows (not candidates): D-027's configuration (envelope dips on both sides) in every cell.
+  reference: {method: current, tts_side: envelope}
+  n_workers: 8               # LPCNet synthesis threads in syllable_decode.py / syllable_tts.py audio

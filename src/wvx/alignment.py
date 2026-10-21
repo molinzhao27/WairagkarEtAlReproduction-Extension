@@ -19,7 +19,8 @@ the paper leaves open is our choice, set in ``configs/experiments/kunz_targets.y
    noise floor + floor_margin_db)``, short gaps bridged, short blips dropped. Inside each speech
    region, syllable nuclei are envelope peaks; a boundary is the minimum between two peaks when the
    dip is at least ``min_dip_db`` below both (Mermelstein-style dip criterion), with no syllable
-   shorter than ``min_syllable_ms``. The same function segments TTS and decoder output.
+   shorter than ``min_syllable_ms``. The same function segments TTS and decoder output. Either side can
+   instead come from elsewhere (``align_trial(tts_segments=, pred_segments=)``; ``wvx.syllables``, D-033).
 3. **DTW** (``dtw_path``, ``map_syllables``). On each envelope clipped at its own silence threshold
    and scaled to [0, 1] (level-invariant; silence is flat, so DTW cannot chase noise in pauses), plus
    the envelope slope (onsets/offsets), Euclidean cost, symmetric steps, optional Sakoe-Chiba band.
@@ -252,16 +253,20 @@ def map_segments(
     for k, b in enumerate(src_b):
         joined = (k % 2 == 1 and k + 1 < src_b.size and src_b[k + 1] == b) or (
             k % 2 == 0 and k > 0 and src_b[k - 1] == b)
+        # Syllables from envelope dips lie inside the path, so b <= n_src - 1 for onsets and joined
+        # boundaries and b >= 1 for offsets. External syllables (forced alignment) can lie in frames that
+        # speech-only DTW dropped, i.e. end up empty at either end: those use the nearest path frame.
+        bi = min(int(b), n_src - 1)
         if joined:          # boundary inside a speech run (syllable cut at an envelope dip, frame b)
-            if pause_rule and last[b] - first[b] + 1 >= min_pause:
+            if pause_rule and last[bi] - first[bi] + 1 >= min_pause:
                 # the dip frame absorbs a pause of the decoder output: the pause stays silent
-                bounds[k] = first[b] if k % 2 == 1 else last[b] + 1
+                bounds[k] = first[bi] if k % 2 == 1 else last[bi] + 1
             else:
-                bounds[k] = int(round(centre[b]))               # centre of the frames DTW pairs with b
+                bounds[k] = int(round(centre[bi]))              # centre of the frames DTW pairs with b
         elif k % 2 == 0:    # onset after silence: first frame paired with the first speech frame
-            bounds[k] = first[b]
+            bounds[k] = first[bi]
         else:               # offset before silence: after the last frame paired with the last speech frame
-            bounds[k] = last[b - 1] + 1
+            bounds[k] = last[max(int(b), 1) - 1] + 1
     bounds = np.maximum.accumulate(np.clip(bounds, 0, n_dst))
 
     if m["snap"] and dst_segs is not None and len(dst_segs):
@@ -429,14 +434,25 @@ class Alignment:
         }
 
 
+def check_segments(segs: np.ndarray, n_frames: int, what: str) -> np.ndarray:
+    """(K, 2) int64 [onset, offset) segments, non-empty, in order, without overlap, inside [0, n_frames]."""
+    s = np.asarray(segs, dtype=np.int64).reshape(-1, 2)
+    if len(s) and (np.any(s[:, 1] <= s[:, 0]) or np.any(s[1:, 0] < s[:-1, 1]) or s.min() < 0 or s.max() > n_frames):
+        raise ValueError(f"{what}: segments must be non-empty, ordered, non-overlapping and within {n_frames} frames")
+    return s
+
+
 def align_trial(
     pred_raw: np.ndarray, tts_raw: np.ndarray, silence: np.ndarray, cfg: Mapping[str, Any],
     synth: Optional[Synth] = None, encode: Optional[Encode] = None, pred_env: Optional[np.ndarray] = None,
+    tts_segments: Optional[np.ndarray] = None, pred_segments: Optional[np.ndarray] = None,
 ) -> Alignment:
     """Decoder output on the neural timeline (T, 20) + TTS frames (n, 20) -> aligned raw target (T, 20).
 
     ``pred_env`` (T,) replaces the envelope of ``pred_raw`` (e.g. the envelope of their closed-loop
-    audio); ``pred_raw`` then only sets T.
+    audio); ``pred_raw`` then only sets T. ``tts_segments`` (on the TTS frames) and ``pred_segments`` (on
+    the neural timeline) replace the envelope-dip syllables of either side (``wvx.syllables``: forced
+    alignment, other segmenters); DTW, mapping and stretch are the same either way.
     """
     pred_raw = np.asarray(pred_raw, dtype=np.float32)
     tts_raw = np.asarray(tts_raw, dtype=np.float32)
@@ -445,8 +461,8 @@ def align_trial(
     if env_p.shape != (n_out,):
         raise ValueError(f"decoder envelope {env_p.shape} does not match {n_out} frames")
     env_t = envelope_db(tts_raw, cfg, synth)
-    seg_p = segment_syllables(env_p, cfg)
-    seg_t = segment_syllables(env_t, cfg)
+    seg_p = segment_syllables(env_p, cfg) if pred_segments is None else check_segments(pred_segments, n_out, "decoder")
+    seg_t = segment_syllables(env_t, cfg) if tts_segments is None else check_segments(tts_segments, tts_raw.shape[0], "TTS")
     if not len(seg_t):
         raise ValueError("no syllables found in the TTS envelope")
     mapped, cost = map_syllables(env_t, env_p, seg_t, seg_p, cfg)

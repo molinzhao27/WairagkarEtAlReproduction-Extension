@@ -232,6 +232,66 @@ def score_alignment(res, theirs_norm, their_raw, their_syl, cfg) -> tuple[dict, 
     return row, {"r": r, **err}
 
 
+def add_variant(row: dict, acc: dict, name: str, res, theirs_norm, their_raw, their_syl, cfg) -> None:
+    """Score one alignment of a trial into ``row[name]`` and the accumulator ``acc[name]``."""
+    sc, er = score_alignment(res, theirs_norm, their_raw, their_syl, cfg)
+    row[name] = sc
+    acc[name]["r"].append(er.pop("r"))
+    for k, e in er.items():
+        acc[name]["errs"].setdefault(k, []).append(e)
+
+
+REFERENCES = ("span_uniform", "oracle_span", "oracle_syllables", "chance")
+
+
+def reference_r(i: int, trials, res, tts, their_raw_i, syl_i, sil20, cfg) -> dict:
+    """Per-feature r of the reference placements of trial ``i`` (module docstring), when defined."""
+    from wvx import alignment as al
+    from wvx import targets as tg
+
+    v = cfg["validation"]
+    T = trials[i].neural.shape[0]
+    theirs = trials[i].target
+
+    def place(src_segs, dst_segs):
+        return tg.decoder_target(al.stretch_features(tts, src_segs, dst_segs, T, sil20, cfg), cfg)
+
+    out = {}
+    tts_span = np.array([[res.tts_segments[0, 0], res.tts_segments[-1, 1]]])
+    if len(res.pred_segments):
+        dspan = np.array([[res.pred_segments[0, 0], res.pred_segments[-1, 1]]])
+        out["span_uniform"] = feature_r(place(tts_span, dspan), theirs)
+    b_t = al.speech_bounds(their_raw_i, cfg, float(v["speech_mask_db"]))
+    if b_t:
+        out["oracle_span"] = feature_r(place(tts_span, np.array([b_t])), theirs)
+    if len(syl_i) == len(res.tts_segments):
+        out["oracle_syllables"] = feature_r(place(res.tts_segments, syl_i), theirs)
+    n = len(trials)
+    j = (i + int(v["chance_shift"])) % n
+    if j != i:
+        L = min(T, trials[j].target.shape[0])
+        out["chance"] = feature_r(tg.decoder_target(res.target_raw, cfg)[:L], trials[j].target[:L])
+    return out
+
+
+def variant_summary(rows: list, acc: dict, name: str, cfg) -> dict:
+    from wvx import alignment as al
+
+    fms, tol = al.frame_ms(cfg), cfg["validation"]["tolerances_ms"]
+    a = acc[name]
+    sub = [r for r in rows if name in r]
+    return {
+        "n_trials": len(sub),
+        "target_r_mean_over_features": summarize(r[name]["r"] for r in sub),
+        "target_r_per_feature": np.nanmean(np.stack(a["r"]), axis=0).tolist() if a["r"] else None,
+        "detected_syllables_minus_theirs": summarize(r[name]["n_detected"] - r["n_their_syllables"] for r in sub),
+        "fraction_detected_count_equal": float(np.mean([r[name]["n_detected"] == r["n_their_syllables"] for r in sub])) if sub else None,
+        "boundaries_vs_syl_indices": {k: boundary_stats(a["errs"].get(k, []), fms, tol) for k in
+                                      ("detected_on", "detected_off", "mapped_on", "mapped_off")},
+        "speech_span_vs_their_target": {k: boundary_stats(a["errs"].get(k, []), fms, tol) for k in ("span_on", "span_off")},
+    }
+
+
 # ----------------------------------------------------------------------------------------- run
 
 
@@ -245,8 +305,6 @@ def run(cfg, session: str, voice: str, args) -> dict:
     t_start = time.time()
     v = cfg["validation"]
     cfg = deep_merge(cfg, {"wairagkar_data": {"keys": {"target": v["their_target_key"]}}})
-    fms = al.frame_ms(cfg)
-    tol = v["tolerances_ms"]
     w = int(cfg["model"]["window_len"])
     data_dir = Path(REPO_ROOT / v["data_dir"])
     sdir = data_dir / session
@@ -298,12 +356,9 @@ def run(cfg, session: str, voice: str, args) -> dict:
     with ThreadPoolExecutor(max_workers=int(cfg["alignment"]["n_workers"])) as ex:
         cl_results = dict(zip(cl_idx, ex.map(closed_loop, cl_idx)))
 
-    def place(src_segs, dst_segs, tts, T):
-        return tg.decoder_target(al.stretch_features(tts, src_segs, dst_segs, T, sil20, cfg), cfg)
-
     rows = []
     acc = {k: {"errs": {}, "r": []} for k in ("offline", "closed_loop")}
-    base_r = {k: [] for k in ("span_uniform", "oracle_span", "oracle_syllables", "chance")}
+    base_r = {k: [] for k in REFERENCES}
     for i, (t, res, pred) in enumerate(zip(trials, results, preds)):
         T = t.neural.shape[0]
         theirs = t.target
@@ -314,48 +369,15 @@ def run(cfg, session: str, voice: str, args) -> dict:
                "decoder_r": float(np.nanmean(feature_r(pred, theirs[w - 1:])))}
         variants = [("offline", res)] + ([("closed_loop", cl_results[i])] if i in cl_results else [])
         for name, rr in variants:
-            sc, er = score_alignment(rr, theirs, their_raw[i], syl[i], cfg)
-            row[name] = sc
-            acc[name]["r"].append(er.pop("r"))
-            for k, e in er.items():
-                acc[name]["errs"].setdefault(k, []).append(e)
+            add_variant(row, acc, name, rr, theirs, their_raw[i], syl[i], cfg)
         if i in cl_results:
             a_env, b_env = res.pred_env[w - 1:], cl_results[i].pred_env[w - 1:]   # frames with predictions
             row["env_r_offline_vs_closed_loop"] = float(np.corrcoef(a_env, b_env)[0, 1])
             row["env_lag_closed_loop_frames"] = best_lag(a_env, b_env, int(v["max_lag_frames"]))
-
-        tts_span = np.array([[res.tts_segments[0, 0], res.tts_segments[-1, 1]]])
-        if len(res.pred_segments):
-            dspan = np.array([[res.pred_segments[0, 0], res.pred_segments[-1, 1]]])
-            base_r["span_uniform"].append(feature_r(place(tts_span, dspan, tts, T), theirs))
-            row["span_uniform_r"] = float(np.nanmean(base_r["span_uniform"][-1]))
-        b_t = al.speech_bounds(their_raw[i], cfg, float(v["speech_mask_db"]))
-        if b_t:
-            base_r["oracle_span"].append(feature_r(place(tts_span, np.array([b_t]), tts, T), theirs))
-            row["oracle_span_r"] = float(np.nanmean(base_r["oracle_span"][-1]))
-        if len(syl[i]) == len(res.tts_segments):
-            base_r["oracle_syllables"].append(feature_r(place(res.tts_segments, syl[i], tts, T), theirs))
-            row["oracle_syllables_r"] = float(np.nanmean(base_r["oracle_syllables"][-1]))
-        j = (i + int(v["chance_shift"])) % n
-        if j != i:
-            L = min(T, trials[j].target.shape[0])
-            base_r["chance"].append(feature_r(tg.decoder_target(res.target_raw, cfg)[:L], trials[j].target[:L]))
-            row["chance_r"] = float(np.nanmean(base_r["chance"][-1]))
+        for k, r in reference_r(i, trials, res, tts, their_raw[i], syl[i], sil20, cfg).items():
+            base_r[k].append(r)
+            row[f"{k}_r"] = float(np.nanmean(r))
         rows.append(row)
-
-    def variant_summary(name):
-        a = acc[name]
-        sub = [r for r in rows if name in r]
-        return {
-            "n_trials": len(sub),
-            "target_r_mean_over_features": summarize(r[name]["r"] for r in sub),
-            "target_r_per_feature": np.nanmean(np.stack(a["r"]), axis=0).tolist() if a["r"] else None,
-            "detected_syllables_minus_theirs": summarize(r[name]["n_detected"] - r["n_their_syllables"] for r in sub),
-            "fraction_detected_count_equal": float(np.mean([r[name]["n_detected"] == r["n_their_syllables"] for r in sub])) if sub else None,
-            "boundaries_vs_syl_indices": {k: boundary_stats(a["errs"].get(k, []), fms, tol) for k in
-                                          ("detected_on", "detected_off", "mapped_on", "mapped_off")},
-            "speech_span_vs_their_target": {k: boundary_stats(a["errs"].get(k, []), fms, tol) for k in ("span_on", "span_off")},
-        }
 
     corpora = {voice: corpus}
     for p in sorted(Path(cfg["paths"]["tts_features"]).glob(f"*/{session}.npz")):
@@ -377,8 +399,8 @@ def run(cfg, session: str, voice: str, args) -> dict:
         "their_syllables_per_trial": summarize(r["n_their_syllables"] for r in rows),
         "tts_syllables_per_trial": summarize(r["n_tts_syllables"] for r in rows),
         "fraction_tts_count_equal_theirs": float(np.mean([r["n_tts_syllables"] == r["n_their_syllables"] for r in rows])),
-        "offline_decoder": variant_summary("offline"),
-        "closed_loop_audio": variant_summary("closed_loop"),
+        "offline_decoder": variant_summary(rows, acc, "offline", cfg),
+        "closed_loop_audio": variant_summary(rows, acc, "closed_loop", cfg),
         "envelope_r_offline_vs_closed_loop": summarize(r.get("env_r_offline_vs_closed_loop") for r in rows),
         "envelope_lag_closed_loop_minus_offline_frames": summarize(r.get("env_lag_closed_loop_frames") for r in rows),
         "reference_target_r": {k: {"summary": summarize(r.get(f"{k}_r") for r in rows),
@@ -411,7 +433,9 @@ def main(argv=None) -> int:
     from wvx.provenance import code_version, config_sha256
     from wvx.seeding import set_seed
 
-    cfg = tg.load_targets_config(args.config, overrides=json.loads(args.override) if args.override else None)
+    from wvx.syllables import load_any_targets_config      # kunz_targets.yaml: same as tg.load_targets_config
+
+    cfg = load_any_targets_config(args.config, overrides=json.loads(args.override) if args.override else None)
     set_seed(int(cfg["seed"]))
     for session in args.session:
         if args.inspect:
