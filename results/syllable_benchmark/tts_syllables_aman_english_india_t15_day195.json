@@ -1,0 +1,182 @@
+{
+ "created": "2026-10-21T11:58:17",
+ "voice": "Aman (English (India))",
+ "corpus": "t15_day195",
+ "settings": {
+  "syllabification": {
+   "rule": "maximal_onset",
+   "onset_source": "cmudict",
+   "min_onset_words": 1
+  },
+  "audio_lag_ms": 15.0,
+  "forced_alignment": {
+   "aligner": "montreal-forced-aligner",
+   "version": "3.4.3",
+   "acoustic_model": "english_us_arpa",
+   "acoustic_model_version": "3.0.0",
+   "acoustic_model_sha256": "d35ce271ded357d833d2f4b8d1041dc3748b9538567ba13f2c697f4e4126711b",
+   "dictionary": "english_us_arpa",
+   "dictionary_version": "3.0.0",
+   "dictionary_sha256": "e8c6c7b036ae2b7c78d2768b8dc6b1f9359175b842956d00b48c53c9c332e6b0",
+   "args": [
+    "--clean",
+    "--final_clean",
+    "--single_speaker",
+    "--output_format",
+    "json"
+   ],
+   "num_jobs": 8,
+   "word_tier": "words",
+   "phone_tier": "phones",
+   "silence_labels": [
+    "",
+    "sil",
+    "sp",
+    "<eps>"
+   ],
+   "unknown_label": "spn",
+   "syllables_file": "syllables.json"
+  }
+ },
+ "versions": {
+  "cmudict": "1.1.3"
+ },
+ "n_legal_onsets": 146,
+ "runtime": {
+  "threads": {
+   "intra_op": 8,
+   "inter_op": 2,
+   "omp": 8
+  },
+  "env": {
+   "OMP_NUM_THREADS": "8",
+   "MKL_NUM_THREADS": "8",
+   "OPENBLAS_NUM_THREADS": "8",
+   "NUMBA_NUM_THREADS": "8",
+   "TF_NUM_INTRAOP_THREADS": "8",
+   "TF_NUM_INTEROP_THREADS": "2"
+  },
+  "nice": 19,
+  "CUDA_VISIBLE_DEVICES": ""
+ },
+ "code_version": {
+  "source": "sync",
+  "commit": "bc4100b3f961ed0c12c87e48d800b7736071aa19",
+  "dirty": false,
+  "diff_sha256": null,
+  "pushed_at": "2026-10-21T10:56:37Z"
+ },
+ "config_sha256": "2571c83cc866a56043f46e0b2fb49c695e6b24cb942ca3ae010edbf182b0e10f",
+ "n_utterances": 294,
+ "n_aligned": 294,
+ "missing_alignments": [],
+ "unknown_words": [],
+ "words_without_vowel": [],
+ "count_agreement_with_cmudict": 0.9761904761904762,
+ "n_count_mismatches": 7,
+ "count_mismatches": [
+  {
+   "text": "I hope my family is closer.",
+   "words": [
+    "i",
+    "hope",
+    "my",
+    "family",
+    "is",
+    "closer"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "Please bring my family here.",
+   "words": [
+    "please",
+    "bring",
+    "my",
+    "family",
+    "here"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "Every house I have seen is big.",
+   "words": [
+    "every",
+    "house",
+    "i",
+    "have",
+    "seen",
+    "is",
+    "big"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "Our group plans to go there next week.",
+   "words": [
+    "our",
+    "group",
+    "plans",
+    "to",
+    "go",
+    "there",
+    "next",
+    "week"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "Pick your favorite game to play.",
+   "words": [
+    "pick",
+    "your",
+    "favorite",
+    "game",
+    "to",
+    "play"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "I walk for two miles every day.",
+   "words": [
+    "i",
+    "walk",
+    "for",
+    "two",
+    "miles",
+    "every",
+    "day"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "Take care of our kids.",
+   "words": [
+    "take",
+    "care",
+    "of",
+    "our",
+    "kids"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 6
+  }
+ ],
+ "syllables_per_utterance": {
+  "min": 2,
+  "median": 6.0,
+  "max": 17
+ },
+ "syllable_ms": {
+  "min": 10.0,
+  "median": 190.0,
+  "max": 470.0
+ }
+}

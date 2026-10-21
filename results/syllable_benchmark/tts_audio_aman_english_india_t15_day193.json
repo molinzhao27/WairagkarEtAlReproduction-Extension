@@ -1,0 +1,62 @@
+{
+ "created": "2026-10-21T11:58:49",
+ "voice": "Aman (English (India))",
+ "corpus": "t15_day193",
+ "corpus_file": "data/processed/tts/aman_english_india/t15_day193.npz",
+ "corpus_sha256": "9de03318f8fa71533df622c67c3feb3242d5089b7e0880f1f53d32ad8ca794fe",
+ "tts_meta": {
+  "engine": "macos_say",
+  "macos": {
+   "productVersion": "27.0",
+   "buildVersion": "26A428"
+  },
+  "say": {
+   "rate_wpm": null,
+   "file_format": "WAVE",
+   "data_format": "LEI16",
+   "pad_ms": 200,
+   "word_pause_ms": null
+  },
+  "lpcnet_binary_sha256": "39729e2b52dcdb2420401c216ed8192e32da3b5191f60ae0b635e8d289891949",
+  "corpus_sha256": "65e64e2113c66cd8c1760fad8b25fb36266ba39f514b9b0be5372137c35b4cd8",
+  "created": "2026-10-20T17:50:20",
+  "frame_layout": "raw LPCNet frames (n, 36) from lpcnet_demo -features; first pad_ms and last pad_ms are digital silence"
+ },
+ "runtime": {
+  "threads": {
+   "intra_op": 8,
+   "inter_op": 2,
+   "omp": 8
+  },
+  "env": {
+   "OMP_NUM_THREADS": "8",
+   "MKL_NUM_THREADS": "8",
+   "OPENBLAS_NUM_THREADS": "8",
+   "NUMBA_NUM_THREADS": "8",
+   "TF_NUM_INTRAOP_THREADS": "8",
+   "TF_NUM_INTEROP_THREADS": "2"
+  },
+  "nice": 19,
+  "CUDA_VISIBLE_DEVICES": ""
+ },
+ "code_version": {
+  "source": "sync",
+  "commit": "bc4100b3f961ed0c12c87e48d800b7736071aa19",
+  "dirty": false,
+  "diff_sha256": null,
+  "pushed_at": "2026-10-21T10:56:37Z"
+ },
+ "config_sha256": "2571c83cc866a56043f46e0b2fb49c695e6b24cb942ca3ae010edbf182b0e10f",
+ "n_utterances": 432,
+ "lag": {
+  "configured_ms": 15.0,
+  "median_ms": 15.0,
+  "mean_ms": 15.414351851851851,
+  "q25_ms": 14.0,
+  "q75_ms": 18.0,
+  "n": 432,
+  "agrees": true,
+  "tolerance_ms": 3.0
+ },
+ "wall_time_s": 29.671777963638306
+}
