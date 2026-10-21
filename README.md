@@ -1,7 +1,7 @@
 # Wairagkar et al. 2025 — reproduction and inner-speech extension
 
-> 🚧 **Work in progress.** Setup and the offline inference reproduction are done. The inner-speech
-> experiment hasn't been run yet, so there are no results to cite.
+> 🚧 **Work in progress.** Setup and the offline inference reproduction are done. First inner-speech runs
+> exist, but they are preliminary and not results to cite.
 
 Reproduce the offline brain-to-voice decoder from Wairagkar et al. 2025 (*Nature*),
 then extend it to inner speech using Kunz et al. 2025 (*Cell*) data.
@@ -10,8 +10,6 @@ then extend it to inner speech using Kunz et al. 2025 (*Cell*) data.
 sentences, test on imagined 50-word sentences from the same day. The arrays and sentence
 set are identical across conditions, so any drop in performance reflects speech mode rather
 than day-to-day drift.
-
-**Status:** see [notes/PLAN.md](notes/PLAN.md) for phases.
 
 ## Citations
 
@@ -48,20 +46,14 @@ is in `third_party/PROVENANCE.md`.
 
 ## Where things run
 
-Code is edited and unit-tested on a Mac. **Data and all data-touching compute live on a
-remote GPU host** inside a Docker container. The host is never named in tracked files;
-configure it in `scripts/remote/host.env` (gitignored; template:
-`scripts/remote/host.env.example`).
-
-- `scripts/remote/setup_container.sh` — one-time container setup on the host.
-- `scripts/remote/sync.sh push` / `pull` — sync code up, results down.
-- `scripts/remote/gpu_job.sh` — run GPU jobs under the host's shared lock.
+Code is edited and unit-tested on a Mac. Data and all data-touching compute live on a
+remote Linux GPU machine inside a Docker container. Code is device-agnostic: it runs on
+Apple silicon (CPU) and on NVIDIA CUDA GPUs.
 
 ## Data
 
-All data lives under `data/` on the GPU host only. `data/` is gitignored; checksums are
-in [data/MANIFEST.md](data/MANIFEST.md). Dataset configs are in `configs/data/kunz.yaml`
-and `configs/data/wairagkar.yaml`.
+All data lives under `data/` on the GPU host only. `data/` is gitignored. Dataset configs
+and SHA-256 checksums are in `configs/data/kunz.yaml` and `configs/data/wairagkar.yaml`.
 
 **Kunz et al. 2025** — T15, session 2024.03.03. Download `sentenceData.zip` from the
 Dryad record, then extract the subset this project needs:
@@ -96,30 +88,42 @@ mamba run -n wvx bash scripts/build_lpcnet.sh # builds third_party/LPCNet/lpcnet
 mamba run -n wvx python scripts/check_env.py  # forward pass, fit step, LPCNet smoke test
 ```
 
-TF 2.21 is the only TF/Keras-2 version reported to run on the Blackwell GPU
-(see `notes/DECISIONS.md`, D-012). The same version is used on both machines to
-avoid skew.
+TF 2.21 is the only TF/Keras-2 version reported to run on the Blackwell GPU. The same
+version is used on both machines to avoid skew.
 
-### GPU host (Linux, CUDA)
+### Linux (CUDA)
 
-Inside the `wvx` container, `scripts/remote/setup_env.sh` creates a project
-`.venv` from `requirements-linux-cuda.txt`, builds LPCNet, and runs the CPU
-tests. Pending GPU verification.
+Create a Python venv from `requirements-linux-cuda.txt` (or use `environment.linux-cuda.yml`
+with conda/mamba). Build LPCNet and run the environment check:
 
 ```bash
-docker exec wvx bash /workspace/WairagkarEtAlReproduction-Extension/scripts/remote/setup_env.sh
+python -m venv .venv
+.venv/bin/pip install -r requirements-linux-cuda.txt
+.venv/bin/pip install -e . --no-deps
+bash scripts/build_lpcnet.sh
+.venv/bin/python scripts/check_env.py
+.venv/bin/python -m pytest
 ```
+
+LPCNet requires autoconf, automake, libtool, make, pkg-config, and a C compiler (gcc).
+Pending GPU verification on the RTX PRO 6000.
 
 ## Pipeline
 
-Scripts that touch data run on the GPU host. Use `scripts/remote/gpu_job.sh` for
-GPU work.
+Scripts that touch data run on the GPU host unless noted otherwise.
 
 - `scripts/extract_kunz_subset.py` — extract the Kunz T15 2024.03.03 files from the Dryad archive.
 - `scripts/fetch_wairagkar_data.py` — download and verify the Wairagkar Dryad dataset (dry run by default).
 - `scripts/prepare_kunz.py` — convert Kunz `.mat` files into decoder-layout SessionData (`.npz`).
+- `scripts/make_tts.py` — generate LPCNet target features from macOS TTS, rank voices, push to host. **Mac only.**
+- `scripts/align_targets.py` — align TTS targets to decoder output for Kunz trials (bootstrap method).
+- `scripts/validate_alignment.py` — validate alignment against Wairagkar sessions' syllable timings and targets.
 - `scripts/run_inference.py` — reproduce offline inference on a held-out session and score the output.
 - `scripts/train.py` — train the brain-to-voice decoder on prepared sessions.
+- `scripts/kunz_experiment.py` — core experiment: train on attempted, decode attempted and imagined.
+- `scripts/summarize_kunz.py` — cross-fold summary of a Kunz experiment run.
+- `scripts/asr_eval.py` — ASR scoring (Whisper) of synthesized audio in a results directory.
+- `scripts/compare_closed_loop.py` — compare offline inference with the audio their decoder produced live.
 - `scripts/inspect_mat.py` — generic `.mat` dumper (shapes, dtypes, value summaries).
 
 ## License
@@ -132,12 +136,11 @@ under `third_party/` retains its own licenses; see
 
 ```
 src/wvx/            project code (config, seeding, data adapters, inference, training, metrics, synthesis)
-scripts/            pipeline entry points + remote host scripts
+scripts/            pipeline entry points
 configs/            all settings (default.yaml, data/, third_party.yaml)
 tests/              fast CPU tests
-notes/              PLAN.md, DATA_FORMATS.md, WAIRAGKAR_CODE.md, DECISIONS.md, METRICS.md
-results/            small outputs only
+results/            small per-trial outputs of our runs; preliminary
 figures/            small outputs only
 third_party/        brain_to_voice (fetched), LPCNet (BSD-3-Clause), PROVENANCE.md
-data/               GPU host only; MANIFEST.md is tracked
+data/               GPU host only (gitignored)
 ```

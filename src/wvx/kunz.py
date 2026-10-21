@@ -12,7 +12,8 @@ z-score -> causal sigmoid smoothing (``wvx.preprocess``). It runs on each block'
 trials are cut, so the rolling statistics see the delay and inter-trial bins of the same block, and
 nothing carries over from one block to the next (blocks are separate recordings).
 
-PROVISIONAL (DATA_FORMATS.md, mismatches 5, 8): channel permutation (default identity) and pre-go context.
+Resolved (DATA_FORMATS.md mismatches 5, 8; DECISIONS D-023, D-024): the channel permutation is the identity
+(Kunz columns are already in the release order) and trials start at the go cue (no pre-go context).
 """
 
 from __future__ import annotations

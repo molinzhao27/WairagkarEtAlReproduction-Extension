@@ -29,11 +29,11 @@ output_dir: "data/raw/kunz/sentenceData"
 # Manifest written after extraction.
 manifest: "data/MANIFEST.md"
 
-# Kunz file -> decoder input (src/wvx/kunz.py). Items marked PROVISIONAL wait on inspecting
-# Wairagkar's released features (notes/DATA_FORMATS.md, "Mismatches vs Wairagkar input").
+# Kunz file -> decoder input (src/wvx/kunz.py). Settings were checked against Wairagkar's released features
+# (notes/DATA_FORMATS.md, "Mismatches vs Wairagkar input"; DECISIONS D-023, D-024).
 adapter:
   bin_ms: 10                    # must equal the file's binSize
-  pre_go_bins: 0                # PROVISIONAL: context bins before the go cue (never crosses a block)
+  pre_go_bins: 0                # context bins before the go cue (never crosses a block); 0 = trials start at go
   # Wairagkar readme/Methods: spike-band power "was clipped at 50k uV2 to avoid outliers". Kunz spikePow
   # peaks at exactly 50000.0, so this is a no-op kept for safety.
   clip_spikepow: 50000
