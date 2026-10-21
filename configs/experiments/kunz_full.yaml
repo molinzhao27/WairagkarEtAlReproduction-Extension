@@ -86,6 +86,12 @@ experiment:
 
   nulls:
     shuffled_trial: true                   # output vs the TTS of another trial's cue, same set (seeded)
+    # Cue nulls (every real output is also scored against EVERY distinct cue of its set; no extra decoding).
+    # The single shuffled-trial partner proved lenient and partly a sentence-length effect (audit 2026-10-21:
+    # an output with few speech frames scores higher against a shorter reference). The length-matched null
+    # averages the k other cues whose TTS speech duration is closest to the own cue's: 10 of the 49 other
+    # cues of a 50-cue block, a tight duration match that still averages enough cues for a stable null.
+    length_matched_k: 10
     # Which models also decode time-shuffled inputs (seeded permutation of the bins within each trial).
     shuffled_time_models: [trained, zero_shot]   # "trained" = every trained variant
 
@@ -103,6 +109,11 @@ experiment:
       predictions: [trained]               # real-input predictions of these models ("trained", "zero_shot")
       references: true                     # TTS references and aligned-target audio
     progress_every: 50
+    # Per output: decoded speech seconds within its first early_window_s seconds (the metrics' silence
+    # detector, TTS metric settings), comparable across trials and modes whatever the output length. The
+    # shortest Kunz trial is 4.3 s; outputs start 59 bins later, so a few are slightly shorter than 4 s
+    # (A13 attempted 3.96 s, E14 3.72 s) and are then measured over their whole length.
+    early_window_s: 4.0
     # ASR hook (extension metric; configs/asr.yaml): used when this module/function exists at scoring time;
     # columns stay empty otherwise (then re-run with --stage score). The hypothesis is also re-scored against
     # the shuffled-trial partner's cue (null; no second transcription). Calls are serialized (one model).
@@ -117,3 +128,13 @@ experiment:
       cfg: {asr: {cpu_threads: 4, model: {allow_download: false}, per: {allow_download: false}}}
       inputs: [real, shuffled_time]        # which decoder outputs are transcribed
       references: true                     # also transcribe the TTS and aligned-target audio (ceiling)
+
+  # Summaries (summary.json per fold; scripts/summarize_kunz.py across folds).
+  summary:
+    # Null shown first and used for the headline excess and the attempted-minus-imagined test:
+    # lenmatched | all | shuffled_trial (the other two are always reported too).
+    primary_null: lenmatched
+    # Sensitivity analysis only (labelled as such; never the primary test): restrict to outputs with at
+    # least this much decoded speech. Below ~40 speech frames (0.4 s) outputs cannot be told apart even for
+    # real attempted speech, and their scores track the reference length (audit 2026-10-21).
+    min_speech_s: 0.4

@@ -26,22 +26,55 @@ old order, so :func:`prepare_neural` applies ``wvx.inference.reorder_channels`` 
   trial's cue from the same set (a derangement, also never the same text);
 - shuffled time (:func:`shuffle_time`): the prepared input's time bins are permuted within the trial
   before decoding (key: block and trial index).
+
+**Cue nulls and identification** (:func:`set_cues`, :func:`cue_null_stats`, :func:`identification`). Every
+real output is also scored against EVERY distinct cue of its set (same output, so how speech-like it is
+cancels). The single shuffled-trial partner proved too lenient and partly a sentence-length effect: with few
+speech frames, ``mel_corr`` against unrelated speech rises as the reference gets shorter. So:
+
+- ``null_all_mean``: mean over all other cues of the set;
+- ``null_lenmatched_mean``: mean over the ``k`` other cues whose TTS speech duration is closest to the own
+  cue's (``experiment.nulls.length_matched_k``);
+- ``own_rank``: rank of the own cue among all cues (1 = best; ties count against the own cue), out of
+  ``n_cues`` cues with a defined score. Under no information the rank is uniform on 1..n_cues;
+  :func:`rank_sum_uniform_p` tests the rank sum exactly against that.
+
+**Resume / provenance** (:func:`training_fingerprint`, :func:`prediction_staleness`): what a trained model
+or a prediction file depends on, so ``scripts/kunz_experiment.py`` never reuses an output made under other
+settings.
 """
 
 from __future__ import annotations
 
+import math
 import zlib
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Any, Mapping, Optional, Sequence
 
 import numpy as np
 
+from wvx.config import REPO_ROOT, deep_merge
 from wvx.session import SessionData, Trial
 
 ROLES = ("heldout_attempted", "paired_imagined", "eval_imagined", "leaky_imagined")
 
 # Independent random streams derived from the config seed (labels, not tunables).
 _STREAM_SHUFFLED_TRIAL, _STREAM_SHUFFLED_TIME = 10, 11
+
+# Per-trial columns of the three nulls on real outputs (labels written by scripts/kunz_experiment.py).
+NULL_COLUMNS = {
+    "lenmatched": "null_lenmatched_mean",        # k other cues closest in TTS speech duration
+    "all": "null_all_mean",                      # every other cue of the set
+    "shuffled_trial": "shuffled_trial_tts_mel_corr",   # one seeded other trial's cue (kept for continuity)
+}
+NULL_LABELS = {"lenmatched": "length-matched other cues", "all": "all other cues",
+               "shuffled_trial": "one shuffled-trial partner"}
+
+# training.* keys that only change logging or directory handling, never the trained weights.
+TRAINING_KEYS_NOT_AFFECTING_MODEL = ("verbose", "log_every_batches", "overwrite")
+# Prediction-header fields written before ``decode_settings`` existed (comparable when present).
+_LEGACY_HEADER_SETTINGS = ("input", "reorder_channels", "seed")
 
 
 # ------------------------------------------------------------------------------------- inputs
@@ -275,4 +308,262 @@ def paired(a: Sequence[float], b: Sequence[float]) -> dict:
         from scipy.stats import wilcoxon
 
         out["wilcoxon_p"] = float(wilcoxon(d).pvalue)
+    return out
+
+
+def unpaired(a: Sequence[float], b: Sequence[float]) -> dict:
+    """mean(a) - mean(b) over the finite values and the two-sided Mann-Whitney U p (unpaired)."""
+    a = np.asarray(a, float)
+    b = np.asarray(b, float)
+    a, b = a[np.isfinite(a)], b[np.isfinite(b)]
+    out = {"n_a": int(a.size), "n_b": int(b.size), "mean_difference": float("nan"), "mannwhitney_p": float("nan")}
+    if a.size and b.size:
+        from scipy.stats import mannwhitneyu
+
+        out["mean_difference"] = float(a.mean() - b.mean())
+        out["mannwhitney_p"] = float(mannwhitneyu(a, b, alternative="two-sided").pvalue)
+    return out
+
+
+def holm(pvalues: Sequence[float]) -> list[float]:
+    """Holm step-down adjusted p values (NaN entries stay NaN and do not count towards the family size)."""
+    p = np.asarray(pvalues, float)
+    out = np.full(p.shape, np.nan)
+    idx = np.flatnonzero(np.isfinite(p))
+    m = idx.size
+    running = 0.0
+    for rank, i in enumerate(idx[np.argsort(p[idx], kind="stable")]):
+        running = max(running, min(1.0, (m - rank) * p[i]))
+        out[i] = running
+    return [float(v) for v in out]
+
+
+# ------------------------------------------------------------------------- cue nulls and ranks
+
+
+def null_order(primary: str) -> list[str]:
+    """The null names with the configured primary one first (``experiment.summary.primary_null``)."""
+    if primary not in NULL_COLUMNS:
+        raise ValueError(f"experiment.summary.primary_null must be one of {list(NULL_COLUMNS)}, got {primary!r}")
+    return [primary] + [n for n in NULL_COLUMNS if n != primary]
+
+
+def set_cues(texts: Sequence[str], normalize=None) -> tuple[list[str], list[str], list[int]]:
+    """Distinct cues of a set in order of first appearance among its trials.
+
+    Returns (keys, representative texts, own column per trial): ``keys[j]`` is the normalized cue of column
+    j, ``texts[j]`` the raw text of its first trial (whose TTS is used), and ``own[i]`` the column of trial
+    i's cue. Trials whose cues are equal after ``normalize`` share one column.
+    """
+    norm = normalize or (lambda s: s)
+    keys: list[str] = []
+    reps: list[str] = []
+    own: list[int] = []
+    pos: dict[str, int] = {}
+    for t in texts:
+        k = norm(t)
+        if k not in pos:
+            pos[k] = len(keys)
+            keys.append(k)
+            reps.append(t)
+        own.append(pos[k])
+    return keys, reps, own
+
+
+def cue_null_stats(scores: Sequence[float], own: int, cue_speech_s: Sequence[float], k: int) -> dict:
+    """Nulls and rank of one output from its scores against every cue of the set.
+
+    ``scores[j]``: mel_corr of the output vs cue j's TTS (NaN = undefined); ``own``: the output's own cue;
+    ``cue_speech_s[j]``: speech seconds of cue j's TTS; ``k``: how many length-matched cues.
+
+    - ``null_all_mean``: mean of the defined scores of all other cues;
+    - ``null_lenmatched_mean``: mean of the defined scores of the ``k`` other cues with the smallest
+      |TTS speech duration - own cue's| (ties: lower column first); ``null_lenmatched_n`` of them defined;
+    - ``own_rank``: 1 + number of other cues scoring >= the own cue (ties count against it), among
+      ``n_cues`` cues with a defined score (own included). Undefined own score: rank NaN, n_cues 0.
+    """
+    s = np.asarray(scores, float)
+    d = np.asarray(cue_speech_s, float)
+    if s.ndim != 1 or s.shape != d.shape or not 0 <= own < s.size:
+        raise ValueError(f"scores {s.shape}, durations {d.shape}, own {own}")
+    if int(k) < 1:
+        raise ValueError(f"length_matched_k must be >= 1, got {k}")
+    others = np.array([j for j in range(s.size) if j != own], dtype=int)
+    o = s[others]
+    fin = np.isfinite(o)
+    order = np.lexsort((others, np.abs(d[others] - d[own])))   # by duration distance, then column
+    near = s[others[order[: int(k)]]]
+    near = near[np.isfinite(near)]
+    own_v = s[own]
+    ok = bool(np.isfinite(own_v))
+    return {
+        "null_all_mean": float(o[fin].mean()) if fin.any() else float("nan"),
+        "null_lenmatched_mean": float(near.mean()) if near.size else float("nan"),
+        "null_lenmatched_n": int(near.size),
+        "own_rank": float(1 + int(np.sum(o[fin] >= own_v))) if ok else float("nan"),
+        "n_cues": int(1 + fin.sum()) if ok else 0,
+        "cue_tts_speech_s": float(d[own]),
+    }
+
+
+def rank_sum_uniform_p(ranks: Sequence[float], n_cues: Sequence[float]) -> float:
+    """Exact two-sided p of the rank sum if each rank were uniform on 1..n_cues, independently.
+
+    Uses the trials with a defined rank and n_cues >= 1; ranks must be integers. The null distribution of
+    the sum is the convolution of the discrete uniforms; p = min(1, 2 * min(P(S <= s), P(S >= s))).
+    """
+    r = np.asarray(ranks, float)
+    n = np.asarray(n_cues, float)
+    ok = np.isfinite(r) & np.isfinite(n) & (n >= 1)
+    r, n = r[ok], n[ok].astype(int)
+    if not r.size:
+        return float("nan")
+    if np.any(r != np.round(r)) or np.any(r < 1) or np.any(r > n):
+        raise ValueError("ranks must be integers in 1..n_cues")
+    pmf = np.ones(1)
+    for size in n:
+        pmf = np.convolve(pmf, np.full(size, 1.0 / size))
+    i = int(r.sum()) - r.size          # pmf[0] is P(S = number of trials), every rank 1
+    lower, upper = float(pmf[: i + 1].sum()), float(pmf[i:].sum())
+    return float(min(1.0, 2.0 * min(lower, upper)))
+
+
+def identification(ranks: Sequence[float], n_cues: Sequence[float]) -> dict:
+    """How often the own cue is identified: top-1 rate (and its chance level, mean 1/n_cues), median rank,
+    mean normalized rank (rank-1)/(n_cues-1) (0 = always best, 0.5 = chance), and the exact rank-sum test
+    against uniform ranks (:func:`rank_sum_uniform_p`). Trials with an undefined rank are left out."""
+    r = np.asarray(ranks, float)
+    n = np.asarray(n_cues, float)
+    ok = np.isfinite(r) & np.isfinite(n) & (n >= 1)
+    r, n = r[ok], n[ok]
+    out = {"n": int(r.size), "n_undefined": int(ok.size - r.size)}
+    if r.size:
+        multi = n > 1
+        out.update(
+            top1_rate=float(np.mean(r == 1)),
+            top1_chance=float(np.mean(1.0 / n)),
+            median_rank=float(np.median(r)),
+            median_n_cues=float(np.median(n)),
+            mean_normalized_rank=float(np.mean((r[multi] - 1) / (n[multi] - 1))) if multi.any() else float("nan"),
+            uniform_rank_p=rank_sum_uniform_p(r, n),
+        )
+    return out
+
+
+def output_speech_stats(wav: np.ndarray, speech: np.ndarray, hop_s: float, early_window_s: float) -> dict:
+    """Speech content of one decoded output, from the metrics' own silence mask (``speech``, one bool per
+    metric frame of ``hop_s`` seconds; frame t is centred at t * hop_s):
+
+    - ``est_speech_frames`` / ``est_speech_s``: speech frames in the whole output;
+    - ``early_speech_s``: speech seconds among the frames centred within the first ``early_window_s``;
+    - ``peak_dbfs``: 20 log10 max|wav| (full scale 1.0); NaN for digital silence (peak 0).
+    """
+    speech = np.asarray(speech, bool)
+    n_early = int(math.ceil(round(float(early_window_s) / float(hop_s), 6)))
+    peak = float(np.max(np.abs(wav))) if np.size(wav) else 0.0
+    return {
+        "est_speech_frames": int(speech.sum()),
+        "est_speech_s": float(speech.sum() * hop_s),
+        "early_speech_s": float(speech[:n_early].sum() * hop_s),
+        "peak_dbfs": 20.0 * math.log10(peak) if peak > 0 else float("nan"),
+    }
+
+
+# ----------------------------------------------------------------------------- resume / provenance
+
+
+def portable(obj: Any) -> Any:
+    """JSON-ready copy for records and hashes: Paths become repo-relative strings (so a hash does not
+    depend on where the repo is checked out), tuples become lists, numpy scalars Python scalars."""
+    if isinstance(obj, Mapping):
+        return {str(k): portable(v) for k, v in obj.items()}
+    if isinstance(obj, (list, tuple)):
+        return [portable(v) for v in obj]
+    if isinstance(obj, Path):
+        try:
+            return str(obj.resolve().relative_to(REPO_ROOT))
+        except ValueError:
+            return str(obj)
+    if isinstance(obj, np.generic):
+        return obj.item()
+    return obj
+
+
+def training_fingerprint(cfg: Mapping[str, Any], variant: str, train_trials: Sequence[Trial],
+                         input_files_sha256: Mapping[str, Optional[str]]) -> dict:
+    """Everything a trained variant depends on: seed, deterministic ops, model, the effective training
+    section (the variant's freeze_base applied; logging-only keys and the init path left out, the init file
+    is identified by content), the session, the channel reorder, the training trials (block, trial index, in
+    order) and the SHA-256 of the input files (training data with targets, electrode map, init model).
+    Not included: run names, output paths, threads/device, the code version (recorded separately)."""
+    e = cfg["experiment"]
+    t = deep_merge(cfg["training"], {"init": {"freeze_base": bool(e["variants"][variant]["freeze_base"])}})
+    t = {k: v for k, v in t.items() if k not in TRAINING_KEYS_NOT_AFFECTING_MODEL}
+    t["init"] = {k: v for k, v in (t.get("init") or {}).items() if k != "path"}
+    return portable({
+        "seed": cfg["seed"],
+        "deterministic_ops": bool(cfg["runtime"].get("deterministic_ops", False)),
+        "model": cfg["model"],
+        "training": t,
+        "variant": variant,
+        "session": e["session"],
+        "reorder_channels": bool(e["reorder_channels"]),
+        "train_trials": [[int(tr.block), int(tr.meta["trial_index"])] for tr in train_trials],
+        "input_files_sha256": dict(input_files_sha256),
+    })
+
+
+def fingerprint_differences(old: Mapping[str, Any], new: Mapping[str, Any], prefix: str = "") -> list[str]:
+    """Dotted keys whose values differ between two fingerprints (for error messages)."""
+    out = []
+    for k in sorted(set(old) | set(new)):
+        a, b = old.get(k, "<absent>"), new.get(k, "<absent>")
+        if isinstance(a, Mapping) and isinstance(b, Mapping):
+            out += fingerprint_differences(a, b, f"{prefix}{k}.")
+        elif a != b:
+            out.append(f"{prefix}{k}")
+    return out
+
+
+def prediction_staleness(header: Mapping[str, Any], keys: Sequence[str], model_sha256: Optional[str],
+                         settings: Mapping[str, Any], expected_keys: Sequence[str]) -> list[str]:
+    """Why a saved prediction file can NOT be reused (empty list: it can).
+
+    - its header's ``model_sha256`` differs from the current model file's (``model_sha256``);
+    - a decode setting differs: compared with the header's ``decode_settings``, or for files written before
+      those were recorded, with the header's own ``input`` / ``reorder_channels`` / ``seed`` fields;
+      settings recorded nowhere cannot be compared and are accepted;
+    - a trial the current fold needs (``expected_keys``) is missing.
+    """
+    reasons = []
+    if model_sha256 is not None and header.get("model_sha256") != model_sha256:
+        reasons.append(f"made by model sha256 {str(header.get('model_sha256'))[:12]}, "
+                       f"the current model is {model_sha256[:12]}")
+    stored = dict(header.get("decode_settings") or {})
+    for k, v in settings.items():
+        if k in stored:
+            old = stored[k]
+        elif k in _LEGACY_HEADER_SETTINGS and k in header:
+            old = header[k]
+        else:
+            continue
+        if old != v:
+            reasons.append(f"decode setting {k} was {old!r}, now {v!r}")
+    missing = sorted(set(expected_keys) - set(keys))
+    if missing:
+        reasons.append(f"{len(missing)} needed trial(s) missing, e.g. {missing[:3]}")
+    return reasons
+
+
+def index_unique(keys: Sequence[Any], what: str) -> dict:
+    """{key: position}; raises ValueError naming the repeated keys instead of silently keeping one."""
+    out: dict = {}
+    dup = []
+    for i, k in enumerate(keys):
+        if k in out:
+            dup.append(k)
+        out[k] = i
+    if dup:
+        raise ValueError(f"{what}: {len(dup)} repeated key(s), e.g. {dup[:3]}; pairing them would drop or "
+                         f"double-count rows")
     return out

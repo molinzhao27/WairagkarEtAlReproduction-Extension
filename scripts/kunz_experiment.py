@@ -17,18 +17,33 @@ Per fold (held-out attempted block X; ``wvx.kunz_experiment.build_fold``), in th
    (``mel_corr``, MCD; target-free, same pipeline for every set), the shuffled-trial null (vs another
    trial's cue in the same set), and for the held-out attempted block also vs the aligned-target audio
    and the frame-wise feature correlation with the targets. ASR when ``wvx.asr`` exists.
+   Every real output is also scored against EVERY distinct cue of its set (the cue nulls: mean over all
+   other cues, mean over the ``nulls.length_matched_k`` cues closest in TTS speech duration, and the rank of
+   the own cue; ``wvx.kunz_experiment.cue_null_stats``), plus its speech content (speech frames, speech
+   seconds within the first ``evaluation.early_window_s``, peak dBFS) from the metrics' silence detector.
 
 Every Kunz trial goes through ``wvx.kunz_experiment.prepare_neural`` (reorder_channels) before training
 and before every decode. Thread caps (``runtime.threads``) are applied before numpy/TensorFlow load.
 
-Re-runnable: training is skipped when its exported ``.h5`` exists, decoding when its prediction file
-exists, and ``--stage score`` recomputes all metrics from the saved predictions (e.g. once ASR exists).
+**Re-runnable, never silently stale:**
+- Training is skipped only when ``training_info.json`` records the SAME training fingerprint (training-
+  relevant config + SHA-256 of the input files; ``wvx.kunz_experiment.training_fingerprint``) and the
+  ``.h5`` is the file it exported. Otherwise it stops with an error: pass ``--retrain`` (expensive) or use a
+  new ``experiment.name``. ``--stage decode/score`` re-check it (older runs without a fingerprint: warning).
+- Decoding is skipped only when the prediction file's header names the current model file (sha256), the
+  same decode settings, and every needed trial; otherwise it is re-decoded, with a loud log line.
+- Scoring (``--stage all``) is redone when ``scores_<model>.json`` is missing, older than its predictions,
+  or records other predictions / model / scoring settings (hashes stored per row). ``--stage score``
+  always rescores. ``--retrain`` re-decodes and rescores that variant, ``--overwrite-predictions`` every
+  model. If any scores are stale at the end (e.g. after ``--stage decode``), no summary is written.
 
 Outputs (``experiment.name`` N, fold F = fold_AXX):
-    results/N/F/fold.json, per_trial.csv, summary.json, scores_<model>.json,
+    results/N/F/fold.json, per_trial.csv, summary.json, scores_<model>.json, score_matrix_<model>.csv
     results/N/F/train_<variant>/ history.csv, split.json, config.yaml, training_info.json
     results/audio/N/F/predictions/<model>__<input>.npz and wavs (gitignored)
     data/checkpoints/N/F/train_<variant>/ best.tf, final.tf, inference_layer00.h5
+Every JSON output records ``code_version`` (``wvx.provenance``) and ``config_sha256`` (of the resolved config
+with repo-relative paths).
 """
 
 from __future__ import annotations
@@ -40,6 +55,7 @@ sys.dont_write_bytecode = True  # -I ignores PYTHONDONTWRITEBYTECODE; keep third
 import argparse  # noqa: E402
 import csv  # noqa: E402
 import datetime  # noqa: E402
+import functools  # noqa: E402
 import hashlib  # noqa: E402
 import importlib  # noqa: E402
 import importlib.util  # noqa: E402
@@ -47,7 +63,6 @@ import inspect  # noqa: E402
 import json  # noqa: E402
 import os  # noqa: E402
 import platform  # noqa: E402
-import subprocess  # noqa: E402
 import time  # noqa: E402
 from pathlib import Path  # noqa: E402
 
@@ -55,11 +70,20 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from wvx.config import REPO_ROOT, deep_merge, resolve_path  # noqa: E402  (yaml only)
 from wvx.experiment_config import apply_tf_threads, apply_thread_env, load_experiment_config  # noqa: E402
+from wvx.provenance import code_version, config_sha256  # noqa: E402  (stdlib only)
 
 DEFAULT_CONFIG = "configs/experiments/kunz_pilot.yaml"
 INPUTS = ("real", "shuffled_time")
 BASE_FIELDS = ["model", "input", "set", "role", "condition", "block", "trial_index", "text", "text_in_training",
                "n_bins", "n_frames"]
+# Per-row provenance in scores_<model>.json (left out of per_trial.csv, which holds the data columns).
+PROVENANCE_FIELDS = ("predictions_sha256", "model_sha256", "score_settings_sha256", "config_sha256", "code_version")
+# experiment.evaluation keys that change how scoring runs or what is saved, never a score.
+EVALUATION_KEYS_NOT_AFFECTING_SCORES = ("n_workers", "progress_every", "save_audio")
+
+
+class StaleOutputError(RuntimeError):
+    """An existing output was made under other settings than this run's; it is never reused silently."""
 
 
 def log(msg: str) -> None:
@@ -73,18 +97,45 @@ def _rel(p) -> str:
         return str(p)
 
 
-def _sha256(path: Path) -> str:
-    with open(path, "rb") as f:
-        return hashlib.file_digest(f, "sha256").hexdigest()
+_SHA_CACHE: dict = {}
 
 
-def _git_commit():
-    try:
-        out = subprocess.run(["git", "rev-parse", "HEAD"], cwd=REPO_ROOT, capture_output=True, check=True)
-        dirty = subprocess.run(["git", "status", "--porcelain"], cwd=REPO_ROOT, capture_output=True).stdout
-    except (OSError, subprocess.CalledProcessError):
+def _sha256(path) -> str:
+    """SHA-256 of a file, cached per (path, size, mtime) so large inputs are hashed once per process."""
+    p = Path(path)
+    st = p.stat()
+    key = (str(p.resolve()), st.st_size, st.st_mtime_ns)
+    if key not in _SHA_CACHE:
+        with open(p, "rb") as f:
+            _SHA_CACHE[key] = hashlib.file_digest(f, "sha256").hexdigest()
+    return _SHA_CACHE[key]
+
+
+@functools.lru_cache(maxsize=1)
+def _code_version() -> dict:
+    return code_version()
+
+
+def version_label(cv) -> str | None:
+    """Compact code version for per-row records: <commit>[+dirty:<first 12 of the diff hash>]."""
+    if not cv or not cv.get("commit"):
         return None
-    return out.stdout.decode().strip() + ("+uncommitted" if dirty.strip() else "")
+    out = str(cv["commit"])
+    if cv.get("dirty"):
+        out += "+dirty" + (f":{str(cv['diff_sha256'])[:12]}" if cv.get("diff_sha256") else "")
+    return out
+
+
+def run_config_sha256(cfg) -> str:
+    """config_sha256 of the resolved config with repo-relative paths (same on the Mac and the host)."""
+    from wvx import kunz_experiment as kx
+
+    return config_sha256(kx.portable(cfg))
+
+
+def run_provenance(cfg, ctx=None) -> dict:
+    cv = (ctx or {}).get("code_version") or _code_version()
+    return {"code_version": cv, "config_sha256": run_config_sha256(cfg)}
 
 
 def _jsonable(obj):
@@ -110,6 +161,12 @@ def _write_json(path: Path, obj) -> None:
     os.replace(tmp, path)
 
 
+def _clear_tf_session() -> None:
+    import tensorflow as tf
+
+    tf.keras.backend.clear_session()
+
+
 # ------------------------------------------------------------------------------------ settings
 
 
@@ -127,7 +184,7 @@ def _expand(names, cfg) -> set[str]:
 
 
 def inputs_for(model: str, cfg) -> list[str]:
-    st = _expand(cfg["experiment"]["nulls"]["shuffled_time_models"], cfg)
+    st = _expand((cfg["experiment"].get("nulls") or {}).get("shuffled_time_models"), cfg)
     return ["real", "shuffled_time"] if model in st else ["real"]
 
 
@@ -150,21 +207,40 @@ class Dirs:
     def predictions(self, model: str, inp: str) -> Path:
         return self.pred / f"{model}__{inp}.npz"
 
+    def scores(self, model: str) -> Path:
+        return self.results / f"scores_{model}.json"
+
+    def score_matrix(self, model: str) -> Path:
+        return self.results / f"score_matrix_{model}.csv"
+
+    def training_info(self, variant: str) -> Path:
+        return self.results / f"train_{variant}" / "training_info.json"
+
 
 def pred_key(set_name: str, trial_index: int) -> str:
+    """Name of one trial's prediction in a predictions .npz (set name + Kunz trial index)."""
     return f"{set_name}__tr{int(trial_index):03d}"
+
+
+def expected_pred_keys(fold) -> list[str]:
+    return [pred_key(s.name, t.meta["trial_index"]) for s in fold.sets for t in s.trials]
 
 
 # ---------------------------------------------------------------------------------------- data
 
 
+def data_path(cfg, key: str) -> Path:
+    """An experiment input file (``experiment.<key>``, formatted with ``paths``)."""
+    fmt = {k: str(v) for k, v in cfg["paths"].items()}
+    return resolve_path(cfg["experiment"][key].format(**fmt))
+
+
 def load_data(cfg):
     from wvx.session import SessionData
 
-    e, fmt = cfg["experiment"], {k: str(v) for k, v in cfg["paths"].items()}
     out = {}
     for key in ("attempted_file", "imagined_file", "imagined_eval_file"):
-        p = resolve_path(e[key].format(**fmt))
+        p = data_path(cfg, key)
         out[key] = SessionData.load(p)
         log(f"loaded {_rel(p)}: {out[key].name}, {len(out[key].trials)} trials")
     return out["attempted_file"], out["imagined_file"], out["imagined_eval_file"]
@@ -187,15 +263,18 @@ def make_fold(block: int, data, cfg):
     return fold, partners
 
 
-def fold_record(fold, partners, cfg) -> dict:
+def train_trials(fold, cfg) -> list:
     n_train = cfg["experiment"]["max_train_trials"]
-    train = fold.train_trials[:n_train] if n_train else fold.train_trials
+    return fold.train_trials[:n_train] if n_train else fold.train_trials
+
+
+def fold_record(fold, partners, cfg) -> dict:
     rec = dict(fold.info)
     rec.update({
         "reorder_channels": bool(cfg["experiment"]["reorder_channels"]),
         "seed": cfg["seed"],
         # wvx.training's split.json indexes into this list
-        "train_trial_order": [{"block": t.block, "trial_index": t.meta["trial_index"]} for t in train],
+        "train_trial_order": [{"block": t.block, "trial_index": t.meta["trial_index"]} for t in train_trials(fold, cfg)],
         "sets": {
             s.name: {
                 **fold.info["sets"][s.name], "n": len(s.trials), "key": s.key,
@@ -246,16 +325,76 @@ def _history_from_csv(path: Path) -> dict:
     return hist
 
 
+def training_input_files(cfg) -> dict:
+    """The files a trained variant depends on: training data (inputs + targets), electrode map, init model."""
+    files = {"attempted_file": data_path(cfg, "attempted_file")}
+    if cfg["experiment"]["reorder_channels"]:
+        files["electrode_mapping"] = Path(cfg["paths"]["electrode_mapping"])
+    init = cfg["training"].get("init") or {}
+    if init.get("source"):
+        files["init"] = resolve_path(init["path"])
+    return files
+
+
+def current_training(fold, variant: str, cfg) -> tuple[dict, str]:
+    """(fingerprint, its sha256) of training ``variant`` on this fold under the current config."""
+    from wvx import kunz_experiment as kx
+
+    shas = {k: (_sha256(p) if p.is_file() else None) for k, p in training_input_files(cfg).items()}
+    fp = kx.training_fingerprint(cfg, variant, train_trials(fold, cfg), shas)
+    return fp, config_sha256(fp)
+
+
+def check_trained_model(fold, variant: str, cfg, dirs: Dirs, strict: bool) -> dict:
+    """``training_info.json`` of an existing exported model, verified against the current config.
+
+    Raises StaleOutputError if it records another training fingerprint or the ``.h5`` is not the file it
+    exported. If nothing can be verified (no training_info.json, or one written before fingerprints were
+    recorded): raises when ``strict`` (deciding whether to skip training), else warns loudly and marks the
+    returned info ``training_config_verified: false``.
+    """
+    from wvx import kunz_experiment as kx
+
+    info_path, h5 = dirs.training_info(variant), dirs.h5(variant)
+    info = json.loads(info_path.read_text()) if info_path.is_file() else {}
+    fp, sha = current_training(fold, variant, cfg)
+    what = f"{fold.name}/{variant}: the existing model {_rel(h5)}"
+    fix = ("Pass --retrain to train it again under the current config (expensive), or set a new "
+           "experiment.name to keep both.")
+    problems = []
+    stored = info.get("training_config_sha256")
+    if stored is not None and stored != sha:
+        diff = kx.fingerprint_differences(info.get("training_fingerprint") or {}, fp)
+        problems.append(f"was trained under other settings (differs in: {', '.join(diff) or 'fingerprint'})")
+    if info.get("exported_sha256") and h5.is_file() and info["exported_sha256"] != _sha256(h5):
+        problems.append("is not the file its training exported (sha256 differs from training_info.json)")
+    if problems:
+        raise StaleOutputError(f"{what} {'; '.join(problems)}. {fix}")
+    if stored is None:
+        why = ("has no training_info.json" if not info else
+               "has a training_info.json without a training fingerprint (written before they were recorded)")
+        if strict:
+            raise StaleOutputError(f"{what} {why}, so it cannot be checked against the current config and is not "
+                                   f"reused for training. {fix} (--stage decode / --stage score reuse it, flagged "
+                                   f"as unverified.)")
+        log(f"!!! WARNING {what} {why}; reused UNVERIFIED (training_config_verified: false)")
+        return {**info, "training_config_verified": False}
+    return {**info, "training_config_verified": True}
+
+
 def train_variant(fold, variant: str, cfg, dirs: Dirs, retrain: bool) -> dict:
     from wvx import kunz_experiment as kx
     from wvx.training import train
 
     e, t = cfg["experiment"], cfg["training"]
     run = f"train_{variant}"
-    info_path = dirs.results / run / "training_info.json"
+    info_path = dirs.training_info(variant)
     if dirs.h5(variant).is_file() and not retrain:
-        log(f"{fold.name}/{variant}: exported model exists, training skipped ({_rel(dirs.h5(variant))})")
-        return json.loads(info_path.read_text()) if info_path.is_file() else {"skipped": True}
+        info = check_trained_model(fold, variant, cfg, dirs, strict=True)
+        log(f"{fold.name}/{variant}: exported model matches the current training config "
+            f"({info['training_config_sha256'][:12]}), training skipped ({_rel(dirs.h5(variant))})")
+        return info
+    fp, fp_sha = current_training(fold, variant, cfg)
     vcfg = deep_merge(cfg, {
         "run_name": run,
         "paths": {"results": dirs.results, "checkpoints": dirs.ckpt},  # Paths: config.yaml stays repo-relative
@@ -266,7 +405,7 @@ def train_variant(fold, variant: str, cfg, dirs: Dirs, retrain: bool) -> dict:
                                max_trials=e["max_train_trials"])
     log(f"{fold.name}/{variant}: training on {len(sess.trials)} attempted trials from blocks {fold.train_blocks} "
         f"(freeze_base={vcfg['training']['init']['freeze_base']}, epochs {t['epochs']}, "
-        f"patience {t['early_stopping_patience']})")
+        f"patience {t['early_stopping_patience']}; fingerprint {fp_sha[:12]})")
     t0 = time.time()
     result = train([sess], vcfg, extra_callbacks=[make_progress_callback(int(t.get("log_every_batches") or 0))])
     wall = time.time() - t0
@@ -293,32 +432,91 @@ def train_variant(fold, variant: str, cfg, dirs: Dirs, retrain: bool) -> dict:
         "wall_time_s": wall,
         "exported": _rel(result.inference_models[0]),
         "exported_sha256": _sha256(result.inference_models[0]),
+        # resume check (check_trained_model): what this model depends on
+        "training_config_sha256": fp_sha,
+        "training_fingerprint": fp,
+        "input_files": {k: _rel(p) for k, p in training_input_files(cfg).items()},
+        **run_provenance(cfg),
     }
     _write_json(info_path, info)
     log(f"{fold.name}/{variant}: trained in {wall / 60:.1f} min, {info['epochs_run']} epochs, "
         f"loss {h.get('loss')} val_loss {h.get('val_loss')}")
-    import tensorflow as tf
-
     del result
-    tf.keras.backend.clear_session()
-    return info
+    _clear_tf_session()
+    return {**info, "training_config_verified": True}
 
 
 # ------------------------------------------------------------------------------------ decoding
 
 
-def decode_model(model: str, fold, cfg, dirs: Dirs, overwrite: bool) -> None:
-    import numpy as np
-    import tensorflow as tf
+def decode_settings(cfg, inp: str) -> dict:
+    """What a prediction file depends on besides the model file (stored in its header, checked on reuse)."""
+    reorder = bool(cfg["experiment"]["reorder_channels"])
+    out = {"input": inp, "reorder_channels": reorder,
+           "window_len": int(cfg["model"]["window_len"]), "step_size": int(cfg["model"]["step_size"])}
+    if reorder:
+        out["electrode_mapping_sha256"] = _sha256(cfg["paths"]["electrode_mapping"])
+    if inp == "shuffled_time":
+        out["seed"] = int(cfg["seed"])  # the time permutation
+    return out
 
+
+def read_prediction_header(path: Path) -> tuple[dict, list[str]]:
+    import numpy as np
+
+    with np.load(path, allow_pickle=False) as z:
+        return json.loads(str(z["header"])), [k for k in z.files if k != "header"]
+
+
+def prediction_staleness(model: str, inp: str, fold, cfg, dirs: Dirs, model_sha: str) -> list[str]:
+    from wvx import kunz_experiment as kx
+
+    try:
+        header, keys = read_prediction_header(dirs.predictions(model, inp))
+    except Exception as ex:  # unreadable or not a prediction file: never reuse
+        return [f"unreadable ({type(ex).__name__}: {ex})"]
+    return kx.prediction_staleness(header, keys, model_sha, decode_settings(cfg, inp), expected_pred_keys(fold))
+
+
+def save_predictions(path: Path, header: dict, preds: dict) -> None:
+    import numpy as np
+
+    tmp = path.with_name(path.stem + ".partial.npz")
+    np.savez_compressed(tmp, header=np.array(json.dumps(header)), **preds)
+    os.replace(tmp, path)
+
+
+def decode_model(model: str, fold, cfg, dirs: Dirs, overwrite: bool) -> list[str]:
+    """Decode every set with ``model`` for its inputs; returns the inputs that were (re-)decoded.
+
+    An existing prediction file is reused only if it was made by the current model file with the current
+    decode settings and holds every trial of the fold (``prediction_staleness``); otherwise it is re-decoded
+    with a loud log line. ``overwrite`` re-decodes regardless.
+    """
     from wvx import inference
     from wvx import kunz_experiment as kx
 
     path = dirs.model_path(model, cfg)
-    todo = [i for i in inputs_for(model, cfg) if overwrite or not dirs.predictions(model, i).is_file()]
+    if not path.is_file():
+        raise FileNotFoundError(f"{model}: model file not found: {_rel(path)}")
+    model_sha = _sha256(path)
+    todo = []
+    for inp in inputs_for(model, cfg):
+        p = dirs.predictions(model, inp)
+        if overwrite or not p.is_file():
+            if overwrite and p.is_file():
+                log(f"{fold.name}/{model}/{inp}: re-decoding (overwrite requested)")
+            todo.append(inp)
+            continue
+        reasons = prediction_staleness(model, inp, fold, cfg, dirs, model_sha)
+        if reasons:
+            log(f"!!! {fold.name}/{model}/{inp}: STALE predictions {_rel(p)}: {'; '.join(reasons)}. Re-decoding.")
+            todo.append(inp)
+        else:
+            log(f"{fold.name}/{model}/{inp}: predictions match model {model_sha[:12]} and decode settings, "
+                f"decoding skipped")
     if not todo:
-        log(f"{fold.name}/{model}: predictions exist, decoding skipped")
-        return
+        return []
     net = inference.load_model(path, cfg)
     for inp in todo:
         t0, preds, n = time.time(), {}, sum(len(s.trials) for s in fold.sets)
@@ -330,16 +528,16 @@ def decode_model(model: str, fold, cfg, dirs: Dirs, overwrite: bool) -> None:
                 preds[pred_key(s.name, t.meta["trial_index"])] = kx.decode(net, x, cfg)
                 if len(preds) % int(cfg["experiment"]["evaluation"]["progress_every"]) == 0:
                     log(f"  {model}/{inp}: decoded {len(preds)}/{n} ({time.time() - t0:.0f} s)")
-        header = {"model": model, "model_path": _rel(path), "model_sha256": _sha256(path), "input": inp,
+        header = {"model": model, "model_path": _rel(path), "model_sha256": model_sha, "input": inp,
                   "reorder_channels": bool(cfg["experiment"]["reorder_channels"]), "seed": cfg["seed"],
-                  "fold": fold.name, "created": datetime.datetime.now().isoformat(timespec="seconds")}
+                  "fold": fold.name, "created": datetime.datetime.now().isoformat(timespec="seconds"),
+                  "decode_settings": decode_settings(cfg, inp), "code_version": version_label(_code_version())}
         out = dirs.predictions(model, inp)
-        tmp = out.with_name(out.stem + ".partial.npz")
-        np.savez_compressed(tmp, header=np.array(json.dumps(header)), **preds)
-        os.replace(tmp, out)
+        save_predictions(out, header, preds)
         log(f"{fold.name}/{model}/{inp}: {len(preds)} trials decoded in {time.time() - t0:.0f} s -> {_rel(out)}")
     del net
-    tf.keras.backend.clear_session()
+    _clear_tf_session()
+    return todo
 
 
 def load_predictions(path: Path):
@@ -436,10 +634,93 @@ def _prefixed(prefix: str, scores: dict) -> dict:
             for k, v in dict(scores).items()}
 
 
+def metric_cfg(override) -> dict:
+    """The resolved metrics section for an ``experiment.evaluation.*_metrics`` override."""
+    from wvx import metrics
+
+    o = dict(override or {})
+    return metrics.load_metrics_config(overrides=o.get("metrics", o) or None)
+
+
+def metric_hop_s(override) -> float:
+    return float(metric_cfg(override)["stft"]["hop_ms"]) / 1000.0
+
+
+def score_settings(cfg) -> dict:
+    """What the per-trial scores depend on besides the predictions and the model (hashed into every row)."""
+    from wvx import kunz_experiment as kx
+
+    e = cfg["experiment"]
+    ev = e["evaluation"]
+    return kx.portable({
+        "seed": cfg["seed"],
+        "nulls": {k: v for k, v in e["nulls"].items() if k != "shuffled_time_models"},
+        "max_trials_per_set": e["max_trials_per_set"],
+        "evaluation": {k: v for k, v in ev.items() if k not in EVALUATION_KEYS_NOT_AFFECTING_SCORES},
+        "tts_voice": ev["tts_voice"] or cfg["tts"]["voice"],
+        "tts_corpus": ev["tts_corpus"] or cfg["kunz"]["corpus"],
+        "tts_metrics_resolved": metric_cfg(ev["tts_metrics"]),
+        "target_metrics_resolved": metric_cfg(ev["target_metrics"]),
+        "synthesis": {k: cfg["synthesis"][k] for k in ("sample_rate", "samples_per_frame", "n_frame_floats")},
+    })
+
+
+def score_staleness(model: str, fold, cfg, dirs: Dirs, rows=None) -> list[str]:
+    """Why ``scores_<model>.json`` can NOT be reused (empty list: it can).
+
+    Missing; older than one of its prediction files; computed from other predictions, another model file or
+    other scoring settings (hashes stored per row; rows without them are only checked by time); or covering
+    other trials than the current fold. Prediction or model files that are absent (e.g. on the Mac, which
+    holds no predictions) cannot be compared and are not held against the scores.
+    """
+    p = dirs.scores(model)
+    if not p.is_file():
+        return ["no scores file"]
+    if rows is None:
+        rows = json.loads(p.read_text())
+    reasons = []
+    by_input: dict = {}
+    for r in rows:
+        by_input.setdefault(r.get("input"), []).append(r)
+    for inp in inputs_for(model, cfg):
+        f = dirs.predictions(model, inp)
+        if not f.is_file():
+            continue
+        if f.stat().st_mtime > p.stat().st_mtime:
+            reasons.append(f"the {inp} predictions are newer than the scores")
+        rs = by_input.get(inp, [])
+        if not rs:
+            reasons.append(f"no scores for the {inp} predictions")
+            continue
+        rec = {r.get("predictions_sha256") for r in rs} - {None}
+        if rec and rec != {_sha256(f)}:
+            reasons.append(f"the {inp} scores were computed from other predictions")
+    model_path = dirs.model_path(model, cfg)
+    rec_m = {r.get("model_sha256") for r in rows} - {None}
+    if rec_m and model_path.is_file() and rec_m != {_sha256(model_path)}:
+        reasons.append("the scores were computed with another model file")
+    rec_s = {r.get("score_settings_sha256") for r in rows} - {None}
+    if rec_s and rec_s != {config_sha256(score_settings(cfg))}:
+        reasons.append("the scoring settings changed")
+    expected = {(s.name, int(t.meta["trial_index"])) for s in fold.sets for t in s.trials}
+    for inp, rs in by_input.items():
+        got = {(r.get("set"), r.get("trial_index")) for r in rs}
+        if got != expected:
+            reasons.append(f"the {inp} scores cover {len(got)} trials, the fold has {len(expected)} "
+                           f"(other sets or trial limits)")
+    return reasons
+
+
 class References:
-    """TTS reference audio per cue and aligned-target audio per held-out attempted trial (shared by models)."""
+    """TTS reference audio per cue and aligned-target audio per held-out attempted trial (shared by models).
+
+    ``tts_speech_s[text]``: speech seconds of the cue's TTS reference by the metrics' silence detector (used
+    to pick the length-matched null cues).
+    """
 
     def __init__(self, fold, cfg, dirs: Dirs, pool, asr=None):
+        import numpy as np
+
         from wvx import inference, metrics, synthesis, targets
 
         e = cfg["experiment"]["evaluation"]
@@ -463,6 +744,9 @@ class References:
             return text, wav
 
         self.tts = dict(pool.map(tts, texts))
+        hop_s = metric_hop_s(e["tts_metrics"])
+        self.tts_speech_s = {text: float(np.sum(metrics.speech_frame_mask(wav, self.sr, e["tts_metrics"]))) * hop_s
+                             for text, wav in self.tts.items()}
         w = int(cfg["model"]["window_len"])
         held = [t for s in fold.sets if s.role == "heldout_attempted" for t in s.trials]
 
@@ -497,14 +781,42 @@ class References:
             log(f"references: ASR on {len(self.asr_rows)} reference clips")
 
 
-def score_model(model: str, fold, partners, cfg, dirs: Dirs, refs: References, asr, pool) -> list[dict]:
-    from wvx import inference, kunz_experiment as kx, metrics, synthesis
+def write_score_matrix(path: Path, rows: list[dict]) -> None:
+    """Per-set cue score matrix of the real outputs: one row per output, ``cue_JJJ`` = mel_corr vs the TTS of
+    the set's J-th distinct cue (order of first appearance among the set's trials; ``own_cue`` = the output's
+    own column, ``own_cue_tts_speech_s`` its TTS speech seconds). Empty cell = undefined."""
+    n = max((len(r["scores"]) for r in rows), default=0)
+    fields = ["set", "trial_index", "text", "own_cue", "own_cue_tts_speech_s"] + [f"cue_{j:03d}" for j in range(n)]
+    tmp = path.with_suffix(".csv.partial")
+    with open(tmp, "w", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=fields, restval="")
+        w.writeheader()
+        for r in rows:
+            out = {k: r[k] for k in fields[:5]}
+            out.update({f"cue_{j:03d}": ("" if v != v else v) for j, v in enumerate(r["scores"])})
+            w.writerow(out)
+    os.replace(tmp, path)
 
-    e = cfg["experiment"]["evaluation"]
+
+def score_model(model: str, fold, partners, cfg, dirs: Dirs, refs: References, asr, pool) -> list[dict]:
+    import numpy as np
+
+    from wvx import inference, kunz_experiment as kx, metrics, synthesis
+    from wvx.metrics import normalize_text
+
+    ex = cfg["experiment"]
+    e = ex["evaluation"]
     save = model in _expand(e["save_audio"]["predictions"], cfg)
     tts_cfg, tgt_cfg = e["tts_metrics"], e["target_metrics"]
     asr_inputs, hyp_key = set(e["asr"].get("inputs") or []), e["asr"].get("hypothesis_key")
+    k_len, early_s, hop_s = int(ex["nulls"]["length_matched_k"]), float(e["early_window_s"]), metric_hop_s(tts_cfg)
     sr = refs.sr
+    model_path = dirs.model_path(model, cfg)
+    model_sha = _sha256(model_path) if model_path.is_file() else None
+    common = {"score_settings_sha256": config_sha256(score_settings(cfg)), "config_sha256": run_config_sha256(cfg),
+              "code_version": version_label(_code_version())}
+    cues = {s.name: kx.set_cues(s.texts, normalize_text) for s in fold.sets}
+    cue_s = {s.name: np.array([refs.tts_speech_s[x] for x in cues[s.name][1]], float) for s in fold.sets}
     tasks = []
     for inp in inputs_for(model, cfg):
         path = dirs.predictions(model, inp)
@@ -512,18 +824,31 @@ def score_model(model: str, fold, partners, cfg, dirs: Dirs, refs: References, a
             log(f"{fold.name}/{model}/{inp}: no predictions ({_rel(path)}), not scored")
             continue
         header, preds = load_predictions(path)
+        # Same check as decode_model: never score predictions of another model file / other decode settings.
+        stale = kx.prediction_staleness(header, list(preds), model_sha, decode_settings(cfg, inp),
+                                        expected_pred_keys(fold))
+        if stale:
+            raise StaleOutputError(f"{_rel(path)} does not match the current model and config ({'; '.join(stale)}): "
+                                   f"decode again first (--stage decode or all)")
+        meta = {"predictions_sha256": _sha256(path), "model_sha256": header.get("model_sha256")}
         for s in fold.sets:
             for i, t in enumerate(s.trials):
-                tasks.append((inp, s, i, t, preds[pred_key(s.name, t.meta["trial_index"])]))
+                tasks.append((inp, meta, s, i, t, preds[pred_key(s.name, t.meta["trial_index"])]))
 
     def safe(row, prefix, fn):
         try:
             row.update(_prefixed(prefix, fn()))
-        except Exception as ex:  # record and go on (e.g. silent output -> metric undefined)
-            row[f"{prefix}error"] = f"{type(ex).__name__}: {ex}"
+        except Exception as ex_:  # record and go on (e.g. silent output -> metric undefined)
+            row[f"{prefix}error"] = f"{type(ex_).__name__}: {ex_}"
+
+    def mel(ref, wav):
+        try:
+            return float(metrics.mel_spectrogram_correlation(ref, wav, sr, tts_cfg))
+        except Exception:  # same policy as safe(): undefined, never fatal
+            return float("nan")
 
     def one(task):
-        inp, s, i, t, pred = task
+        inp, meta, s, i, t, pred = task
         idx = int(t.meta["trial_index"])
         row = {"model": model, "input": inp, "set": s.name, "role": s.role, "condition": s.condition,
                "block": s.block, "trial_index": idx, "text": t.text, "text_in_training": bool(s.text_in_training[i]),
@@ -532,10 +857,13 @@ def score_model(model: str, fold, partners, cfg, dirs: Dirs, refs: References, a
         if save and inp == "real":
             synthesis.write_wav(dirs.audio / model / s.name / f"tr{idx:03d}.wav", wav, cfg)
         safe(row, "tts_", lambda: metrics.evaluate(refs.tts[t.text], wav, sr, tts_cfg))
+        safe(row, "", lambda: kx.output_speech_stats(wav, metrics.speech_frame_mask(wav, sr, tts_cfg), hop_s, early_s))
         partner = s.trials[partners[s.name][i]] if s.name in partners else None
         if inp == "real" and partner is not None:
             row["shuffled_trial_partner"] = int(partner.meta["trial_index"])
             safe(row, "shuffled_trial_tts_", lambda: metrics.evaluate(refs.tts[partner.text], wav, sr, tts_cfg))
+        if inp == "real":  # cue nulls: the same output vs EVERY distinct cue of its set
+            row["_cue_scores"] = [mel(refs.tts[x], wav) for x in cues[s.name][1]]
         if s.role == "heldout_attempted":
             safe(row, "", lambda: kx.feature_scores(pred, inference.align_to_predictions(t.target, len(pred))))
             safe(row, "target_", lambda: metrics.evaluate(refs.target[idx], wav, sr, tgt_cfg))
@@ -545,6 +873,8 @@ def score_model(model: str, fold, partners, cfg, dirs: Dirs, refs: References, a
             hyp = row.get(f"asr_{hyp_key}")
             if inp == "real" and s.name in partners and isinstance(hyp, str):
                 safe(row, "shuffled_trial_", lambda: asr.rescore(partner.text, hyp))
+        row.update(meta)
+        row.update(common)
         return row
 
     t0, rows = time.time(), []
@@ -553,7 +883,19 @@ def score_model(model: str, fold, partners, cfg, dirs: Dirs, refs: References, a
         rows.append(row)
         if len(rows) % every == 0:
             log(f"  {model}: scored {len(rows)}/{len(tasks)} ({time.time() - t0:.0f} s)")
-    log(f"{fold.name}/{model}: {len(rows)} outputs scored in {time.time() - t0:.0f} s")
+    matrix = []
+    for row, (inp, _, s, i, t, _) in zip(rows, tasks):
+        scores = row.pop("_cue_scores", None)
+        if scores is None:
+            continue
+        own = cues[s.name][2][i]
+        row.update(kx.cue_null_stats(scores, own, cue_s[s.name], k_len))
+        matrix.append({"set": s.name, "trial_index": row["trial_index"], "text": t.text, "own_cue": own,
+                       "own_cue_tts_speech_s": float(cue_s[s.name][own]), "scores": scores})
+    if matrix:
+        write_score_matrix(dirs.score_matrix(model), matrix)
+    log(f"{fold.name}/{model}: {len(rows)} outputs scored ({len(matrix)} against every cue of their set) "
+        f"in {time.time() - t0:.0f} s")
     return rows
 
 
@@ -569,14 +911,18 @@ def _num(rows, key):
 
 
 def _match(a_rows, b_rows, key_a, key_b, by=("trial_index",)):
-    """Values of key_a in a_rows and key_b in b_rows, matched on ``by``."""
-    idx = {tuple(r[k] for k in by): r for r in b_rows}
+    """Values of key_a in a_rows and key_b in b_rows, matched on ``by``. A key repeated on either side is
+    ambiguous and raises ValueError (it would otherwise drop or double-count rows)."""
+    from wvx import kunz_experiment as kx
+
+    kx.index_unique([tuple(r[k] for k in by) for r in a_rows], f"_match on {by}, first rows")
+    idx = kx.index_unique([tuple(r[k] for k in by) for r in b_rows], f"_match on {by}, second rows")
     a, b = [], []
     for r in a_rows:
-        o = idx.get(tuple(r[k] for k in by))
-        if o is not None:
+        j = idx.get(tuple(r[k] for k in by))
+        if j is not None:
             a.append(r)
-            b.append(o)
+            b.append(b_rows[j])
     return _num(a, key_a), _num(b, key_b)
 
 
@@ -613,6 +959,33 @@ def pooled_asr(rows: list[dict], prefix: str = "asr_") -> dict:
     return out
 
 
+def summary_settings(cfg) -> dict:
+    """Settings of the cue-null summaries (``experiment.summary`` and the null/early-window parameters)."""
+    e = cfg["experiment"]
+    return {"primary_null": e["summary"]["primary_null"], "min_speech_s": float(e["summary"]["min_speech_s"]),
+            "length_matched_k": int(e["nulls"]["length_matched_k"]),
+            "early_window_s": float(e["evaluation"]["early_window_s"])}
+
+
+def has_cue_nulls(rows) -> bool:
+    """Rows scored with the cue nulls (``n_cues`` is set on every real output, 0 when silent)."""
+    return bool(rows) and all("n_cues" in r for r in rows)
+
+
+def _null_excess(rows, order) -> dict:
+    from wvx import kunz_experiment as kx
+
+    own = _num(rows, "tts_mel_corr")
+    return {n: {"column": kx.NULL_COLUMNS[n], "null": kx.describe(_num(rows, kx.NULL_COLUMNS[n])),
+                "excess": kx.paired(own, _num(rows, kx.NULL_COLUMNS[n]))} for n in order}
+
+
+def _excess_values(rows, null_name) -> list:
+    from wvx import kunz_experiment as kx
+
+    return [a - b for a, b in zip(_num(rows, "tts_mel_corr"), _num(rows, kx.NULL_COLUMNS[null_name]))]
+
+
 def summarize(rows: list[dict], fold, cfg) -> dict:
     from wvx import kunz_experiment as kx
     from wvx.metrics import normalize_text
@@ -620,10 +993,13 @@ def summarize(rows: list[dict], fold, cfg) -> dict:
     def sel(**kw):
         return [r for r in rows if all(r.get(k) == v for k, v in kw.items())]
 
+    st = summary_settings(cfg)
+    order = kx.null_order(st["primary_null"])
+    min_s = st["min_speech_s"]
     models = [m for m in model_names(cfg) if sel(model=m)]
     numeric = sorted({k for r in rows for k, v in r.items()
                       if isinstance(v, (int, float)) and not isinstance(v, bool) and k not in ("block", "trial_index")})
-    out = {"per_model": {}, "comparisons": {}}
+    out = {"per_model": {}, "comparisons": {}, "settings": {**st, "null_order": order}}
     groups = [(s.name, {"set": s.name}) for s in fold.sets]
     groups.append(("leaky_imagined_pooled", {"role": "leaky_imagined"}))
     for m in models:
@@ -643,6 +1019,21 @@ def summarize(rows: list[dict], fold, cfg) -> dict:
                 "real_minus_shuffled_trial": kx.paired(_num(real, "tts_mel_corr"),
                                                        _num(real, "shuffled_trial_tts_mel_corr")),
             }
+            if has_cue_nulls(real):
+                # Same output vs other cues of the set (primary null first) and identification of the own cue.
+                g["nulls"] = _null_excess(real, order)
+                g["identification"] = kx.identification(_num(real, "own_rank"), _num(real, "n_cues"))
+                g["speech_s"] = kx.describe(_num(real, "est_speech_s"))
+                g["early_speech_s"] = kx.describe(_num(real, "early_speech_s"))
+                g["peak_dbfs"] = kx.describe(_num(real, "peak_dbfs"))
+                kept = [r for r, v in zip(real, _num(real, "est_speech_s")) if v >= min_s]
+                g["sensitivity_min_speech"] = {
+                    "analysis": "sensitivity analysis, not the primary test: only outputs with >= min_speech_s "
+                                "of decoded speech (selected on the output itself)",
+                    "min_speech_s": min_s, "n_kept": len(kept), "n": len(real),
+                    "nulls": {n: v["excess"] for n, v in _null_excess(kept, order).items()},
+                    "identification": kx.identification(_num(kept, "own_rank"), _num(kept, "n_cues")),
+                }
             by = ("set", "trial_index")
             if shuf:
                 g["silent_outputs_shuffled_time"] = _silent(shuf)
@@ -673,10 +1064,29 @@ def summarize(rows: list[dict], fold, cfg) -> dict:
         if held and pair:
             for r in held + pair:
                 r["_cue"] = normalize_text(r["text"])
-            a, b = _match(held, pair, "tts_mel_corr", "tts_mel_corr", by=("_cue",))
-            res["attempted_minus_paired_imagined_same_cue"] = kx.paired(a, b)
-            for r in held + pair:
-                r.pop("_cue", None)
+            try:
+                a, b = _match(held, pair, "tts_mel_corr", "tts_mel_corr", by=("_cue",))
+                res["attempted_minus_paired_imagined_same_cue"] = kx.paired(a, b)
+                if has_cue_nulls(held) and has_cue_nulls(pair):
+                    avi = res["attempted_vs_paired_imagined"] = {
+                        "primary_null": order[0],
+                        # unpaired (Mann-Whitney): each output has its own null
+                        "excess_difference": {n: kx.unpaired(_excess_values(held, n), _excess_values(pair, n))
+                                              for n in order},
+                        "early_speech_s_same_cue": kx.paired(*_match(held, pair, "early_speech_s", "early_speech_s",
+                                                                     by=("_cue",))),
+                    }
+                    hk = [r for r, v in zip(held, _num(held, "est_speech_s")) if v >= min_s]
+                    pk = [r for r, v in zip(pair, _num(pair, "est_speech_s")) if v >= min_s]
+                    avi["sensitivity_min_speech"] = {
+                        "analysis": "sensitivity analysis, not the primary test", "min_speech_s": min_s,
+                        "n_attempted_kept": len(hk), "n_imagined_kept": len(pk),
+                        "excess_difference": {n: kx.unpaired(_excess_values(hk, n), _excess_values(pk, n))
+                                              for n in order},
+                    }
+            finally:
+                for r in held + pair:
+                    r.pop("_cue", None)
     if "zero_shot" in models:
         for m in models:
             if m == "zero_shot":
@@ -706,10 +1116,10 @@ def _asr_reference_summary(path: Path) -> dict:
 def write_rows_csv(path: Path, rows: list[dict]) -> None:
     fields = list(BASE_FIELDS)
     for r in rows:
-        fields.extend(k for k in r if k not in fields)
+        fields.extend(k for k in r if k not in fields and k not in PROVENANCE_FIELDS)
     tmp = path.with_suffix(".csv.partial")
     with open(tmp, "w", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=fields, restval="")
+        w = csv.DictWriter(f, fieldnames=fields, restval="", extrasaction="ignore")
         w.writeheader()
         for r in rows:
             w.writerow({k: ("" if isinstance(v, float) and v != v else v) for k, v in r.items()})
@@ -729,12 +1139,30 @@ def headline(summary: dict) -> list[str]:
             asr = v.get("asr_real", {})
             asr_s = (f" | WER {asr['wer_pooled']:.2f} (null trial {v['asr_null_shuffled_trial'].get('wer_pooled', float('nan')):.2f})"
                      if "wer_pooled" in asr else "")
+            cue = ""
+            if "nulls" in v:
+                p, ex = next(iter(v["nulls"].items()))
+                ident = v["identification"]
+                cue = (f" | excess vs {p} null {ex['excess'].get('mean', float('nan')):+.3f} "
+                       f"(p {ex['excess'].get('wilcoxon_p', float('nan')):.1e}) | top-1 "
+                       f"{ident.get('top1_rate', float('nan')):.2f} (chance {ident.get('top1_chance', float('nan')):.2f})")
             lines.append(f"{m:10s} {g:28s} mel_corr vs TTS {fmt(a)} | shuffled-trial {fmt(n1)}"
-                         + (f" | shuffled-time {fmt(n2)}" if n2 else "") + asr_s)
+                         + (f" | shuffled-time {fmt(n2)}" if n2 else "") + cue + asr_s)
     return lines
 
 
 # ---------------------------------------------------------------------------------------- main
+
+
+def _forced(overwrite: bool, retrained: bool, decoded) -> str:
+    why = []
+    if retrained:
+        why.append("--retrain")
+    if overwrite:
+        why.append("--overwrite-predictions")
+    if decoded:
+        why.append(f"re-decoded {list(decoded)}")
+    return ", ".join(why)
 
 
 def run_fold(block, data, cfg, args, ctx) -> dict:
@@ -742,11 +1170,16 @@ def run_fold(block, data, cfg, args, ctx) -> dict:
 
     fold, partners = make_fold(block, data, cfg)
     dirs = Dirs(cfg, fold.name)
-    _write_json(dirs.results / "fold.json", fold_record(fold, partners, cfg))
-    log(f"{fold.name}: train blocks {fold.train_blocks}; sets "
-        + ", ".join(f"{s.name} ({len(s.trials)}, {sum(s.text_in_training)} cues in training)" for s in fold.sets))
     e = cfg["experiment"]
     stage = args.stage
+    # Fail fast: refuse a trained model made under other settings BEFORE writing or computing anything.
+    training_stage = stage in ("all", "train")
+    verified = {v: check_trained_model(fold, v, cfg, dirs, strict=training_stage)
+                for v in e["run_variants"] if dirs.h5(v).is_file() and not (training_stage and args.retrain)}
+    prov = run_provenance(cfg, ctx)
+    _write_json(dirs.results / "fold.json", {**fold_record(fold, partners, cfg), **prov})
+    log(f"{fold.name}: train blocks {fold.train_blocks}; sets "
+        + ", ".join(f"{s.name} ({len(s.trials)}, {sum(s.text_in_training)} cues in training)" for s in fold.sets))
     timing: dict = {}
     training: dict = {}
     asr, asr_status = (None, "not scored in this stage")
@@ -764,58 +1197,102 @@ def run_fold(block, data, cfg, args, ctx) -> dict:
                     _write_json(dirs.results / "asr_references.json", refs.asr_rows)
             t0 = time.time()
             rows = score_model(model, fold, partners, cfg, dirs, refs, asr, pool)
-            _write_json(dirs.results / f"scores_{model}.json", rows)
+            _write_json(dirs.scores(model), rows)
             timing[f"score_{model}_s"] = time.time() - t0
 
-        def decode(model):
+        def decode(model, overwrite):
             t0 = time.time()
-            decode_model(model, fold, cfg, dirs, overwrite=args.overwrite_predictions)
+            done = decode_model(model, fold, cfg, dirs, overwrite=overwrite)
             timing[f"decode_{model}_s"] = time.time() - t0
+            return done or []
 
-        def needs_score(model):
-            return stage == "score" or (stage == "all" and not (dirs.results / f"scores_{model}.json").is_file())
+        def needs_score(model, forced: str) -> bool:
+            if stage == "score":
+                return True
+            if stage != "all":
+                return False
+            if forced:
+                log(f"{fold.name}/{model}: re-scoring ({forced})")
+                return True
+            reasons = score_staleness(model, fold, cfg, dirs)
+            if reasons == ["no scores file"]:
+                return True
+            if reasons:
+                log(f"!!! {fold.name}/{model}: STALE scores ({'; '.join(reasons)}); re-scoring")
+                return True
+            log(f"{fold.name}/{model}: scores match their predictions, model and settings; scoring skipped")
+            return False
 
-        if e["zero_shot"] and stage in ("all", "decode"):
-            decode("zero_shot")
-        if e["zero_shot"] and needs_score("zero_shot"):
-            score("zero_shot")
+        if e["zero_shot"]:
+            decoded = decode("zero_shot", args.overwrite_predictions) if stage in ("all", "decode") else []
+            if needs_score("zero_shot", _forced(args.overwrite_predictions, False, decoded)):
+                score("zero_shot")
         for v in e["run_variants"]:
-            if stage in ("all", "train"):
+            retrained = False
+            if training_stage:
                 t0 = time.time()
                 training[v] = train_variant(fold, v, cfg, dirs, retrain=args.retrain)
                 timing[f"train_{v}_s"] = time.time() - t0
-            elif (dirs.results / f"train_{v}" / "training_info.json").is_file():
-                training[v] = json.loads((dirs.results / f"train_{v}" / "training_info.json").read_text())
+                retrained = bool(args.retrain)
+            elif v in verified:
+                training[v] = verified[v]
+            elif dirs.training_info(v).is_file():
+                training[v] = json.loads(dirs.training_info(v).read_text())
+            decoded = []
             if stage in ("all", "decode"):
                 if not dirs.h5(v).is_file():
                     raise FileNotFoundError(f"no trained model for {v}: {_rel(dirs.h5(v))}")
-                decode(v)
-            if needs_score(v):
+                decoded = decode(v, args.overwrite_predictions or retrained)
+            if needs_score(v, _forced(args.overwrite_predictions, retrained, decoded)):
                 score(v)
 
-    rows = []
+    rows, stale = [], {}
     for m in model_names(cfg):
-        p = dirs.results / f"scores_{m}.json"
+        p = dirs.scores(m)
         if p.is_file():
-            rows.extend(json.loads(p.read_text()))
+            mrows = json.loads(p.read_text())
+            reasons = [r for r in score_staleness(m, fold, cfg, dirs, mrows) if r != "no scores file"]
+            if reasons:
+                stale[m] = reasons
+            rows.extend(mrows)
+    if stale:
+        for m, reasons in stale.items():
+            log(f"!!! {fold.name}/{m}: scores are STALE ({'; '.join(reasons)}). per_trial.csv and summary.json NOT "
+                f"written; run --stage score (or all).")
+        return {"fold": fold.name, "scored": False, "stale_scores": stale}
     if not rows:
         return {"fold": fold.name, "scored": False}
     for r in rows:  # JSON null -> NaN for the statistics
         for k, v in list(r.items()):
             if v is None:
                 r[k] = float("nan")
+    legacy = sorted({r["model"] for r in rows if r.get("input") == "real" and "n_cues" not in r})
+    if legacy:
+        log(f"!!! WARNING {fold.name}: scores of {legacy} predate the cue nulls (no null_all_mean / "
+            f"null_lenmatched_mean / own_rank); their summary has the shuffled-trial null only. Re-run --stage score.")
     write_rows_csv(dirs.results / "per_trial.csv", rows)
+    models = {}
+    for m in model_names(cfg):
+        mp = dirs.model_path(m, cfg)
+        models[m] = {"path": _rel(mp), "sha256": _sha256(mp) if mp.is_file() else None, "inputs": inputs_for(m, cfg),
+                     "predictions": {}}
+        for inp in inputs_for(m, cfg):
+            pp = dirs.predictions(m, inp)
+            if pp.is_file():
+                header, _ = read_prediction_header(pp)
+                models[m]["predictions"][inp] = {"path": _rel(pp), "sha256": _sha256(pp),
+                                                 "model_sha256": header.get("model_sha256")}
     summary = {
         "fold": fold.name,
         "created": datetime.datetime.now().isoformat(timespec="seconds"),
         "config_file": args.config,
-        "git_commit": ctx["git"],
+        "code_version": prov["code_version"],
+        "config_sha256": prov["config_sha256"],
+        "git_commit": version_label(prov["code_version"]),  # kept for continuity with older summaries
         "seed": cfg["seed"],
         "design": fold.info,
         "reorder_channels": bool(e["reorder_channels"]),
-        "models": {m: {"path": _rel(dirs.model_path(m, cfg)),
-                       "sha256": _sha256(dirs.model_path(m, cfg)) if dirs.model_path(m, cfg).is_file() else None,
-                       "inputs": inputs_for(m, cfg)} for m in model_names(cfg)},
+        "models": models,
         "training": training,
         "tts_reference": {"voice": cfg["tts"]["voice"] if not e["evaluation"]["tts_voice"] else e["evaluation"]["tts_voice"],
                           "corpus": e["evaluation"]["tts_corpus"] or cfg["kunz"]["corpus"],
@@ -829,13 +1306,19 @@ def run_fold(block, data, cfg, args, ctx) -> dict:
             "target-based scores (target_*, feat_corr_mean) of the zero-shot model are partly circular; the "
             "target-free mel_corr vs TTS is the primary metric.",
             "mel_corr uses DTW, which raises the floor for unrelated speech (METRICS.md 2.5); compare with the nulls.",
+            "The single shuffled-trial partner is a lenient null and partly a sentence-length effect (few speech "
+            "frames score higher against shorter references); the length-matched cue null is primary "
+            "(experiment.summary.primary_null). Outputs with little speech (< ~40 frames) cannot be identified "
+            "even for real attempted speech: see the min_speech_s sensitivity analysis.",
             "leaky_imagined sets: their cues were trained on (attempted); not a clean generalization test.",
         ],
         "results": summarize(rows, fold, cfg),
         "timing_s": timing,
         "outputs": {"per_trial_csv": _rel(dirs.results / "per_trial.csv"), "audio": _rel(dirs.audio),
-                    "predictions": _rel(dirs.pred), "checkpoints": _rel(dirs.ckpt)},
-        "runtime": ctx["runtime"],
+                    "predictions": _rel(dirs.pred), "checkpoints": _rel(dirs.ckpt),
+                    "score_matrices": {m: _rel(dirs.score_matrix(m)) for m in model_names(cfg)
+                                       if dirs.score_matrix(m).is_file()}},
+        "runtime": ctx.get("runtime"),
     }
     _write_json(dirs.results / "summary.json", summary)
     for line in headline(summary["results"]):
@@ -850,8 +1333,10 @@ def main(argv=None) -> int:
     ap.add_argument("--stage", choices=["all", "train", "decode", "score"], default="all")
     ap.add_argument("--folds", type=int, nargs="+", default=None, help="override experiment.folds")
     ap.add_argument("--variants", nargs="+", default=None, help="override experiment.run_variants")
-    ap.add_argument("--retrain", action="store_true", help="train even if an exported model exists")
-    ap.add_argument("--overwrite-predictions", action="store_true", help="decode even if predictions exist")
+    ap.add_argument("--retrain", action="store_true",
+                    help="train even if an exported model exists (then re-decode and rescore that variant)")
+    ap.add_argument("--overwrite-predictions", action="store_true",
+                    help="decode even if up-to-date predictions exist (then rescore)")
     ap.add_argument("--smoke", action="store_true",
                     help="tiny end-to-end check: name <name>_smoke, 1 epoch, few trials (not a result)")
     args = ap.parse_args(argv)
@@ -890,7 +1375,7 @@ def main(argv=None) -> int:
     configure_device(cfg["runtime"]["device"])
     set_seed(int(cfg["seed"]), deterministic_ops=bool(cfg["runtime"]["deterministic_ops"]))
     ctx = {
-        "git": _git_commit(),
+        "code_version": _code_version(),
         "runtime": {
             "device": cfg["runtime"]["device"], "threads": cfg["runtime"].get("threads"), "env": env_set,
             **tf_threads, "CUDA_VISIBLE_DEVICES": os.environ.get("CUDA_VISIBLE_DEVICES"),
@@ -901,7 +1386,7 @@ def main(argv=None) -> int:
     }
     log(f"config {args.config} (experiment {cfg['experiment']['name']}), stage {args.stage}, "
         f"folds {cfg['experiment']['folds']}, variants {cfg['experiment']['run_variants']}, "
-        f"epochs {cfg['training']['epochs']}; runtime {ctx['runtime']}")
+        f"epochs {cfg['training']['epochs']}; code {version_label(ctx['code_version'])}; runtime {ctx['runtime']}")
     t0 = time.time()
     data = load_data(cfg)
     for block in cfg["experiment"]["folds"]:
