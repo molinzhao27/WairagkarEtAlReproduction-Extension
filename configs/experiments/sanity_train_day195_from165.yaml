@@ -1,0 +1,19 @@
+# Sanity check v2 (user-approved 2026-10-21): the same recipe as sanity_train_day195.yaml (D-034), but starting
+# from an OLD decoder, the day-165 model (30 days before day195). That matches the Kunz situation (23-47 days
+# from the nearest decoder). Question: does adapting a new input layer with real targets recover quality that
+# the 30-day gap lost? Zero-shot baseline = the day-165 model as is; training starts from its input layer.
+#
+#   host: CUDA_VISIBLE_DEVICES= .venv/bin/python -I scripts/sanity_train_day195.py \
+#       --config configs/experiments/sanity_train_day195_from165.yaml [--smoke]
+
+base_experiment: configs/experiments/sanity_train_day195.yaml
+
+run_name: sanity_train_day195_from165
+
+training:
+  init:
+    path: data/raw/wairagkar/t15_neural_data/t15_day172/brain2voice_t15_day165.h5   # day-165 model (D-024: reorder ON)
+
+sanity:
+  name: sanity_train_day195_from165
+  zero_shot_model: data/raw/wairagkar/t15_neural_data/t15_day172/brain2voice_t15_day165.h5
