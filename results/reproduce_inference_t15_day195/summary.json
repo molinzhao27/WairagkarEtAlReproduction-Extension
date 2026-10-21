@@ -12,75 +12,75 @@
   "reorder_channels": true,
   "target_audio_source": "raw",
   "n_trials_in_session": 305,
-  "n_trials_run": 5,
+  "n_trials_run": 305,
   "metrics_available": true,
   "n_metrics_errors": 0,
   "aggregate": {
     "n_bins": {
-      "mean": 959.6,
-      "sd": 230.1804509509876,
-      "median": 999.0,
-      "n": 5
+      "mean": 1335.9540983606557,
+      "sd": 455.58293177982983,
+      "median": 1268.0,
+      "n": 305
     },
     "n_frames": {
-      "mean": 900.6,
-      "sd": 230.1804509509876,
-      "median": 940.0,
-      "n": 5
+      "mean": 1276.9540983606557,
+      "sd": 455.58293177982983,
+      "median": 1209.0,
+      "n": 305
     },
     "t_predict_s": {
-      "mean": 0.6645008087158203,
-      "sd": 0.2200707336522004,
-      "median": 0.629561185836792,
-      "n": 5
+      "mean": 1.2534247773592588,
+      "sd": 0.6231043002068156,
+      "median": 1.1186559200286865,
+      "n": 305
     },
     "feat_mse": {
-      "mean": 0.021680570393800735,
-      "sd": 0.004393631725761952,
-      "median": 0.019304804503917694,
-      "n": 5
+      "mean": 0.02292694608818312,
+      "sd": 0.006162643504755432,
+      "median": 0.02219250239431858,
+      "n": 305
     },
     "feat_corr_mean": {
-      "mean": 0.6431722222807753,
-      "sd": 0.0890870983648339,
-      "median": 0.6369210735941939,
-      "n": 5
+      "mean": 0.6074437963105113,
+      "sd": 0.07781932674571579,
+      "median": 0.6163751403027538,
+      "n": 305
     },
     "t_synth_s": {
-      "mean": 1.2858745098114013,
-      "sd": 0.3249582305218313,
-      "median": 1.3194074630737305,
-      "n": 5
+      "mean": 2.3396153621986264,
+      "sd": 1.140479013956546,
+      "median": 2.07883882522583,
+      "n": 305
     },
     "mel_corr": {
-      "mean": 0.7967189714786717,
-      "sd": 0.05905379387623496,
-      "median": 0.7542581555015639,
-      "n": 5
+      "mean": 0.7835588221980405,
+      "sd": 0.056813498127718166,
+      "median": 0.7983313579831364,
+      "n": 305
     },
     "mcd": {
-      "mean": 5.093337153809458,
-      "sd": 0.6426948413137195,
-      "median": 5.404153965074518,
-      "n": 5
+      "mean": 5.419177082356221,
+      "sd": 0.6165025274414117,
+      "median": 5.3470845498369926,
+      "n": 305
     },
     "mel_corr_framewise": {
-      "mean": 0.8665480416917968,
-      "sd": 0.021295709194396332,
-      "median": 0.8683009470207651,
-      "n": 5
+      "mean": 0.8790697382368285,
+      "sd": 0.033016575890146276,
+      "median": 0.8835904338904893,
+      "n": 305
     },
     "ref_speech_fraction": {
-      "mean": 0.46358643419344475,
-      "sd": 0.052179914065985274,
-      "median": 0.445371142618849,
-      "n": 5
+      "mean": 0.41374638000914965,
+      "sd": 0.09116215880933456,
+      "median": 0.4276002719238613,
+      "n": 305
     },
     "est_speech_fraction": {
-      "mean": 0.44737276757805616,
-      "sd": 0.06624090674432816,
-      "median": 0.42720510095642933,
-      "n": 5
+      "mean": 0.3832341344774415,
+      "sd": 0.08445241840858125,
+      "median": 0.39552238805970147,
+      "n": 305
     }
   },
   "data_files": {
@@ -300,7 +300,7 @@
     "csv": "results/reproduce_inference_t15_day195/per_trial_metrics.csv",
     "audio_dir": "results/audio/reproduce_inference_t15_day195"
   },
-  "wall_time_s": 14.857884168624878,
+  "wall_time_s": 1149.8819859027863,
   "config": {
     "seed": 42,
     "paths": {
@@ -364,11 +364,16 @@
       "session": "t15_day195",
       "reorder_channels": true,
       "batch_size": 256,
-      "max_trials": 5,
+      "max_trials": null,
       "synthesize": true,
       "save_predictions": true,
       "target_audio_source": "raw",
       "audio_subdir": "audio"
+    },
+    "closed_loop": {
+      "audio_key": "brain2voice_pred_audio_16kHz",
+      "description_key": "trial_description",
+      "sample_rate": 16000
     },
     "synthesis": {
       "lpcnet_binary": "lpcnet_demo",

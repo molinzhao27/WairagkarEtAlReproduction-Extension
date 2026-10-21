@@ -62,6 +62,14 @@ inference:
   target_audio_source: raw
   audio_subdir: audio              # audio -> <paths.results>/<audio_subdir>/<run_name>/ (gitignored)
 
+# scripts/compare_closed_loop.py: our offline audio vs the audio their decoder synthesized live in the
+# session (same model for t15_day195: brain2voice_t15_day193.h5). Keys from t15_neural_data_readme.txt.
+closed_loop:
+  audio_key: brain2voice_pred_audio_16kHz
+  description_key: trial_description
+  sample_rate: 16000
+  bin_ms: 10                       # live audio is (window_len - 1) bins longer: it starts at trial onset
+
 synthesis:
   lpcnet_binary: lpcnet_demo       # relative to paths.lpcnet
   # Bare name: looked up next to the running Python (the env's bin/) first, then on PATH.

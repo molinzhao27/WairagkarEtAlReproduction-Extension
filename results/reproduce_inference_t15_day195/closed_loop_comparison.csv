@@ -1,0 +1,306 @@
+trial,type,text,ours_vs_target_mel_corr,ours_vs_live_mel_corr,ours_vs_live_mel_corr_framewise,live_vs_target_mel_corr,live_s,ours_s
+0,Training data (50-word vocab),I hope it is you.,0.8680128313497015,,,,,
+1,Training data (50-word vocab),You up?,0.869793408272928,,,,,
+2,Training data (50-word vocab),Is my nurse very hungry?,0.7488129256918604,,,,,
+3,Training data (50-word vocab),They need it coming.,0.7427175365773048,,,,,
+4,Training data (50-word vocab),I need good glasses.,0.7542581555015639,,,,,
+5,Training data (50-word vocab),"Bring my music here, please.",0.6804696012679938,,,,,
+6,Training data (50-word vocab),Am I right?,0.6225667432716991,,,,,
+7,Training data (50-word vocab),I do feel it.,0.7640275125315587,,,,,
+8,Training data (50-word vocab),I am coming right up.,0.835999875858022,,,,,
+9,Training data (50-word vocab),"Yes, it is good.",0.8404280959221413,,,,,
+10,Training data (50-word vocab),I need my music.,0.7327836335428234,,,,,
+11,Training data (50-word vocab),I do need you.,0.8595915257275977,,,,,
+12,Training data (50-word vocab),Do not clean it.,0.6649949558465698,,,,,
+13,Training data (50-word vocab),How is that going?,0.844392802003733,,,,,
+14,Training data (50-word vocab),I hope my family is closer.,0.7208984733746636,,,,,
+15,Training data (50-word vocab),What do you do here?,0.8549785154057524,,,,,
+16,Training data (50-word vocab),I do not have hope.,0.8475812388228894,,,,,
+17,Training data (50-word vocab),It is right.,0.8281300720449428,,,,,
+18,Training data (50-word vocab),Bring my nurse.,0.7418451303198659,,,,,
+19,Training data (50-word vocab),Are you coming up here.,0.8049398191957815,,,,,
+20,Training data (50-word vocab),I feel bad here.,0.7200736782210202,,,,,
+21,Training data (50-word vocab),You are not okay.,0.7245877768081102,,,,,
+22,Training data (50-word vocab),You have it like that.,0.7726551825308373,,,,,
+23,Training data (50-word vocab),I hope I have good family.,0.8097038546656684,,,,,
+24,Training data (50-word vocab),Not coming up.,0.7533747580773136,,,,,
+25,Training data (50-word vocab),You do not need glasses.,0.8332110150477654,,,,,
+26,Training data (50-word vocab),Is my nurse closer?,0.6806648577401371,,,,,
+27,Training data (50-word vocab),You are what?,0.7927813162447427,,,,,
+28,Training data (50-word vocab),They hope they have my faith.,0.8264910813579526,,,,,
+29,Training data (50-word vocab),You are no good.,0.7645159784532817,,,,,
+30,Training data (50-word vocab),What is it you need?,0.8263838384997324,,,,,
+31,Training data (50-word vocab),They are not thirsty.,0.6968656042228152,,,,,
+32,Training data (50-word vocab),I hope my nurse is here.,0.8521891973332305,,,,,
+33,Training data (50-word vocab),Is my music good?,0.6447251046988467,,,,,
+34,Training data (50-word vocab),Where are my glasses?,0.8577154623975638,,,,,
+35,Training data (50-word vocab),They are coming closer.,0.7716051475565541,,,,,
+36,Training data (50-word vocab),They do not have faith.,0.836107156348372,,,,,
+37,Training data (50-word vocab),"Bring my family here, please.",0.7188281684311078,,,,,
+38,Training data (50-word vocab),I am here.,0.8675211788058832,,,,,
+39,Training data (50-word vocab),My family is not very tired.,0.801992244815475,,,,,
+40,Training data (50-word vocab),How do you have it?,0.7424944723300346,,,,,
+41,Training data (50-word vocab),They do okay.,0.7489497031441278,,,,,
+42,Training data (50-word vocab),That is like success.,0.7007803892953148,,,,,
+43,Training data (50-word vocab),How am I going outside?,0.7023144273804134,,,,,
+44,Training data (50-word vocab),You need it right here.,0.8333948569628046,,,,,
+45,Training data (50-word vocab),You have no computer.,0.7116815019704161,,,,,
+46,Training data (50-word vocab),Do you have success?,0.7274373325389816,,,,,
+47,Training data (50-word vocab),I hope my nurse is comfortable.,0.8002386897727929,,,,,
+48,Training data (50-word vocab),Do it please.,0.7439574504412083,,,,,
+49,Training data (50-word vocab),They hope I am closer.,0.7602762586041802,,,,,
+50,Training data (50-word vocab),Where is my hope?,0.8101140910033484,,,,,
+51,Training data (50-word vocab),I like that here.,0.801433796058804,,,,,
+52,Training data (50-word vocab),They hope it is okay.,0.8224237935234449,,,,,
+53,Training data (50-word vocab),Please tell my nurse I am good.,0.7371436944927672,,,,,
+54,Training data (50-word vocab),Tell my family they feel hungry.,0.7321117862355397,,,,,
+55,Training data (50-word vocab),"No, you are not going.",0.8286679354853946,,,,,
+56,Training data (50-word vocab),You have music.,0.7123124656919133,,,,,
+57,Training data (50-word vocab),You clean it up.,0.8655563618843424,,,,,
+58,Training data (50-word vocab),Do you like music?,0.8122852874611063,,,,,
+59,Training data (50-word vocab),Do you need help here?,0.8045967716164274,,,,,
+60,Training data (50-word vocab),I feel very tired.,0.7737894222357766,,,,,
+61,Training data (50-word vocab),What do they have?,0.8386076417654958,,,,,
+62,Training data (50-word vocab),That is it.,0.7983313579831364,,,,,
+63,Training data (50-word vocab),What do you have?,0.8251145930460508,,,,,
+64,Training data (50-word vocab),That is yes.,0.8521410255536068,,,,,
+65,Training data (50-word vocab),My family is good.,0.8282781049242288,,,,,
+66,Training data (50-word vocab),Are you right here?,0.84121867105879,,,,,
+67,Training data (50-word vocab),You feel very bad.,0.8360501623846283,,,,,
+68,Training data (50-word vocab),I need that.,0.7660040606678898,,,,,
+69,Training data (50-word vocab),I hope they are closer.,0.76222056277509,,,,,
+70,Training data (50-word vocab),I am clean.,0.71094872593006,,,,,
+71,Training data (50-word vocab),"No, I am not hungry.",0.7441170930126221,,,,,
+72,Training data (50-word vocab),Are they very thirsty?,0.713585887984445,,,,,
+73,Training data (50-word vocab),You hope they are not here.,0.8157702637877151,,,,,
+74,Training data (50-word vocab),How is my nurse?,0.830089369374192,,,,,
+75,Training data (50-word vocab),I hope that you are.,0.8034241841562386,,,,,
+76,Training data (50-word vocab),You do not like my nurse.,0.8535575195191576,,,,,
+77,Training data (50-word vocab),They need it right here.,0.8179434902729964,,,,,
+78,Training data (50-word vocab),Do they have family?,0.8304702041036036,,,,,
+79,Training data (50-word vocab),Are you coming up?,0.8466577462755746,,,,,
+80,Training data (50-word vocab),Not here please.,0.8627334272344601,,,,,
+81,Training data (50-word vocab),Are you very hungry?,0.7270021785781579,,,,,
+82,Training data (50-word vocab),I feel you.,0.8319251949161479,,,,,
+83,Training data (50-word vocab),Tell my nurse you are not hungry.,0.7505848569556557,,,,,
+84,Training data (50-word vocab),"Not bad, right?",0.8043551009595704,,,,,
+85,Training data (50-word vocab),They are not tired.,0.7169683698032473,,,,,
+86,Training data (50-word vocab),It is what they have.,0.8321683931842397,,,,,
+87,Training data (50-word vocab),My nurse is not going.,0.785601432204278,,,,,
+88,Training data (50-word vocab),"Yes, I am very good.",0.8398536725870211,,,,,
+89,Training data (50-word vocab),How do they do it right?,0.8313231307205953,,,,,
+90,Training data (50-word vocab),They like my glasses like that.,0.7805142915898777,,,,,
+91,Training data (50-word vocab),They feel comfortable.,0.7655741591851732,,,,,
+92,Training data (50-word vocab),My computer is not good.,0.7284348241211926,,,,,
+93,Training data (50-word vocab),They are right outside.,0.6776676298438813,,,,,
+94,Training data (50-word vocab),Tell my nurse you are not comfortable.,0.7738124449059562,,,,,
+95,Training data (50-word vocab),They are coming right up.,0.8344721477144257,,,,,
+96,Training data (50-word vocab),Do I have success?,0.7889753910842837,,,,,
+97,Training data (50-word vocab),You hope you have my faith.,0.899817309360041,,,,,
+98,Training data (50-word vocab),You hope my nurse is good.,0.800011934708919,,,,,
+99,Training data (50-word vocab),My family is okay.,0.8039544023083669,,,,,
+100,Training data (50-word vocab),What do you need?,0.8249540307194856,,,,,
+101,Training data (50-word vocab),Please bring my family here.,0.8023793083588273,,,,,
+102,Training data (50-word vocab),They are not coming.,0.8555094559058434,,,,,
+103,Training data (50-word vocab),I do not like music.,0.701871377228228,,,,,
+104,Training data (50-word vocab),You need glasses.,0.8125083215092765,,,,,
+105,Training data (50-word vocab),I do have hope.,0.8070370065816472,,,,,
+106,Training data (50-word vocab),They have no faith.,0.7747880111279862,,,,,
+107,Training data (50-word vocab),Hope you do good.,0.8588779053921141,,,,,
+108,Training data (50-word vocab),What do I tell my family?,0.8073742617078704,,,,,
+109,Training data (50-word vocab),It is not bad.,0.8178197802885055,,,,,
+110,Training data (50-word vocab),Please tell my nurse I am hungry.,0.7917370483038837,,,,,
+111,Training data (50-word vocab),I hope my family is good.,0.7966119976624789,,,,,
+112,Training data (50-word vocab),What do you have here?,0.8741962951344615,,,,,
+113,Training data (50-word vocab),How do you like that?,0.8460241532367039,,,,,
+114,Training data (50-word vocab),I tell you I am thirsty.,0.786132646919462,,,,,
+115,Training data (50-word vocab),Are they very hungry?,0.6364380509835855,,,,,
+116,Training data (50-word vocab),Is my family coming?,0.6635153070561389,,,,,
+117,Training data (50-word vocab),I hope you have good glasses.,0.845620466864682,,,,,
+118,Training data (50-word vocab),Clean up it.,0.803622584671607,,,,,
+119,Training data (50-word vocab),Hope you have it.,0.826271248030135,,,,,
+120,Training data (50-word vocab),I hope my nurse is closer.,0.8583784742836162,,,,,
+121,Training data (50-word vocab),What music is it?,0.6243132440497879,,,,,
+122,Training data (50-word vocab),I do not like that.,0.8049612233634938,,,,,
+123,Training data (50-word vocab),"Yes, my family is going here.",0.839015567171432,,,,,
+124,Training data (50-word vocab),Where they are going.,0.8200953415051137,,,,,
+125,Training data (50-word vocab),I hope you are here.,0.8861465029294073,,,,,
+126,Training data (50-word vocab),Please bring it.,0.623570199310923,,,,,
+127,Training data (50-word vocab),Where it is?,0.8403710452007147,,,,,
+128,Training data (50-word vocab),I hope you like my family.,0.8390624373922378,,,,,
+129,Training data (50-word vocab),Where you going?,0.8215357568780342,,,,,
+130,Training data (50-word vocab),"Bring my glasses here, please.",0.8383898446181298,,,,,
+131,Training data (50-word vocab),I hope that you like it.,0.8135551720363872,,,,,
+132,Training data (50-word vocab),I hope they are coming.,0.8504398851443747,,,,,
+133,Training data (50-word vocab),You do not need that.,0.8372198793859505,,,,,
+134,Training data (50-word vocab),Tell my nurse you do not feel thirsty.,0.8207017134454219,,,,,
+135,Training data (50-word vocab),They do not have my faith.,0.8453668839953702,,,,,
+136,Training data (50-word vocab),I do not need it.,0.6740747465452502,,,,,
+137,Training data (50-word vocab),My hope is my success.,0.743206618317012,,,,,
+138,Training data (50-word vocab),They hope my family is okay.,0.8474310720259929,,,,,
+139,Training data (50-word vocab),You are not very hungry.,0.7652433873370736,,,,,
+140,Training data (50-word vocab),"No, I do not feel very tired.",0.7947647166645387,,,,,
+141,Training data (50-word vocab),I like how comfortable you are.,0.8120588604516431,,,,,
+142,Training data (50-word vocab),Please tell my family I am coming.,0.8121113162368422,,,,,
+143,Training data (50-word vocab),I like my success.,0.6855097135502295,,,,,
+144,Training data (50-word vocab),Please tell my nurse I am comfortable.,0.8109714541845987,,,,,
+145,Training data (50-word vocab),"Goodbye, I am going.",0.7249599668314255,,,,,
+146,Evaluation trial,I am where I need to be right now.,0.7653582000177346,0.9564691317502667,0.9600686806861958,0.7768753901411581,11.39,11.39
+147,Evaluation trial,The child tried to play with me today.,0.8103980681532352,0.9639237368118689,0.9822745952540206,0.81333769677634,19.67,19.67
+148,Evaluation trial,Have you seen any such thing?,0.7436829868362033,0.9631595022249548,0.9787532606576871,0.7479742213503322,13.91,13.91
+149,Evaluation trial,People will be here on time.,0.7927792265467692,0.9632562331170327,0.9758052395632439,0.8012021582016248,13.22,13.22
+150,Evaluation trial,"Having been through it, I am sure.",0.674751671012212,0.944986594907325,0.9783654799547883,0.668297391414078,17.21,17.21
+151,Evaluation trial,Every house I have seen is big.,0.8300572754754316,0.9590212265747562,0.9829487784482183,0.831121553226384,16.47,16.47
+152,Evaluation trial,Do you like my new voice?,0.7819622770654198,0.9676310765857806,0.970918740646886,0.797204214202139,11.01,11.01
+153,Evaluation trial,What choice does she have?,0.851337779473139,0.9588793105718303,0.9770622745125589,0.8522504971228155,9.21,9.21
+154,Evaluation trial,My car is getting quite old.,0.8010473741614618,0.955999604602841,0.9741842250990853,0.8134272855263645,12.48,12.48
+155,Evaluation trial,Our group plans to go there next week.,0.8015389232348952,0.9630794923921607,0.970911779081943,0.8005747048426105,15.29,15.29
+156,Evaluation trial,I could come back later.,0.7229112705843785,0.9449695509123792,0.9721023223923726,0.6961259474901654,9.31,9.31
+157,Evaluation trial,I have never heard of it really.,0.7219466584111408,0.9597581255896479,0.9778223013893032,0.7281722638162825,13.75,13.75
+158,Evaluation trial,It was a great year for them.,0.763435613974153,0.9561607220311231,0.9736307987777904,0.763805355767306,11.44,11.44
+159,Evaluation trial,I will keep this with me for now.,0.7701174634261406,0.9637373238850803,0.9766464142959121,0.7701069260373001,15.06,15.06
+160,Evaluation trial,She said she will need more time.,0.7945380619913325,0.9704871367094124,0.9754148197765637,0.8035602427756618,11.39,11.39
+161,Evaluation trial,I know it is hard to come by.,0.8309366596374479,0.9626068786539541,0.9735559812075382,0.8401147828123147,12.6,12.6
+162,Evaluation trial,It would take us years.,0.71955728665442,0.9503717265222409,0.965650317282806,0.7308678571042032,8.59,8.59
+163,Evaluation trial,"This is my voice, how do I sound?",0.8186473174626216,0.9599347922148121,0.976353253104965,0.812062143107999,13.52,13.52
+164,Evaluation trial,I didn't know this was true.,0.7408193718927638,0.947479972331043,0.970423138798032,0.7392830846600503,9.97,9.97
+165,Evaluation trial,It will be more trouble for us.,0.8038827067831953,0.9592752240941828,0.9734718716044031,0.8003010117936842,12.89,12.89
+166,Evaluation trial,I don't think it is any less time.,0.8236045842970408,0.9507429873847013,0.9703969914259464,0.8224636773057803,14.47,14.47
+167,Evaluation trial,The whole house will change.,0.7709566780932735,0.9436822724580007,0.9722018832106378,0.7796822984642502,12.6,12.6
+168,Evaluation trial,I know everything you told them.,0.7941118654298321,0.9485558430947274,0.9727997178555594,0.7954584054924887,12.25,12.25
+169,Evaluation trial,You have a great job.,0.7731048924917092,0.9589618656190801,0.9795183315088544,0.7711936838918223,9.29,9.29
+170,Evaluation trial,Have they seen the paper?,0.6357220134804488,0.935711679609119,0.9668367430876927,0.6403237378120645,10.54,10.54
+171,Evaluation trial,"Give me some more time, please.",0.819502206889716,0.9649431177380701,0.9745307486485688,0.8170997943222431,10.62,10.62
+172,Evaluation trial,I like this kind of food very much.,0.7468360795667139,0.95974104761588,0.979266763529945,0.7498866331408518,16.19,16.19
+173,Evaluation trial,Everything is not about money.,0.7293890744536367,0.9525062956681938,0.9563006236546666,0.7316188636699195,11.4,11.4
+174,Evaluation trial,You must believe me about this.,0.8365696760476089,0.9645647623314039,0.9803057406787576,0.8468624539998707,13.98,13.98
+175,Evaluation trial,I did that a lot when we were young.,0.7574337337199252,0.9419620006211078,0.9717632769424416,0.762963949553365,16.87,16.87
+176,Evaluation trial,My friend told me not to go.,0.8230732118223976,0.955797501022321,0.9732975423022564,0.820644163366771,14.17,14.17
+177,Evaluation trial,When is your family coming?,0.719638635392327,0.9663633295228451,0.9749521982230807,0.7081100915800695,10.63,10.63
+178,Evaluation trial,It grew a lot over the last year.,0.7297150118484617,0.9632324997782291,0.9739729756639971,0.7426466415364048,14.05,14.05
+179,Evaluation trial,How many teams do you have?,0.8085224880497371,0.9598813278152385,0.9760000214541453,0.8143261717106679,11.42,11.42
+180,Evaluation trial,"Yes, I felt the same way.",0.8397888113604239,0.9604534481383509,0.9748413898997302,0.8431513787892804,10.56,10.56
+181,Evaluation trial,Do you know how much would it cost?,0.8168797218043846,0.9652388979881923,0.9732848615724784,0.8196583579519787,12.94,12.94
+182,Evaluation trial,This is our family home.,0.7982000639863751,0.9551919813965333,0.9743613399167448,0.8069000062349634,9.54,9.54
+183,Evaluation trial,Do you need anything else?,0.821790204545511,0.9572381735055371,0.9738574749139672,0.8314080629018964,11.37,11.37
+184,Evaluation trial,I wanted to get more work done.,0.8188627421644739,0.955690768786015,0.9724958373922054,0.8212424690238705,13.25,13.25
+185,Evaluation trial,I might leave early.,0.6611385944710924,0.9391429107036158,0.9754945429328743,0.6524219370225675,8.95,8.95
+186,Evaluation trial,There is a bug in my code.,0.8135088689873008,0.9545621553079744,0.9734702679641736,0.8206420959185176,12.97,12.97
+187,Evaluation trial,Enjoy your day at the beach.,0.7422163694899624,0.951194608159405,0.9655244998699425,0.7367386398077256,10.71,10.71
+188,Evaluation trial,She walks with a cane.,0.7806690836722143,0.9606362508688026,0.9822933003042584,0.7796971111273296,10.45,10.45
+189,Evaluation trial,Have you seen the broom?,0.8294966659569525,0.9480221458392013,0.9682032453256231,0.8377536861140736,9.53,9.53
+190,Evaluation trial,The dog would lick the bone.,0.7464767043807103,0.9586724557290551,0.9780156011285159,0.7586622786051768,15.7,15.7
+191,Evaluation trial (free response),It made me feel happy and it felt like my real voice.,0.7161181990742811,0.9610863220886842,0.9773684436357992,0.7208323439008393,27.46,27.46
+192,Evaluation trial (free response),"Yes, it did as much as it could at this point.",0.7403820580229908,0.9595951921455439,0.9798930300580315,0.7445393029889876,23.63,23.63
+193,Evaluation trial (free response),The first two are right.,0.7006199751262375,0.9573065705708357,0.9755028579191662,0.6974651057243557,12.43,12.43
+194,Evaluation trial (free response),I want to thank you for all your hard work this month to make this happen.,0.7734616768393849,0.9552528158994237,0.9680614373239551,0.7735558502308488,31.15,31.15
+195,Evaluation trial,Cooking is a good life skill.,0.7246738058098549,0.9569459901375652,0.9769682287478763,0.7331551784751066,11.55,11.55
+196,Evaluation trial,Since when do you play this game?,0.8090344444002966,0.9672170785220136,0.9745437788171347,0.8152614009150174,15.47,15.47
+197,Evaluation trial,I used to enjoy my walks.,0.8280787873080161,0.9633795822335515,0.9762982887773027,0.8401316094646601,13.89,13.89
+198,Evaluation trial,I will write the paper now.,0.8163306864413575,0.9540253810365563,0.9731148788959862,0.8296947749930107,11.52,11.52
+199,Evaluation trial,It will not happen for a few hours.,0.7493204621566216,0.955436374515496,0.9730091195857054,0.7434161295418578,14.14,14.14
+200,Evaluation trial,I love my house very much.,0.8228910831529133,0.9613543686093535,0.9792086087864446,0.825206464198072,11.25,11.25
+201,Evaluation trial,I can't help you with your work.,0.8192642278812385,0.9626879195559498,0.9710271485670251,0.8218480665528876,11.81,11.81
+202,Evaluation trial,That is a great name for a baby.,0.8132924898479654,0.9489513939046077,0.9769088306984631,0.8170152704713687,15.37,15.37
+203,Evaluation trial,It is not the same.,0.875742429538905,0.9626923988831857,0.9701035861705716,0.8813295457942175,8.91,8.91
+204,Evaluation trial,I don't know what to say.,0.8532070124168006,0.9646604868689928,0.9744747813654125,0.8491301627698453,10.15,10.15
+205,Evaluation trial,Let's go home now.,0.8025270429444135,0.9642296913090579,0.9770112912486084,0.807923277658342,8.15,8.15
+206,Evaluation trial,Long time no see.,0.8381847321624548,0.967387201586409,0.9758002386780685,0.8478485047001648,7.83,7.83
+207,Evaluation trial,We tried to move it a little.,0.7458060055080424,0.9489768856556733,0.9721442195424543,0.7483579719043453,12.93,12.93
+208,Evaluation trial,I am taking half a day off.,0.7224793841787036,0.9399577660494961,0.9737145784832052,0.7351189183508471,13.21,13.21
+209,Evaluation trial,"Believe me, it will cost you more.",0.7693371351870912,0.9564905874991702,0.9732622133540924,0.7757157092473497,11.46,11.46
+210,Evaluation trial,The jury went in early.,0.6954176668297365,0.9594416472912102,0.9743364588066541,0.7000182266585103,9.36,9.36
+211,Evaluation trial,You must be paid for the job.,0.8384783743020678,0.9625173032104251,0.974420975271989,0.8410524554328058,10.43,10.43
+212,Evaluation trial,I have read this book a while ago.,0.7085872700094489,0.9609996908224415,0.9746022364110555,0.7199987452052311,14.54,14.54
+213,Evaluation trial,This name means a lot.,0.7772398092571742,0.9587134957856398,0.9766896040830593,0.7906892525323853,8.46,8.46
+214,Evaluation trial,Keep trying hard till you get it.,0.7377351059205706,0.9552649422828903,0.9786291601454422,0.7350063735971769,15.04,15.04
+215,Evaluation trial,Gone are the days of phone calls.,0.789056137029584,0.9603003360683772,0.9765782892777188,0.8014838876782282,12.75,12.75
+216,Evaluation trial,Do you own a house and a car?,0.7851149177144946,0.9570704323053629,0.9725175036162662,0.7897781146202554,13.66,13.66
+217,Evaluation trial,Everything got very quiet.,0.7247275231067067,0.9393532815259658,0.9650022816850221,0.7194989517033037,9.89,9.89
+218,Evaluation trial,I enjoyed working on this case.,0.7637439829860024,0.9629253405536783,0.9742270630810349,0.7635403096550796,14.7,14.7
+219,Evaluation trial,Can you point me to the drug store?,0.8281363540738269,0.9651988923180415,0.9772178671422683,0.8388977609892653,13.76,13.76
+220,Evaluation trial,Read everything you can.,0.8028119406375165,0.9572697814175148,0.9797858419239553,0.8075703955841448,8.98,8.98
+221,Evaluation trial,They wanted to change the name.,0.8356494539031578,0.9638186691732479,0.975712133734304,0.8524453048707421,10.78,10.78
+222,Evaluation trial,Would you like to watch an old movie?,0.806270400503934,0.9527125590865113,0.9648364250884818,0.8059390285306808,12.24,12.24
+223,Evaluation trial,She was very kind to me.,0.7724384198775252,0.9551830045629739,0.9718921830666535,0.7744036574248726,10.71,10.71
+224,Evaluation trial,"Can you come to get me, please?",0.8330716998686428,0.9663931277181106,0.9745191058145639,0.8370371871111922,12.26,12.26
+225,Evaluation trial,My family will be here soon.,0.840385676785045,0.9603142967583889,0.9763871353934958,0.8569958496116182,12.03,12.03
+226,Evaluation trial,My friend will help me make the choice.,0.8270237030891806,0.9510750777345705,0.9688503751170596,0.8290238985345507,12.91,12.91
+227,Evaluation trial,I saw two people in the room.,0.8043137260809157,0.9629100189489439,0.9731882932479964,0.8154179483392661,12.53,12.53
+228,Evaluation trial,Anything can be used in this case.,0.7393004185302511,0.9529232639724619,0.9717800158213947,0.758387699095185,12.17,12.17
+229,Evaluation trial,We have found it.,0.7423401143479674,0.954742833189955,0.9683999669671041,0.7450362722395264,6.76,6.76
+230,Evaluation trial,I hope everything is as it should be.,0.7152811050695163,0.9538563947041201,0.9608526086748623,0.7190266933423292,15.42,15.42
+231,Evaluation trial,Give me a call should you need anything.,0.8040511661107969,0.9544714523397143,0.9663819478693434,0.811483459381966,15.49,15.49
+232,Evaluation trial,I will live at my best friend's house.,0.7418976782813902,0.9602812295400733,0.9750093273177495,0.7632605349673758,14.6,14.6
+233,Evaluation trial,I will try to make it look nice.,0.813342242522171,0.9629458441576823,0.9733175802788576,0.8297452694838123,13.48,13.48
+234,Evaluation trial (mimed speech),"Please, let's go.",0.7749364871439439,0.9559012735932374,0.9807741006573705,0.7721919801477062,6.32,6.32
+235,Evaluation trial (mimed speech),You have changed.,0.8444076285231794,0.974299900163752,0.9816668873752686,0.8550854258710714,5.93,5.93
+236,Evaluation trial (mimed speech),Why do you think this is right?,0.7945822172897578,0.9667787624757178,0.9764379971413332,0.7926116354889604,12.43,12.43
+237,Evaluation trial (mimed speech),Nothing is wrong so far.,0.8492986582250472,0.9722026825081092,0.9755734044773241,0.852187741910847,9.66,9.66
+238,Evaluation trial (mimed speech),Let's keep going.,0.7725850853241091,0.9570194103075981,0.973688448420825,0.7710913032233245,7.19,7.19
+239,Evaluation trial (mimed speech),I would like to go home now.,0.8047672348868247,0.9688894768934935,0.9782285188459792,0.8087656625230533,12.09,12.09
+240,Evaluation trial (mimed speech),It is very clear to me.,0.8324387622365801,0.9626629277002031,0.9717811347546746,0.8368903373679061,9.98,9.98
+241,Evaluation trial (mimed speech),I had many days off.,0.6673494754661066,0.9488898842798914,0.9754065094497975,0.6989726426444604,10.26,10.26
+242,Evaluation trial (mimed speech),I was looking at it.,0.6435866977062795,0.9599503203437948,0.9762195184801528,0.6375564967319514,10.28,10.28
+243,Evaluation trial (mimed speech),Can you give me a call?,0.753820390051976,0.9563221281386365,0.9748433082806838,0.7816083896068273,12.32,12.32
+244,Training data,I am talking to you right now.,0.8245184253268374,,,,,
+245,Training data,I am talking to you right now.,0.8334094816035253,,,,,
+246,Training data,I am talking to you right now.,0.7996042348545267,,,,,
+247,Training data,I am talking to you right now.,0.848547487628618,,,,,
+248,Training data,I am talking to you right now.,0.7766732606493354,,,,,
+249,Training data,I am talking to you right now.,0.8467561439948834,,,,,
+250,Training data,I am talking to you right now.,0.841173786546775,,,,,
+251,Training data,I am talking to you right now.,0.8280866119999551,,,,,
+252,Training data,I am talking to you right now.,0.8704057010157464,,,,,
+253,Training data,I am talking to you right now.,0.848585037849305,,,,,
+254,Training data,I am talking to you right now.,0.7981496012044533,,,,,
+255,Training data,I am talking to you right now.,0.799650246775674,,,,,
+256,Evaluation trial,I am sure people will like your book.,0.8019715459952692,0.9604227253985705,0.9749730380372263,0.8023237805858152,14.83,14.83
+257,Evaluation trial,This is more than what we wanted.,0.8303913141450519,0.9605147164005838,0.9788124550953812,0.8330699416401179,15.89,15.89
+258,Evaluation trial,Tell kids to stay at home.,0.7782672562044797,0.9733558052689115,0.9831264711902996,0.7861280262351599,14.65,14.65
+259,Evaluation trial,How many times did you go there?,0.7968067669318348,0.9569111031521645,0.9789521363623231,0.8015984853760305,17.94,17.94
+260,Evaluation trial,Try looking past it.,0.6970990651546503,0.9561831713793774,0.9838301698404083,0.6909319321925007,12.84,12.84
+261,Evaluation trial,She didn't mean anything by it.,0.5380476717539462,0.9360270818958625,0.9650667245930358,0.5496385690859421,14.0,14.0
+262,Evaluation trial,Pick your favorite game to play.,0.716121091963648,0.9660399301517482,0.983140708792353,0.7210221907528143,15.65,15.65
+263,Evaluation trial,I walk for two miles every day.,0.7368272743665649,0.9519623485963777,0.976409718647154,0.7412021509578882,18.39,18.39
+264,Evaluation trial,You should make up your mind.,0.8250333195797193,0.9683883236842918,0.9816463011686318,0.8209462185026727,13.33,13.33
+265,Evaluation trial,Since when do you write on paper?,0.7613401010205815,0.9664636024777755,0.9774853845041497,0.7580167788506244,14.97,14.97
+266,Evaluation trial,I don't want any part of this.,0.7382522034010445,0.9467674384124825,0.9695335080308964,0.7411757104296284,13.25,13.25
+267,Evaluation trial,"Thank you, that would be great.",0.7828613684275219,0.9553130627873546,0.9782815831180777,0.7839133990865378,12.9,12.9
+268,Evaluation trial,They changed their mind.,0.7499765074129577,0.955907743953252,0.9773215673120822,0.7774254216923917,10.62,10.62
+269,Evaluation trial,Join me for a walk.,0.7990632842632649,0.9585120615864178,0.9759099507894436,0.8137633437011751,10.94,10.94
+270,Evaluation trial,We are doing everything we can.,0.7162103354721667,0.9333042177314086,0.9516763894841265,0.758938188972613,14.06,14.06
+271,Evaluation trial,Nice to see you again.,0.7990669786169168,0.963407122756714,0.9744778182748174,0.8088579036962216,10.04,10.04
+272,Evaluation trial,This is called life.,0.8094112049033141,0.9527513598060299,0.9804364208622467,0.7919171035584742,8.16,8.16
+273,Evaluation trial,There is no space for me to do work.,0.8392400895393177,0.9671711166554793,0.9731991863655075,0.8290617666001172,14.81,14.81
+274,Evaluation trial,You should make a move now.,0.7938557720411412,0.9487898777415206,0.9698657400202693,0.7951435794469891,10.85,10.85
+275,Evaluation trial,It was a bad choice.,0.8063494400064574,0.9632107652975861,0.9776076933536038,0.8029680652451237,8.57,8.57
+276,Evaluation trial,I am not so sure right now.,0.8353709187707274,0.9631993240363854,0.9762840344555709,0.8336704153275859,12.49,12.49
+277,Evaluation trial,The trouble with this plan.,0.763482744633281,0.9477509684611747,0.972794074664208,0.7832362816359806,11.26,11.26
+278,Evaluation trial,We love your new house.,0.8264183690320472,0.9704398989400765,0.9785983355164165,0.8326717428911803,10.84,10.84
+279,Evaluation trial,I think about that quite often.,0.7878318973347221,0.9542936212424745,0.9722570459836095,0.7842819715786774,12.37,12.37
+280,Evaluation trial,I wish she could hear you now.,0.8226463907720944,0.9684647139492931,0.9769792839812498,0.8194303278012915,14.74,14.74
+281,Evaluation trial,I believe in people.,0.6712135172597122,0.9441064259084424,0.9704893745977019,0.6595117710454256,8.24,8.24
+282,Evaluation trial,I know my friends are there for me.,0.7952918283250126,0.964210574593694,0.9674005068626943,0.793175833512468,14.78,14.78
+283,Evaluation trial,You were the first to help me.,0.7801982288717653,0.9660090876626326,0.9712954418572064,0.7996031514618718,12.45,12.45
+284,Evaluation trial,"Good job, well done.",0.786410271887046,0.9624453845598039,0.9814871755555089,0.788238102921464,7.95,7.95
+285,Evaluation trial,I could say the same for you.,0.8344364034318399,0.9580260730031156,0.9699962444132784,0.8359368388828349,11.39,11.39
+286,Evaluation trial,Watch out for the cars.,0.7732669104188314,0.9568332276475953,0.9731388524623391,0.7825986701828259,10.08,10.08
+287,Evaluation trial,Your hard work will pay off.,0.6545178618125691,0.9553575428459435,0.9710002987029437,0.6496892812627569,10.11,10.11
+288,Evaluation trial,I love that little baby.,0.719299226702925,0.9528450599340379,0.9809488705353088,0.7388051700783489,9.77,9.77
+289,Evaluation trial,People should learn to enjoy life.,0.7271015559744155,0.959736387319335,0.9774981395847384,0.7285417601169603,15.13,15.13
+290,Evaluation trial,Take care of our kids.,0.7297489157445627,0.9610515839269116,0.9752497641801252,0.7304500156358014,14.24,14.24
+291,Evaluation trial,I was walking down the street.,0.7711008447420353,0.963276286684857,0.9849730644828159,0.765014208299186,41.75,41.75
+292,Evaluation trial,I had some time to think some more.,0.8381775758877505,0.965679980110002,0.9805151810632878,0.8408640275824105,20.18,20.18
+293,Evaluation trial,They won't care what we think.,0.7723430295624896,0.9605340984320364,0.9746917335212826,0.779848469576123,12.66,12.66
+294,Evaluation trial,Do you want to work on it now?,0.809352999878682,0.9657918373239838,0.9742851436764728,0.8187547990424029,14.91,14.91
+295,Evaluation trial,Make sure you save your work.,0.7675635014045016,0.9627886330666602,0.9752528900849754,0.76773244594237,11.45,11.45
+296,Evaluation trial,Get everyone in my office.,0.7248711387057061,0.9480242299150241,0.975506948170491,0.735870045636867,11.0,11.0
+297,Evaluation trial,Look what I found.,0.732156930181253,0.9606771293189403,0.9767800079246645,0.751328294772841,7.41,7.41
+298,Evaluation trial,I did not get the last part of the talk.,0.78651515718773,0.9499777691431692,0.9737724537983109,0.7877332603882461,16.8,16.8
+299,Evaluation trial,I will work on this piece first.,0.805223286372383,0.9618634279956609,0.9774566106923335,0.8182336234294894,12.35,12.35
+300,Evaluation trial,The line goes on for a mile.,0.7482208003836908,0.9586317598161742,0.9761450285986729,0.7771865749654998,12.22,12.22
+301,Evaluation trial,I could not see the light.,0.7848692070462745,0.9559001868897152,0.9769307598451,0.7989101630440973,11.32,11.32
+302,Evaluation trial (free response),I enjoy summer the most.,0.7590801859721016,0.9453094778635533,0.9695198924561232,0.7648070801171338,12.86,12.86
+303,Evaluation trial (free response),I like the color blue.,0.8047447588961034,0.952918727049396,0.9782856635647399,0.8210124994867087,12.72,12.72
+304,Evaluation trial (free response),I have not had a day off in more than three weeks.,0.7121791856814412,0.9556529354756833,0.9708418894834832,0.7159105490585661,25.14,25.14

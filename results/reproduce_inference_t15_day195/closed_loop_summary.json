@@ -1,0 +1,96 @@
+{
+  "Evaluation trial": {
+    "ours_vs_target_mel_corr": {
+      "n": 130,
+      "mean": 0.7774,
+      "median": 0.7865,
+      "sd": 0.0511
+    },
+    "ours_vs_live_mel_corr": {
+      "n": 130,
+      "mean": 0.9576,
+      "median": 0.959,
+      "sd": 0.0077
+    },
+    "ours_vs_live_mel_corr_framewise": {
+      "n": 130,
+      "mean": 0.9743,
+      "median": 0.9745,
+      "sd": 0.0051
+    },
+    "live_vs_target_mel_corr": {
+      "n": 130,
+      "mean": 0.7822,
+      "median": 0.7925,
+      "sd": 0.0518
+    }
+  },
+  "Evaluation trial (free response)": {
+    "ours_vs_target_mel_corr": {
+      "n": 7,
+      "mean": 0.7438,
+      "median": 0.7404,
+      "sd": 0.0348
+    },
+    "ours_vs_live_mel_corr": {
+      "n": 7,
+      "mean": 0.9553,
+      "median": 0.9557,
+      "sd": 0.0048
+    },
+    "ours_vs_live_mel_corr_framewise": {
+      "n": 7,
+      "mean": 0.9742,
+      "median": 0.9755,
+      "sd": 0.0043
+    },
+    "live_vs_target_mel_corr": {
+      "n": 7,
+      "mean": 0.7483,
+      "median": 0.7445,
+      "sd": 0.0389
+    }
+  },
+  "Evaluation trial (mimed speech)": {
+    "ours_vs_target_mel_corr": {
+      "n": 10,
+      "mean": 0.7738,
+      "median": 0.7848,
+      "sd": 0.0665
+    },
+    "ours_vs_live_mel_corr": {
+      "n": 10,
+      "mean": 0.9623,
+      "median": 0.9613,
+      "sd": 0.0077
+    },
+    "ours_vs_live_mel_corr_framewise": {
+      "n": 10,
+      "mean": 0.9765,
+      "median": 0.9759,
+      "sd": 0.0029
+    },
+    "live_vs_target_mel_corr": {
+      "n": 10,
+      "mean": 0.7807,
+      "median": 0.7871,
+      "sd": 0.0649
+    }
+  },
+  "Training data": {
+    "ours_vs_target_mel_corr": {
+      "n": 12,
+      "mean": 0.8263,
+      "median": 0.8307,
+      "sd": 0.0263
+    }
+  },
+  "Training data (50-word vocab)": {
+    "ours_vs_target_mel_corr": {
+      "n": 146,
+      "mean": 0.7881,
+      "median": 0.8045,
+      "sd": 0.0609
+    }
+  }
+}
