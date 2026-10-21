@@ -1,0 +1,16 @@
+# Recipe tuning, run B (D-038, user-approved 2026-10-21): as sanity_train_day195_from165.yaml (D-036), frozen
+# base, but their full 15 epochs (reproduce_training.yaml; early stopping patience 10 on val_loss, final weights
+# exported). Dev setting: day-165 model -> day195, real targets. Primary: pooled WER; secondary: feature r.
+#
+#   host: CUDA_VISIBLE_DEVICES= .venv/bin/python -I scripts/sanity_train_day195.py \
+#       --config configs/experiments/sanity_train_day195_from165_ep15.yaml
+
+base_experiment: configs/experiments/sanity_train_day195_from165.yaml
+
+run_name: sanity_train_day195_from165_ep15
+
+training:
+  epochs: 15                                  # run B: their epochs (pilot and D-036 used 5)
+
+sanity:
+  name: sanity_train_day195_from165_ep15

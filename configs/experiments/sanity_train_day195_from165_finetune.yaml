@@ -1,0 +1,17 @@
+# Recipe tuning, run A (D-038, user-approved 2026-10-21): as sanity_train_day195_from165.yaml (D-036), but the
+# decoder's core (base) is fine-tuned too, not only the new input layer. Dev setting: day-165 model -> day195,
+# real targets. Primary: pooled WER on the 147 test trials; secondary: feature r.
+#
+#   host: CUDA_VISIBLE_DEVICES= .venv/bin/python -I scripts/sanity_train_day195.py \
+#       --config configs/experiments/sanity_train_day195_from165_finetune.yaml
+
+base_experiment: configs/experiments/sanity_train_day195_from165.yaml
+
+run_name: sanity_train_day195_from165_finetune
+
+training:
+  init:
+    freeze_base: false                        # run A: fine-tune the base as well
+
+sanity:
+  name: sanity_train_day195_from165_finetune
