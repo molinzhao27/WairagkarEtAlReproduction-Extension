@@ -1,0 +1,26 @@
+# Step 1 after the pilot (D-029): the day-193 decoder AS IS (no training on Kunz, so no target
+# circularity and no sentence leakage) on all four attempted/imagined block pairs, with nulls.
+# Question: is the zero-shot attempted > imagined gap seen in the pilot pair (A3 vs I4) consistent?
+#
+#   host (CPU only, niced, detached):
+#   CUDA_VISIBLE_DEVICES= nice -n 19 .venv/bin/python -I scripts/kunz_experiment.py \
+#       --config configs/experiments/kunz_zeroshot.yaml
+
+base_experiment: configs/experiments/kunz_full.yaml
+
+run_name: kunz_zeroshot
+
+experiment:
+  name: kunz_zeroshot
+  folds: [3, 6, 11, 13]        # each "fold" = one attempted block and its paired imagined block
+  run_variants: []             # no training: zero-shot baseline only
+  zero_shot: true
+  include_leaky: false         # nothing is trained, so every imagined block is clean; each is scored once via its pair
+  eval_block: null             # already scored zero-shot in the pilot (deterministic): results/kunz_pilot/fold_A03/
+  nulls:
+    shuffled_trial: true
+    shuffled_time_models: [zero_shot]
+  evaluation:
+    save_audio:
+      predictions: [zero_shot]
+      references: true
