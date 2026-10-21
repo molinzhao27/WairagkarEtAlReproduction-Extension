@@ -106,3 +106,32 @@ typing-extensions==4.16.0
 urllib3==2.8.0
 wheel==0.48.0
 wrapt==2.5.1
+
+# --- ASR scoring (src/wvx/asr.py, scripts/asr_eval.py): HOST VENV ONLY, CPU. Not in the Mac env (its tests skip).
+# Installed into the host venv 2026-10-21 (`pip check` clean; no existing pin changed). Exact closure from
+# `pip install --dry-run --report` on the host. Model weights are not here: configs/asr.yaml pins the revision.
+faster-whisper==1.2.1
+ctranslate2==4.8.3
+onnxruntime==1.31.0
+tokenizers==0.23.3
+huggingface_hub==2.2.0
+hf-xet==1.7.0
+av==19.0.2
+anyio==4.15.1
+click==8.5.0
+filelock==4.2.4
+fsspec==2026.9.0
+h11==0.16.0
+httpcore2==2.15.1
+httpx2==2.15.1
+tqdm==4.70.1
+truststore==0.10.5
+# PER: g2p_en (NLTK data fetched into data/processed/models/nltk_data by wvx.asr, see configs/asr.yaml `per`)
+g2p_en==2.1.0
+nltk==3.10.3
+inflect==7.5.0
+typeguard==4.6.0
+more-itertools==11.2.1
+Distance==0.1.3
+regex==2026.9.29
+defusedxml==0.7.1

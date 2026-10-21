@@ -1,0 +1,843 @@
+{
+  "results_dir": "results/reproduce_inference_t15_day195",
+  "variant": "fallback",
+  "sources": [
+    "target",
+    "pred",
+    "live"
+  ],
+  "types_filter": null,
+  "max_trials": null,
+  "asr": {
+    "engine": "faster-whisper",
+    "model": {
+      "name": "small.en",
+      "repo_id": "Systran/faster-whisper-small.en",
+      "revision": "d1d751a5f8271d482d14ca55d9e2deeebbae577f",
+      "files": [
+        "config.json",
+        "model.bin",
+        "tokenizer.json",
+        "vocabulary.txt"
+      ],
+      "download_bytes": 486101605,
+      "sha256": {
+        "model.bin": "62b2a45b05ee59acb4a5341b33ee35e041395d378d418a18acfe4c9e768ee37a"
+      },
+      "verify_sha256": true,
+      "cache_dir": "data/processed/models",
+      "local_name": "faster-whisper-small.en",
+      "hf_home": "data/processed/models/hf_home",
+      "allow_download": true
+    },
+    "seed": null,
+    "device": "cpu",
+    "compute_type": "int8",
+    "cpu_threads": 8,
+    "audio": {
+      "sample_rate": 16000,
+      "resample_kaiser_beta": 5.0,
+      "int_full_scale": 32768.0,
+      "max_float_peak": 1.5,
+      "peak_normalize": null
+    },
+    "decode": {
+      "language": "en",
+      "beam_size": 5,
+      "patience": 1.0,
+      "length_penalty": 1.0,
+      "temperature": [
+        0.0,
+        0.2,
+        0.4,
+        0.6,
+        0.8,
+        1.0
+      ],
+      "compression_ratio_threshold": 2.4,
+      "log_prob_threshold": -1.0,
+      "no_speech_threshold": 0.6,
+      "condition_on_previous_text": false,
+      "without_timestamps": true,
+      "suppress_blank": true,
+      "vad_filter": false,
+      "initial_prompt": null
+    },
+    "text": {
+      "digits_to_words": true,
+      "replacements": [
+        [
+          "ok",
+          "okay"
+        ],
+        [
+          "good bye",
+          "goodbye"
+        ]
+      ]
+    }
+  },
+  "constrained": {
+    "method": "snap",
+    "snap": {
+      "distance": "char",
+      "max_normalized_distance": null
+    },
+    "prompt_template": "{words}.",
+    "oov_reference": "nan",
+    "vocabulary": [
+      "am",
+      "are",
+      "bad",
+      "bring",
+      "clean",
+      "closer",
+      "comfortable",
+      "coming",
+      "computer",
+      "do",
+      "faith",
+      "family",
+      "feel",
+      "glasses",
+      "going",
+      "good",
+      "goodbye",
+      "have",
+      "hello",
+      "help",
+      "here",
+      "hope",
+      "how",
+      "hungry",
+      "i",
+      "is",
+      "it",
+      "like",
+      "music",
+      "my",
+      "need",
+      "no",
+      "not",
+      "nurse",
+      "okay",
+      "outside",
+      "please",
+      "right",
+      "success",
+      "tell",
+      "that",
+      "they",
+      "thirsty",
+      "tired",
+      "up",
+      "very",
+      "what",
+      "where",
+      "yes",
+      "you"
+    ]
+  },
+  "per": {
+    "enabled": true,
+    "engine": "g2p_en",
+    "strip_stress": true
+  },
+  "live_trim_lead_in": false,
+  "versions": {
+    "faster-whisper": "1.2.1",
+    "ctranslate2": "4.8.3",
+    "tokenizers": "0.23.3",
+    "huggingface-hub": "2.2.0",
+    "g2p-en": "2.1.0",
+    "nltk": "3.10.3",
+    "python": "3.12.14"
+  },
+  "runtime": {
+    "clips": 757,
+    "total_s": 449.4,
+    "asr_s_per_clip_mean": 0.555,
+    "audio_s_total": 9766.0,
+    "real_time_factor": 0.0431
+  },
+  "results": {
+    "target": {
+      "Evaluation trial": {
+        "n_trials": 130,
+        "wer": {
+          "n": 130,
+          "mean": 0.0041,
+          "median": 0.0,
+          "sd": 0.0268,
+          "pooled": 0.0036
+        },
+        "cer": {
+          "n": 130,
+          "mean": 0.0027,
+          "median": 0.0,
+          "sd": 0.0186,
+          "pooled": 0.0028
+        },
+        "per": {
+          "n": 130,
+          "mean": 0.003,
+          "median": 0.0,
+          "sd": 0.0206,
+          "pooled": 0.003
+        },
+        "wer_constrained": {
+          "n": 0
+        },
+        "cer_constrained": {
+          "n": 0
+        },
+        "per_constrained": {
+          "n": 0
+        },
+        "empty_hypothesis_fraction": 0.0,
+        "ref_in_vocabulary_fraction": 0.0,
+        "repetition_flag_fraction": 0.0,
+        "fallback_used_fraction": 0.0,
+        "asr_s_mean": 0.483,
+        "audio_s_mean": 12.677
+      },
+      "Evaluation trial (free response)": {
+        "n_trials": 7,
+        "wer": {
+          "n": 7,
+          "mean": 0.0,
+          "median": 0.0,
+          "sd": 0.0,
+          "pooled": 0.0
+        },
+        "cer": {
+          "n": 7,
+          "mean": 0.0,
+          "median": 0.0,
+          "sd": 0.0,
+          "pooled": 0.0
+        },
+        "per": {
+          "n": 7,
+          "mean": 0.0,
+          "median": 0.0,
+          "sd": 0.0,
+          "pooled": 0.0
+        },
+        "wer_constrained": {
+          "n": 0
+        },
+        "cer_constrained": {
+          "n": 0
+        },
+        "per_constrained": {
+          "n": 0
+        },
+        "empty_hypothesis_fraction": 0.0,
+        "ref_in_vocabulary_fraction": 0.0,
+        "repetition_flag_fraction": 0.0,
+        "fallback_used_fraction": 0.0,
+        "asr_s_mean": 0.563,
+        "audio_s_mean": 20.77
+      },
+      "Evaluation trial (mimed speech)": {
+        "n_trials": 10,
+        "wer": {
+          "n": 10,
+          "mean": 0.0,
+          "median": 0.0,
+          "sd": 0.0,
+          "pooled": 0.0
+        },
+        "cer": {
+          "n": 10,
+          "mean": 0.0,
+          "median": 0.0,
+          "sd": 0.0,
+          "pooled": 0.0
+        },
+        "per": {
+          "n": 10,
+          "mean": 0.0,
+          "median": 0.0,
+          "sd": 0.0,
+          "pooled": 0.0
+        },
+        "wer_constrained": {
+          "n": 0
+        },
+        "cer_constrained": {
+          "n": 0
+        },
+        "per_constrained": {
+          "n": 0
+        },
+        "empty_hypothesis_fraction": 0.0,
+        "ref_in_vocabulary_fraction": 0.0,
+        "repetition_flag_fraction": 0.0,
+        "fallback_used_fraction": 0.0,
+        "asr_s_mean": 0.484,
+        "audio_s_mean": 9.646
+      },
+      "Training data": {
+        "n_trials": 12,
+        "wer": {
+          "n": 12,
+          "mean": 0.0,
+          "median": 0.0,
+          "sd": 0.0,
+          "pooled": 0.0
+        },
+        "cer": {
+          "n": 12,
+          "mean": 0.0,
+          "median": 0.0,
+          "sd": 0.0,
+          "pooled": 0.0
+        },
+        "per": {
+          "n": 12,
+          "mean": 0.0,
+          "median": 0.0,
+          "sd": 0.0,
+          "pooled": 0.0
+        },
+        "wer_constrained": {
+          "n": 0
+        },
+        "cer_constrained": {
+          "n": 0
+        },
+        "per_constrained": {
+          "n": 0
+        },
+        "empty_hypothesis_fraction": 0.0,
+        "ref_in_vocabulary_fraction": 0.0,
+        "repetition_flag_fraction": 0.0,
+        "fallback_used_fraction": 0.0,
+        "asr_s_mean": 0.496,
+        "audio_s_mean": 13.427
+      },
+      "Training data (50-word vocab)": {
+        "n_trials": 146,
+        "wer": {
+          "n": 146,
+          "mean": 0.0253,
+          "median": 0.0,
+          "sd": 0.0849,
+          "pooled": 0.0223
+        },
+        "cer": {
+          "n": 146,
+          "mean": 0.0182,
+          "median": 0.0,
+          "sd": 0.0643,
+          "pooled": 0.0145
+        },
+        "per": {
+          "n": 146,
+          "mean": 0.019,
+          "median": 0.0,
+          "sd": 0.0648,
+          "pooled": 0.0152
+        },
+        "wer_constrained": {
+          "n": 146,
+          "mean": 0.0171,
+          "median": 0.0,
+          "sd": 0.068,
+          "pooled": 0.0149
+        },
+        "cer_constrained": {
+          "n": 146,
+          "mean": 0.0141,
+          "median": 0.0,
+          "sd": 0.0604,
+          "pooled": 0.0107
+        },
+        "per_constrained": {
+          "n": 146,
+          "mean": 0.0149,
+          "median": 0.0,
+          "sd": 0.0626,
+          "pooled": 0.0115
+        },
+        "empty_hypothesis_fraction": 0.0,
+        "ref_in_vocabulary_fraction": 1.0,
+        "repetition_flag_fraction": 0.0,
+        "fallback_used_fraction": 0.0,
+        "asr_s_mean": 0.468,
+        "audio_s_mean": 12.628
+      },
+      "ALL": {
+        "n_trials": 305,
+        "wer": {
+          "n": 305,
+          "mean": 0.0139,
+          "median": 0.0,
+          "sd": 0.0623,
+          "pooled": 0.0106
+        },
+        "cer": {
+          "n": 305,
+          "mean": 0.0099,
+          "median": 0.0,
+          "sd": 0.0468,
+          "pooled": 0.0071
+        },
+        "per": {
+          "n": 305,
+          "mean": 0.0104,
+          "median": 0.0,
+          "sd": 0.0476,
+          "pooled": 0.0076
+        },
+        "wer_constrained": {
+          "n": 146,
+          "mean": 0.0171,
+          "median": 0.0,
+          "sd": 0.068,
+          "pooled": 0.0149
+        },
+        "cer_constrained": {
+          "n": 146,
+          "mean": 0.0141,
+          "median": 0.0,
+          "sd": 0.0604,
+          "pooled": 0.0107
+        },
+        "per_constrained": {
+          "n": 146,
+          "mean": 0.0149,
+          "median": 0.0,
+          "sd": 0.0626,
+          "pooled": 0.0115
+        },
+        "empty_hypothesis_fraction": 0.0,
+        "ref_in_vocabulary_fraction": 0.4787,
+        "repetition_flag_fraction": 0.0,
+        "fallback_used_fraction": 0.0,
+        "asr_s_mean": 0.478,
+        "audio_s_mean": 12.77
+      }
+    },
+    "pred": {
+      "Evaluation trial": {
+        "n_trials": 130,
+        "wer": {
+          "n": 130,
+          "mean": 0.5719,
+          "median": 0.5,
+          "sd": 0.3613,
+          "pooled": 0.5473
+        },
+        "cer": {
+          "n": 130,
+          "mean": 0.4082,
+          "median": 0.3846,
+          "sd": 0.2462,
+          "pooled": 0.3975
+        },
+        "per": {
+          "n": 130,
+          "mean": 0.4631,
+          "median": 0.4286,
+          "sd": 0.2642,
+          "pooled": 0.4502
+        },
+        "wer_constrained": {
+          "n": 0
+        },
+        "cer_constrained": {
+          "n": 0
+        },
+        "per_constrained": {
+          "n": 0
+        },
+        "empty_hypothesis_fraction": 0.0,
+        "ref_in_vocabulary_fraction": 0.0,
+        "repetition_flag_fraction": 0.0,
+        "fallback_used_fraction": 0.0308,
+        "asr_s_mean": 0.604,
+        "audio_s_mean": 12.677
+      },
+      "Evaluation trial (free response)": {
+        "n_trials": 7,
+        "wer": {
+          "n": 7,
+          "mean": 0.9556,
+          "median": 0.8182,
+          "sd": 0.4061,
+          "pooled": 0.8485
+        },
+        "cer": {
+          "n": 7,
+          "mean": 0.6585,
+          "median": 0.6364,
+          "sd": 0.2377,
+          "pooled": 0.6
+        },
+        "per": {
+          "n": 7,
+          "mean": 0.7571,
+          "median": 0.6923,
+          "sd": 0.2717,
+          "pooled": 0.6813
+        },
+        "wer_constrained": {
+          "n": 0
+        },
+        "cer_constrained": {
+          "n": 0
+        },
+        "per_constrained": {
+          "n": 0
+        },
+        "empty_hypothesis_fraction": 0.0,
+        "ref_in_vocabulary_fraction": 0.0,
+        "repetition_flag_fraction": 0.0,
+        "fallback_used_fraction": 0.1429,
+        "asr_s_mean": 0.673,
+        "audio_s_mean": 20.77
+      },
+      "Evaluation trial (mimed speech)": {
+        "n_trials": 10,
+        "wer": {
+          "n": 10,
+          "mean": 0.7133,
+          "median": 0.7167,
+          "sd": 0.4955,
+          "pooled": 0.64
+        },
+        "cer": {
+          "n": 10,
+          "mean": 0.4809,
+          "median": 0.4805,
+          "sd": 0.3217,
+          "pooled": 0.4498
+        },
+        "per": {
+          "n": 10,
+          "mean": 0.5636,
+          "median": 0.5437,
+          "sd": 0.3706,
+          "pooled": 0.5221
+        },
+        "wer_constrained": {
+          "n": 0
+        },
+        "cer_constrained": {
+          "n": 0
+        },
+        "per_constrained": {
+          "n": 0
+        },
+        "empty_hypothesis_fraction": 0.0,
+        "ref_in_vocabulary_fraction": 0.0,
+        "repetition_flag_fraction": 0.0,
+        "fallback_used_fraction": 0.1,
+        "asr_s_mean": 0.714,
+        "audio_s_mean": 9.646
+      },
+      "Training data": {
+        "n_trials": 12,
+        "wer": {
+          "n": 12,
+          "mean": 0.3214,
+          "median": 0.2857,
+          "sd": 0.3093,
+          "pooled": 0.3214
+        },
+        "cer": {
+          "n": 12,
+          "mean": 0.25,
+          "median": 0.2414,
+          "sd": 0.2414,
+          "pooled": 0.25
+        },
+        "per": {
+          "n": 12,
+          "mean": 0.299,
+          "median": 0.2941,
+          "sd": 0.2732,
+          "pooled": 0.299
+        },
+        "wer_constrained": {
+          "n": 0
+        },
+        "cer_constrained": {
+          "n": 0
+        },
+        "per_constrained": {
+          "n": 0
+        },
+        "empty_hypothesis_fraction": 0.0,
+        "ref_in_vocabulary_fraction": 0.0,
+        "repetition_flag_fraction": 0.0,
+        "fallback_used_fraction": 0.0,
+        "asr_s_mean": 0.506,
+        "audio_s_mean": 13.427
+      },
+      "Training data (50-word vocab)": {
+        "n_trials": 146,
+        "wer": {
+          "n": 146,
+          "mean": 0.5769,
+          "median": 0.5,
+          "sd": 0.532,
+          "pooled": 0.5394
+        },
+        "cer": {
+          "n": 146,
+          "mean": 0.4306,
+          "median": 0.3767,
+          "sd": 0.3267,
+          "pooled": 0.4084
+        },
+        "per": {
+          "n": 146,
+          "mean": 0.4737,
+          "median": 0.446,
+          "sd": 0.3141,
+          "pooled": 0.4599
+        },
+        "wer_constrained": {
+          "n": 146,
+          "mean": 0.538,
+          "median": 0.5,
+          "sd": 0.5262,
+          "pooled": 0.5022
+        },
+        "cer_constrained": {
+          "n": 146,
+          "mean": 0.4144,
+          "median": 0.3636,
+          "sd": 0.3165,
+          "pooled": 0.3966
+        },
+        "per_constrained": {
+          "n": 146,
+          "mean": 0.4798,
+          "median": 0.4444,
+          "sd": 0.3263,
+          "pooled": 0.4678
+        },
+        "empty_hypothesis_fraction": 0.0,
+        "ref_in_vocabulary_fraction": 1.0,
+        "repetition_flag_fraction": 0.0,
+        "fallback_used_fraction": 0.0616,
+        "asr_s_mean": 0.648,
+        "audio_s_mean": 12.628
+      },
+      "ALL": {
+        "n_trials": 305,
+        "wer": {
+          "n": 305,
+          "mean": 0.5779,
+          "median": 0.5,
+          "sd": 0.4617,
+          "pooled": 0.5474
+        },
+        "cer": {
+          "n": 305,
+          "mean": 0.4208,
+          "median": 0.3784,
+          "sd": 0.2943,
+          "pooled": 0.4041
+        },
+        "per": {
+          "n": 305,
+          "mean": 0.4718,
+          "median": 0.4348,
+          "sd": 0.2991,
+          "pooled": 0.4585
+        },
+        "wer_constrained": {
+          "n": 146,
+          "mean": 0.538,
+          "median": 0.5,
+          "sd": 0.5262,
+          "pooled": 0.5022
+        },
+        "cer_constrained": {
+          "n": 146,
+          "mean": 0.4144,
+          "median": 0.3636,
+          "sd": 0.3165,
+          "pooled": 0.3966
+        },
+        "per_constrained": {
+          "n": 146,
+          "mean": 0.4798,
+          "median": 0.4444,
+          "sd": 0.3263,
+          "pooled": 0.4678
+        },
+        "empty_hypothesis_fraction": 0.0,
+        "ref_in_vocabulary_fraction": 0.4787,
+        "repetition_flag_fraction": 0.0,
+        "fallback_used_fraction": 0.0492,
+        "asr_s_mean": 0.626,
+        "audio_s_mean": 12.77
+      }
+    },
+    "live": {
+      "Evaluation trial": {
+        "n_trials": 130,
+        "wer": {
+          "n": 130,
+          "mean": 0.5723,
+          "median": 0.5,
+          "sd": 0.3475,
+          "pooled": 0.557
+        },
+        "cer": {
+          "n": 130,
+          "mean": 0.4005,
+          "median": 0.3717,
+          "sd": 0.2328,
+          "pooled": 0.3967
+        },
+        "per": {
+          "n": 130,
+          "mean": 0.4729,
+          "median": 0.4721,
+          "sd": 0.26,
+          "pooled": 0.4674
+        },
+        "wer_constrained": {
+          "n": 0
+        },
+        "cer_constrained": {
+          "n": 0
+        },
+        "per_constrained": {
+          "n": 0
+        },
+        "empty_hypothesis_fraction": 0.0,
+        "ref_in_vocabulary_fraction": 0.0,
+        "repetition_flag_fraction": 0.0,
+        "fallback_used_fraction": 0.0308,
+        "asr_s_mean": 0.57,
+        "audio_s_mean": 13.267
+      },
+      "Evaluation trial (free response)": {
+        "n_trials": 7,
+        "wer": {
+          "n": 7,
+          "mean": 0.8305,
+          "median": 0.8333,
+          "sd": 0.2775,
+          "pooled": 0.7727
+        },
+        "cer": {
+          "n": 7,
+          "mean": 0.5725,
+          "median": 0.5238,
+          "sd": 0.2383,
+          "pooled": 0.5193
+        },
+        "per": {
+          "n": 7,
+          "mean": 0.71,
+          "median": 0.6897,
+          "sd": 0.1948,
+          "pooled": 0.6593
+        },
+        "wer_constrained": {
+          "n": 0
+        },
+        "cer_constrained": {
+          "n": 0
+        },
+        "per_constrained": {
+          "n": 0
+        },
+        "empty_hypothesis_fraction": 0.0,
+        "ref_in_vocabulary_fraction": 0.0,
+        "repetition_flag_fraction": 0.0,
+        "fallback_used_fraction": 0.0,
+        "asr_s_mean": 0.633,
+        "audio_s_mean": 21.36
+      },
+      "Evaluation trial (mimed speech)": {
+        "n_trials": 10,
+        "wer": {
+          "n": 10,
+          "mean": 0.7667,
+          "median": 0.8,
+          "sd": 0.6178,
+          "pooled": 0.68
+        },
+        "cer": {
+          "n": 10,
+          "mean": 0.4879,
+          "median": 0.4868,
+          "sd": 0.347,
+          "pooled": 0.4545
+        },
+        "per": {
+          "n": 10,
+          "mean": 0.5673,
+          "median": 0.7284,
+          "sd": 0.3854,
+          "pooled": 0.5368
+        },
+        "wer_constrained": {
+          "n": 0
+        },
+        "cer_constrained": {
+          "n": 0
+        },
+        "per_constrained": {
+          "n": 0
+        },
+        "empty_hypothesis_fraction": 0.0,
+        "ref_in_vocabulary_fraction": 0.0,
+        "repetition_flag_fraction": 0.0,
+        "fallback_used_fraction": 0.1,
+        "asr_s_mean": 0.503,
+        "audio_s_mean": 10.236
+      },
+      "ALL": {
+        "n_trials": 147,
+        "wer": {
+          "n": 147,
+          "mean": 0.5978,
+          "median": 0.5,
+          "sd": 0.3762,
+          "pooled": 0.5787
+        },
+        "cer": {
+          "n": 147,
+          "mean": 0.4146,
+          "median": 0.4,
+          "sd": 0.246,
+          "pooled": 0.4081
+        },
+        "per": {
+          "n": 147,
+          "mean": 0.4907,
+          "median": 0.4737,
+          "sd": 0.2733,
+          "pooled": 0.4843
+        },
+        "wer_constrained": {
+          "n": 0
+        },
+        "cer_constrained": {
+          "n": 0
+        },
+        "per_constrained": {
+          "n": 0
+        },
+        "empty_hypothesis_fraction": 0.0,
+        "ref_in_vocabulary_fraction": 0.0,
+        "repetition_flag_fraction": 0.0,
+        "fallback_used_fraction": 0.034,
+        "asr_s_mean": 0.568,
+        "audio_s_mean": 13.446
+      }
+    }
+  }
+}

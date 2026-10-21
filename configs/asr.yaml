@@ -1,0 +1,136 @@
+# Automatic speech recognition (ASR) scoring of synthesized speech: src/wvx/asr.py, scripts/asr_eval.py.
+# notes/PLAN.md Phase 3 d). This is an EXTENSION metric: Wairagkar et al. report no ASR-based WER (their
+# WER/PER come from human listeners; notes/METRICS.md section 4), so no number here is comparable to the paper.
+#
+# CPU only, on the GPU host:  CUDA_VISIBLE_DEVICES= nice -n 19 .venv/bin/python -I scripts/asr_eval.py ...
+# Tags: [LIB] the library default, written out so it is recorded; [CHOICE] ours.
+# The whole file is one `asr:` section (wvx.asr.load_asr_config), like configs/metrics.yaml.
+
+asr:
+  engine: faster-whisper            # faster-whisper 1.2.1 on CTranslate2 4.8.3 (pinned in requirements-linux-cuda.txt)
+
+  model:
+    name: small.en                  # [CHOICE] English-only Whisper "small" (~244M parameters), CTranslate2 conversion.
+                                    #   Larger models (medium.en ~1.5 GB, large-v3 ~3 GB) need the user's approval.
+    repo_id: Systran/faster-whisper-small.en
+    revision: d1d751a5f8271d482d14ca55d9e2deeebbae577f   # Hugging Face commit (2023-11-23), pinned
+    files: [config.json, model.bin, tokenizer.json, vocabulary.txt]
+    download_bytes: 486101605       # all files (Hugging Face API, 2026-10-21): ~486 MB, under the 1 GB ask-first limit
+    sha256:                         # verified after download and on every load (Hugging Face LFS object id)
+      model.bin: 62b2a45b05ee59acb4a5341b33ee35e041395d378d418a18acfe4c9e768ee37a
+    verify_sha256: true
+    cache_dir: data/processed/models              # inside the repo, gitignored; model -> <cache_dir>/<local_name>
+    local_name: faster-whisper-small.en
+    hf_home: data/processed/models/hf_home        # HF_HOME for huggingface_hub (locks, xet cache): never ~/.cache
+    allow_download: true            # false = fail if the model is not already in cache_dir
+
+  seed: null                        # CTranslate2 RNG (used only by sampling, i.e. temperature > 0 fallback);
+                                    #   null = configs/default.yaml seed
+  device: cpu                       # never the GPU (also launch with CUDA_VISIBLE_DEVICES= empty)
+  compute_type: int8                # CTranslate2 int8 weights on CPU (supported: int8, int8_float32, float32)
+  cpu_threads: 8                    # <= 8 on the shared host (another project trains on CPU)
+  num_workers: 1
+
+  audio:
+    sample_rate: 16000              # Whisper's input rate; other rates are resampled (scipy resample_poly)
+    resample_kaiser_beta: 5.0       # scipy's default anti-aliasing window ("kaiser", 5.0)
+    int_full_scale: 32768.0         # integer PCM is divided by this; so is their closed-loop audio (float32 holding
+                                    #   int16-scaled values), explicitly, in scripts/asr_eval.py
+    max_float_peak: 1.5             # float audio peaking above this is rejected (probably int16-scaled)
+    peak_normalize: null            # [CHOICE] null = feed the level as is (our LPCNet audio and their live audio
+                                    #   are both ~-23 dBFS RMS); a number = scale the peak to this value first
+
+  decode:                           # passed to WhisperModel.transcribe
+    language: en
+    beam_size: 5                    # [LIB]
+    patience: 1.0                   # [LIB]
+    length_penalty: 1.0             # [LIB]
+    temperature: [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]   # [LIB] default temperature fallback: a degenerate decode
+                                    #   (repetition loop) is retried with sampling; `seed` keeps it reproducible.
+                                    #   Applied identically to every audio condition (D-028). Beam-only variant: [0.0]
+    compression_ratio_threshold: 2.4   # [LIB] with one temperature this only flags loops (max_compression_ratio)
+    log_prob_threshold: -1.0        # [LIB]
+    no_speech_threshold: 0.6        # [LIB] a window judged silent (and low-confidence) is dropped -> empty transcript
+    condition_on_previous_text: false  # clips are < 30 s (one window); no carry-over between windows otherwise
+    without_timestamps: true        # text only
+    suppress_blank: true            # [LIB]
+    vad_filter: false               # [LIB] no voice-activity detection
+    initial_prompt: null            # UNCONSTRAINED decoding: no prompt, no language model, no vocabulary
+
+  text:
+    # Both reference and hypothesis: (1) digits -> words, (2) wvx.metrics.normalize_text with configs/metrics.yaml
+    # `text` (NFKC, lowercase, hyphens -> space, punctuation removed except in-word apostrophes),
+    # (3) whole-token rewrites below. Whisper writes numbers as digits; the cue sentences spell them out.
+    digits_to_words: true           # "2" -> "two", "1,000" -> "one thousand", "2.5" -> "two point five";
+                                    #   ordinals ("3rd"), years and "%" are left as they are
+    replacements:                   # [CHOICE] spelling variants of vocabulary words only (applied to both sides)
+      - [ok, okay]
+      - [good bye, goodbye]
+
+  constrained:
+    # CONSTRAINED scores use the closed 50-word vocabulary below. They are reported separately from the
+    # unconstrained ones because a closed vocabulary inflates them.
+    method: snap                    # [CHOICE] primary. snap: map every word of the UNCONSTRAINED hypothesis to the
+                                    #   nearest vocabulary word (no second decode). prompt: decode again with the
+                                    #   vocabulary as Whisper's initial prompt (no snapping). prompt_snap: both.
+    snap:
+      distance: char                # Levenshtein distance over characters; ties -> smaller length difference ->
+                                    #   alphabetical order. In-vocabulary words are kept unchanged.
+      max_normalized_distance: null # null = every word is snapped (word count unchanged); a number d = words with
+                                    #   distance / len(word) > d are deleted instead
+    prompt_template: "{words}."     # initial_prompt for prompt / prompt_snap ({words} = vocabulary, ", "-joined)
+    oov_reference: nan              # nan = constrained scores are undefined (NaN) when the reference has words
+                                    #   outside the vocabulary (e.g. Wairagkar's open-vocabulary evaluation
+                                    #   sentences) | score = score anyway
+    # Union of the normalized words of the Kunz T15 2024.03.03 cue sentences (`sentenceText`) in
+    # t15.2024.03.03_{attempted_50words, imagined_50words, imagined_50words_eval}.mat: 49 + 49 + 45 words,
+    # union exactly 50 (notes/DATA_FORMATS.md section 8). Derived 2026-10-21 on the host with
+    # `python -I scripts/asr_eval.py --derive-vocabulary` (it re-derives the list and checks it against this one).
+    vocabulary: [am, are, bad, bring, clean, closer, comfortable, coming, computer, do, faith, family, feel,
+                 glasses, going, good, goodbye, have, hello, help, here, hope, how, hungry, i, is, it, like,
+                 music, my, need, "no", not, nurse, okay, outside, please, right, success, tell, that, they,
+                 thirsty, tired, up, very, what, where, "yes", you]   # "no"/"yes" quoted: bare, YAML reads booleans
+    vocabulary_source:
+      dir: data/raw/kunz/sentenceData
+      files: [t15.2024.03.03_attempted_50words.mat, t15.2024.03.03_imagined_50words.mat,
+              t15.2024.03.03_imagined_50words_eval.mat]
+      key: sentenceText
+
+  per:
+    # Phoneme error rate: g2p_en 2.1.0 (CMUdict lookup, POS-based homograph choice, neural G2P for other words)
+    # on the normalized reference and hypothesis; edit distance over ARPAbet phonemes (word boundaries ignored).
+    enabled: true                   # true + g2p_en missing = error (never a silent NaN)
+    engine: g2p_en
+    strip_stress: true              # [CHOICE] "AH0"/"AH1" -> "AH" (39 phonemes); stress is not what we test
+    nltk_data: data/processed/models/nltk_data   # inside the repo, gitignored (~20 MB); never ~/nltk_data
+    # g2p_en checks the first two at import time; nltk >= 3.9 tags with the "_eng" tagger, which g2p_en does
+    # not fetch itself.
+    nltk_resources:
+      - [cmudict, corpora/cmudict.zip]
+      - [averaged_perceptron_tagger, taggers/averaged_perceptron_tagger.zip]
+      - [averaged_perceptron_tagger_eng, taggers/averaged_perceptron_tagger_eng.zip]
+    allow_download: true
+
+  variants:                         # scripts/asr_eval.py --variant NAME: deep-merged over this section; the
+                                    #   output files get the suffix _NAME. Sensitivity checks, not the primary result.
+    fallback:                       # faster-whisper's default temperature fallback: a decode that looks degenerate
+      decode:                       #   (compression ratio > 2.4 or avg logprob < -1) is redone with seeded sampling
+        temperature: [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]
+    prompt:                         # alternative constrained method: vocabulary as initial prompt, then snapping
+      constrained:
+        method: prompt_snap
+
+  eval:                             # scripts/asr_eval.py
+    per_trial_csv: per_trial_metrics.csv     # in --results-dir (written by scripts/run_inference.py)
+    trial_column: trial
+    text_column: text
+    type_column: type               # used if the CSV has it; else the .mat trial_description; else "all"
+    wav_columns:                    # source name -> CSV column holding a repo-relative wav path
+      target: target_wav            # LPCNet resynthesis of their target features (near-best case)
+      pred: pred_wav                # our offline decoder output
+    live_source: live               # closed-loop audio from the neural .mat (needs --experiment with `closed_loop`)
+    live_trim_lead_in: false        # [CHOICE] false = score the whole live clip, as it was heard; true = drop the
+                                    #   first (window_len - 1) bins so it covers the same frames as the offline audio
+    out_per_trial: asr_per_trial.csv
+    out_summary: asr_summary.json
+    progress_every: 20              # clips between progress lines
