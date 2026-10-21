@@ -35,6 +35,7 @@ syllables:
   method: current            # decoder side for align_targets.py: current | nuclei | sylber. The benchmark runs
                              #   all three; set this (or pass --method) to the winner for the Kunz v2 targets.
   count_constraint: false    # [D-033] secondary variant only: keep the N strongest decoder syllables, N = TTS count
+  arm: A                     # mapping for align_targets.py (or --arm): A | B. The benchmark runs both arms.
   # [MEASURED] LPCNet synthesis delay: the content of feature frame k (nominally [10k, 10k + 10) ms) sits at
   # [10k + lag, 10k + 10 + lag) ms of the synthesized audio, so audio times (aligner, nuclei, Sylber) are moved
   # back by it onto the feature / neural timeline. Measured as the centre-to-centre delay between the c0 power
@@ -70,6 +71,24 @@ syllables:
     # word-initial cluster (146 clusters), the textbook definition with no threshold to set. It admits rare
     # loan-word onsets (e.g. T S, Z W, NG); syllable COUNTS do not depend on it, only consonant placement.
     min_onset_words: 1
+
+  # [D-033 addition, fixed 2026-10-21 before any benchmark run] Arm B, segment-driven mapping
+  # (wvx.syllables.align_trial_segment_driven): the decoder syllables are the target spans; TTS syllables are
+  # paired with them monotonically and stretched into them; silence (pitch held as in arm A) elsewhere.
+  segment_mapping:
+    equal_counts: one_to_one # equal counts: TTS syllable k -> decoder syllable k, no DTW
+    # Unequal counts: DTW over the two syllable sequences, steps (1,1) (1,0) (0,1) with equal weights (every
+    # syllable of both sides on the path; ties prefer the diagonal). Pair cost, from what both sides have:
+    #   position_weight * |onset share_tts - onset share_dec| * (K + J) / 2
+    #   + log_duration_weight * |ln(duration share_tts / duration share_dec)|
+    # shares = fractions of each side's speech time (summed syllable durations: pauses and speaking rate drop out);
+    # the (K + J) / 2 factor makes one syllable's worth of position error cost about 1. [CHOICE] equal weights:
+    # one syllable of misplacement ~ a factor e (2.7) of relative-duration mismatch; neither tuned.
+    position_weight: 1.0
+    log_duration_weight: 1.0
+    # Each TTS syllable goes to ONE decoder syllable: the lowest-cost of those its path pairs it with (earliest
+    # on ties); TTS syllables sharing a decoder syllable split it in proportion to their TTS durations; a
+    # decoder syllable with no TTS syllable stays silent. No decoder syllables in a trial: the target is silence.
 
   segmenters:
     nuclei:
@@ -123,15 +142,18 @@ benchmark:
     # Kunz attempted trials with the Kunz decoder (must equal kunz.decoder; checked): input for the v2 targets.
     kunz_attempted: {kunz_condition: attempted, model: data/raw/wairagkar/t15_neural_data/t15_day195/brain2voice_t15_day193.h5, role: kunz}
   methods: [current, nuclei, sylber]
+  arms: [A, B]               # [D-033] every method under both mappings, free and count-constrained
   onset_tolerance_ms: 100    # [D-033] headline: share of their syllable onsets with a mapped onset within this
-  # [D-033] choice rule, fixed before any result: the method with the highest mean target r over the primary
-  # cells (free variant, forced TTS side) wins; methods within tie_tolerance of the best are tied, and the tie
-  # goes to the earliest (simplest) in simplicity_order. Every cell is reported regardless.
+  # [D-033] choice rule, fixed before any result: the (arm, method) candidate with the highest mean target r over
+  # the primary cells (free variant, forced TTS side) wins; candidates within tie_tolerance of the best are tied,
+  # and the tie goes to the simplest: arm A before B, then simplicity_order (A/current < A/nuclei < A/sylber <
+  # B/current < B/nuclei < B/sylber). Every cell is reported regardless.
   choice:
     primary_cells: [day195_m172, day195_m165]
     metric: target_r_mean
     tie_tolerance: 0.01
+    arms: [A, B]
     simplicity_order: [current, nuclei, sylber]
   # Reference rows (not candidates): D-027's configuration (envelope dips on both sides) in every cell.
-  reference: {method: current, tts_side: envelope}
+  reference: {method: current, tts_side: envelope, arm: A}
   n_workers: 8               # LPCNet synthesis threads in syllable_decode.py / syllable_tts.py audio

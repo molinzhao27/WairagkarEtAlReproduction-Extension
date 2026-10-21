@@ -76,18 +76,25 @@ def world(cfg):
                 records={"current": None, "nuclei": rec_n, "sylber": rec_s})
 
 
+@pytest.mark.parametrize("arm", ["A", "B"])
 @pytest.mark.parametrize("method", ["current", "nuclei", "sylber"])
 @pytest.mark.parametrize("count", [False, True])
-def test_score_run_every_method(bench, cfg, world, method, count):
+def test_score_run_every_method(bench, cfg, world, method, count, arm):
     w = world
     out = bench.score_run(method, count, "forced", w["trials"], w["preds"], w["corpus"], cfg, w["their_raw"], w["syl"],
-                          w["words"], w["desc"], w["pred_env"], w["tts_forced"], w["records"][method], False)
+                          w["words"], w["desc"], w["pred_env"], w["tts_forced"], w["records"][method], False, arm=arm)
     h = out["headline"]
     assert h["n_trials"] == 2 and h["oracle_n_trials"] == 2 and h["fraction_tts_count_equal_theirs"] == 1.0
     assert h["target_r_mean"] > 0.8 and h["target_r_mean"] > h["chance_r_mean"] + 0.3
     assert h["onsets_within_tolerance"] == 1.0 and h["span_onset_error_median_ms"] <= 50
     assert h["tts_syllables_without_speech"] == 0 and h["tts_syllables_total"] == 5
     assert len(out["per_trial"]) == 2 and out["offline_decoder"]["n_trials"] == 2
+    if arm == "B":     # the synthetic decoder finds exactly the right syllables: one to one, nothing left silent
+        assert h["trials_paired_one_to_one"] == 2 and h["decoder_syllables_without_tts"] == 0
+        assert h["tts_syllables_without_frames"] == 0 and h["trials_without_decoder_syllables"] == 0
+        assert out["per_trial"][0]["mapping"]["pairing"] == "one_to_one"
+    else:
+        assert h["decoder_syllables_without_tts"] is None and out["per_trial"][0]["mapping"] is None
 
 
 def test_score_run_reference_and_guards(bench, cfg, world):
@@ -98,4 +105,8 @@ def test_score_run_reference_and_guards(bench, cfg, world):
     with pytest.raises(ValueError):
         bench.score_run("current", True, "envelope", w["trials"], w["preds"], w["corpus"], cfg, w["their_raw"],
                         w["syl"], w["words"], w["desc"], w["pred_env"], None, None, False)
-    assert bench.run_name("nuclei", True, "forced") == "nuclei__count__tts-forced"
+    assert bench.run_name("nuclei", True, "forced", "B") == "nuclei__count__tts-forced__arm-B"
+    runs = bench.planned_runs(cfg)
+    assert len(runs) == 13 and runs[-1] == ("current", False, "envelope", "A")
+    assert {(m, c, a) for m, c, _, a in runs[:-1]} == {(m, c, a) for m in ("current", "nuclei", "sylber")
+                                                      for c in (False, True) for a in ("A", "B")}

@@ -37,6 +37,22 @@ frames from the envelope masks) whatever the method; the decoder syllables enter
 ``keep_strongest`` keeps the N decoder syllables with the highest envelope peak, N = the number of TTS
 syllables; fewer than N are left as they are.
 
+**Mapping arms** (``arm``; D-033 addition, fixed before any benchmark run):
+
+- ``A``: the unchanged D-027 mapping (``wvx.alignment``: envelope DTW, decoder syllables only snap).
+- ``B``, segment-driven (``align_trial_segment_driven``, settings ``syllables.segment_mapping``): the
+  decoder syllables ARE the target spans. TTS syllables are paired with decoder syllables one to one when
+  the counts match, else by a monotone DTW over the two syllable sequences (``syllable_cost``,
+  ``syllable_path``; every syllable of both sides on the path, many-to-one and one-to-many allowed). The
+  cost uses what both sides have: each syllable's onset as a share of its side's speech time (summed
+  syllable durations, so pauses do not count; differences scaled to about one per syllable) plus the
+  |log ratio| of its share of that speech time. Each TTS syllable then goes to ONE decoder syllable, the
+  lowest-cost of those the path pairs it with (``assign_syllables``; monotone by construction). TTS
+  syllables that share a decoder syllable split its span in proportion to their TTS durations
+  (``segment_driven_spans``); a decoder syllable with no TTS syllable stays silent; everything outside the
+  spans is silence with the same pitch rule as arm A (``wvx.alignment.stretch_features``). No decoder
+  syllable at all: the target is silence.
+
 Pure NumPy and the standard library; the tools that need Praat or PyTorch are in
 ``wvx.syllable_segmenters`` and run in the separate syllable environment (requirements-syllables.txt).
 """
@@ -57,6 +73,7 @@ PathLike = Union[str, Path]
 DEFAULT_CONFIG = "configs/experiments/syllable_benchmark.yaml"
 METHODS = ("current", "nuclei", "sylber")
 TTS_SIDES = ("envelope", "forced")
+ARMS = ("A", "B")
 
 
 # ------------------------------------------------------------------------------------- config
@@ -90,6 +107,8 @@ def settings(cfg: Mapping[str, Any]) -> dict:
         raise ValueError(f"syllables.method must be one of {METHODS}, got {s['method']!r}")
     if s["tts_side"] not in TTS_SIDES:
         raise ValueError(f"syllables.tts_side must be one of {TTS_SIDES}, got {s['tts_side']!r}")
+    if s["arm"] not in ARMS:
+        raise ValueError(f"syllables.arm must be one of {ARMS}, got {s['arm']!r}")
     return s
 
 
@@ -381,6 +400,123 @@ def decoder_segments(method: str, env_db: np.ndarray, cfg: Mapping[str, Any],
     raise ValueError(f"unknown method {method!r}")
 
 
+# ------------------------------------------------------------- arm B: segment-driven mapping
+
+
+def speech_time_features(segs: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+    """(onset share, duration share) of each syllable within its side's speech time (summed durations)."""
+    d = np.diff(np.asarray(segs, dtype=np.float64).reshape(-1, 2), axis=1).ravel()
+    if d.size == 0 or np.any(d <= 0):
+        raise ValueError("syllables must be non-empty")
+    total = d.sum()
+    return np.concatenate([[0.0], np.cumsum(d)[:-1]]) / total, d / total
+
+
+def syllable_cost(tts_segs: np.ndarray, dec_segs: np.ndarray, mcfg: Mapping[str, Any]) -> np.ndarray:
+    """(K, J) pair costs: position_weight * |onset share difference| * (K + J) / 2
+    + log_duration_weight * |ln(TTS duration share / decoder duration share)|.
+
+    Both terms are dimensionless and invariant to each side's speaking rate and pauses; the position
+    difference is scaled so that one syllable's worth of speech time costs about 1.
+    """
+    pt, rt = speech_time_features(tts_segs)
+    pd, rd = speech_time_features(dec_segs)
+    unit = (pt.size + pd.size) / 2.0
+    return (float(mcfg["position_weight"]) * unit * np.abs(pt[:, None] - pd[None, :])
+            + float(mcfg["log_duration_weight"]) * np.abs(np.log(rt[:, None] / rd[None, :])))
+
+
+def syllable_path(cost: np.ndarray) -> np.ndarray:
+    """Monotone (L, 2) path [tts, decoder] from (0, 0) to (K - 1, J - 1) minimising the summed pair cost,
+    steps (1, 1), (1, 0), (0, 1) with equal weights (every syllable of both sides is on the path).
+    Ties prefer the diagonal step, then (1, 0), then (0, 1): deterministic."""
+    C = np.asarray(cost, dtype=np.float64)
+    K, J = C.shape
+    D = np.full((K + 1, J + 1), np.inf)
+    D[0, 0] = 0.0
+    for i in range(1, K + 1):
+        for j in range(1, J + 1):
+            D[i, j] = C[i - 1, j - 1] + min(D[i - 1, j - 1], D[i - 1, j], D[i, j - 1])
+    path = [(K - 1, J - 1)]
+    i, j = K, J
+    while (i, j) != (1, 1):
+        steps = [(i - 1, j - 1), (i - 1, j), (i, j - 1)]          # tie order: diagonal, (1, 0), (0, 1)
+        i, j = min(steps, key=lambda ij: D[ij])                   # min() keeps the first of equal values
+        path.append((i - 1, j - 1))
+    return np.asarray(path[::-1], dtype=np.int64)
+
+
+def assign_syllables(path: np.ndarray, cost: np.ndarray) -> np.ndarray:
+    """(K,) decoder syllable of each TTS syllable: the lowest-cost of its path pairs (earliest on ties).
+    Monotone: consecutive TTS syllables share at most one decoder syllable on a DTW path."""
+    path = np.asarray(path, dtype=np.int64)
+    K = int(cost.shape[0])
+    out = np.empty(K, dtype=np.int64)
+    for i in range(K):
+        js = path[path[:, 0] == i, 1]
+        out[i] = js[int(np.argmin(cost[i, js]))]
+    return out
+
+
+def segment_driven_spans(tts_segs: np.ndarray, dec_segs: np.ndarray, assignment: np.ndarray) -> np.ndarray:
+    """(K, 2) target span of each TTS syllable: its decoder syllable, split among the TTS syllables assigned
+    to it in proportion to their TTS durations (rounded; a span can be empty if the decoder syllable has
+    fewer frames than TTS syllables)."""
+    tts_segs = np.asarray(tts_segs, dtype=np.int64).reshape(-1, 2)
+    dec_segs = np.asarray(dec_segs, dtype=np.int64).reshape(-1, 2)
+    d = np.diff(tts_segs, axis=1).ravel().astype(np.float64)
+    out = np.zeros_like(tts_segs)
+    for j in np.unique(assignment):
+        idx = np.flatnonzero(assignment == j)
+        on, off = (int(x) for x in dec_segs[j])
+        ends = on + np.rint((off - on) * np.cumsum(d[idx]) / d[idx].sum()).astype(np.int64)
+        ends[-1] = off
+        out[idx, 0] = np.concatenate([[on], ends[:-1]])
+        out[idx, 1] = ends
+    return out
+
+
+def align_trial_segment_driven(pred_raw: np.ndarray, tts_raw: np.ndarray, silence: np.ndarray, cfg: Mapping[str, Any],
+                               tts_segments: Optional[np.ndarray] = None, pred_segments: Optional[np.ndarray] = None,
+                               pred_env: Optional[np.ndarray] = None, synth=None):
+    """Arm B for one trial (module docstring): decoder output (T, 20) + TTS frames (n, 20) -> aligned raw target.
+
+    Missing ``tts_segments`` / ``pred_segments`` are the envelope dips, as in arm A. Returns a
+    ``wvx.alignment.Alignment`` whose ``info`` holds the pairing diagnostics.
+    """
+    from wvx import alignment as al
+
+    mcfg = cfg["syllables"]["segment_mapping"]
+    pred_raw = np.asarray(pred_raw, dtype=np.float32)
+    tts_raw = np.asarray(tts_raw, dtype=np.float32)
+    n_out = pred_raw.shape[0]
+    env_p = al.envelope_db(pred_raw, cfg, synth) if pred_env is None else np.asarray(pred_env, np.float64)
+    env_t = al.envelope_db(tts_raw, cfg, synth)
+    seg_p = al.segment_syllables(env_p, cfg) if pred_segments is None else al.check_segments(pred_segments, n_out, "decoder")
+    seg_t = al.segment_syllables(env_t, cfg) if tts_segments is None else al.check_segments(tts_segments, tts_raw.shape[0], "TTS")
+    if not len(seg_t):
+        raise ValueError("no TTS syllables")
+    K, J = len(seg_t), len(seg_p)
+    if J == 0:                                     # nothing detected in the decoder output: silence throughout
+        spans = np.zeros_like(seg_t)
+        info = {"pairing": "none", "n_decoder_syllables": 0, "n_decoder_syllables_without_tts": 0,
+                "n_tts_syllables_without_frames": K}
+        cost = float("nan")
+    else:
+        C = syllable_cost(seg_t, seg_p, mcfg)
+        one_to_one = K == J and mcfg["equal_counts"] == "one_to_one"
+        path = np.stack([np.arange(K), np.arange(K)], axis=1) if one_to_one else syllable_path(C)
+        assignment = assign_syllables(path, C)
+        spans = segment_driven_spans(seg_t, seg_p, assignment)
+        cost = float(C[path[:, 0], path[:, 1]].mean())
+        info = {"pairing": "one_to_one" if one_to_one else "dtw", "n_decoder_syllables": J,
+                "n_decoder_syllables_without_tts": int(J - np.unique(assignment).size),
+                "n_tts_syllables_without_frames": int(np.sum(spans[:, 1] <= spans[:, 0])),
+                "assignment": assignment.tolist()}
+    target = al.stretch_features(tts_raw, seg_t, spans, n_out, silence, cfg)
+    return al.Alignment(target, env_p, env_t, seg_p, seg_t, spans, cost, info)
+
+
 # ------------------------------------------------------------------------------- file formats
 
 
@@ -441,20 +577,28 @@ def segment_records(cfg: Mapping[str, Any], cell: str, method: str) -> tuple[lis
 # -------------------------------------------------------------------------------- choice rule
 
 
-def choose_method(target_r: Mapping[str, Mapping[str, float]], rule: Mapping[str, Any]) -> dict:
-    """The pre-registered choice (D-033): highest mean target r over ``rule['primary_cells']``; every method
-    within ``tie_tolerance`` of the best is tied, and the tie goes to the earliest in ``simplicity_order``.
+def candidates(rule: Mapping[str, Any]) -> list[str]:
+    """Candidate cells "<arm>/<method>" in tie-break order: arm A before B, then ``simplicity_order``."""
+    return [f"{a}/{m}" for a in rule["arms"] for m in rule["simplicity_order"]]
 
-    ``target_r[method][cell]`` = mean target r of that method (free variant, forced TTS side) in that cell.
+
+def choose_method(target_r: Mapping[str, Mapping[str, float]], rule: Mapping[str, Any]) -> dict:
+    """The pre-registered choice (D-033): the (arm, method) cell with the highest mean target r over
+    ``rule['primary_cells']``; every candidate within ``tie_tolerance`` of the best is tied, and the tie goes
+    to the earliest in ``candidates(rule)`` (arm A before B; current < nuclei < sylber).
+
+    ``target_r["<arm>/<method>"][cell]`` = mean target r of that candidate (free variant, forced TTS side).
     """
-    cells, order, tol = list(rule["primary_cells"]), list(rule["simplicity_order"]), float(rule["tie_tolerance"])
+    cells, order, tol = list(rule["primary_cells"]), candidates(rule), float(rule["tie_tolerance"])
     means = {}
     for m in order:
         vals = [target_r.get(m, {}).get(c) for c in cells]
         if any(v is None for v in vals):
-            raise ValueError(f"method {m!r} lacks a result for one of {cells}")
+            raise ValueError(f"candidate {m!r} lacks a result for one of {cells}")
         means[m] = float(np.mean(vals))
     best = max(means.values())
     tied = [m for m in order if means[m] >= best - tol]
+    arm, method = tied[0].split("/")
     return {"mean_target_r": means, "best_mean": best, "tied_within_tolerance": tied, "winner": tied[0],
-            "rule": {"primary_cells": cells, "tie_tolerance": tol, "simplicity_order": order}}
+            "winner_arm": arm, "winner_method": method,
+            "rule": {"primary_cells": cells, "tie_tolerance": tol, "order": order}}

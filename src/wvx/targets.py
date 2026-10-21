@@ -323,19 +323,25 @@ def lpcnet_callables(cfg: Mapping[str, Any]):
 def align_trials(model, trials: Sequence, corpus: TTSCorpus, cfg: Mapping[str, Any], reorder: bool,
                  log=print, preds: Optional[Sequence[np.ndarray]] = None,
                  tts_segments: Optional[Sequence[Optional[np.ndarray]]] = None,
-                 pred_segments: Optional[Sequence[Optional[np.ndarray]]] = None) -> tuple[list[np.ndarray], list]:
+                 pred_segments: Optional[Sequence[Optional[np.ndarray]]] = None,
+                 arm: str = "A") -> tuple[list[np.ndarray], list]:
     """Decoder predictions and alignments for trials (anything with ``.neural`` and ``.text``).
 
     Predictions run in this process (TensorFlow); alignments run in ``alignment.n_workers`` threads,
     each calling LPCNet as a subprocess. Returns (normalized predictions, ``alignment.Alignment``s).
     ``preds``: normalized predictions computed earlier (``model`` is then unused). ``tts_segments`` /
     ``pred_segments``: per trial, syllables that replace the envelope-dip ones (``align_trial``); None, or
-    a None entry, keeps the envelope dips.
+    a None entry, keeps the envelope dips. ``arm``: "A" = ``wvx.alignment.align_trial`` (D-027 mapping),
+    "B" = ``wvx.syllables.align_trial_segment_driven`` (decoder syllables define the spans; D-033).
     """
     from concurrent.futures import ThreadPoolExecutor
 
     from wvx import inference
     from wvx.alignment import align_trial
+    from wvx.syllables import align_trial_segment_driven
+
+    if arm not in ("A", "B"):
+        raise ValueError(f"arm must be 'A' or 'B', got {arm!r}")
 
     sil20 = silence_frame(corpus, cfg)
     missing = sorted({t.text for t in trials if t.text not in corpus})
@@ -358,9 +364,12 @@ def align_trials(model, trials: Sequence, corpus: TTSCorpus, cfg: Mapping[str, A
     def one(i):
         t = trials[i]
         pred_raw = prediction_timeline(preds[i], t.neural.shape[0], sil20, cfg)
-        return align_trial(pred_raw, reduce(corpus.lookup(t.text), cfg), sil20, cfg, synth=synth, encode=encode,
-                           tts_segments=None if tts_segments is None else tts_segments[i],
-                           pred_segments=None if pred_segments is None else pred_segments[i])
+        segs = {"tts_segments": None if tts_segments is None else tts_segments[i],
+                "pred_segments": None if pred_segments is None else pred_segments[i]}
+        tts = reduce(corpus.lookup(t.text), cfg)
+        if arm == "B":
+            return align_trial_segment_driven(pred_raw, tts, sil20, cfg, synth=synth, **segs)
+        return align_trial(pred_raw, tts, sil20, cfg, synth=synth, encode=encode, **segs)
 
     with ThreadPoolExecutor(max_workers=int(cfg["alignment"]["n_workers"])) as ex:
         results = list(ex.map(one, range(len(trials))))

@@ -2,25 +2,26 @@
 """Host, project venv: score the syllable-timing methods on Wairagkar sessions, then apply the choice rule (D-033).
 
     CUDA_VISIBLE_DEVICES= nice -n 24 .venv/bin/python -I scripts/syllable_benchmark.py evaluate --cell day195_m172
-        [--methods current nuclei sylber] [--no-count] [--no-reference] [--threads N] [--max-trials N] [--overwrite]
+        [--methods current nuclei sylber] [--arms A B] [--no-count] [--no-reference] [--threads N] [--max-trials N]
+        [--overwrite]
     .venv/bin/python -I scripts/syllable_benchmark.py summarize
 
 ``evaluate`` (one cell = session x decoder) loads the cell's saved decoder output (scripts/syllable_decode.py),
 the TTS syllables of the session's cues (scripts/syllable_tts.py) and each method's decoder syllables
-(``current`` from the envelope, ``nuclei`` / ``sylber`` from scripts/syllable_segment.py), runs the unchanged
-alignment (wvx.alignment: DTW, mapping, per-syllable stretch, via wvx.targets.align_trials) and scores every
-trial with the functions of scripts/validate_alignment.py against their ``syl_indices`` and ``_syl`` targets.
-Runs per cell:
-  - every method, free (the candidates) and count-constrained (secondary: the N strongest decoder
+(``current`` from the envelope, ``nuclei`` / ``sylber`` from scripts/syllable_segment.py), maps them with each
+arm (wvx.targets.align_trials: A = the unchanged D-027 mapping, B = segment-driven, wvx.syllables) and scores
+every trial with the functions of scripts/validate_alignment.py against their ``syl_indices`` and ``_syl``
+targets. Runs per cell (13):
+  - every arm x method, free (the candidates) and count-constrained (secondary: the N strongest decoder
     syllables, N = TTS syllables), TTS side ``forced``;
-  - reference: D-027's configuration (``current`` with envelope-dip TTS syllables), for continuity.
-One JSON per run: results/syllable_benchmark/<cell>/<method>__<free|count>__tts-<side>.json, with the headline
-numbers, the full validate_alignment-style summaries, the reference placements (chance, their-timing oracle)
-and per-trial rows.
+  - reference: D-027's configuration (arm A, ``current``, envelope-dip TTS syllables), for continuity.
+One JSON per run: results/syllable_benchmark/<cell>/<method>__<free|count>__tts-<side>__arm-<A|B>.json, with the
+headline numbers, the full validate_alignment-style summaries, the reference placements (chance, their-timing
+oracle) and per-trial rows.
 
 ``summarize`` collects every configured Wairagkar cell into results/syllable_benchmark/summary.json and
-summary.md, and applies the pre-registered rule (``benchmark.choice``, wvx.syllables.choose_method). Every
-cell is reported, whatever the winner.
+summary.md, and applies the pre-registered rule (``benchmark.choice``, wvx.syllables.choose_method: best
+(arm, method) candidate; ties to arm A, then the simpler method). Every cell is reported, whatever the winner.
 """
 
 from __future__ import annotations
@@ -40,15 +41,27 @@ from wvx.config import resolve_path  # noqa: E402
 from wvx.syllable_runtime import rel, runtime_record, sha256, start  # noqa: E402  (no numpy)
 
 
-def run_name(method: str, count: bool, tts_side: str) -> str:
-    return f"{method}__{'count' if count else 'free'}__tts-{tts_side}"
+def run_name(method: str, count: bool, tts_side: str, arm: str) -> str:
+    return f"{method}__{'count' if count else 'free'}__tts-{tts_side}__arm-{arm}"
 
 
-def result_path(cfg, cell: str, method: str, count: bool, tts_side: str) -> Path:
-    return Path(cfg["paths"]["syllable_benchmark"]) / cell / f"{run_name(method, count, tts_side)}.json"
+def result_path(cfg, cell: str, method: str, count: bool, tts_side: str, arm: str) -> Path:
+    return Path(cfg["paths"]["syllable_benchmark"]) / cell / f"{run_name(method, count, tts_side, arm)}.json"
 
 
-def headline(rows, acc, cfg, va) -> dict:
+def planned_runs(cfg, methods=None, arms=None, count: bool = True, reference: bool = True) -> list:
+    """(method, count, tts_side, arm) of every run of a cell: arm x method x {free, count} on the forced TTS side,
+    then the D-027 reference."""
+    b = cfg["benchmark"]
+    runs = [(m, c, "forced", a) for a in (arms or b["arms"]) for m in (methods or b["methods"])
+            for c in ((False, True) if count else (False,))]
+    if reference:
+        ref = b["reference"]
+        runs.append((ref["method"], False, ref["tts_side"], ref["arm"]))
+    return runs
+
+
+def headline(rows, acc, cfg, va, infos=None) -> dict:
     """The pre-registered numbers of one run (D-033) from validate_alignment-style accumulators."""
     import numpy as np
 
@@ -71,12 +84,23 @@ def headline(rows, acc, cfg, va) -> dict:
         "fraction_tts_count_equal_theirs": float(np.mean([r["n_tts_syllables"] == r["n_their_syllables"] for r in rows])),
         "tts_syllables_without_speech": int(sum(r["n_tts_syllables_without_speech"] for r in rows)),
         "tts_syllables_total": int(sum(r["n_tts_syllables"] for r in rows)),
+        "decoder_syllables_total": int(sum(r["offline"]["n_detected"] for r in rows)),
+        # arm B only (None for arm A): decoder syllables left silent, TTS syllables squeezed to no frames,
+        # trials whose decoder output had no syllable (target all silence), trials paired one to one
+        "decoder_syllables_without_tts": _sum_info(infos, "n_decoder_syllables_without_tts"),
+        "tts_syllables_without_frames": _sum_info(infos, "n_tts_syllables_without_frames"),
+        "trials_without_decoder_syllables": None if not infos else int(sum(i["n_decoder_syllables"] == 0 for i in infos)),
+        "trials_paired_one_to_one": None if not infos else int(sum(i["pairing"] == "one_to_one" for i in infos)),
     }
 
 
+def _sum_info(infos, key):
+    return None if not infos else int(sum(i[key] for i in infos))
+
+
 def score_run(method: str, count: bool, tts_side: str, trials, preds, corpus, cfg, their_raw, syl, words, desc,
-              pred_env, tts_forced, records, reorder: bool) -> dict:
-    """Align every trial with one (method, variant, TTS side) and score it as scripts/validate_alignment.py does.
+              pred_env, tts_forced, records, reorder: bool, arm: str = "A") -> dict:
+    """Align every trial with one (method, variant, TTS side, arm) and score it as scripts/validate_alignment.py does.
 
     ``trials``: objects with ``.neural`` (sets T), ``.text`` and ``.target`` (their decoder target); ``preds``: the
     saved normalized predictions; ``pred_env``: the decoder envelope per trial (dB, neural timeline);
@@ -100,7 +124,7 @@ def score_run(method: str, count: bool, tts_side: str, trials, preds, corpus, cf
             segs = sy.keep_strongest(segs, pred_env[i], len(tts_segs[i]))
         pred_segs.append(segs)
     _, results = tg.align_trials(None, trials, corpus, cfg, reorder=reorder, log=None, preds=preds,
-                                 tts_segments=tts_segs, pred_segments=pred_segs)
+                                 tts_segments=tts_segs, pred_segments=pred_segs, arm=arm)
     rows, acc = [], {"offline": {"errs": {}, "r": []}}
     base_r = {k: [] for k in va.REFERENCES}
     for i, (t, res, pred) in enumerate(zip(trials, results, preds)):
@@ -110,14 +134,16 @@ def score_run(method: str, count: bool, tts_side: str, trials, preds, corpus, cf
                "n_their_syllables": int(len(syl[i])), "n_their_words": int(len(words[i])),
                "n_tts_syllables": int(len(res.tts_segments)), "n_decoder_syllables_before_constraint": n_before[i],
                "n_tts_syllables_without_speech": int(sum(not tts_speech[a:b].any() for a, b in res.tts_segments)),
-               "dtw_cost": res.dtw_cost, "decoder_r": float(np.nanmean(va.feature_r(pred, t.target[w - 1:])))}
+               "dtw_cost": res.dtw_cost, "decoder_r": float(np.nanmean(va.feature_r(pred, t.target[w - 1:]))),
+               "mapping": {k: v for k, v in (res.info or {}).items() if k != "assignment"} or None}
         va.add_variant(row, acc, "offline", res, t.target, their_raw[i], syl[i], cfg)
         for k, r in va.reference_r(i, trials, res, tts, their_raw[i], syl[i], sil20, cfg).items():
             base_r[k].append(r)
             row[f"{k}_r"] = float(np.nanmean(r))
         rows.append(row)
+    infos = [res.info for res in results] if arm == "B" else None
     return {
-        "headline": headline(rows, acc, cfg, va),
+        "headline": headline(rows, acc, cfg, va, infos),
         "decoder_vs_their_target_r": va.summarize(r["decoder_r"] for r in rows),
         "decoder_output_sanity": tg.decoder_output_sanity(trials, results, cfg),
         "offline_decoder": va.variant_summary(rows, acc, "offline", cfg),
@@ -150,11 +176,7 @@ def cmd_evaluate(cfg, env_set, args) -> int:
     cfg = deep_merge(cfg, {"wairagkar_data": {"keys": {"target": v["their_target_key"]}}})
     session = spec["session"]
     voice = cfg["tts"]["voice"]
-    methods = args.methods or list(cfg["benchmark"]["methods"])
-    runs = [(m, c, "forced") for m in methods for c in ((False,) if args.no_count else (False, True))]
-    if not args.no_reference:
-        ref = cfg["benchmark"]["reference"]
-        runs.append((ref["method"], False, ref["tts_side"]))
+    runs = planned_runs(cfg, args.methods, args.arms, count=not args.no_count, reference=not args.no_reference)
     existing = [result_path(cfg, cell, *r) for r in runs if result_path(cfg, cell, *r).exists()]
     if existing and not args.overwrite:
         raise SystemExit(f"{len(existing)} results exist, e.g. {rel(existing[0])}; pass --overwrite to replace them")
@@ -185,24 +207,24 @@ def cmd_evaluate(cfg, env_set, args) -> int:
     sil20 = tg.silence_frame(corpus, cfg)
     pred_env = [al.envelope_db(tg.prediction_timeline(p, t.neural.shape[0], sil20, cfg), cfg) for p, t in zip(preds, trials)]
     tts_forced = None
-    if any(side == "forced" for _, _, side in runs):
+    if any(side == "forced" for _, _, side, _ in runs):
         table = sy.load_tts_syllables(cfg, voice, session)
         tts_forced = [table[tg.text_key(t.text)] for t in trials]
     records, seg_headers = {}, {}
-    for m in {m for m, _, _ in runs if m != "current"}:
+    for m in sorted({m for m, _, _, _ in runs if m != "current"}):
         recs, h = sy.segment_records(cfg, cell, m)
         if h["decoded"]["model"]["sha256"] != dec["model"]["sha256"] or len(recs) != n:
             raise SystemExit(f"{cell} {m}: segment file does not belong to these predictions")
         records[m], seg_headers[m] = recs, {k: h.get(k) for k in ("settings", "versions", "checkpoint_load", "code_version",
                                                                    "settings_differing_from_package_defaults", "created")}
 
-    for method, count, side in runs:
+    for method, count, side, arm in runs:
         t0 = time.time()
         scored = score_run(method, count, side, trials, preds, corpus, cfg, their_raw, syl, words, desc, pred_env,
-                           tts_forced, records.get(method), dec["model"]["reorder_channels"])
+                           tts_forced, records.get(method), dec["model"]["reorder_channels"], arm=arm)
         out = {
             "created": datetime.datetime.now().isoformat(timespec="seconds"),
-            "cell": cell, "cell_spec": spec, "session": session, "method": method,
+            "cell": cell, "cell_spec": spec, "session": session, "method": method, "arm": arm,
             "variant": "count_constrained" if count else "free", "tts_side": side,
             "role": "reference" if side != "forced" else ("secondary" if count else "candidate"),
             "headline": scored["headline"],
@@ -216,9 +238,9 @@ def cmd_evaluate(cfg, env_set, args) -> int:
             "per_trial": scored["per_trial"],
             "wall_time_s": time.time() - t0,
         }
-        p = sy.save_json(result_path(cfg, cell, method, count, side), va._jsonable(out))
+        p = sy.save_json(result_path(cfg, cell, method, count, side, arm), va._jsonable(out))
         h = out["headline"]
-        print(f"[evaluate] {cell} {run_name(method, count, side)}: target r {h['target_r_mean']:.3f}, onsets within "
+        print(f"[evaluate] {cell} {run_name(method, count, side, arm)}: target r {h['target_r_mean']:.3f}, onsets within "
               f"{h['onset_tolerance_ms']} ms {h['onsets_within_tolerance']:.3f}, span onset error {h['span_onset_error_median_ms']} ms, "
               f"oracle {h['oracle_r_mean']} (n={h['oracle_n_trials']}) -> {rel(p)} ({out['wall_time_s']:.0f} s)", flush=True)
     print(f"[evaluate] {cell}: {len(runs)} runs in {time.time() - t_start:.0f} s")
@@ -237,23 +259,21 @@ def cmd_summarize(cfg, env_set, args) -> int:
     b = cfg["benchmark"]
     root = Path(cfg["paths"]["syllable_benchmark"])
     cells = {c: s for c, s in b["cells"].items() if "session" in s}
-    ref = b["reference"]
     table, missing = [], []
-    runs = [(m, c, "forced") for m in b["methods"] for c in (False, True)] + [(ref["method"], False, ref["tts_side"])]
     for cell, spec in cells.items():
-        for method, count, side in runs:
-            p = result_path(cfg, cell, method, count, side)
+        for method, count, side, arm in planned_runs(cfg):
+            p = result_path(cfg, cell, method, count, side, arm)
             if not p.is_file():
                 missing.append(rel(p))
                 continue
             d = sy.load_json(p)
             table.append({"cell": cell, "role": spec.get("role"), "age_days": spec.get("age_days"), "method": method,
-                          "variant": d["variant"], "tts_side": side, "run_role": d["role"], **d["headline"],
+                          "arm": arm, "variant": d["variant"], "tts_side": side, "run_role": d["role"], **d["headline"],
                           "code_version": d["code_version"], "file": rel(p)})
     target_r = {}
     for r in table:
         if r["variant"] == "free" and r["tts_side"] == "forced":
-            target_r.setdefault(r["method"], {})[r["cell"]] = r["target_r_mean"]
+            target_r.setdefault(f"{r['arm']}/{r['method']}", {})[r["cell"]] = r["target_r_mean"]
     try:
         choice = sy.choose_method(target_r, b["choice"])
     except ValueError as e:
@@ -277,18 +297,19 @@ def cmd_summarize(cfg, env_set, args) -> int:
         return "-" if x is None else (f"{x:.{nd}f}" if isinstance(x, float) else str(x))
 
     lines = ["# Syllable-timing benchmark (D-033)", "",
-             f"Choice rule: highest mean target r over {', '.join(b['choice']['primary_cells'])} (free, forced TTS); "
-             f"ties within {b['choice']['tie_tolerance']} go to the simpler method ({' < '.join(b['choice']['simplicity_order'])}).", ""]
+             f"Choice rule: highest mean target r over {', '.join(b['choice']['primary_cells'])} (free, forced TTS), "
+             f"over (arm, method); ties within {b['choice']['tie_tolerance']} go to the simpler candidate "
+             f"({' < '.join(sy.candidates(b['choice']))}).", ""]
     if "winner" in choice:
-        lines += [f"**Winner: {choice['winner']}** (means: " + ", ".join(f"{m} {v:.4f}" for m, v in choice["mean_target_r"].items())
+        lines += [f"**Winner: arm {choice['winner_arm']}, {choice['winner_method']}** (means: " + ", ".join(f"{m} {v:.4f}" for m, v in choice["mean_target_r"].items())
                   + f"; tied within tolerance: {', '.join(choice['tied_within_tolerance'])})", ""]
     else:
         lines += [f"No choice yet: {choice['error']}", ""]
     tol = b["onset_tolerance_ms"]
-    lines += [f"| cell | age (d) | method | variant | TTS | onsets <= {tol} ms | span onset err (ms) | target r | chance r | oracle r (n) | r on oracle trials |",
-              "|---|---|---|---|---|---|---|---|---|---|---|"]
+    lines += [f"| cell | age (d) | arm | method | variant | TTS | onsets <= {tol} ms | span onset err (ms) | target r | chance r | oracle r (n) | r on oracle trials |",
+              "|---|---|---|---|---|---|---|---|---|---|---|---|"]
     for r in table:
-        lines.append(f"| {r['cell']} | {r['age_days']} | {r['method']} | {r['variant']} | {r['tts_side']} | "
+        lines.append(f"| {r['cell']} | {r['age_days']} | {r['arm']} | {r['method']} | {r['variant']} | {r['tts_side']} | "
                      f"{f(r['onsets_within_tolerance'])} | {f(r['span_onset_error_median_ms'], 0)} | {f(r['target_r_mean'])} | "
                      f"{f(r['chance_r_mean'])} | {f(r['oracle_r_mean'])} ({r['oracle_n_trials']}) | {f(r['target_r_mean_on_oracle_trials'])} |")
     lines += ["", "TTS side (forced alignment + maximal onset): syllable count = CMUdict count in "
@@ -307,6 +328,7 @@ def main(argv=None) -> int:
     ap.add_argument("--config", default="configs/experiments/syllable_benchmark.yaml")
     ap.add_argument("--cell", default=None)
     ap.add_argument("--methods", nargs="+", choices=["current", "nuclei", "sylber"], default=None)
+    ap.add_argument("--arms", nargs="+", choices=["A", "B"], default=None, help="default: benchmark.arms")
     ap.add_argument("--no-count", action="store_true", help="skip the count-constrained variants")
     ap.add_argument("--no-reference", action="store_true", help="skip the D-027 reference run")
     ap.add_argument("--threads", type=int, default=None)

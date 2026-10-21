@@ -422,6 +422,7 @@ class Alignment:
     tts_segments: np.ndarray      # (K, 2) syllables detected in the TTS
     mapped_segments: np.ndarray   # (K, 2) TTS syllables on the neural timeline
     dtw_cost: float
+    info: Optional[dict] = None   # mapping-specific diagnostics (segment-driven arm: wvx.syllables)
 
     def summary(self) -> dict:
         return {

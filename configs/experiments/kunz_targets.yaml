@@ -134,6 +134,7 @@ syllables:
   tts_side: envelope         # envelope = envelope dips of the TTS (D-027) | forced = MFA + maximal onset (D-033)
   method: current            # decoder side: current = envelope dips (D-027) | nuclei | sylber (D-033)
   count_constraint: false    # keep only the N strongest decoder syllables, N = number of TTS syllables
+  arm: A                     # mapping: A = envelope DTW + snap (D-027) | B = decoder syllables define the spans (D-033)
 
 # --------------------------------------------------------------------- validation on Wairagkar sessions
 validation:

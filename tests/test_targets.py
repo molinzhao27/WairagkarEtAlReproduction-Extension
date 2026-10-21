@@ -182,3 +182,22 @@ def test_align_trials_with_saved_predictions_and_segments(cfg):
     assert merged[0].mapped_segments.shape == (1, 2)
     with pytest.raises(ValueError):
         tg.align_trials(None, trials, corpus, cfg, reorder=False, log=None, preds=preds * 2)
+
+
+def test_align_trials_segment_driven_arm(cfg):
+    from types import SimpleNamespace
+
+    from wvx.syllables import load_benchmark_config
+
+    bcfg = load_benchmark_config()                       # arm B settings live in the benchmark config
+    w, T = bcfg["model"]["window_len"], 320
+    corpus = tg.TTSCorpus("V", ["You up?"], [_c0_frames(_bumps(100, [30, 50], 5))], SILENCE36)
+    preds = [tg.scale(_c0_frames(_bumps(T, [150, 230], 12))[:, :20][w - 1:], bcfg)]
+    trials = [SimpleNamespace(neural=np.zeros((T, bcfg["model"]["n_features"]), np.float32), text="You up?")]
+    _, a = tg.align_trials(None, trials, corpus, bcfg, reorder=False, log=None, preds=preds)
+    _, b = tg.align_trials(None, trials, corpus, bcfg, reorder=False, log=None, preds=preds, arm="B")
+    assert a[0].info is None and b[0].info["pairing"] == "one_to_one"
+    np.testing.assert_array_equal(b[0].mapped_segments, b[0].pred_segments)    # decoder syllables are the spans
+    np.testing.assert_array_equal(b[0].pred_segments, a[0].pred_segments)      # same envelope-dip syllables
+    with pytest.raises(ValueError):
+        tg.align_trials(None, trials, corpus, bcfg, reorder=False, log=None, preds=preds, arm="C")
