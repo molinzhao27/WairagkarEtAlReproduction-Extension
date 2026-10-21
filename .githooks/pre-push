@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# The public GitHub repo gets a code-only copy of history from maintainer/publish_public.sh (local only).
+# Block pushing local branches straight to GitHub, which would publish notes and other local-only files.
+set -euo pipefail
+url="${2:-}"
+if [[ "$url" == *github.com* && "${WVX_PUBLISH:-}" != "1" ]]; then
+  echo "pre-push: don't push local branches to GitHub; publish code with maintainer/publish_public.sh" >&2
+  exit 1
+fi
