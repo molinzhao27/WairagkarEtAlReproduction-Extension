@@ -105,5 +105,8 @@ third_party/LPCNet/src/.dirstamp
 # GPU host SSH target (machine-local)
 scripts/remote/host.env
 
+# Code version on the host, written by sync.sh push (wvx.provenance)
+.wvx_version.json
+
 # Scratch run folders written by scripts/time_training.py (timing.json is kept)
 results/time_training_*_base/
