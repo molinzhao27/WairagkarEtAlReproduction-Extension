@@ -16,6 +16,13 @@ from typing import Optional
 import numpy as np
 
 
+def _json_scalar(obj):
+    """Let numpy scalars and arrays in trial metadata be written as JSON."""
+    if isinstance(obj, (np.generic, np.ndarray)):
+        return obj.tolist()
+    raise TypeError(f"not JSON serializable: {type(obj).__name__}")
+
+
 @dataclass
 class Trial:
     neural: np.ndarray                    # (T, n_features) float32
@@ -63,7 +70,7 @@ class SessionData:
             ],
         }
         Path(path).parent.mkdir(parents=True, exist_ok=True)
-        np.savez_compressed(path, header=np.array(json.dumps(header)), **arrays)
+        np.savez_compressed(path, header=np.array(json.dumps(header, default=_json_scalar)), **arrays)
 
     @classmethod
     def load(cls, path) -> "SessionData":

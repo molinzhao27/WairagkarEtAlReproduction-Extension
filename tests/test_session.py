@@ -19,7 +19,7 @@ def test_save_load_round_trip(tmp_path):
     rng = np.random.default_rng(0)
     trials = [
         Trial(neural=rng.random((5, 6), np.float32), target=rng.random((5, 3), np.float32),
-              text="a b.", block=3, meta={"go_offset": 2, "closed_loop": True}),
+              text="a b.", block=3, meta={"go_offset": np.int64(2), "closed_loop": True}),
         Trial(neural=rng.random((4, 6), np.float32), text="c?", block=6),
     ]
     SessionData("s", 2, trials).save(tmp_path / "s.npz")
