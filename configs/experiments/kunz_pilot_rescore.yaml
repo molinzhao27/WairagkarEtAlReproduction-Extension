@@ -1,0 +1,15 @@
+# Rescore of the Kunz CPU pilot (D-029) with the audited pipeline (D-031: cue-matrix nulls, per-clip ASR seeding,
+# silent-clip skipping). Same experiment (outputs in results/kunz_pilot/), only the CPU budget differs: it shares
+# chiplet 1 with another job (AGENTS.md "Where things run"), so 4 threads. No decoding, no training.
+#
+#   host: CUDA_VISIBLE_DEVICES= .venv/bin/python -I scripts/kunz_experiment.py \
+#       --config configs/experiments/kunz_pilot_rescore.yaml --stage score
+
+base_experiment: configs/experiments/kunz_pilot.yaml
+
+runtime:
+  threads: {intra_op: 4, inter_op: 1, omp: 4}
+
+experiment:
+  evaluation:
+    n_workers: 4                 # LPCNet synthesis + metric threads (not part of the scoring hash)
