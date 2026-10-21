@@ -1,0 +1,25 @@
+# Training-throughput benchmark (scripts/time_training.py). Mimics the Kunz experiment's training:
+# start from a released single-layer decoder, one new input layer, base frozen or fine-tuned.
+# Merged over configs/experiments/reproduce_training.yaml (hyperparameters, augmentation).
+run_name: time_training
+
+benchmark:
+  session: t15_day195            # proxy data with real trial lengths
+  layer: 0
+  n_trials: 8                    # trials used for the timed epoch (small: CPU, stay well under 30 min)
+  n_val_trials: 2
+  variants: [frozen_base, finetune_base]
+  # Projection target: Kunz attempted training set with one attempted block held out
+  # (3 blocks x 50 trials, mean go length 844 bins; notes/DATA_FORMATS.md).
+  project_n_trials: 150
+  project_mean_bins: 844
+
+training:
+  epochs: 1
+  overwrite: true
+  verbose: 0
+  validation: {n_trials: 2, fraction: null, pool: null}
+  init:
+    source: inference_h5
+    path: data/raw/wairagkar/t15_neural_data/t15_day195/brain2voice_t15_day193.h5
+    freeze_base: true            # overridden per variant

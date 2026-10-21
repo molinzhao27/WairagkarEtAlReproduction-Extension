@@ -1,0 +1,21 @@
+{
+  "device": [
+    "/device:CPU:0"
+  ],
+  "variants": {
+    "frozen_base": {
+      "wall_s": 66.6,
+      "train_windows_incl_aug": 30168,
+      "windows_per_s": 452.7,
+      "projected_kunz_epoch_min": 17.3,
+      "projected_kunz_windows_per_epoch": 471000
+    },
+    "finetune_base": {
+      "wall_s": 83.9,
+      "train_windows_incl_aug": 30168,
+      "windows_per_s": 359.5,
+      "projected_kunz_epoch_min": 21.8,
+      "projected_kunz_windows_per_epoch": 471000
+    }
+  }
+}
