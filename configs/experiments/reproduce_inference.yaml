@@ -82,7 +82,7 @@ synthesis:
   wav_subtype: PCM_16              # saved audio; LPCNet output is 16-bit, so this is lossless
   timeout_s: 600                   # per LPCNet/ffmpeg call (their retry loops never give up)
   preflight_timeout_s: 30
-  tmp_root: null                   # null = system temp dir; one fresh dir per call
+  tmp_root: data/processed/tmp     # inside the repo (hard rule: nothing outside the repo); one fresh dir per call
   keep_tmp: false
   strip_ld_library_path: true      # as their code does (speech_processor.py:58-59,156-157)
 

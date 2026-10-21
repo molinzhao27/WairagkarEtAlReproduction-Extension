@@ -1,0 +1,136 @@
+{
+  "created": "2026-10-21T01:49:20",
+  "session": "t15.2024.03.03_attempted",
+  "n_trials": 200,
+  "saved": "data/processed/kunz_targets/t15.2024.03.03_attempted.npz",
+  "voice": "Aman (English (India))",
+  "tts_corpus": {
+    "file": "data/processed/tts/aman_english_india/kunz_50words.npz",
+    "meta": {
+      "engine": "macos_say",
+      "macos": {
+        "productVersion": "27.0",
+        "buildVersion": "26A428"
+      },
+      "say": {
+        "rate_wpm": null,
+        "file_format": "WAVE",
+        "data_format": "LEI16",
+        "pad_ms": 200,
+        "word_pause_ms": null
+      },
+      "lpcnet_binary_sha256": "39729e2b52dcdb2420401c216ed8192e32da3b5191f60ae0b635e8d289891949",
+      "corpus_sha256": "e713f435a525d0ae9519c6bc9e4f93b917d75f2b393069c73bf76d2b6f72cddd",
+      "created": "2026-10-20T17:47:57",
+      "frame_layout": "raw LPCNet frames (n, 36) from lpcnet_demo -features; first pad_ms and last pad_ms are digital silence"
+    }
+  },
+  "decoder": {
+    "path": "data/raw/wairagkar/t15_neural_data/t15_day195/brain2voice_t15_day193.h5",
+    "sha256": "fd476519fb7f0a7880efb1cbcd328a4915cd1473a23a2eb8d4939d6f34ad006b",
+    "reorder_channels": true
+  },
+  "decoder_output_sanity": {
+    "r_detected_syllables_vs_cue_words": 0.6942420907243814,
+    "r_detected_syllables_vs_tts_syllables": 0.6457544225453254,
+    "detected_syllables_per_trial_median": 7.0,
+    "fraction_trials_without_speech": 0.0,
+    "envelope_range_db_p95_minus_p5_median": 70.03417108629841,
+    "speech_fraction_median": 0.3946351402716851
+  },
+  "syllables_per_trial": {
+    "min": 2,
+    "median": 5.0,
+    "max": 10
+  },
+  "speech_fraction_per_trial": {
+    "min": 0.09952380952380953,
+    "median": 0.4541723687104421,
+    "max": 0.7118491921005387
+  },
+  "pred_syllables_zero": 0,
+  "target_fraction_outside_unit_range": 0.0,
+  "target_mean": [
+    -0.36079686880111694,
+    0.23372451961040497,
+    -0.24647583067417145,
+    -0.047040000557899475,
+    0.052048854529857635,
+    -0.06354396790266037,
+    0.044068593531847,
+    -0.007294035982340574,
+    -0.08468462526798248,
+    0.04204777255654335,
+    0.32118308544158936,
+    -0.17426899075508118,
+    0.0495227575302124,
+    -0.09059133380651474,
+    -0.03640878200531006,
+    0.12240917235612869,
+    0.027919316664338112,
+    0.010539933107793331,
+    0.045412030071020126,
+    -0.32450342178344727
+  ],
+  "target_sd": [
+    0.7594147324562073,
+    0.20652340352535248,
+    0.18888205289840698,
+    0.17314869165420532,
+    0.1401226967573166,
+    0.1179167851805687,
+    0.16512565314769745,
+    0.1068609207868576,
+    0.13309188187122345,
+    0.12663550674915314,
+    0.10688064247369766,
+    0.12757790088653564,
+    0.1355670988559723,
+    0.08885812014341354,
+    0.10306952893733978,
+    0.11803480982780457,
+    0.08353090286254883,
+    0.08979705721139908,
+    0.49174919724464417,
+    0.5213772654533386
+  ],
+  "alignment_config": {
+    "c0_offset": 4.0,
+    "c0_scale": 4.242640687119285,
+    "n_workers": 8,
+    "envelope": {
+      "source": "c0",
+      "smooth_ms": 15.0,
+      "amin": 1e-05
+    },
+    "segmentation": {
+      "speech_threshold_db": 30.0,
+      "floor_percentile": 10.0,
+      "floor_margin_db": 6.0,
+      "min_gap_ms": 60.0,
+      "min_region_ms": 50.0,
+      "min_dip_db": 3.0,
+      "min_syllable_ms": 60.0
+    },
+    "dtw": {
+      "feature": "range",
+      "delta_weight": 1.0,
+      "metric": "euclidean",
+      "band_rad": null,
+      "speech_only": true
+    },
+    "mapping": {
+      "snap": true,
+      "snap_tolerance_ms": 100.0,
+      "min_syllable_frames": 2
+    },
+    "stretch": {
+      "domain": "features",
+      "interp": "linear",
+      "gap_fill": "silence",
+      "silence_pitch": "hold",
+      "audio_n_fft": 512
+    }
+  },
+  "wall_time_s": 209.62930750846863
+}

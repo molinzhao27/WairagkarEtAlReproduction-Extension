@@ -1,0 +1,2409 @@
+{
+ "created": "2026-10-21T01:44:40",
+ "session": "t15_day195",
+ "n_trials": 100,
+ "trial_range": [
+  0,
+  100
+ ],
+ "categories": {
+  "Training data (50-word vocab)": 100
+ },
+ "voice": "Aman (English (India))",
+ "tag": "reorder_off_0_100",
+ "their_target_key": "target_speech_feats_syl",
+ "decoder": {
+  "path": "data/raw/wairagkar/t15_neural_data/t15_day195/brain2voice_t15_day193.h5",
+  "sha256": "fd476519fb7f0a7880efb1cbcd328a4915cd1473a23a2eb8d4939d6f34ad006b",
+  "reorder_channels": false
+ },
+ "tts_meta": {
+  "engine": "macos_say",
+  "macos": {
+   "productVersion": "27.0",
+   "buildVersion": "26A428"
+  },
+  "say": {
+   "rate_wpm": null,
+   "file_format": "WAVE",
+   "data_format": "LEI16",
+   "pad_ms": 200,
+   "word_pause_ms": null
+  },
+  "lpcnet_binary_sha256": "39729e2b52dcdb2420401c216ed8192e32da3b5191f60ae0b635e8d289891949",
+  "corpus_sha256": "c3ac09067a918b22932a0d14594ab2df3cfe1786f4f6c013621c72781d534298",
+  "created": "2026-10-20T17:47:09",
+  "frame_layout": "raw LPCNet frames (n, 36) from lpcnet_demo -features; first pad_ms and last pad_ms are digital silence"
+ },
+ "decoder_vs_their_target_r": {
+  "n": 100,
+  "mean": -0.004593393300310709,
+  "sd": 0.03194276060258569,
+  "median": -0.001118494023103267,
+  "q25": -0.023484741803258657,
+  "q75": 0.01711645210161805
+ },
+ "decoder_output_sanity": {
+  "r_detected_syllables_vs_cue_words": 0.13568133853231426,
+  "r_detected_syllables_vs_tts_syllables": 0.10701462561817372,
+  "detected_syllables_per_trial_median": 1.0,
+  "fraction_trials_without_speech": 0.01,
+  "envelope_range_db_p95_minus_p5_median": 0.0,
+  "speech_fraction_median": 1.0
+ },
+ "their_syllables_per_trial": {
+  "n": 100,
+  "mean": 5.21,
+  "sd": 1.5381482373295494,
+  "median": 5.0,
+  "q25": 4.0,
+  "q75": 6.0
+ },
+ "tts_syllables_per_trial": {
+  "n": 100,
+  "mean": 4.44,
+  "sd": 1.3215142829345434,
+  "median": 4.0,
+  "q25": 3.75,
+  "q75": 5.0
+ },
+ "fraction_tts_count_equal_theirs": 0.42,
+ "offline_decoder": {
+  "n_trials": 100,
+  "target_r_mean_over_features": {
+   "n": 100,
+   "mean": 0.025456582273327512,
+   "sd": 0.04694575901285157,
+   "median": 0.01640924345701933,
+   "q25": -0.010120196966454387,
+   "q75": 0.06396391242742538
+  },
+  "target_r_per_feature": [
+   0.14581435918807983,
+   0.021885717287659645,
+   -0.018577666953206062,
+   0.007010411471128464,
+   0.00090216746320948,
+   0.018814094364643097,
+   0.019868114963173866,
+   -0.02922005206346512,
+   0.015591037459671497,
+   0.02595268189907074,
+   0.08178415149450302,
+   0.04303440451622009,
+   0.0038184362929314375,
+   -0.019780851900577545,
+   -0.0018627089448273182,
+   0.023726869374513626,
+   0.014945861883461475,
+   -0.005058165639638901,
+   0.04607640206813812,
+   0.11440636962652206
+  ],
+  "detected_syllables_minus_theirs": {
+   "n": 100,
+   "mean": -4.21,
+   "sd": 1.531633115338004,
+   "median": -4.0,
+   "q25": -5.0,
+   "q75": -3.0
+  },
+  "fraction_detected_count_equal": 0.0,
+  "boundaries_vs_syl_indices": {
+   "detected_on": {
+    "n": 517,
+    "median_abs_ms": 4820.0,
+    "mean_abs_ms": 5215.880077369439,
+    "mean_signed_ms": -4015.377176015474,
+    "within_50ms": 0.007736943907156673,
+    "within_100ms": 0.015473887814313346,
+    "within_200ms": 0.027079303675048357
+   },
+   "detected_off": {
+    "n": 517,
+    "median_abs_ms": 5560.0,
+    "mean_abs_ms": 6076.78916827853,
+    "mean_signed_ms": 5339.303675048356,
+    "within_50ms": 0.0,
+    "within_100ms": 0.0,
+    "within_200ms": 0.0019342359767891683
+   },
+   "mapped_on": {
+    "n": 521,
+    "median_abs_ms": 3250.0,
+    "mean_abs_ms": 3593.8387715930903,
+    "mean_signed_ms": -237.2552783109405,
+    "within_50ms": 0.015355086372360844,
+    "within_100ms": 0.026871401151631478,
+    "within_200ms": 0.0345489443378119
+   },
+   "mapped_off": {
+    "n": 521,
+    "median_abs_ms": 3750.0,
+    "mean_abs_ms": 4510.63339731286,
+    "mean_signed_ms": 2219.4241842610363,
+    "within_50ms": 0.003838771593090211,
+    "within_100ms": 0.015355086372360844,
+    "within_200ms": 0.026871401151631478
+   }
+  },
+  "speech_span_vs_their_target": {
+   "span_on": {
+    "n": 100,
+    "median_abs_ms": 1580.0,
+    "mean_abs_ms": 2510.5,
+    "mean_signed_ms": -40.3,
+    "within_50ms": 0.0,
+    "within_100ms": 0.0,
+    "within_200ms": 0.0
+   },
+   "span_off": {
+    "n": 100,
+    "median_abs_ms": 2095.0,
+    "mean_abs_ms": 3489.0,
+    "mean_signed_ms": 1809.8,
+    "within_50ms": 0.0,
+    "within_100ms": 0.0,
+    "within_200ms": 0.01
+   }
+  }
+ },
+ "closed_loop_audio": {
+  "n_trials": 0,
+  "target_r_mean_over_features": {
+   "n": 0
+  },
+  "target_r_per_feature": null,
+  "detected_syllables_minus_theirs": {
+   "n": 0
+  },
+  "fraction_detected_count_equal": null,
+  "boundaries_vs_syl_indices": {
+   "detected_on": {
+    "n": 0
+   },
+   "detected_off": {
+    "n": 0
+   },
+   "mapped_on": {
+    "n": 0
+   },
+   "mapped_off": {
+    "n": 0
+   }
+  },
+  "speech_span_vs_their_target": {
+   "span_on": {
+    "n": 0
+   },
+   "span_off": {
+    "n": 0
+   }
+  }
+ },
+ "envelope_r_offline_vs_closed_loop": {
+  "n": 0
+ },
+ "envelope_lag_closed_loop_minus_offline_frames": {
+  "n": 0
+ },
+ "reference_target_r": {
+  "span_uniform": {
+   "summary": {
+    "n": 99,
+    "mean": 0.05031557835613829,
+    "sd": 0.05658260087558986,
+    "median": 0.04933958128094673,
+    "q25": 0.0009618252224754542,
+    "q75": 0.09277498722076416
+   },
+   "per_feature": [
+    0.10084724426269531,
+    0.06421130895614624,
+    0.05535047873854637,
+    0.04576462134718895,
+    0.05670854449272156,
+    0.008502339012920856,
+    0.08584094047546387,
+    0.006644663400948048,
+    0.04375280812382698,
+    0.0673663541674614,
+    0.06643279641866684,
+    0.024268094450235367,
+    0.043779630213975906,
+    -0.011442343704402447,
+    0.04357384145259857,
+    0.04758181795477867,
+    0.01570771634578705,
+    0.01626378856599331,
+    0.1251562237739563,
+    0.10000068694353104
+   ]
+  },
+  "oracle_span": {
+   "summary": {
+    "n": 100,
+    "mean": 0.2181700824946165,
+    "sd": 0.06981269567447224,
+    "median": 0.2173955887556076,
+    "q25": 0.1635013334453106,
+    "q75": 0.2567952945828438
+   },
+   "per_feature": [
+    0.47525566816329956,
+    0.2574520409107208,
+    0.22102566063404083,
+    0.3325185477733612,
+    0.25441598892211914,
+    0.13767346739768982,
+    0.23237581551074982,
+    0.0076500428840518,
+    0.0899575725197792,
+    0.16712938249111176,
+    0.254500150680542,
+    0.1427960991859436,
+    0.28698527812957764,
+    0.08494892716407776,
+    0.061518993228673935,
+    0.11638543754816055,
+    0.04708028957247734,
+    0.02032921276986599,
+    0.8062488436698914,
+    0.36715424060821533
+   ]
+  },
+  "oracle_syllables": {
+   "summary": {
+    "n": 42,
+    "mean": 0.45985283312343417,
+    "sd": 0.05545131870271624,
+    "median": 0.4783600717782974,
+    "q25": 0.4324016571044922,
+    "q75": 0.49750155210494995
+   },
+   "per_feature": [
+    0.9686229228973389,
+    0.6887750625610352,
+    0.4086238443851471,
+    0.6123611927032471,
+    0.5002172589302063,
+    0.32012850046157837,
+    0.6188153028488159,
+    0.04139518737792969,
+    0.26117295026779175,
+    0.36129212379455566,
+    0.5486779808998108,
+    0.44554561376571655,
+    0.577653706073761,
+    0.20278701186180115,
+    0.24445922672748566,
+    0.4202522039413452,
+    0.15678994357585907,
+    0.1361662596464157,
+    0.7988192439079285,
+    0.8845013976097107
+   ]
+  },
+  "chance": {
+   "summary": {
+    "n": 100,
+    "mean": 0.010398103629021875,
+    "sd": 0.04751992285010675,
+    "median": 0.009434720035642385,
+    "q25": -0.025165801402181387,
+    "q75": 0.047721972689032555
+   },
+   "per_feature": [
+    0.13025662302970886,
+    -0.014012355357408524,
+    -0.03847460821270943,
+    0.023277001455426216,
+    0.017036817967891693,
+    0.025405414402484894,
+    0.04630432650446892,
+    -0.031971000134944916,
+    -0.0012112018885090947,
+    0.004213836509734392,
+    0.004415145143866539,
+    0.028559427708387375,
+    -0.016980618238449097,
+    -0.014480266720056534,
+    -0.011146944016218185,
+    -0.00633242167532444,
+    -0.0022263166029006243,
+    -0.000575701822526753,
+    0.0018220009515061975,
+    0.06802774220705032
+   ]
+  }
+ },
+ "voice_check": {
+  "theirs": {
+   "median_voiced_f0_hz": 129.03225708007812,
+   "c0_speech_mean": 9.084232309401267
+  },
+  "Aman (English (India))": {
+   "distance": 0.18721730672809686,
+   "median_voiced_f0_hz": 138.52813720703125,
+   "c0_speech_mean": 9.363081457319652,
+   "mean_z": [
+    0.09447322305427298,
+    0.1784713495454608,
+    -0.5937748015998248,
+    0.10569642698901754,
+    0.019702347800162407,
+    -0.12735649540390945,
+    0.1076035949304042,
+    -0.6242750169075038,
+    -0.6473716239201024,
+    -0.19983794165227045,
+    0.4367357121339677,
+    0.3044797149877154,
+    0.14038403409886616,
+    -0.03996059320465806,
+    0.3362676131656945,
+    -0.4310870101491998,
+    0.12303410175792612,
+    -0.01896292464753006,
+    -0.6412648916307883,
+    0.7636847987171027
+   ]
+  },
+  "Daniel (English (UK))": {
+   "distance": 0.6407829390583157,
+   "median_voiced_f0_hz": 115.94203186035156,
+   "c0_speech_mean": 9.482166630182574,
+   "mean_z": [
+    0.1348189088213615,
+    -0.10004777306394247,
+    -0.45301885192703417,
+    0.5564212159752994,
+    -0.27305439110667423,
+    -0.6203033486882915,
+    1.5311388798508887,
+    -1.809406187981223,
+    -0.2772931975003838,
+    -0.22872961422848118,
+    -0.21597401501342472,
+    1.2678171154435856,
+    -0.12283966654425167,
+    0.6971619100978216,
+    0.17988520970590557,
+    -0.4609789481360298,
+    -0.475652895213955,
+    0.1382557537271226,
+    0.7019838968909335,
+    1.3167998160066872
+   ]
+  },
+  "Rishi (English (India))": {
+   "distance": 0.508689024071215,
+   "median_voiced_f0_hz": 115.10791015625,
+   "c0_speech_mean": 8.954526849880823,
+   "mean_z": [
+    -0.04394380581797014,
+    0.5711539987208738,
+    -0.8177261788955076,
+    1.084078191863184,
+    -0.38522957501979455,
+    -0.04683648579218437,
+    0.5283258210476972,
+    -0.9835309387586872,
+    0.19602249434724753,
+    -0.8414069747881615,
+    0.4112908371734487,
+    0.8838703917758867,
+    -0.24079831354002318,
+    0.7989281958981083,
+    -0.32048288583624407,
+    -0.10214162230246401,
+    -0.4142806646519049,
+    0.2699199180844977,
+    0.15501797071769843,
+    1.5023608353403897
+   ]
+  }
+ },
+ "alignment_config": {
+  "c0_offset": 4.0,
+  "c0_scale": 4.242640687119285,
+  "n_workers": 8,
+  "envelope": {
+   "source": "audio",
+   "smooth_ms": 15.0,
+   "amin": 1e-05
+  },
+  "segmentation": {
+   "speech_threshold_db": 30.0,
+   "floor_percentile": 10.0,
+   "floor_margin_db": 6.0,
+   "min_gap_ms": 60.0,
+   "min_region_ms": 50.0,
+   "min_dip_db": 3.0,
+   "min_syllable_ms": 60.0
+  },
+  "dtw": {
+   "feature": "range",
+   "delta_weight": 1.0,
+   "metric": "euclidean",
+   "band_rad": null,
+   "speech_only": true
+  },
+  "mapping": {
+   "snap": true,
+   "snap_tolerance_ms": 100.0,
+   "min_syllable_frames": 2
+  },
+  "stretch": {
+   "domain": "features",
+   "interp": "linear",
+   "gap_fill": "silence",
+   "silence_pitch": "hold",
+   "audio_n_fft": 512
+  }
+ },
+ "per_trial": [
+  {
+   "trial": 0,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 939,
+   "text": "I hope it is you.",
+   "n_their_syllables": 5,
+   "n_their_words": 5,
+   "n_tts_syllables": 5,
+   "dtw_cost": 0.03316814793000849,
+   "decoder_r": 0.04750216379761696,
+   "offline": {
+    "r": 0.11386346817016602,
+    "n_detected": 1,
+    "n_mapped": 5
+   },
+   "span_uniform_r": 0.09983953833580017,
+   "oracle_span_r": 0.27345266938209534,
+   "oracle_syllables_r": 0.5323597192764282,
+   "chance_r": 0.07223743200302124
+  },
+  {
+   "trial": 1,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 552,
+   "text": "You up?",
+   "n_their_syllables": 2,
+   "n_their_words": 2,
+   "n_tts_syllables": 3,
+   "dtw_cost": 0.04224339502414305,
+   "decoder_r": 0.02898857370018959,
+   "offline": {
+    "r": 0.08549685776233673,
+    "n_detected": 1,
+    "n_mapped": 3
+   },
+   "span_uniform_r": 0.08465121686458588,
+   "oracle_span_r": 0.13352453708648682,
+   "chance_r": 0.07117346674203873
+  },
+  {
+   "trial": 2,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1257,
+   "text": "Is my nurse very hungry?",
+   "n_their_syllables": 7,
+   "n_their_words": 5,
+   "n_tts_syllables": 4,
+   "dtw_cost": 0.02650593624956524,
+   "decoder_r": -0.04448423534631729,
+   "offline": {
+    "r": -0.05920105054974556,
+    "n_detected": 1,
+    "n_mapped": 4
+   },
+   "span_uniform_r": 0.055127739906311035,
+   "oracle_span_r": 0.2346961945295334,
+   "chance_r": 0.009432105347514153
+  },
+  {
+   "trial": 3,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1051,
+   "text": "They need it coming.",
+   "n_their_syllables": 4,
+   "n_their_words": 4,
+   "n_tts_syllables": 3,
+   "dtw_cost": 0.036000715858138764,
+   "decoder_r": -0.049960218369960785,
+   "offline": {
+    "r": 0.0452570803463459,
+    "n_detected": 1,
+    "n_mapped": 3
+   },
+   "span_uniform_r": 0.10964186489582062,
+   "oracle_span_r": 0.16385379433631897,
+   "chance_r": 0.03907818719744682
+  },
+  {
+   "trial": 4,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 999,
+   "text": "I need good glasses.",
+   "n_their_syllables": 5,
+   "n_their_words": 4,
+   "n_tts_syllables": 4,
+   "dtw_cost": 0.035217808041693485,
+   "decoder_r": -0.016341861337423325,
+   "offline": {
+    "r": 0.022545207291841507,
+    "n_detected": 1,
+    "n_mapped": 4
+   },
+   "span_uniform_r": 0.0004535607877187431,
+   "oracle_span_r": 0.31018877029418945,
+   "chance_r": 0.03300054371356964
+  },
+  {
+   "trial": 5,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1268,
+   "text": "Bring my music here, please.",
+   "n_their_syllables": 7,
+   "n_their_words": 5,
+   "n_tts_syllables": 6,
+   "dtw_cost": 0.03386790735933766,
+   "decoder_r": 0.026090165600180626,
+   "offline": {
+    "r": 0.026238054037094116,
+    "n_detected": 1,
+    "n_mapped": 6
+   },
+   "span_uniform_r": 0.1001165509223938,
+   "oracle_span_r": 0.1809430569410324,
+   "chance_r": -0.007918648421764374
+  },
+  {
+   "trial": 6,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 802,
+   "text": "Am I right?",
+   "n_their_syllables": 4,
+   "n_their_words": 3,
+   "n_tts_syllables": 3,
+   "dtw_cost": 0.016619961702283026,
+   "decoder_r": 0.03835858404636383,
+   "offline": {
+    "r": 0.15863725543022156,
+    "n_detected": 1,
+    "n_mapped": 3
+   },
+   "span_uniform_r": 0.11142991483211517,
+   "oracle_span_r": 0.12619009613990784,
+   "chance_r": 0.019005728885531425
+  },
+  {
+   "trial": 7,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1146,
+   "text": "I do feel it.",
+   "n_their_syllables": 4,
+   "n_their_words": 4,
+   "n_tts_syllables": 3,
+   "dtw_cost": 0.18171750348808963,
+   "decoder_r": -0.01613173820078373,
+   "offline": {
+    "r": 0.0843353420495987,
+    "n_detected": 1,
+    "n_mapped": 3
+   },
+   "span_uniform_r": 0.08286859840154648,
+   "oracle_span_r": 0.22114498913288116,
+   "chance_r": 0.09479361027479172
+  },
+  {
+   "trial": 8,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1191,
+   "text": "I am coming right up.",
+   "n_their_syllables": 5,
+   "n_their_words": 5,
+   "n_tts_syllables": 5,
+   "dtw_cost": 0.19702712852824444,
+   "decoder_r": 0.0006375275552272797,
+   "offline": {
+    "r": -0.0028977326583117247,
+    "n_detected": 1,
+    "n_mapped": 5
+   },
+   "span_uniform_r": -0.002976245479658246,
+   "oracle_span_r": 0.2305588722229004,
+   "oracle_syllables_r": 0.3388423025608063,
+   "chance_r": 0.04684758931398392
+  },
+  {
+   "trial": 9,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1195,
+   "text": "Yes, it is good.",
+   "n_their_syllables": 4,
+   "n_their_words": 4,
+   "n_tts_syllables": 4,
+   "dtw_cost": 0.023807226113246087,
+   "decoder_r": -0.055646248161792755,
+   "offline": {
+    "r": 0.004485162906348705,
+    "n_detected": 1,
+    "n_mapped": 4
+   },
+   "span_uniform_r": 0.08933233469724655,
+   "oracle_span_r": 0.25310468673706055,
+   "oracle_syllables_r": 0.4487134516239166,
+   "chance_r": -0.027529846876859665
+  },
+  {
+   "trial": 10,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 842,
+   "text": "I need my music.",
+   "n_their_syllables": 5,
+   "n_their_words": 4,
+   "n_tts_syllables": 4,
+   "dtw_cost": 0.019995448948823363,
+   "decoder_r": 0.005124131683260202,
+   "offline": {
+    "r": -0.029584771022200584,
+    "n_detected": 1,
+    "n_mapped": 4
+   },
+   "span_uniform_r": 0.0674348697066307,
+   "oracle_span_r": 0.2774794399738312,
+   "chance_r": 0.07110962271690369
+  },
+  {
+   "trial": 11,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1415,
+   "text": "I do need you.",
+   "n_their_syllables": 4,
+   "n_their_words": 4,
+   "n_tts_syllables": 3,
+   "dtw_cost": 0.014345574314905761,
+   "decoder_r": -0.008222850039601326,
+   "offline": {
+    "r": 0.10089577734470367,
+    "n_detected": 1,
+    "n_mapped": 3
+   },
+   "span_uniform_r": 0.06289593875408173,
+   "oracle_span_r": 0.2700365483760834,
+   "chance_r": -0.0038589134346693754
+  },
+  {
+   "trial": 12,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1030,
+   "text": "Do not clean it.",
+   "n_their_syllables": 4,
+   "n_their_words": 4,
+   "n_tts_syllables": 2,
+   "dtw_cost": 0.02430198413654033,
+   "decoder_r": 0.04387710615992546,
+   "offline": {
+    "r": 0.057260047644376755,
+    "n_detected": 1,
+    "n_mapped": 2
+   },
+   "span_uniform_r": 0.028912778943777084,
+   "oracle_span_r": 0.25674939155578613,
+   "chance_r": -0.05430648475885391
+  },
+  {
+   "trial": 13,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1237,
+   "text": "How is that going?",
+   "n_their_syllables": 4,
+   "n_their_words": 4,
+   "n_tts_syllables": 4,
+   "dtw_cost": 0.1892736523543562,
+   "decoder_r": -0.02436893992125988,
+   "offline": {
+    "r": -0.04118640348315239,
+    "n_detected": 1,
+    "n_mapped": 4
+   },
+   "span_uniform_r": -0.043224215507507324,
+   "oracle_span_r": 0.23278634250164032,
+   "oracle_syllables_r": 0.4780511260032654,
+   "chance_r": 0.056576915085315704
+  },
+  {
+   "trial": 14,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 2224,
+   "text": "I hope my family is closer.",
+   "n_their_syllables": 9,
+   "n_their_words": 6,
+   "n_tts_syllables": 7,
+   "dtw_cost": 0.023446532659534097,
+   "decoder_r": 0.03283744677901268,
+   "offline": {
+    "r": 0.043289609253406525,
+    "n_detected": 1,
+    "n_mapped": 7
+   },
+   "span_uniform_r": 0.00019590873853303492,
+   "oracle_span_r": 0.19617636501789093,
+   "chance_r": -0.047939784824848175
+  },
+  {
+   "trial": 15,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1748,
+   "text": "What do you do here?",
+   "n_their_syllables": 5,
+   "n_their_words": 5,
+   "n_tts_syllables": 5,
+   "dtw_cost": 0.014308942340792507,
+   "decoder_r": 0.00985665526241064,
+   "offline": {
+    "r": 0.016178054735064507,
+    "n_detected": 1,
+    "n_mapped": 5
+   },
+   "span_uniform_r": 0.09031081199645996,
+   "oracle_span_r": 0.22779914736747742,
+   "oracle_syllables_r": 0.4286869466304779,
+   "chance_r": 0.06627382338047028
+  },
+  {
+   "trial": 16,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1777,
+   "text": "I do not have hope.",
+   "n_their_syllables": 5,
+   "n_their_words": 5,
+   "n_tts_syllables": 4,
+   "dtw_cost": 0.15069146834795,
+   "decoder_r": 0.027788612991571426,
+   "offline": {
+    "r": 0.03979046642780304,
+    "n_detected": 1,
+    "n_mapped": 4
+   },
+   "span_uniform_r": 0.06117860600352287,
+   "oracle_span_r": 0.23503753542900085,
+   "chance_r": -0.012267595157027245
+  },
+  {
+   "trial": 17,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1039,
+   "text": "It is right.",
+   "n_their_syllables": 3,
+   "n_their_words": 3,
+   "n_tts_syllables": 3,
+   "dtw_cost": 0.013125595791614764,
+   "decoder_r": 0.020965149626135826,
+   "offline": {
+    "r": 0.1426265686750412,
+    "n_detected": 1,
+    "n_mapped": 3
+   },
+   "span_uniform_r": -0.01957935094833374,
+   "oracle_span_r": 0.302810937166214,
+   "oracle_syllables_r": 0.526031494140625,
+   "chance_r": 0.10883176326751709
+  },
+  {
+   "trial": 18,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1150,
+   "text": "Bring my nurse.",
+   "n_their_syllables": 4,
+   "n_their_words": 3,
+   "n_tts_syllables": 2,
+   "dtw_cost": 0.1988063521770584,
+   "decoder_r": 0.000849357049446553,
+   "offline": {
+    "r": 0.016280921176075935,
+    "n_detected": 1,
+    "n_mapped": 2
+   },
+   "span_uniform_r": 0.016752440482378006,
+   "oracle_span_r": 0.17866770923137665,
+   "chance_r": 0.019750282168388367
+  },
+  {
+   "trial": 19,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 2117,
+   "text": "Are you coming up here.",
+   "n_their_syllables": 6,
+   "n_their_words": 5,
+   "n_tts_syllables": 6,
+   "dtw_cost": 0.016795350795166305,
+   "decoder_r": -0.0016973508754745126,
+   "offline": {
+    "r": -0.010260330513119698,
+    "n_detected": 1,
+    "n_mapped": 6
+   },
+   "span_uniform_r": 0.08423764258623123,
+   "oracle_span_r": 0.23983803391456604,
+   "oracle_syllables_r": 0.43707337975502014,
+   "chance_r": -0.04010864719748497
+  },
+  {
+   "trial": 20,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 957,
+   "text": "I feel bad here.",
+   "n_their_syllables": 4,
+   "n_their_words": 4,
+   "n_tts_syllables": 4,
+   "dtw_cost": 0.1885428227155892,
+   "decoder_r": -0.0032498654909431934,
+   "offline": {
+    "r": -0.02769153192639351,
+    "n_detected": 1,
+    "n_mapped": 4
+   },
+   "span_uniform_r": -0.031817857176065445,
+   "oracle_span_r": 0.18946757912635803,
+   "oracle_syllables_r": 0.42513060569763184,
+   "chance_r": -0.024532556533813477
+  },
+  {
+   "trial": 21,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1611,
+   "text": "You are not okay.",
+   "n_their_syllables": 5,
+   "n_their_words": 4,
+   "n_tts_syllables": 5,
+   "dtw_cost": 0.026025212922899357,
+   "decoder_r": -0.0022953934967517853,
+   "offline": {
+    "r": 0.016762614250183105,
+    "n_detected": 1,
+    "n_mapped": 5
+   },
+   "span_uniform_r": 0.11101100593805313,
+   "oracle_span_r": 0.21592655777931213,
+   "oracle_syllables_r": 0.4916253685951233,
+   "chance_r": -0.021473819389939308
+  },
+  {
+   "trial": 22,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1488,
+   "text": "You have it like that.",
+   "n_their_syllables": 5,
+   "n_their_words": 5,
+   "n_tts_syllables": 5,
+   "dtw_cost": 0.023899176910922942,
+   "decoder_r": -0.02126361057162285,
+   "offline": {
+    "r": -0.026489660143852234,
+    "n_detected": 1,
+    "n_mapped": 5
+   },
+   "span_uniform_r": 0.04100243002176285,
+   "oracle_span_r": 0.24733193218708038,
+   "oracle_syllables_r": 0.48494958877563477,
+   "chance_r": 0.05893033742904663
+  },
+  {
+   "trial": 23,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 2140,
+   "text": "I hope I have good family.",
+   "n_their_syllables": 7,
+   "n_their_words": 6,
+   "n_tts_syllables": 6,
+   "dtw_cost": 0.22594604754968645,
+   "decoder_r": 0.0058958157896995544,
+   "offline": {
+    "r": 0.009452996775507927,
+    "n_detected": 1,
+    "n_mapped": 6
+   },
+   "span_uniform_r": -0.011062869802117348,
+   "oracle_span_r": 0.2569330036640167,
+   "chance_r": 0.03743431717157364
+  },
+  {
+   "trial": 24,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1394,
+   "text": "Not coming up.",
+   "n_their_syllables": 3,
+   "n_their_words": 3,
+   "n_tts_syllables": 5,
+   "dtw_cost": 0.025218669470713957,
+   "decoder_r": -0.011962927877902985,
+   "offline": {
+    "r": 0.044847749173641205,
+    "n_detected": 1,
+    "n_mapped": 5
+   },
+   "span_uniform_r": 0.011156351305544376,
+   "oracle_span_r": 0.2717299461364746,
+   "chance_r": -0.07211226224899292
+  },
+  {
+   "trial": 25,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 2018,
+   "text": "You do not need glasses.",
+   "n_their_syllables": 6,
+   "n_their_words": 5,
+   "n_tts_syllables": 5,
+   "dtw_cost": 0.2640959769382837,
+   "decoder_r": -0.007500255946069956,
+   "offline": {
+    "r": 0.011623919010162354,
+    "n_detected": 1,
+    "n_mapped": 5
+   },
+   "span_uniform_r": 0.015339577570557594,
+   "oracle_span_r": 0.09305556863546371,
+   "chance_r": 0.03173929825425148
+  },
+  {
+   "trial": 26,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1733,
+   "text": "Is my nurse closer?",
+   "n_their_syllables": 7,
+   "n_their_words": 4,
+   "n_tts_syllables": 5,
+   "dtw_cost": 0.01832588319416862,
+   "decoder_r": 0.01908033899962902,
+   "offline": {
+    "r": 0.00013509187556337565,
+    "n_detected": 1,
+    "n_mapped": 5
+   },
+   "span_uniform_r": 0.06653763353824615,
+   "oracle_span_r": 0.2390333116054535,
+   "chance_r": 0.06095210462808609
+  },
+  {
+   "trial": 27,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1039,
+   "text": "You are what?",
+   "n_their_syllables": 3,
+   "n_their_words": 3,
+   "n_tts_syllables": 3,
+   "dtw_cost": 0.014755483118885658,
+   "decoder_r": 0.0077065275982022285,
+   "offline": {
+    "r": 0.07179781794548035,
+    "n_detected": 1,
+    "n_mapped": 3
+   },
+   "span_uniform_r": 0.010694480501115322,
+   "oracle_span_r": 0.26009851694107056,
+   "oracle_syllables_r": 0.5224276185035706,
+   "chance_r": 0.025596875697374344
+  },
+  {
+   "trial": 28,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1308,
+   "text": "They hope they have my faith.",
+   "n_their_syllables": 6,
+   "n_their_words": 6,
+   "n_tts_syllables": 6,
+   "dtw_cost": 0.20929433170627323,
+   "decoder_r": 0.03362205997109413,
+   "offline": {
+    "r": 0.05162326246500015,
+    "n_detected": 2,
+    "n_mapped": 6
+   },
+   "span_uniform_r": 0.07061129808425903,
+   "oracle_span_r": 0.24239447712898254,
+   "oracle_syllables_r": 0.5470899343490601,
+   "chance_r": -0.06500692665576935
+  },
+  {
+   "trial": 29,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 885,
+   "text": "You are no good.",
+   "n_their_syllables": 4,
+   "n_their_words": 4,
+   "n_tts_syllables": 4,
+   "dtw_cost": 0.018335193896328907,
+   "decoder_r": -0.003599919378757477,
+   "offline": {
+    "r": 0.0321427658200264,
+    "n_detected": 0,
+    "n_mapped": 4
+   },
+   "oracle_span_r": 0.23972372710704803,
+   "oracle_syllables_r": 0.4823990762233734,
+   "chance_r": 0.08144179731607437
+  },
+  {
+   "trial": 30,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1597,
+   "text": "What is it you need?",
+   "n_their_syllables": 5,
+   "n_their_words": 5,
+   "n_tts_syllables": 4,
+   "dtw_cost": 0.01561064724806437,
+   "decoder_r": 0.01159735769033432,
+   "offline": {
+    "r": -0.007026843726634979,
+    "n_detected": 1,
+    "n_mapped": 4
+   },
+   "span_uniform_r": -0.042864393442869186,
+   "oracle_span_r": 0.20692434906959534,
+   "chance_r": -0.04767042398452759
+  },
+  {
+   "trial": 31,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1363,
+   "text": "They are not thirsty.",
+   "n_their_syllables": 5,
+   "n_their_words": 4,
+   "n_tts_syllables": 4,
+   "dtw_cost": 0.023393210014307834,
+   "decoder_r": -0.008088866248726845,
+   "offline": {
+    "r": -0.015783198177814484,
+    "n_detected": 1,
+    "n_mapped": 4
+   },
+   "span_uniform_r": 0.07240665704011917,
+   "oracle_span_r": 0.21344518661499023,
+   "chance_r": -0.056002549827098846
+  },
+  {
+   "trial": 32,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 2044,
+   "text": "I hope my nurse is here.",
+   "n_their_syllables": 7,
+   "n_their_words": 6,
+   "n_tts_syllables": 6,
+   "dtw_cost": 0.017613795562045242,
+   "decoder_r": 0.009509804658591747,
+   "offline": {
+    "r": 0.03816138952970505,
+    "n_detected": 1,
+    "n_mapped": 6
+   },
+   "span_uniform_r": -0.02910670079290867,
+   "oracle_span_r": 0.27816715836524963,
+   "chance_r": 0.05747415870428085
+  },
+  {
+   "trial": 33,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 2132,
+   "text": "Is my music good?",
+   "n_their_syllables": 5,
+   "n_their_words": 4,
+   "n_tts_syllables": 5,
+   "dtw_cost": 0.030221026678152366,
+   "decoder_r": -0.02185981348156929,
+   "offline": {
+    "r": 0.07044900953769684,
+    "n_detected": 1,
+    "n_mapped": 5
+   },
+   "span_uniform_r": -0.020193735137581825,
+   "oracle_span_r": 0.37270599603652954,
+   "oracle_syllables_r": 0.5291664004325867,
+   "chance_r": 0.008077165111899376
+  },
+  {
+   "trial": 34,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1525,
+   "text": "Where are my glasses?",
+   "n_their_syllables": 5,
+   "n_their_words": 4,
+   "n_tts_syllables": 4,
+   "dtw_cost": 0.016359329491913092,
+   "decoder_r": -0.004904264118522406,
+   "offline": {
+    "r": 0.014254731126129627,
+    "n_detected": 1,
+    "n_mapped": 4
+   },
+   "span_uniform_r": 0.12249775230884552,
+   "oracle_span_r": 0.1971946358680725,
+   "chance_r": 0.04387573152780533
+  },
+  {
+   "trial": 35,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1450,
+   "text": "They are coming closer.",
+   "n_their_syllables": 7,
+   "n_their_words": 4,
+   "n_tts_syllables": 5,
+   "dtw_cost": 0.024032786968655424,
+   "decoder_r": 0.014485838823020458,
+   "offline": {
+    "r": 0.08118131756782532,
+    "n_detected": 1,
+    "n_mapped": 5
+   },
+   "span_uniform_r": -0.010663164779543877,
+   "oracle_span_r": 0.21190492808818817,
+   "chance_r": 0.11472184956073761
+  },
+  {
+   "trial": 36,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1726,
+   "text": "They do not have faith.",
+   "n_their_syllables": 5,
+   "n_their_words": 5,
+   "n_tts_syllables": 4,
+   "dtw_cost": 0.265872070914249,
+   "decoder_r": -0.015072634443640709,
+   "offline": {
+    "r": 0.010824009776115417,
+    "n_detected": 1,
+    "n_mapped": 4
+   },
+   "span_uniform_r": 0.010148302651941776,
+   "oracle_span_r": 0.22782424092292786,
+   "chance_r": -0.028237979859113693
+  },
+  {
+   "trial": 37,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1834,
+   "text": "Bring my family here, please.",
+   "n_their_syllables": 7,
+   "n_their_words": 5,
+   "n_tts_syllables": 6,
+   "dtw_cost": 0.029522948895996434,
+   "decoder_r": 0.0030048605985939503,
+   "offline": {
+    "r": -0.02665906772017479,
+    "n_detected": 1,
+    "n_mapped": 6
+   },
+   "span_uniform_r": 0.08437049388885498,
+   "oracle_span_r": 0.2618854343891144,
+   "chance_r": -0.08251644670963287
+  },
+  {
+   "trial": 38,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 929,
+   "text": "I am here.",
+   "n_their_syllables": 3,
+   "n_their_words": 3,
+   "n_tts_syllables": 2,
+   "dtw_cost": 0.01536229372362818,
+   "decoder_r": 0.012377666309475899,
+   "offline": {
+    "r": 0.08010981976985931,
+    "n_detected": 1,
+    "n_mapped": 2
+   },
+   "span_uniform_r": 0.0641016736626625,
+   "oracle_span_r": 0.23704831302165985,
+   "chance_r": -0.03826159983873367
+  },
+  {
+   "trial": 39,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 2012,
+   "text": "My family is not very tired.",
+   "n_their_syllables": 7,
+   "n_their_words": 6,
+   "n_tts_syllables": 7,
+   "dtw_cost": 0.022623271665230538,
+   "decoder_r": 0.007591957692056894,
+   "offline": {
+    "r": 0.0685928463935852,
+    "n_detected": 1,
+    "n_mapped": 7
+   },
+   "span_uniform_r": 0.0014700896572321653,
+   "oracle_span_r": 0.24376961588859558,
+   "oracle_syllables_r": 0.48874837160110474,
+   "chance_r": 0.013580377213656902
+  },
+  {
+   "trial": 40,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1668,
+   "text": "How do you have it?",
+   "n_their_syllables": 5,
+   "n_their_words": 5,
+   "n_tts_syllables": 4,
+   "dtw_cost": 0.013061739895063955,
+   "decoder_r": -0.029504898935556412,
+   "offline": {
+    "r": 0.02161412313580513,
+    "n_detected": 1,
+    "n_mapped": 4
+   },
+   "span_uniform_r": 0.03992610424757004,
+   "oracle_span_r": 0.35669249296188354,
+   "chance_r": 0.0019854293204844
+  },
+  {
+   "trial": 41,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1310,
+   "text": "They do okay.",
+   "n_their_syllables": 4,
+   "n_their_words": 3,
+   "n_tts_syllables": 3,
+   "dtw_cost": 0.016963733367903647,
+   "decoder_r": 0.033384524285793304,
+   "offline": {
+    "r": 0.09503448754549026,
+    "n_detected": 1,
+    "n_mapped": 3
+   },
+   "span_uniform_r": 0.0428219698369503,
+   "oracle_span_r": 0.34518665075302124,
+   "chance_r": -0.03335075080394745
+  },
+  {
+   "trial": 42,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 2022,
+   "text": "That is like success.",
+   "n_their_syllables": 5,
+   "n_their_words": 4,
+   "n_tts_syllables": 5,
+   "dtw_cost": 0.25976582073019,
+   "decoder_r": -0.008584907278418541,
+   "offline": {
+    "r": -0.014714999124407768,
+    "n_detected": 1,
+    "n_mapped": 5
+   },
+   "span_uniform_r": -0.016583086922764778,
+   "oracle_span_r": 0.3529861271381378,
+   "oracle_syllables_r": 0.49806419014930725,
+   "chance_r": 8.823107577882183e-07
+  },
+  {
+   "trial": 43,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1308,
+   "text": "How am I going outside?",
+   "n_their_syllables": 6,
+   "n_their_words": 5,
+   "n_tts_syllables": 5,
+   "dtw_cost": 0.023340114021135963,
+   "decoder_r": 0.03706030175089836,
+   "offline": {
+    "r": 6.296113133430481e-05,
+    "n_detected": 1,
+    "n_mapped": 5
+   },
+   "span_uniform_r": 0.04211020469665527,
+   "oracle_span_r": 0.1492227017879486,
+   "chance_r": -0.07446831464767456
+  },
+  {
+   "trial": 44,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 2012,
+   "text": "You need it right here.",
+   "n_their_syllables": 5,
+   "n_their_words": 5,
+   "n_tts_syllables": 4,
+   "dtw_cost": 0.017890160537110865,
+   "decoder_r": 0.016461823135614395,
+   "offline": {
+    "r": -0.006838499568402767,
+    "n_detected": 1,
+    "n_mapped": 4
+   },
+   "span_uniform_r": 0.03935420885682106,
+   "oracle_span_r": 0.21762053668498993,
+   "chance_r": 0.031773343682289124
+  },
+  {
+   "trial": 45,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1004,
+   "text": "You have no computer.",
+   "n_their_syllables": 6,
+   "n_their_words": 4,
+   "n_tts_syllables": 6,
+   "dtw_cost": 0.036178835785253424,
+   "decoder_r": -0.09477145224809647,
+   "offline": {
+    "r": 0.03755586966872215,
+    "n_detected": 1,
+    "n_mapped": 6
+   },
+   "span_uniform_r": 0.04933958128094673,
+   "oracle_span_r": 0.2390948086977005,
+   "oracle_syllables_r": 0.48185473680496216,
+   "chance_r": -0.006578444037586451
+  },
+  {
+   "trial": 46,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1190,
+   "text": "Do you have success?",
+   "n_their_syllables": 6,
+   "n_their_words": 4,
+   "n_tts_syllables": 4,
+   "dtw_cost": 0.029832470944274398,
+   "decoder_r": -0.07680238783359528,
+   "offline": {
+    "r": 0.07352672517299652,
+    "n_detected": 1,
+    "n_mapped": 4
+   },
+   "span_uniform_r": 0.10699701309204102,
+   "oracle_span_r": 0.2505338788032532,
+   "chance_r": -0.017049796879291534
+  },
+  {
+   "trial": 47,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1395,
+   "text": "I hope my nurse is comfortable.",
+   "n_their_syllables": 9,
+   "n_their_words": 6,
+   "n_tts_syllables": 6,
+   "dtw_cost": 0.03347284764754147,
+   "decoder_r": -0.021990925073623657,
+   "offline": {
+    "r": 0.016537565737962723,
+    "n_detected": 1,
+    "n_mapped": 6
+   },
+   "span_uniform_r": -0.007477371487766504,
+   "oracle_span_r": 0.15281495451927185,
+   "chance_r": -0.01453488040715456
+  },
+  {
+   "trial": 48,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 777,
+   "text": "Do it please.",
+   "n_their_syllables": 4,
+   "n_their_words": 3,
+   "n_tts_syllables": 3,
+   "dtw_cost": 0.03984434518543806,
+   "decoder_r": -0.03467147797346115,
+   "offline": {
+    "r": 0.08121949434280396,
+    "n_detected": 1,
+    "n_mapped": 3
+   },
+   "span_uniform_r": 0.02615073323249817,
+   "oracle_span_r": 0.28550633788108826,
+   "chance_r": 0.04608511924743652
+  },
+  {
+   "trial": 49,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1352,
+   "text": "They hope I am closer.",
+   "n_their_syllables": 7,
+   "n_their_words": 5,
+   "n_tts_syllables": 5,
+   "dtw_cost": 0.02762146010165259,
+   "decoder_r": 0.03095223940908909,
+   "offline": {
+    "r": 0.06513214856386185,
+    "n_detected": 1,
+    "n_mapped": 5
+   },
+   "span_uniform_r": -0.0055773211643099785,
+   "oracle_span_r": 0.21260066330432892,
+   "chance_r": 0.03108881786465645
+  },
+  {
+   "trial": 50,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 974,
+   "text": "Where is my hope?",
+   "n_their_syllables": 4,
+   "n_their_words": 4,
+   "n_tts_syllables": 3,
+   "dtw_cost": 0.1933244518890483,
+   "decoder_r": 0.036266665905714035,
+   "offline": {
+    "r": 0.04758819192647934,
+    "n_detected": 1,
+    "n_mapped": 3
+   },
+   "span_uniform_r": 0.027628187090158463,
+   "oracle_span_r": 0.18925242125988007,
+   "chance_r": -0.008473388850688934
+  },
+  {
+   "trial": 51,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1135,
+   "text": "I like that here.",
+   "n_their_syllables": 4,
+   "n_their_words": 4,
+   "n_tts_syllables": 4,
+   "dtw_cost": 0.024497951792325456,
+   "decoder_r": 0.026330530643463135,
+   "offline": {
+    "r": -0.024645166471600533,
+    "n_detected": 1,
+    "n_mapped": 4
+   },
+   "span_uniform_r": 0.14311301708221436,
+   "oracle_span_r": 0.1489206850528717,
+   "oracle_syllables_r": 0.4330132007598877,
+   "chance_r": -0.027065536007285118
+  },
+  {
+   "trial": 52,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1255,
+   "text": "They hope it is okay.",
+   "n_their_syllables": 6,
+   "n_their_words": 5,
+   "n_tts_syllables": 6,
+   "dtw_cost": 0.025392194189395496,
+   "decoder_r": -0.02381722256541252,
+   "offline": {
+    "r": 0.01753503642976284,
+    "n_detected": 1,
+    "n_mapped": 6
+   },
+   "span_uniform_r": 0.12668344378471375,
+   "oracle_span_r": 0.1309317648410797,
+   "oracle_syllables_r": 0.4997081756591797,
+   "chance_r": -0.08330114185810089
+  },
+  {
+   "trial": 53,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1729,
+   "text": "Please tell my nurse I am good.",
+   "n_their_syllables": 9,
+   "n_their_words": 7,
+   "n_tts_syllables": 6,
+   "dtw_cost": 0.1517595613956869,
+   "decoder_r": -0.0359417162835598,
+   "offline": {
+    "r": -0.029652928933501244,
+    "n_detected": 1,
+    "n_mapped": 6
+   },
+   "span_uniform_r": -0.03075103834271431,
+   "oracle_span_r": 0.09064973890781403,
+   "chance_r": 0.05034512281417847
+  },
+  {
+   "trial": 54,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1850,
+   "text": "Tell my family they feel hungry.",
+   "n_their_syllables": 8,
+   "n_their_words": 6,
+   "n_tts_syllables": 6,
+   "dtw_cost": 0.2126526049651502,
+   "decoder_r": -0.009663094766438007,
+   "offline": {
+    "r": -0.02439374476671219,
+    "n_detected": 1,
+    "n_mapped": 6
+   },
+   "span_uniform_r": -0.015653429552912712,
+   "oracle_span_r": 0.08249998837709427,
+   "chance_r": 1.998313109652372e-06
+  },
+  {
+   "trial": 55,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1148,
+   "text": "No, you are not going.",
+   "n_their_syllables": 5,
+   "n_their_words": 5,
+   "n_tts_syllables": 5,
+   "dtw_cost": 0.21283931617450824,
+   "decoder_r": 0.022624101489782333,
+   "offline": {
+    "r": 0.09739576280117035,
+    "n_detected": 1,
+    "n_mapped": 5
+   },
+   "span_uniform_r": 0.09463618695735931,
+   "oracle_span_r": 0.12697088718414307,
+   "oracle_syllables_r": 0.47866901755332947,
+   "chance_r": -0.031314924359321594
+  },
+  {
+   "trial": 56,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 867,
+   "text": "You have music.",
+   "n_their_syllables": 4,
+   "n_their_words": 3,
+   "n_tts_syllables": 4,
+   "dtw_cost": 0.1794276840683454,
+   "decoder_r": -0.07754212617874146,
+   "offline": {
+    "r": -0.019504234194755554,
+    "n_detected": 1,
+    "n_mapped": 4
+   },
+   "span_uniform_r": -0.020046118646860123,
+   "oracle_span_r": 0.14418622851371765,
+   "oracle_syllables_r": 0.4881426692008972,
+   "chance_r": -0.0001721605658531189
+  },
+  {
+   "trial": 57,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1081,
+   "text": "You clean it up.",
+   "n_their_syllables": 4,
+   "n_their_words": 4,
+   "n_tts_syllables": 4,
+   "dtw_cost": 0.036145885460238156,
+   "decoder_r": 0.005188323557376862,
+   "offline": {
+    "r": 0.003037314862012863,
+    "n_detected": 1,
+    "n_mapped": 4
+   },
+   "span_uniform_r": 0.049473993480205536,
+   "oracle_span_r": 0.15739256143569946,
+   "oracle_syllables_r": 0.3978646695613861,
+   "chance_r": -0.03285025432705879
+  },
+  {
+   "trial": 58,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1094,
+   "text": "Do you like music?",
+   "n_their_syllables": 5,
+   "n_their_words": 4,
+   "n_tts_syllables": 3,
+   "dtw_cost": 0.02000293378878458,
+   "decoder_r": -0.0730910450220108,
+   "offline": {
+    "r": 0.11382162570953369,
+    "n_detected": 1,
+    "n_mapped": 3
+   },
+   "span_uniform_r": 0.11114925146102905,
+   "oracle_span_r": 0.23317715525627136,
+   "chance_r": 0.06196289509534836
+  },
+  {
+   "trial": 59,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1035,
+   "text": "Do you need help here?",
+   "n_their_syllables": 5,
+   "n_their_words": 5,
+   "n_tts_syllables": 3,
+   "dtw_cost": 0.031081937567263032,
+   "decoder_r": 0.03382585570216179,
+   "offline": {
+    "r": 0.05879833176732063,
+    "n_detected": 1,
+    "n_mapped": 3
+   },
+   "span_uniform_r": 0.1621612310409546,
+   "oracle_span_r": 0.15500712394714355,
+   "chance_r": -0.03884202241897583
+  },
+  {
+   "trial": 60,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1115,
+   "text": "I feel very tired.",
+   "n_their_syllables": 4,
+   "n_their_words": 4,
+   "n_tts_syllables": 4,
+   "dtw_cost": 0.02965408034834333,
+   "decoder_r": 0.04350670427083969,
+   "offline": {
+    "r": 0.06357450038194656,
+    "n_detected": 1,
+    "n_mapped": 4
+   },
+   "span_uniform_r": -0.08234069496393204,
+   "oracle_span_r": 0.11161066591739655,
+   "oracle_syllables_r": 0.43605637550354004,
+   "chance_r": 0.02438066154718399
+  },
+  {
+   "trial": 61,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 890,
+   "text": "What do they have?",
+   "n_their_syllables": 4,
+   "n_their_words": 4,
+   "n_tts_syllables": 4,
+   "dtw_cost": 0.025680582395365227,
+   "decoder_r": -0.010168430395424366,
+   "offline": {
+    "r": -0.04714709892868996,
+    "n_detected": 1,
+    "n_mapped": 4
+   },
+   "span_uniform_r": 0.1573818325996399,
+   "oracle_span_r": 0.283050000667572,
+   "oracle_syllables_r": 0.45287713408470154,
+   "chance_r": -0.08586816489696503
+  },
+  {
+   "trial": 62,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1024,
+   "text": "That is it.",
+   "n_their_syllables": 3,
+   "n_their_words": 3,
+   "n_tts_syllables": 3,
+   "dtw_cost": 0.018452097207400396,
+   "decoder_r": 0.013072937726974487,
+   "offline": {
+    "r": -0.010107497684657574,
+    "n_detected": 1,
+    "n_mapped": 3
+   },
+   "span_uniform_r": 0.014574425294995308,
+   "oracle_span_r": 0.25950464606285095,
+   "oracle_syllables_r": 0.5012747049331665,
+   "chance_r": 0.034816861152648926
+  },
+  {
+   "trial": 63,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 893,
+   "text": "What do you have?",
+   "n_their_syllables": 4,
+   "n_their_words": 4,
+   "n_tts_syllables": 3,
+   "dtw_cost": 0.15579185014545427,
+   "decoder_r": -0.04241204261779785,
+   "offline": {
+    "r": -0.005170607473701239,
+    "n_detected": 1,
+    "n_mapped": 3
+   },
+   "span_uniform_r": -0.007031463086605072,
+   "oracle_span_r": 0.21717064082622528,
+   "chance_r": 0.02295583300292492
+  },
+  {
+   "trial": 64,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 747,
+   "text": "That is yes.",
+   "n_their_syllables": 3,
+   "n_their_words": 3,
+   "n_tts_syllables": 3,
+   "dtw_cost": 0.03461087200078843,
+   "decoder_r": 0.022718748077750206,
+   "offline": {
+    "r": -0.010922671295702457,
+    "n_detected": 1,
+    "n_mapped": 3
+   },
+   "span_uniform_r": 0.1117527037858963,
+   "oracle_span_r": 0.25359681248664856,
+   "oracle_syllables_r": 0.49584609270095825,
+   "chance_r": 0.03183809667825699
+  },
+  {
+   "trial": 65,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 917,
+   "text": "My family is good.",
+   "n_their_syllables": 5,
+   "n_their_words": 4,
+   "n_tts_syllables": 5,
+   "dtw_cost": 0.037096122943396447,
+   "decoder_r": -0.013366514816880226,
+   "offline": {
+    "r": 0.012309138663113117,
+    "n_detected": 1,
+    "n_mapped": 5
+   },
+   "span_uniform_r": 0.10382144153118134,
+   "oracle_span_r": 0.1563367247581482,
+   "oracle_syllables_r": 0.49888238310813904,
+   "chance_r": -0.0353705957531929
+  },
+  {
+   "trial": 66,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 935,
+   "text": "Are you right here?",
+   "n_their_syllables": 4,
+   "n_their_words": 4,
+   "n_tts_syllables": 4,
+   "dtw_cost": 0.023938464357349892,
+   "decoder_r": 0.03117062710225582,
+   "offline": {
+    "r": 0.03509971499443054,
+    "n_detected": 1,
+    "n_mapped": 4
+   },
+   "span_uniform_r": 0.07538879662752151,
+   "oracle_span_r": 0.1896049827337265,
+   "oracle_syllables_r": 0.3360103964805603,
+   "chance_r": -0.08291522413492203
+  },
+  {
+   "trial": 67,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1044,
+   "text": "You feel very bad.",
+   "n_their_syllables": 4,
+   "n_their_words": 4,
+   "n_tts_syllables": 4,
+   "dtw_cost": 0.026850255132085568,
+   "decoder_r": 0.010548681020736694,
+   "offline": {
+    "r": -0.010158294811844826,
+    "n_detected": 1,
+    "n_mapped": 4
+   },
+   "span_uniform_r": 0.1407524049282074,
+   "oracle_span_r": 0.13423219323158264,
+   "oracle_syllables_r": 0.43468961119651794,
+   "chance_r": -0.03697826340794563
+  },
+  {
+   "trial": 68,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 821,
+   "text": "I need that.",
+   "n_their_syllables": 3,
+   "n_their_words": 3,
+   "n_tts_syllables": 2,
+   "dtw_cost": 0.1679534207745864,
+   "decoder_r": -0.015082359313964844,
+   "offline": {
+    "r": -0.00356324203312397,
+    "n_detected": 1,
+    "n_mapped": 2
+   },
+   "span_uniform_r": -0.003966204356402159,
+   "oracle_span_r": 0.28885945677757263,
+   "chance_r": 0.017480244860053062
+  },
+  {
+   "trial": 69,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1207,
+   "text": "I hope they are closer.",
+   "n_their_syllables": 7,
+   "n_their_words": 5,
+   "n_tts_syllables": 6,
+   "dtw_cost": 0.025817975644369336,
+   "decoder_r": -0.0006307583535090089,
+   "offline": {
+    "r": 0.0038004335947334766,
+    "n_detected": 1,
+    "n_mapped": 6
+   },
+   "span_uniform_r": 0.03206177055835724,
+   "oracle_span_r": 0.16244395077228546,
+   "chance_r": -0.020777318626642227
+  },
+  {
+   "trial": 70,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 793,
+   "text": "I am clean.",
+   "n_their_syllables": 3,
+   "n_their_words": 3,
+   "n_tts_syllables": 2,
+   "dtw_cost": 0.14959007702530097,
+   "decoder_r": -0.041601791977882385,
+   "offline": {
+    "r": 0.038364432752132416,
+    "n_detected": 1,
+    "n_mapped": 2
+   },
+   "span_uniform_r": 0.027021462097764015,
+   "oracle_span_r": 0.23881511390209198,
+   "chance_r": -0.04509507864713669
+  },
+  {
+   "trial": 71,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1011,
+   "text": "No, I am not hungry.",
+   "n_their_syllables": 6,
+   "n_their_words": 5,
+   "n_tts_syllables": 4,
+   "dtw_cost": 0.0326234343223668,
+   "decoder_r": -0.030829261988401413,
+   "offline": {
+    "r": 0.01385459303855896,
+    "n_detected": 1,
+    "n_mapped": 4
+   },
+   "span_uniform_r": 0.18628785014152527,
+   "oracle_span_r": 0.10828350484371185,
+   "chance_r": 0.02337828278541565
+  },
+  {
+   "trial": 72,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1218,
+   "text": "Are they very thirsty?",
+   "n_their_syllables": 5,
+   "n_their_words": 4,
+   "n_tts_syllables": 5,
+   "dtw_cost": 0.027243476812413306,
+   "decoder_r": -0.10729725658893585,
+   "offline": {
+    "r": 0.010996008291840553,
+    "n_detected": 1,
+    "n_mapped": 5
+   },
+   "span_uniform_r": 0.06910292059183121,
+   "oracle_span_r": 0.21378770470619202,
+   "oracle_syllables_r": 0.3981384336948395,
+   "chance_r": -0.009856518357992172
+  },
+  {
+   "trial": 73,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1472,
+   "text": "You hope they are not here.",
+   "n_their_syllables": 6,
+   "n_their_words": 6,
+   "n_tts_syllables": 5,
+   "dtw_cost": 0.02311789108319923,
+   "decoder_r": 0.015553472563624382,
+   "offline": {
+    "r": 0.015242335386574268,
+    "n_detected": 1,
+    "n_mapped": 5
+   },
+   "span_uniform_r": 0.05132216960191727,
+   "oracle_span_r": 0.0750075951218605,
+   "chance_r": 0.007896161638200283
+  },
+  {
+   "trial": 74,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1062,
+   "text": "How is my nurse?",
+   "n_their_syllables": 5,
+   "n_their_words": 4,
+   "n_tts_syllables": 2,
+   "dtw_cost": 0.12265698131798054,
+   "decoder_r": -0.0320429727435112,
+   "offline": {
+    "r": -0.013537034392356873,
+    "n_detected": 1,
+    "n_mapped": 2
+   },
+   "span_uniform_r": -0.01421036384999752,
+   "oracle_span_r": 0.21087460219860077,
+   "chance_r": -0.030935581773519516
+  },
+  {
+   "trial": 75,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1165,
+   "text": "I hope that you are.",
+   "n_their_syllables": 5,
+   "n_their_words": 5,
+   "n_tts_syllables": 5,
+   "dtw_cost": 0.02444902551621174,
+   "decoder_r": -0.030878454446792603,
+   "offline": {
+    "r": -0.0691475197672844,
+    "n_detected": 1,
+    "n_mapped": 5
+   },
+   "span_uniform_r": 0.15631482005119324,
+   "oracle_span_r": 0.3044160008430481,
+   "oracle_syllables_r": 0.4980533719062805,
+   "chance_r": 0.03125918284058571
+  },
+  {
+   "trial": 76,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1236,
+   "text": "You do not like my nurse.",
+   "n_their_syllables": 7,
+   "n_their_words": 6,
+   "n_tts_syllables": 5,
+   "dtw_cost": 0.03735818000072911,
+   "decoder_r": 0.013506847433745861,
+   "offline": {
+    "r": 0.009910176508128643,
+    "n_detected": 1,
+    "n_mapped": 5
+   },
+   "span_uniform_r": 0.041922103613615036,
+   "oracle_span_r": 0.20069417357444763,
+   "chance_r": 0.06851319968700409
+  },
+  {
+   "trial": 77,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1162,
+   "text": "They need it right here.",
+   "n_their_syllables": 5,
+   "n_their_words": 5,
+   "n_tts_syllables": 4,
+   "dtw_cost": 0.0361289739055676,
+   "decoder_r": 0.008158288896083832,
+   "offline": {
+    "r": 0.06770889461040497,
+    "n_detected": 1,
+    "n_mapped": 4
+   },
+   "span_uniform_r": 0.17978395521640778,
+   "oracle_span_r": 0.18748219311237335,
+   "chance_r": 0.004224886652082205
+  },
+  {
+   "trial": 78,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 940,
+   "text": "Do they have family?",
+   "n_their_syllables": 5,
+   "n_their_words": 4,
+   "n_tts_syllables": 4,
+   "dtw_cost": 0.03296489219289439,
+   "decoder_r": 0.02284127101302147,
+   "offline": {
+    "r": 0.13702929019927979,
+    "n_detected": 1,
+    "n_mapped": 4
+   },
+   "span_uniform_r": 0.021559733897447586,
+   "oracle_span_r": 0.21529488265514374,
+   "chance_r": 0.04617583751678467
+  },
+  {
+   "trial": 79,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 915,
+   "text": "Are you coming up?",
+   "n_their_syllables": 5,
+   "n_their_words": 4,
+   "n_tts_syllables": 5,
+   "dtw_cost": 0.040330528438605726,
+   "decoder_r": -0.06748326867818832,
+   "offline": {
+    "r": -0.0035536780487746,
+    "n_detected": 1,
+    "n_mapped": 5
+   },
+   "span_uniform_r": 0.15630677342414856,
+   "oracle_span_r": 0.225505068898201,
+   "oracle_syllables_r": 0.2878432273864746,
+   "chance_r": 0.009437334723770618
+  },
+  {
+   "trial": 80,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 952,
+   "text": "Not here please.",
+   "n_their_syllables": 4,
+   "n_their_words": 3,
+   "n_tts_syllables": 3,
+   "dtw_cost": 0.0329073133304881,
+   "decoder_r": -0.0037178359925746918,
+   "offline": {
+    "r": -0.017466764897108078,
+    "n_detected": 1,
+    "n_mapped": 3
+   },
+   "span_uniform_r": 0.00399970356374979,
+   "oracle_span_r": 0.4073198735713959,
+   "chance_r": 0.008238313719630241
+  },
+  {
+   "trial": 81,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1099,
+   "text": "Are you very hungry?",
+   "n_their_syllables": 5,
+   "n_their_words": 4,
+   "n_tts_syllables": 5,
+   "dtw_cost": 0.02541834509103121,
+   "decoder_r": 0.008191597647964954,
+   "offline": {
+    "r": 0.0745166465640068,
+    "n_detected": 1,
+    "n_mapped": 5
+   },
+   "span_uniform_r": 0.03058673068881035,
+   "oracle_span_r": 0.2894538640975952,
+   "oracle_syllables_r": 0.3937883973121643,
+   "chance_r": -0.022635985165834427
+  },
+  {
+   "trial": 82,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 2690,
+   "text": "I feel you.",
+   "n_their_syllables": 3,
+   "n_their_words": 3,
+   "n_tts_syllables": 2,
+   "dtw_cost": 0.019475982861493147,
+   "decoder_r": 0.006449364125728607,
+   "offline": {
+    "r": 0.014651554636657238,
+    "n_detected": 1,
+    "n_mapped": 2
+   },
+   "span_uniform_r": 0.024560729041695595,
+   "oracle_span_r": 0.3626123368740082,
+   "chance_r": 0.05275692790746689
+  },
+  {
+   "trial": 83,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 2550,
+   "text": "Tell my nurse you are not hungry.",
+   "n_their_syllables": 9,
+   "n_their_words": 7,
+   "n_tts_syllables": 7,
+   "dtw_cost": 0.2185131062791024,
+   "decoder_r": -0.023373914882540703,
+   "offline": {
+    "r": -0.03616202622652054,
+    "n_detected": 1,
+    "n_mapped": 7
+   },
+   "span_uniform_r": -0.021364504471421242,
+   "oracle_span_r": 0.15880489349365234,
+   "chance_r": 5.323153800418368e-06
+  },
+  {
+   "trial": 84,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1129,
+   "text": "Not bad, right?",
+   "n_their_syllables": 3,
+   "n_their_words": 3,
+   "n_tts_syllables": 3,
+   "dtw_cost": 0.025526740472933875,
+   "decoder_r": 0.023158125579357147,
+   "offline": {
+    "r": 0.026157772168517113,
+    "n_detected": 1,
+    "n_mapped": 3
+   },
+   "span_uniform_r": 0.06079933047294617,
+   "oracle_span_r": 0.376886248588562,
+   "oracle_syllables_r": 0.4174650311470032,
+   "chance_r": 0.06042962148785591
+  },
+  {
+   "trial": 85,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1318,
+   "text": "They are not tired.",
+   "n_their_syllables": 4,
+   "n_their_words": 4,
+   "n_tts_syllables": 3,
+   "dtw_cost": 0.02268127433786003,
+   "decoder_r": 0.0048047685995697975,
+   "offline": {
+    "r": 0.06905899196863174,
+    "n_detected": 1,
+    "n_mapped": 3
+   },
+   "span_uniform_r": 0.050216954201459885,
+   "oracle_span_r": 0.1746307611465454,
+   "chance_r": 0.07611013203859329
+  },
+  {
+   "trial": 86,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1071,
+   "text": "It is what they have.",
+   "n_their_syllables": 5,
+   "n_their_words": 5,
+   "n_tts_syllables": 5,
+   "dtw_cost": 0.16472837977991303,
+   "decoder_r": 0.03573310375213623,
+   "offline": {
+    "r": 0.0795358270406723,
+    "n_detected": 1,
+    "n_mapped": 5
+   },
+   "span_uniform_r": 0.04670620709657669,
+   "oracle_span_r": 0.17192146182060242,
+   "oracle_syllables_r": 0.48278409242630005,
+   "chance_r": -0.00041772687109187245
+  },
+  {
+   "trial": 87,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1154,
+   "text": "My nurse is not going.",
+   "n_their_syllables": 6,
+   "n_their_words": 5,
+   "n_tts_syllables": 4,
+   "dtw_cost": 0.027138055933104872,
+   "decoder_r": -0.024186167865991592,
+   "offline": {
+    "r": -0.045830897986888885,
+    "n_detected": 1,
+    "n_mapped": 4
+   },
+   "span_uniform_r": 0.10372982919216156,
+   "oracle_span_r": 0.15013030171394348,
+   "chance_r": 0.0512453094124794
+  },
+  {
+   "trial": 88,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1465,
+   "text": "Yes, I am very good.",
+   "n_their_syllables": 5,
+   "n_their_words": 5,
+   "n_tts_syllables": 5,
+   "dtw_cost": 0.023092384527369725,
+   "decoder_r": 0.029983077198266983,
+   "offline": {
+    "r": 0.021222464740276337,
+    "n_detected": 1,
+    "n_mapped": 5
+   },
+   "span_uniform_r": 0.04812685027718544,
+   "oracle_span_r": 0.14802049100399017,
+   "oracle_syllables_r": 0.4365614950656891,
+   "chance_r": 0.039064086973667145
+  },
+  {
+   "trial": 89,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1382,
+   "text": "How do they do it right?",
+   "n_their_syllables": 6,
+   "n_their_words": 6,
+   "n_tts_syllables": 5,
+   "dtw_cost": 0.02180784539417009,
+   "decoder_r": -0.011863673105835915,
+   "offline": {
+    "r": 0.07606186717748642,
+    "n_detected": 1,
+    "n_mapped": 5
+   },
+   "span_uniform_r": 0.06000567600131035,
+   "oracle_span_r": 0.23370662331581116,
+   "chance_r": 0.008071580901741982
+  },
+  {
+   "trial": 90,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1435,
+   "text": "They like my glasses like that.",
+   "n_their_syllables": 7,
+   "n_their_words": 6,
+   "n_tts_syllables": 7,
+   "dtw_cost": 0.03361241966293509,
+   "decoder_r": -0.025540268048644066,
+   "offline": {
+    "r": -0.035930268466472626,
+    "n_detected": 1,
+    "n_mapped": 7
+   },
+   "span_uniform_r": -0.03181969374418259,
+   "oracle_span_r": 0.2098623514175415,
+   "oracle_syllables_r": 0.46981483697891235,
+   "chance_r": -0.10844069719314575
+  },
+  {
+   "trial": 91,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 865,
+   "text": "They feel comfortable.",
+   "n_their_syllables": 5,
+   "n_their_words": 3,
+   "n_tts_syllables": 5,
+   "dtw_cost": 0.05567627106561696,
+   "decoder_r": -0.05604299157857895,
+   "offline": {
+    "r": 0.07095223665237427,
+    "n_detected": 1,
+    "n_mapped": 5
+   },
+   "span_uniform_r": 0.1042628064751625,
+   "oracle_span_r": 0.13394036889076233,
+   "oracle_syllables_r": 0.4158399999141693,
+   "chance_r": -0.004154191352427006
+  },
+  {
+   "trial": 92,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1106,
+   "text": "My computer is not good.",
+   "n_their_syllables": 7,
+   "n_their_words": 5,
+   "n_tts_syllables": 7,
+   "dtw_cost": 0.037874938639538246,
+   "decoder_r": -0.024693604558706284,
+   "offline": {
+    "r": -0.0419519878923893,
+    "n_detected": 1,
+    "n_mapped": 7
+   },
+   "span_uniform_r": 0.0965619683265686,
+   "oracle_span_r": 0.25580599904060364,
+   "oracle_syllables_r": 0.45821595191955566,
+   "chance_r": 0.02452462911605835
+  },
+  {
+   "trial": 93,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 957,
+   "text": "They are right outside.",
+   "n_their_syllables": 5,
+   "n_their_words": 4,
+   "n_tts_syllables": 5,
+   "dtw_cost": 0.03682745960991552,
+   "decoder_r": -0.001606229692697525,
+   "offline": {
+    "r": 0.02258307859301567,
+    "n_detected": 1,
+    "n_mapped": 5
+   },
+   "span_uniform_r": 0.07086709141731262,
+   "oracle_span_r": 0.19996920228004456,
+   "oracle_syllables_r": 0.43219780921936035,
+   "chance_r": 0.01702987775206566
+  },
+  {
+   "trial": 94,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1423,
+   "text": "Tell my nurse you are not comfortable.",
+   "n_their_syllables": 10,
+   "n_their_words": 7,
+   "n_tts_syllables": 8,
+   "dtw_cost": 0.04489467285523776,
+   "decoder_r": -0.008483470417559147,
+   "offline": {
+    "r": 0.0410725399851799,
+    "n_detected": 1,
+    "n_mapped": 8
+   },
+   "span_uniform_r": -0.005880136042833328,
+   "oracle_span_r": 0.08576586842536926,
+   "chance_r": 0.09294596314430237
+  },
+  {
+   "trial": 95,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1137,
+   "text": "They are coming right up.",
+   "n_their_syllables": 6,
+   "n_their_words": 5,
+   "n_tts_syllables": 5,
+   "dtw_cost": 0.19975955424751665,
+   "decoder_r": 0.010118561796844006,
+   "offline": {
+    "r": 0.04818776249885559,
+    "n_detected": 1,
+    "n_mapped": 5
+   },
+   "span_uniform_r": 0.058024466037750244,
+   "oracle_span_r": 0.1101059764623642,
+   "chance_r": 0.08265188336372375
+  },
+  {
+   "trial": 96,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1019,
+   "text": "Do I have success?",
+   "n_their_syllables": 6,
+   "n_their_words": 4,
+   "n_tts_syllables": 4,
+   "dtw_cost": 0.039031492228166015,
+   "decoder_r": -0.06735669076442719,
+   "offline": {
+    "r": 0.0111546590924263,
+    "n_detected": 1,
+    "n_mapped": 4
+   },
+   "span_uniform_r": 0.10224111378192902,
+   "oracle_span_r": 0.2168349325656891,
+   "chance_r": 0.05217772722244263
+  },
+  {
+   "trial": 97,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1528,
+   "text": "You hope you have my faith.",
+   "n_their_syllables": 6,
+   "n_their_words": 6,
+   "n_tts_syllables": 6,
+   "dtw_cost": 0.03236754043189374,
+   "decoder_r": 0.045175231993198395,
+   "offline": {
+    "r": 0.0818466991186142,
+    "n_detected": 1,
+    "n_mapped": 6
+   },
+   "span_uniform_r": -0.022814510390162468,
+   "oracle_span_r": 0.3512325584888458,
+   "oracle_syllables_r": 0.5387526750564575,
+   "chance_r": 0.0539209358394146
+  },
+  {
+   "trial": 98,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1540,
+   "text": "You hope my nurse is good.",
+   "n_their_syllables": 7,
+   "n_their_words": 6,
+   "n_tts_syllables": 6,
+   "dtw_cost": 0.028944327030173363,
+   "decoder_r": 0.01358281821012497,
+   "offline": {
+    "r": -0.052497051656246185,
+    "n_detected": 1,
+    "n_mapped": 6
+   },
+   "span_uniform_r": 0.11301513016223907,
+   "oracle_span_r": 0.21070632338523865,
+   "chance_r": 0.05643121525645256
+  },
+  {
+   "trial": 99,
+   "category": "Training data (50-word vocab)",
+   "n_bins": 1080,
+   "text": "My family is okay.",
+   "n_their_syllables": 6,
+   "n_their_words": 4,
+   "n_tts_syllables": 6,
+   "dtw_cost": 0.032227834716414015,
+   "decoder_r": -0.025765419006347656,
+   "offline": {
+    "r": -0.017555439844727516,
+    "n_detected": 1,
+    "n_mapped": 6
+   },
+   "span_uniform_r": 0.090913787484169,
+   "oracle_span_r": 0.2598755955696106,
+   "oracle_syllables_r": 0.4901149272918701,
+   "chance_r": 0.057863008230924606
+  }
+ ],
+ "wall_time_s": 213.62581968307495
+}

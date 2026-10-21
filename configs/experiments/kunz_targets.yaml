@@ -1,0 +1,156 @@
+# Target speech for the Kunz T15 2024.03.03 attempted trials: the paper's bootstrap alignment (D-020).
+# TTS of the cue -> LPCNet features; a pretrained decoder's output on the trial gives the timing
+# (syllables from its envelope, DTW against the TTS envelope, per-syllable stretch); the result is
+# scaled and smoothed exactly as their loader does. Validated on Wairagkar sessions first.
+#
+#   Mac:  python scripts/make_tts.py rank|generate ...       (macOS `say`; audio never leaves a temp dir)
+#   host: python -I scripts/validate_alignment.py ...        (Wairagkar sessions vs their targets)
+#   host: python -I scripts/align_targets.py                 (Kunz attempted -> data/processed/kunz_targets)
+#
+# This file is merged over `base_experiment` (itself merged over configs/default.yaml), so the
+# synthesis / wairagkar_data / paths sections of reproduce_inference.yaml apply here too.
+# Tags: [PAPER] stated by Wairagkar et al. 2025; [THEIRS] their code; [CHOICE] ours (see the
+# docstrings of src/wvx/alignment.py and src/wvx/targets.py for the reasoning).
+
+base_experiment: configs/experiments/reproduce_inference.yaml
+
+run_name: kunz_targets
+
+paths:
+  tts_features: data/processed/tts                  # <tts_features>/<voice_slug>/<corpus>.npz (host)
+  kunz_processed: data/processed/kunz               # SessionData without targets (scripts/prepare_kunz.py)
+  kunz_targets: data/processed/kunz_targets         # SessionData with targets (scripts/align_targets.py)
+  alignment_validation: results/alignment_validation  # small JSON only
+
+# LPCNet/ffmpeg temp files stay inside the repo's data/processed/ on the host (one fresh dir per call,
+# deleted afterwards); overrides the system temp dir of reproduce_inference.yaml.
+synthesis:
+  tmp_root: data/processed/tmp
+
+# --------------------------------------------------------------------------------- TTS (Mac only)
+tts:
+  engine: macos_say          # [PAPER] built-in macOS TTS (13.5.1 there; this Mac runs a newer macOS)
+  say_binary: /usr/bin/say
+  # [CHOICE] 2026-10-20, results/alignment_validation/voice_ranking.json: closest male voice to their
+  # released targets (cepstral moments, rank 1 of 29; F0 138 vs their 128 Hz) and 2nd on their norm
+  # JSON (Rishi 1st, nearly tied). Present in macOS 13.5.1: unverified.
+  voice: "Aman (English (India))"
+  rate_wpm: null             # null = the voice's default speaking rate (the paper gives none)
+  word_pause_ms: null        # [CHOICE] null = the cue as one phrase; N = `[[slnc N]]` between words (variant)
+  file_format: WAVE
+  data_format: LEI16         # 16-bit PCM at the voice's native rate; resampled to 16 kHz by wvx.synthesis.encode_wav
+  pad_ms: 200                # [CHOICE] digital silence added before and after each utterance before LPCNet
+                             #   encoding, so edge frames are well formed and every utterance starts/ends silent
+  silence_ms: 500            # length of the digital-silence clip encoded for the silence frame
+  n_workers: 8               # parallel say + encode jobs (I/O and subprocess bound)
+  timeout_s: 60              # per `say` call (a normal call takes < 2 s)
+  retries: 2                 # re-run a `say` call that timed out
+
+# Ranking installed voices against the statistics in their norm JSON (scripts/make_tts.py rank).
+voice_id:
+  locale_prefix: en_         # English voices only
+  n_sentences: 60            # seeded subset of the corpus per voice (`say` runs ~0.5 s per sentence, serially)
+  exclude:                   # novelty / singing voices of macOS (not plausible speech targets)
+    - Bad News
+    - Bahh
+    - Bells
+    - Boing
+    - Bubbles
+    - Cellos
+    - Good News
+    - Jester
+    - Organ
+    - Superstar
+    - Trinoids
+    - Whisper
+    - Wobble
+    - Zarvox
+  voiced_corr_min: 0.0       # LPCNet feature 19 = pitch correlation - 0.5; > 0 means correlation > 0.5 ("voiced")
+  male_max_f0_hz: 165.0      # [CHOICE] median voiced F0 below this = male-range voice (T15 is male)
+  # Their mean/std are over a TTS set containing an unknown share of digital silence (c0 = -12.485 is
+  # their c0 minimum and exactly LPCNet's code for zeros). We fit that share per voice.
+  silence_share_grid: [0.0, 0.9, 0.005]   # start, stop, step
+  # c0 excluded (gain-dependent); pitch (18) excluded: their pauses hold the last speech pitch instead
+  # of the silence code 3.1, so the JSON's pitch moments do not follow the two-part mixture.
+  distance_features: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 19]
+  # Second reference: speech-frame moments of their released targets (their voice, stretched), from
+  # results/alignment_validation/their_target_speech_stats.json. Cepstra only: voicing (19) and pitch
+  # are changed by their stretching; F0 is compared separately (semitones).
+  reference_features: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17]
+  speech_mask_db: 30.0       # speech frames: c0 power within this of the utterance's loudest frame
+  male_voices_unlabelled: [Eddy, Grandpa, Reed, Rocko, Ralph, Albert]   # gender 0 in AVFoundation; male by name
+  pitch_period_scale: 0.02   # LPCNet: feature 18 = 0.02 * (period - 100), period in samples at 16 kHz
+  pitch_period_offset: 100.0
+
+# ----------------------------------------------------------------------------------- alignment
+alignment:
+  # LPCNet: c0 = sqrt(18) * mean_b log10(1e-2 + E_b) - 4 (src/lpcnet_enc.c), so this converts c0 to
+  # the mean log band power in dB (used by envelope source "c0" and the speech masks).
+  c0_offset: 4.0
+  c0_scale: 4.242640687119285   # sqrt(18)
+  n_workers: 8               # trials aligned in parallel (threads; LPCNet runs as a subprocess)
+
+  envelope:
+    source: c0               # [CHOICE] c0 = LPCNet energy coefficient (mean log band power) | audio = RMS of the
+                             #   LPCNet resynthesis ([PAPER] wording). c0 was picked on t15_day195 (target r 0.279
+                             #   vs 0.233) and confirmed on t15_day193 (0.290 vs 0.251); results/alignment_validation
+    smooth_ms: 15.0          # [CHOICE] Gaussian sigma on the frame RMS (about a 9 Hz low-pass: syllable rate)
+    amin: 1.0e-5             # RMS floor before dB (-100 dB re full scale)
+
+  segmentation:              # [CHOICE] the paper's automatic syllable segmentation is unspecified
+    speech_threshold_db: 30.0   # frames more than this below the utterance peak are silence ...
+    floor_percentile: 10.0      # ... and so are frames within floor_margin_db of this percentile (noise floor)
+    floor_margin_db: 6.0
+    min_gap_ms: 60.0         # silences shorter than this inside speech are bridged (stop closures)
+    min_region_ms: 50.0      # speech regions shorter than this are dropped
+    min_dip_db: 3.0          # a syllable boundary needs an envelope dip at least this deep on both sides
+    min_syllable_ms: 60.0    # no syllable shorter than this (closer peaks are merged)
+
+  dtw:                       # [PAPER] DTW between the TTS and predicted envelopes; cost [CHOICE]
+    feature: range           # envelope clipped at the silence threshold and scaled to [0, 1] per signal
+    delta_weight: 1.0        # weight of the envelope slope (frame difference) next to its level
+    metric: euclidean
+    band_rad: null           # null = unconstrained; else Sakoe-Chiba radius (fraction of length)
+    speech_only: true        # [CHOICE] DTW on speech frames only, mapped back (see src/wvx/alignment.py, step 3)
+
+  mapping:
+    snap: true               # [PAPER] TTS boundaries are mapped "onto the predicted ones": a DTW-mapped
+                             #   boundary moves to the nearest detected boundary of the decoder output
+    snap_tolerance_ms: 100.0
+    min_syllable_frames: 2
+
+  stretch:
+    domain: features         # [CHOICE] features = resample LPCNet frames (pitch and spectrum kept by construction)
+                             #   | audio = LPCNet-resynthesize the TTS, phase-vocoder each syllable, re-encode
+    interp: linear           # features domain: linear | nearest
+    gap_fill: silence        # time outside the mapped syllables: silence (LPCNet code of digital zeros) | tts
+    silence_pitch: hold      # [THEIRS, observed] pitch in pauses = last speech frame's, as in their targets | code (3.1)
+    audio_n_fft: 512         # audio domain: phase vocoder FFT size (32 ms at 16 kHz)
+
+# --------------------------------------------------------------------- validation on Wairagkar sessions
+validation:
+  data_dir: data/raw/wairagkar/t15_neural_data
+  sessions: []               # filled in once the release is extracted (scripts/validate_alignment.py --session)
+  reorder_channels: auto     # auto = their rule: true for the provided day025-day195 models, else false
+  reorder_until_day: 195
+  max_trials: null
+  speech_indices_file: "{session}_speech_indices.mat"   # syl_indices / word_indices: per trial (K, 2) int64,
+                             #   0-based [onset, offset) bins at 100 Hz (offset frame is the first silent one)
+  syllable_key: syl_indices
+  word_key: word_indices
+  their_target_key: target_speech_feats_syl   # syllable-aligned release targets (_word = word-aligned)
+  closed_loop_audio_key: brain2voice_pred_audio_16kHz   # evaluation trials only; int16-scaled, T * 160 samples
+  pcm_full_scale: 32768.0
+  tolerances_ms: [50, 100, 200]
+  speech_mask_db: 30.0       # frames of a (raw) target within this many dB of its loudest frame are speech
+  max_lag_frames: 30         # envelope lag search, offline decoder vs their closed-loop audio
+  chance_shift: 1            # chance baseline: our target of trial i vs their target of trial i + shift
+
+# ---------------------------------------------------------------------------- Kunz application
+kunz:
+  conditions: [attempted]
+  # Nearest released decoder in time to 2024.03.03 (post-implant day ~216-240): the day-195 session's
+  # closed-loop decoder, trained through day 193. Confirm the file name once the release is extracted.
+  decoder: data/raw/wairagkar/t15_neural_data/t15_day195/brain2voice_t15_day193.h5
+  reorder_channels: true     # their rule for day025-day195 models; assumes wvx.preprocess outputs release order
+  corpus: kunz_50words       # TTS corpus name: <tts_features>/<voice_slug>/kunz_50words.npz
