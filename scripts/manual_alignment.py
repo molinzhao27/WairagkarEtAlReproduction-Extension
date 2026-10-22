@@ -49,6 +49,7 @@ import sys
 import tarfile
 import time
 from pathlib import Path
+from typing import Optional
 
 SCRIPTS = Path(__file__).resolve().parent
 sys.path.insert(0, str(SCRIPTS.parent / "src"))
@@ -63,11 +64,15 @@ NAME_RE = r"[A-Za-z0-9][A-Za-z0-9._-]{0,63}"
 # ------------------------------------------------------------------------------------------- helpers
 
 
-def _paths(cfg, name: str) -> dict:
+def _paths(cfg, name: str, label: Optional[str] = None) -> dict:
+    """``label`` (ingest/score/targets --label) keeps a second answer set of the same package apart: its own work
+    folder, results subfolder and targets folder. No label = the first answer set, as before."""
     root = Path(cfg["paths"]["manual_alignment"])
+    sfx = f"_{label}" if label else ""
+    res = Path(cfg["paths"]["manual_alignment_results"]) / name
     return {"root": root, "pkg": root / name, "key": root / f"{name}_key.json", "answers": root / f"{name}_answers",
-            "work": root / f"{name}_work", "staging": root / f".{name}.partial",
-            "results": Path(cfg["paths"]["manual_alignment_results"]) / name}
+            "work": root / f"{name}_work{sfx}", "staging": root / f".{name}.partial",
+            "results": res / label if label else res, "targets": Path(f"{cfg['paths']['manual_targets']}{sfx}")}
 
 
 def _save(path: Path, obj) -> Path:
@@ -351,7 +356,7 @@ def cmd_ingest(cfg, env_set, args) -> int:
     from wvx import manual_alignment as ma, syllables as sy
     from wvx.provenance import code_version, config_sha256
 
-    P = _paths(cfg, args.name)
+    P = _paths(cfg, args.name, args.label)
     snap = _snapshot(P, args.snapshot)
     adir = snap / "answers"
     man = sy.load_json(P["pkg"] / "manifest.json")
@@ -362,7 +367,7 @@ def cmd_ingest(cfg, env_set, args) -> int:
         if not p.is_file():
             continue
         r = p.relative_to(adir)
-        if len(r.parts) == 2 and p.suffix == ".json":
+        if len(r.parts) == 2 and p.suffix == ".json" and (not args.workers or re.fullmatch(args.workers, r.parts[0])):
             try:
                 files.append((p, r.parts[0], json.loads(p.read_text()), None))
             except (OSError, ValueError) as e:
@@ -385,7 +390,8 @@ def cmd_ingest(cfg, env_set, args) -> int:
     for a in res["accepted"]:
         per_worker.setdefault(a["worker_id"], {"accepted": 0, "rejected": 0})["accepted"] += 1
     stamp = datetime.datetime.now().isoformat(timespec="seconds")
-    prov = {"name": args.name, "created": stamp, "snapshot": rel(snap), "code_version": code_version(),
+    prov = {"name": args.name, "label": args.label, "workers_filter": args.workers, "created": stamp,
+            "snapshot": rel(snap), "code_version": code_version(),
             "config_sha256": config_sha256(cfg), "files_sha256": key["files_sha256"]}
     w = P["work"]
     _save(w / "accepted.json", {**prov, "answers": res["accepted"]})
@@ -464,7 +470,7 @@ def cmd_score(cfg, env_set, args) -> int:
 
     set_seed(int(cfg["seed"]))
     s = ma.settings(cfg)
-    P = _paths(cfg, args.name)
+    P = _paths(cfg, args.name, args.label)
     cfg = deep_merge(cfg, {"wairagkar_data": {"keys": {"target": cfg["validation"]["their_target_key"]}}})
     key = sy.load_json(P["key"])
     agg = sy.load_json(P["work"] / "aggregated.json")
@@ -506,7 +512,8 @@ def cmd_score(cfg, env_set, args) -> int:
         row["per_worker"] = pw
         results[cell] = row
     decision = ma.adoption(manual_r, base_r, coverage, s["adoption"])
-    prov = {"name": args.name, "created": datetime.datetime.now().isoformat(timespec="seconds"),
+    prov = {"name": args.name, "label": args.label, "workers_filter": agg.get("workers_filter"),
+            "created": datetime.datetime.now().isoformat(timespec="seconds"),
             "code_version": code_version(), "config_sha256": config_sha256(cfg), "files_sha256": key["files_sha256"],
             "aggregation": agg["method"], "baseline": base}
     _save(P["work"] / "score_details.json", {**prov, "cells": details})
@@ -517,7 +524,7 @@ def cmd_score(cfg, env_set, args) -> int:
         return "-" if x is None else (f"{x:.{nd}f}" if isinstance(x, float) else str(x))
 
     tol = cfg["benchmark"]["onset_tolerance_ms"]
-    lines = [f"# Manual alignment `{args.name}`: blind calibration score", "",
+    lines = [f"# Manual alignment `{args.name}`{f' ({args.label})' if args.label else ''}: blind calibration score", "",
              f"Adoption rule (pre-registered): manual is adopted iff its mean target r over {', '.join(s['adoption']['primary_cells'])} "
              f"beats {base['arm']}/{base['method']} on the same trials by >= {s['adoption']['min_improvement']} "
              f"(coverage >= {s['adoption']['min_coverage']}).", "",
@@ -556,11 +563,11 @@ def cmd_targets(cfg, env_set, args) -> int:
 
     set_seed(int(cfg["seed"]))
     s = ma.settings(cfg)
-    P = _paths(cfg, args.name)
-    out_dir = Path(cfg["paths"]["manual_targets"]).resolve()
+    P = _paths(cfg, args.name, args.label)
+    out_dir = P["targets"].resolve()
     protected = {resolve_path(p).resolve() for p in s["targets"]["protected"]}
     if out_dir in protected:
-        raise SystemExit(f"{rel(out_dir)} is protected (v1/v2 targets); paths.manual_targets must be a new directory")
+        raise SystemExit(f"{rel(out_dir)} is protected (v1/v2 targets); paths.manual_targets (+ _label) must be a new directory")
     key = sy.load_json(P["key"])
     agg = sy.load_json(P["work"] / "aggregated.json")
     if agg["files_sha256"] != key["files_sha256"]:
@@ -596,7 +603,7 @@ def cmd_targets(cfg, env_set, args) -> int:
             a = agg["items"][t2id[i]]
             t.meta["alignment"] = {
                 "method": "manual (wvx.manual_alignment): TTS syllables stretched one to one onto aggregated answers",
-                "package": args.name, "item_id": t2id[i], "n_answers": a["n_answers"], "workers": a["workers"],
+                "package": args.name, "label": args.label, "item_id": t2id[i], "n_answers": a["n_answers"], "workers": a["workers"],
                 "aggregation": agg["method"], "syllables": {"tts_side": "forced", "arm": "B", "decoder_method": "manual"},
                 "voice": cfg["tts"]["voice"], "decoder": rel(resolve_path(c["spec"]["model"])),
                 "mapped_segments": res.mapped_segments.tolist(), "code_version": cv, "files_sha256": key["files_sha256"]}
@@ -606,7 +613,7 @@ def cmd_targets(cfg, env_set, args) -> int:
         SessionData(name, SessionData.load(Path(cfg["paths"]["kunz_processed"]) / f"{name}.npz").layer, trials).save(out)
         tgt = np.concatenate([t.target for t in trials])
         n_ans = [agg["items"][t2id[i]]["n_answers"] for i in range(len(trials))]
-        summary = {"name": args.name, "created": datetime.datetime.now().isoformat(timespec="seconds"), "session": name,
+        summary = {"name": args.name, "label": args.label, "created": datetime.datetime.now().isoformat(timespec="seconds"), "session": name,
                    "saved": rel(out), "n_trials": len(trials), "answers_per_trial": {"min": min(n_ans), "median": float(np.median(n_ans)),
                                                                                  "max": max(n_ans)},
                    "speech_fraction_per_trial": {"min": min(speech), "median": float(np.median(speech)), "max": max(speech)},
@@ -750,10 +757,17 @@ def main(argv=None) -> int:
     ap.add_argument("--snapshot", default=None, help="ingest: an answers snapshot folder (default: the latest collect)")
     ap.add_argument("--dest", default=None, help="deliver: Mac folder (default: delivery.mac_root)")
     ap.add_argument("--src", default=None, help="collect: Mac folder (default: delivery.mac_root)")
+    ap.add_argument("--label", default=None, help="ingest/score/targets: a separate answer set of the same package "
+                                                    "(own work, results and targets folders)")
+    ap.add_argument("--workers", default=None, help="ingest: only worker folders matching this regex (e.g. 'a[0-9]{2}')")
     ap.add_argument("--overwrite", action="store_true")
     args = ap.parse_args(argv)
     if not re.fullmatch(NAME_RE, args.name):
         ap.error(f"--name must match {NAME_RE}")
+    if args.label is not None and not re.fullmatch(NAME_RE, args.label):
+        ap.error(f"--label must match {NAME_RE}")
+    if args.workers is not None:
+        re.compile(args.workers)
     if args.step in ("deliver", "collect"):
         from wvx import manual_alignment as ma
 

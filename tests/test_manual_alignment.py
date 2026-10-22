@@ -863,7 +863,7 @@ def test_ingest_on_a_fake_host(script, built, cfg, tmp_path):
         (snap / w).mkdir(parents=True, exist_ok=True)
         (snap / w / f"{b}.json").write_text(json.dumps(obj))
     (snap / w / "notes.md").write_text("x")
-    args = SimpleNamespace(name="testpkg", snapshot=None)
+    args = SimpleNamespace(name="testpkg", snapshot=None, label=None, workers=None)
     assert script.cmd_ingest(c, {}, args) == 0
     agg = json.loads((data / "testpkg_work" / "aggregated.json").read_text())
     assert set(agg["items"]) == set(built.man["items"]) and agg["files_sha256"] == "f" * 64
@@ -873,3 +873,17 @@ def test_ingest_on_a_fake_host(script, built, cfg, tmp_path):
     k = built.man["counts"]["redundancy_k"]
     assert s["coverage"]["calibration"] == {"n_items": 2, "with_answer": 2, f"with_{k}_or_more": 2}
     assert s["n_rejections"] == 0 and s["n_ignored_files"] == 1
+
+    # A second answer set of the same package (--label, --workers): its own work and results folders; the first
+    # set's outputs stay as they were. Only the matching worker folders are ingested.
+    before = (data / "testpkg_work" / "aggregated.json").read_text()
+    first = sorted(p.name for p in snap.iterdir())[0]
+    args2 = SimpleNamespace(name="testpkg", snapshot=None, label="second", workers=re.escape(first))
+    assert script.cmd_ingest(c, {}, args2) == 0
+    assert (data / "testpkg_work" / "aggregated.json").read_text() == before
+    acc2 = json.loads((data / "testpkg_work_second" / "accepted.json").read_text())
+    assert acc2["answers"] and {a["worker_id"] for a in acc2["answers"]} == {first}
+    assert acc2["label"] == "second" and acc2["workers_filter"] == re.escape(first)
+    s2 = json.loads((res_dir / "testpkg" / "second" / "ingest_summary.json").read_text())
+    assert s2["n_ignored_files"] > s["n_ignored_files"]
+    assert script._paths(c, "testpkg", "second")["targets"].name.endswith("_second")
