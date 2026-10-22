@@ -17,7 +17,9 @@ Steps:
 1. Zero-shot: the day-193 decoder as is (reorder ON) decodes the test trials.
 2. Per target variant (``sanity.target_variants``): ``theirs`` = their targets; ``ours`` (optional) = our
    option-(b) targets for the same training trials (``wvx.targets.align_trials`` with the day-193 decoder and the
-   Aman TTS of the cue, exactly as for Kunz; cached under data/processed/<name>/). The validation loss of the
+   Aman TTS of the cue, exactly as for Kunz; cached under data/processed/<name>/); ``tts_oracle`` / ``tts_auto``
+   (D-049): the Aman TTS with forced-aligned syllables, arm B, placed on THEIR true syllables / on the c0-dip
+   syllables of the init decoder's own output (the Kunz v2 pipeline; settings from ``sanity.tts_targets.config``). The validation loss of the
    initial model (epoch 0) is measured first, then ``wvx.training.train`` runs, then the exported model decodes.
 3. Scoring per test trial, always against THEIR targets: frame-wise feature correlation (mean over the 20
    features) with the decoder target; ``mel_corr`` etc. (``wvx.metrics.evaluate``, configs/metrics.yaml) vs the
@@ -33,7 +35,9 @@ Outputs (``sanity.name`` N):
     results/N/train_<variant>/ history.csv, split.json, config.yaml, training_info.json
     results/audio/N/ predictions/<model>.npz, <model>/trNNN.wav, target/trNNN.wav (gitignored)
     data/checkpoints/N/train_<variant>/ best.tf, final.tf, inference_layer00.h5
-    data/processed/N/ours_targets.npz (variant ours)
+    data/processed/N/ours_targets.npz (variant ours), <variant>_targets.npz (tts_oracle, tts_auto)
+
+``--device gpu`` runs on a GPU (the spare PC, D-042); the device is recorded in summary.json.
 """
 
 from __future__ import annotations
@@ -238,6 +242,101 @@ def ours_targets(sess, train, cfg, dirs: Dirs) -> tuple[dict, dict]:
     return out, info
 
 
+TTS_VARIANTS = {
+    "tts_oracle": "TTS syllables (forced) on THEIR true syllables (syl_indices), arm B",
+    "tts_auto": "TTS syllables (forced) on the c0-dip syllables of the init decoder's own output (B/current), arm B",
+}
+
+
+def _valid_spans(segs, n_bins: int) -> bool:
+    import numpy as np
+
+    segs = np.asarray(segs)
+    return bool(segs.size and segs.ndim == 2 and np.all(segs[:, 1] > segs[:, 0]) and np.all(segs[1:, 0] >= segs[:-1, 1])
+                and segs[0, 0] >= 0 and segs[-1, 1] <= n_bins)
+
+
+def tts_targets(variant: str, sess, train, cfg, dirs: Dirs) -> tuple[dict, dict]:
+    """D-049 targets from the TTS voice for the training trials (cached): the Kunz target pipeline
+    (``sanity.tts_targets.config``: forced TTS syllables, arm B, ``wvx.targets.decoder_target``) with the decoder-side
+    syllables taken from THEIR syl_indices (``tts_oracle``) or from the c0 dips of the init decoder's own output
+    (``tts_auto``). A trial whose syl_indices are malformed uses the c0-dip syllables (counted)."""
+    import numpy as np
+    import tensorflow as tf
+
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    import validate_alignment as va
+    from wvx import alignment as al, inference, kunz_experiment as kx, syllables as sy, targets as tg
+
+    s = cfg["sanity"]
+    path = dirs.targets / f"{variant}_targets.npz"
+    keys = [f"tr{i:03d}" for i in train]
+    if path.is_file():
+        with np.load(path, allow_pickle=False) as z:
+            header = json.loads(str(z["header"]))
+            if all(k in z.files for k in keys):
+                log(f"{variant}: targets loaded from {_rel(path)}")
+                return {i: z[k] for i, k in zip(train, keys)}, header["info"]
+        log(f"{variant}: {_rel(path)} lacks some trials; regenerating")
+    t0 = time.time()
+    cfg_t = load_experiment_config(s["tts_targets"]["config"])
+    voice = cfg_t["tts"]["voice"]
+    corpus_file = tg.corpus_path(cfg_t, voice, s["session"])
+    corpus = tg.TTSCorpus.load(corpus_file)
+    sil20 = tg.silence_frame(corpus, cfg_t)
+    table = sy.load_tts_syllables(cfg_t, voice, s["session"])
+    trials = [sess.trials[i] for i in train]
+    tts_segs = [table[tg.text_key(t.text)] for t in trials]
+    reorder = bool(cfg["experiment"]["reorder_channels"])
+    model_path = resolve_path(cfg["training"]["init"]["path"])
+    model = inference.load_model(model_path, cfg_t)
+    preds = [inference.predict_trial(model, t.neural, cfg_t, reorder=reorder) for t in trials]
+    auto = [sy.decoder_segments("current", al.envelope_db(tg.prediction_timeline(p, t.neural.shape[0], sil20, cfg_t),
+                                                          cfg_t), cfg_t, None) for p, t in zip(preds, trials)]
+    n_fallback = 0
+    if variant == "tts_oracle":
+        v = cfg_t["validation"]
+        si = resolve_path(s["data_dir"]) / s["session"] / v["speech_indices_file"].format(session=s["session"])
+        syl = va.load_intervals(si, v["syllable_key"], len(sess.trials))
+        pred_segs = []
+        for i, t, a in zip(train, trials, auto):
+            ok = _valid_spans(syl[i], t.neural.shape[0])
+            n_fallback += not ok
+            pred_segs.append(syl[i] if ok else a)
+    else:
+        pred_segs = auto
+    log(f"{variant}: placing the TTS ({voice}) of {len(trials)} training cues ({TTS_VARIANTS[variant]}; "
+        f"{n_fallback} fallbacks)")
+    _, results = tg.align_trials(None, trials, corpus, cfg_t, reorder=reorder, preds=preds, tts_segments=tts_segs,
+                                 pred_segments=pred_segs, arm="B", log=log)
+    out = {i: tg.decoder_target(res.target_raw, cfg_t) for i, res in zip(train, results)}
+    for i, y in out.items():
+        if y.shape != sess.trials[i].target.shape:
+            raise ValueError(f"trial {i}: {variant} target {y.shape}, theirs {sess.trials[i].target.shape}")
+    r = [kx.feature_scores(out[i], sess.trials[i].target)["feat_corr_mean"] for i in train]
+    pairing = [(res.info or {}).get("pairing") for res in results]
+    info = {
+        "variant": variant, "method": TTS_VARIANTS[variant] + "; wvx.targets.align_trials + decoder_target",
+        "settings_config": s["tts_targets"]["config"], "voice": voice, "corpus": _rel(corpus_file),
+        "decoder_for_auto_syllables": _rel(model_path), "decoder_sha256": _sha256(model_path),
+        "reorder_channels": reorder, "n_trials": len(train), "n_fallback_to_auto": n_fallback,
+        "pairing": {k: pairing.count(k) for k in sorted(set(map(str, pairing)))},
+        "vs_theirs_word_target_r": kx.describe(r),
+        "n_mapped_syllables": kx.describe([len(res.mapped_segments) for res in results]),
+        "wall_time_s": time.time() - t0,
+    }
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_name(path.stem + ".partial.npz")
+    np.savez_compressed(tmp, header=np.array(json.dumps(_jsonable({"info": info, "trials": train}))),
+                        **{k: out[i] for i, k in zip(train, keys)})
+    os.replace(tmp, path)
+    log(f"{variant}: {len(out)} targets in {info['wall_time_s']:.0f} s -> {_rel(path)}; r vs their targets "
+        f"{info['vs_theirs_word_target_r'].get('mean', float('nan')):.3f}; pairing {info['pairing']}")
+    del model
+    tf.keras.backend.clear_session()
+    return out, info
+
+
 # ------------------------------------------------------------------------------------ training
 
 
@@ -311,8 +410,9 @@ def train_variant(variant: str, sess, train, targets: dict, cfg, dirs: Dirs, ret
     split = json.loads(result.split_json.read_text())["sessions"][tsess.name]
     info = {
         "variant": variant,
-        "targets": "their target_speech_feats_word (scaled + smoothed by their loader)" if variant == "theirs"
-                   else "our option-(b) alignment (wvx.targets), scaled + smoothed by their transform",
+        "targets": {"theirs": "their target_speech_feats_word (scaled + smoothed by their loader)",
+                    "ours": "our option-(b) alignment (wvx.targets), scaled + smoothed by their transform"}.get(
+                        variant, TTS_VARIANTS.get(variant, variant)),
         "freeze_base": t["init"]["freeze_base"],
         "init": _rel(resolve_path(t["init"]["path"])),
         "n_train_trials": len(split["train"]),
@@ -522,8 +622,10 @@ def summarize(rows: list[dict], target_rows: list[dict], cfg) -> dict:
                                           "asr_pooled": pooled_asr(sel)}
     trained = [m for m in models if m != ZERO_SHOT]
     pairs = [(m, ZERO_SHOT) for m in trained if ZERO_SHOT in models]
-    if "trained_ours" in trained and "trained_theirs" in trained:
-        pairs.append(("trained_ours", "trained_theirs"))
+    for a, b in (("trained_ours", "trained_theirs"), ("trained_tts_oracle", "trained_theirs"),
+                 ("trained_tts_auto", "trained_theirs"), ("trained_tts_auto", "trained_tts_oracle")):
+        if a in trained and b in trained:
+            pairs.append((a, b))
     for a, b in pairs:
         comp = out["comparisons"][f"{a}_minus_{b}"] = {}
         for g, f in groups:
@@ -579,9 +681,12 @@ def main(argv=None) -> int:
     ap.add_argument("--overwrite-predictions", action="store_true", help="decode even if predictions exist")
     ap.add_argument("--smoke", action="store_true",
                     help="tiny end-to-end check: name <name>_smoke, 1 epoch, few trials (not a result)")
+    ap.add_argument("--device", choices=["auto", "cpu", "gpu"], default=None, help="override runtime.device")
     args = ap.parse_args(argv)
 
     over: dict = {"sanity": {}}
+    if args.device:
+        over["runtime"] = {"device": args.device}
     if args.variants:
         over["sanity"]["target_variants"] = args.variants
     cfg = load_experiment_config(args.config, over)
@@ -594,9 +699,11 @@ def main(argv=None) -> int:
                          "log_every_batches": sm["log_every_batches"]},
         })
         s = cfg["sanity"]
-    unknown = set(s["target_variants"]) - {"theirs", "ours"}
+    unknown = set(s["target_variants"]) - {"theirs", "ours", *TTS_VARIANTS}
     if unknown:
-        raise SystemExit(f"unknown target variants {sorted(unknown)} (theirs, ours)")
+        raise SystemExit(f"unknown target variants {sorted(unknown)} (theirs, ours, {', '.join(TTS_VARIANTS)})")
+    if set(s["target_variants"]) & set(TTS_VARIANTS) and not (s.get("tts_targets") or {}).get("config"):
+        raise SystemExit("tts_oracle / tts_auto need sanity.tts_targets.config")
     if resolve_path(cfg["training"]["init"]["path"]) != resolve_path(s["zero_shot_model"]):
         raise SystemExit("training.init.path must be the zero-shot model (the new input layer copies its layer)")
 
@@ -636,7 +743,7 @@ def main(argv=None) -> int:
         "targets": cfg["wairagkar_data"]["keys"]["target"], "reorder_channels": cfg["experiment"]["reorder_channels"],
     })
 
-    timing, training, ours_info = {}, {}, None
+    timing, training, ours_info, tts_info = {}, {}, None, {}
     models = [ZERO_SHOT] + [f"trained_{v}" for v in s["target_variants"]]
     from concurrent.futures import ThreadPoolExecutor
 
@@ -687,7 +794,8 @@ def main(argv=None) -> int:
                 "models": {m: {"path": _rel(dirs.model_path(m, cfg)),
                                "sha256": _sha256(dirs.model_path(m, cfg)) if dirs.model_path(m, cfg).is_file() else None}
                            for m in models},
-                "training": training, "ours_targets": ours_info, "results": results, "timing_s": timing,
+                "training": training, "ours_targets": ours_info, "tts_targets": tts_info, "results": results,
+                "timing_s": timing,
                 "outputs": {"per_trial_csv": _rel(dirs.results / "per_trial.csv"), "audio": _rel(dirs.audio),
                             "checkpoints": _rel(dirs.ckpt)},
                 "runtime": runtime,
@@ -709,10 +817,14 @@ def main(argv=None) -> int:
             if args.stage == "all":
                 if v == "theirs":
                     tgt = {i: sess.trials[i].target for i in train}
-                else:
+                elif v == "ours":
                     t0 = time.time()
                     tgt, ours_info = ours_targets(sess, train, cfg, dirs)
                     timing["ours_targets_s"] = time.time() - t0
+                else:
+                    t0 = time.time()
+                    tgt, tts_info[v] = tts_targets(v, sess, train, cfg, dirs)
+                    timing[f"{v}_targets_s"] = time.time() - t0
                 t0 = time.time()
                 training[v] = train_variant(v, sess, train, tgt, cfg, dirs, retrain=args.retrain)
                 timing[f"train_{v}_s"] = time.time() - t0
@@ -720,10 +832,14 @@ def main(argv=None) -> int:
             else:
                 p = dirs.results / f"train_{v}" / "training_info.json"
                 training[v] = json.loads(p.read_text()) if p.is_file() else None
-                op = dirs.targets / "ours_targets.npz"
-                if v == "ours" and op.is_file():
+                op = dirs.targets / ("ours_targets.npz" if v == "ours" else f"{v}_targets.npz")
+                if v != "theirs" and op.is_file():
                     with np.load(op, allow_pickle=False) as z:
-                        ours_info = json.loads(str(z["header"]))["info"]
+                        info = json.loads(str(z["header"]))["info"]
+                    if v == "ours":
+                        ours_info = info
+                    else:
+                        tts_info[v] = info
             score(model)
             write_summary()
     log(f"done in {(time.time() - t_start) / 60:.1f} min -> {_rel(dirs.results / 'summary.json')}")

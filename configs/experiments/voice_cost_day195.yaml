@@ -1,0 +1,22 @@
+# D-049 (pre-registered, user-approved 2026-10-22): what does the TTS voice cost? The dev setting of D-039 run B
+# (day-165 decoder adapted on t15_day195, frozen base, 15 epochs, same split and test trials, scored against their
+# real targets) with three training-target variants in one run on the spare PC's GPU:
+#   theirs      their real targets (D-039 run B again, on this machine)
+#   tts_oracle  Aman TTS, forced syllables placed on THEIR true syllables (arm B)
+#   tts_auto    Aman TTS on the c0-dip syllables of the day-165 decoder's own output (B/current: the Kunz v2 way)
+#
+#   PC: .venv/bin/python -I scripts/sanity_train_day195.py --config configs/experiments/voice_cost_day195.yaml --device gpu
+base_experiment: configs/experiments/sanity_train_day195_from165_ep15.yaml
+
+run_name: voice_cost_day195
+
+runtime:
+  threads: {intra_op: 16, inter_op: 2, omp: 16}   # one process on the PC (16 threads)
+
+sanity:
+  name: voice_cost_day195
+  target_variants: [theirs, tts_oracle, tts_auto]
+  tts_targets:
+    config: configs/experiments/manual_alignment.yaml   # the Kunz target pipeline: forced TTS syllables, arm B (D-037/D-041)
+  evaluation:
+    n_workers: 12
