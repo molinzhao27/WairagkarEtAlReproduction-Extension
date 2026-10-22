@@ -830,7 +830,7 @@ def write_score_matrix(path: Path, rows: list[dict]) -> None:
 
 def audio_scorer(refs: References, cfg):
     """Worker processes (``evaluation.n_workers``) that vocode and score the outputs (``wvx.kunz_experiment.
-    score_output``; the config and the references go to each worker once, one BLAS thread each).
+    score_output``; the config and the references go to each worker once; BLAS threads as the run sets them).
 
     The LPCNet feature conversion and the metrics' DTW (librosa, numba without ``nogil``) hold the GIL, so in this
     process's threads they ran one at a time. Spawned, not forked: this process runs TensorFlow threads.
@@ -845,7 +845,7 @@ def audio_scorer(refs: References, cfg):
         max_workers=int(e["n_workers"]), mp_context=multiprocessing.get_context("spawn"),
         initializer=kx.init_output_scoring,
         initargs=(cfg, refs.tts, refs.target, refs.sr, e["tts_metrics"], e["target_metrics"],
-                  metric_hop_s(e["tts_metrics"]), float(e["early_window_s"]), 1))
+                  metric_hop_s(e["tts_metrics"]), float(e["early_window_s"])))
 
 
 def score_model(model: str, fold, partners, cfg, dirs: Dirs, refs: References, asr, pool) -> list[dict]:

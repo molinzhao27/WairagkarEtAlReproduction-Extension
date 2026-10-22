@@ -1,7 +1,7 @@
 """Scoring in worker processes (scripts/kunz_experiment.py ``audio_scorer``), on synthetic audio.
 
-``wvx.kunz_experiment.audio_scores`` / ``score_output`` run in spawned processes with one BLAS thread each, as the
-experiment runs them, must give exactly the in-process result (same fields, same order, same float bits), and the
+``wvx.kunz_experiment.audio_scores`` / ``score_output`` run in spawned processes, as the experiment runs them,
+must give exactly the in-process result (same fields, same order, same float bits), and the
 same numbers as calling the metrics directly, as the scoring threads did before this work moved to processes.
 """
 
@@ -51,7 +51,7 @@ def _bits(v):
 
 def _workers(refs, n=2):
     return ProcessPoolExecutor(max_workers=n, mp_context=multiprocessing.get_context("spawn"),
-                               initializer=kx.init_output_scoring, initargs=(*refs, 1))
+                               initializer=kx.init_output_scoring, initargs=refs)
 
 
 def _inline(refs, fn, *args):
