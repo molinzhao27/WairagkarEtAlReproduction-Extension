@@ -830,22 +830,27 @@ def write_score_matrix(path: Path, rows: list[dict]) -> None:
 
 def audio_scorer(refs: References, cfg):
     """Worker processes (``evaluation.n_workers``) that vocode and score the outputs (``wvx.kunz_experiment.
-    score_output``; the config and the references go to each worker once; BLAS threads as the run sets them).
+    score_output``; the config and the references go to each worker once).
 
     The LPCNet feature conversion and the metrics' DTW (librosa, numba without ``nogil``) hold the GIL, so in this
-    process's threads they ran one at a time. Spawned, not forked: this process runs TensorFlow threads.
+    process's threads they ran one at a time. Spawned, not forked: this process runs TensorFlow threads. BLAS: 2
+    threads per worker, or 1 if this process has 1 (same results as this process's count, see init_output_scoring;
+    uncapped, 8 workers x 8 OpenBLAS threads slowed a pass by 40%).
     """
     import multiprocessing
     from concurrent.futures import ProcessPoolExecutor
 
+    from threadpoolctl import threadpool_info
+
     from wvx import kunz_experiment as kx
 
     e = cfg["experiment"]["evaluation"]
+    blas = min((i["num_threads"] for i in threadpool_info() if i["user_api"] == "blas"), default=1)
     return ProcessPoolExecutor(
         max_workers=int(e["n_workers"]), mp_context=multiprocessing.get_context("spawn"),
         initializer=kx.init_output_scoring,
         initargs=(cfg, refs.tts, refs.target, refs.sr, e["tts_metrics"], e["target_metrics"],
-                  metric_hop_s(e["tts_metrics"]), float(e["early_window_s"])))
+                  metric_hop_s(e["tts_metrics"]), float(e["early_window_s"]), min(2, blas)))
 
 
 def score_model(model: str, fold, partners, cfg, dirs: Dirs, refs: References, asr, pool) -> list[dict]:

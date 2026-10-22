@@ -51,7 +51,7 @@ def _bits(v):
 
 def _workers(refs, n=2):
     return ProcessPoolExecutor(max_workers=n, mp_context=multiprocessing.get_context("spawn"),
-                               initializer=kx.init_output_scoring, initargs=refs)
+                               initializer=kx.init_output_scoring, initargs=(*refs, 2))   # 2 BLAS threads
 
 
 def _inline(refs, fn, *args):

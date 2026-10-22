@@ -97,8 +97,8 @@ class InlinePool:
     """ProcessPoolExecutor stand-in: initializer and jobs run in this process, so the fake metrics apply."""
 
     def __init__(self, max_workers=None, mp_context=None, initializer=None, initargs=()):
-        assert mp_context.get_start_method() == "spawn"   # the real workers: spawned, not forked
-        initializer(*initargs)
+        assert mp_context.get_start_method() == "spawn" and initargs[-1] in (1, 2)   # real workers: spawned, <= 2 BLAS
+        initializer(*initargs[:-1])                                                    # (no BLAS cap in the test process)
 
     def submit(self, fn, *args):
         f = Future()

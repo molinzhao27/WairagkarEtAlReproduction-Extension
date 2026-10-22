@@ -488,14 +488,19 @@ _REFS: dict = {}
 
 def init_output_scoring(cfg: Mapping[str, Any], tts: Mapping[str, np.ndarray], target: Mapping[int, np.ndarray],
                         sr: int, tts_metrics: Optional[Mapping], target_metrics: Optional[Mapping], hop_s: float,
-                        early_window_s: float) -> None:
+                        early_window_s: float, blas_threads: Optional[int] = None) -> None:
     """Hold what :func:`score_output` needs in this process: the config (LPCNet), TTS audio per cue, aligned-target
     audio per held-out trial index, and the metric settings. A ``ProcessPoolExecutor`` initializer (so the
     references go to each worker once).
 
-    BLAS keeps the thread count the run sets (``runtime.threads``, inherited): OpenBLAS's single-thread path rounds
-    some matrix products differently, which changed the last bit of 1 of ~650 MCD values on fold A03 when the
-    workers were capped at one thread."""
+    ``blas_threads`` caps BLAS in a worker (the workers already run in parallel). Never 1 when the run itself
+    allows more: OpenBLAS then takes its single-thread path for large products, which rounds some of them
+    differently (the last bit of 1 of ~650 MCD values on fold A03); with 2 or more it takes the same path as with
+    the run's own count, and how many threads share a product does not change it."""
+    if blas_threads is not None:
+        from threadpoolctl import threadpool_limits
+
+        threadpool_limits(int(blas_threads), user_api="blas")
     _REFS.clear()
     _REFS.update(cfg=cfg, tts=tts, target=target, sr=sr, tts_metrics=tts_metrics, target_metrics=target_metrics,
                  hop_s=hop_s, early_window_s=early_window_s)
