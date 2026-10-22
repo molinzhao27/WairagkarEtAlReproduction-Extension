@@ -244,6 +244,10 @@ TTS_VARIANTS = {
     "tts_oracle": "TTS syllables (forced) on THEIR true syllables (syl_indices), arm B",
     "tts_auto": "TTS syllables (forced) on the c0-dip syllables of the init decoder's own output (B/current), arm B",
 }
+CONV_VARIANTS = {  # D-051: a TTS variant's targets passed through the voice conversion (sanity.voice_conversion.model)
+    "conv_oracle": "tts_oracle",
+    "conv_auto": "tts_auto",
+}
 
 
 def _valid_spans(segs, n_bins: int) -> bool:
@@ -335,6 +339,26 @@ def tts_targets(variant: str, sess, train, cfg, dirs: Dirs) -> tuple[dict, dict]
     return out, info
 
 
+def conv_targets(variant: str, sess, train, cfg, dirs: Dirs) -> tuple[dict, dict]:
+    """D-051: the ``CONV_VARIANTS[variant]`` TTS targets (``tts_targets``, cached) converted toward their voice with
+    the ridge map of ``sanity.voice_conversion.model`` (``wvx.voice_conversion``; fit on another session)."""
+    from wvx import kunz_experiment as kx, voice_conversion as vc
+
+    base, base_info = tts_targets(CONV_VARIANTS[variant], sess, train, cfg, dirs)
+    mpath = resolve_path(cfg["sanity"]["voice_conversion"]["model"])
+    model = vc.load(mpath)
+    out = {i: vc.apply(model, base[i]) for i in train}
+    r = [kx.feature_scores(out[i], sess.trials[i].target)["feat_corr_mean"] for i in train]
+    info = {"variant": variant, "base": CONV_VARIANTS[variant], "base_info": base_info, "conversion": _rel(mpath),
+            "conversion_sha256": _sha256(mpath), "conversion_meta": model.get("meta"),
+            "k": model["k"], "alpha": model["alpha"], "vs_theirs_word_target_r": kx.describe(r),
+            "fraction_outside_unit_range": float(sum(float((abs(y) > 1).mean()) for y in out.values()) / len(out))}
+    log(f"{variant}: {len(out)} {CONV_VARIANTS[variant]} targets converted ({_rel(mpath)}, k={model['k']}, "
+        f"alpha={model['alpha']:g}); r vs their targets {base_info['vs_theirs_word_target_r'].get('mean', float('nan')):.3f}"
+        f" -> {info['vs_theirs_word_target_r'].get('mean', float('nan')):.3f}")
+    return out, info
+
+
 # ------------------------------------------------------------------------------------ training
 
 
@@ -410,7 +434,8 @@ def train_variant(variant: str, sess, train, targets: dict, cfg, dirs: Dirs, ret
         "variant": variant,
         "targets": {"theirs": "their target_speech_feats_word (scaled + smoothed by their loader)",
                     "ours": "our option-(b) alignment (wvx.targets), scaled + smoothed by their transform"}.get(
-                        variant, TTS_VARIANTS.get(variant, variant)),
+                        variant, TTS_VARIANTS.get(variant, f"{CONV_VARIANTS[variant]} converted (D-051)"
+                                              if variant in CONV_VARIANTS else variant)),
         "freeze_base": t["init"]["freeze_base"],
         "init": _rel(resolve_path(t["init"]["path"])),
         "n_train_trials": len(split["train"]),
@@ -621,7 +646,8 @@ def summarize(rows: list[dict], target_rows: list[dict], cfg) -> dict:
     trained = [m for m in models if m != ZERO_SHOT]
     pairs = [(m, ZERO_SHOT) for m in trained if ZERO_SHOT in models]
     for a, b in (("trained_ours", "trained_theirs"), ("trained_tts_oracle", "trained_theirs"),
-                 ("trained_tts_auto", "trained_theirs"), ("trained_tts_auto", "trained_tts_oracle")):
+                 ("trained_tts_auto", "trained_theirs"), ("trained_tts_auto", "trained_tts_oracle"),
+                 ("trained_conv_auto", "trained_conv_oracle")):
         if a in trained and b in trained:
             pairs.append((a, b))
     for a, b in pairs:
@@ -697,10 +723,13 @@ def main(argv=None) -> int:
                          "log_every_batches": sm["log_every_batches"]},
         })
         s = cfg["sanity"]
-    unknown = set(s["target_variants"]) - {"theirs", "ours", *TTS_VARIANTS}
+    unknown = set(s["target_variants"]) - {"theirs", "ours", *TTS_VARIANTS, *CONV_VARIANTS}
     if unknown:
-        raise SystemExit(f"unknown target variants {sorted(unknown)} (theirs, ours, {', '.join(TTS_VARIANTS)})")
-    if set(s["target_variants"]) & set(TTS_VARIANTS) and not (s.get("tts_targets") or {}).get("config"):
+        raise SystemExit(f"unknown target variants {sorted(unknown)} "
+                         f"(theirs, ours, {', '.join(TTS_VARIANTS)}, {', '.join(CONV_VARIANTS)})")
+    if set(s["target_variants"]) & set(CONV_VARIANTS) and not (s.get("voice_conversion") or {}).get("model"):
+        raise SystemExit("conv_oracle / conv_auto need sanity.voice_conversion.model")
+    if set(s["target_variants"]) & {*TTS_VARIANTS, *CONV_VARIANTS} and not (s.get("tts_targets") or {}).get("config"):
         raise SystemExit("tts_oracle / tts_auto need sanity.tts_targets.config")
     if resolve_path(cfg["training"]["init"]["path"]) != resolve_path(s["zero_shot_model"]):
         raise SystemExit("training.init.path must be the zero-shot model (the new input layer copies its layer)")
@@ -821,7 +850,8 @@ def main(argv=None) -> int:
                     timing["ours_targets_s"] = time.time() - t0
                 else:
                     t0 = time.time()
-                    tgt, tts_info[v] = tts_targets(v, sess, train, cfg, dirs)
+                    make = conv_targets if v in CONV_VARIANTS else tts_targets
+                    tgt, tts_info[v] = make(v, sess, train, cfg, dirs)
                     timing[f"{v}_targets_s"] = time.time() - t0
                 t0 = time.time()
                 training[v] = train_variant(v, sess, train, tgt, cfg, dirs, retrain=args.retrain)

@@ -1,0 +1,21 @@
+# D-051 (pre-registered): fit the TTS (Aman) -> their-voice target conversion on t15_day193, check on t15_day195.
+#   .venv/bin/python -I scripts/voice_conversion.py --config configs/experiments/voice_conversion.yaml
+base_experiment: configs/experiments/voice_cost_day195.yaml   # seed, runtime threads
+
+run_name: voice_conversion
+
+paths:
+  voice_conversion: data/processed/voice_conversion          # the fitted maps (.npz; small, gitignored data)
+
+voice_conversion:
+  name: aman_to_theirs_word_day193
+  data_config: configs/experiments/voice_cost_day195.yaml      # their decoder targets as the dev training loads them
+  placement_config: configs/experiments/manual_alignment.yaml  # TTS placement: forced syllables, arm B (as tts_oracle)
+  fit_session: t15_day193
+  check_session: t15_day195                                    # never used to fit or choose
+  ks: [0, 2, 5, 10]                                            # ±k frames of context
+  alphas: [0.1, 1, 10, 100, 1000, 10000]
+  n_folds: 5
+  check_cached:                                                # the D-049 dev run's training targets, if present
+    tts_oracle: data/processed/voice_cost_day195/tts_oracle_targets.npz
+    tts_auto: data/processed/voice_cost_day195/tts_auto_targets.npz
