@@ -1,0 +1,1704 @@
+{
+  "heldout_block": 3,
+  "paired_block": 4,
+  "train_blocks": [
+    6,
+    11,
+    13
+  ],
+  "n_train_pool_trials": 150,
+  "sets": {
+    "heldout_attempted_A03": {
+      "role": "heldout_attempted",
+      "condition": "attempted",
+      "block": 3,
+      "n": 50,
+      "n_cues_in_training": 0,
+      "key": "attempted:B03",
+      "trials": [
+        {
+          "trial_index": 0,
+          "text": "I hope it is you.",
+          "n_bins": 1114,
+          "text_in_training": false,
+          "shuffled_trial_partner": 17
+        },
+        {
+          "trial_index": 1,
+          "text": "You up?",
+          "n_bins": 683,
+          "text_in_training": false,
+          "shuffled_trial_partner": 29
+        },
+        {
+          "trial_index": 2,
+          "text": "Is my nurse very hungry?",
+          "n_bins": 1208,
+          "text_in_training": false,
+          "shuffled_trial_partner": 43
+        },
+        {
+          "trial_index": 3,
+          "text": "They need it coming.",
+          "n_bins": 743,
+          "text_in_training": false,
+          "shuffled_trial_partner": 35
+        },
+        {
+          "trial_index": 4,
+          "text": "I need good glasses.",
+          "n_bins": 1245,
+          "text_in_training": false,
+          "shuffled_trial_partner": 27
+        },
+        {
+          "trial_index": 5,
+          "text": "Bring my music here, please.",
+          "n_bins": 1535,
+          "text_in_training": false,
+          "shuffled_trial_partner": 1
+        },
+        {
+          "trial_index": 6,
+          "text": "Am I right?",
+          "n_bins": 816,
+          "text_in_training": false,
+          "shuffled_trial_partner": 7
+        },
+        {
+          "trial_index": 7,
+          "text": "I do feel it.",
+          "n_bins": 800,
+          "text_in_training": false,
+          "shuffled_trial_partner": 38
+        },
+        {
+          "trial_index": 8,
+          "text": "I am coming right up.",
+          "n_bins": 913,
+          "text_in_training": false,
+          "shuffled_trial_partner": 20
+        },
+        {
+          "trial_index": 9,
+          "text": "Yes, it is good.",
+          "n_bins": 768,
+          "text_in_training": false,
+          "shuffled_trial_partner": 13
+        },
+        {
+          "trial_index": 10,
+          "text": "I need my music.",
+          "n_bins": 593,
+          "text_in_training": false,
+          "shuffled_trial_partner": 6
+        },
+        {
+          "trial_index": 11,
+          "text": "I do need you.",
+          "n_bins": 902,
+          "text_in_training": false,
+          "shuffled_trial_partner": 40
+        },
+        {
+          "trial_index": 12,
+          "text": "Do not clean it.",
+          "n_bins": 675,
+          "text_in_training": false,
+          "shuffled_trial_partner": 21
+        },
+        {
+          "trial_index": 13,
+          "text": "How is that going?",
+          "n_bins": 765,
+          "text_in_training": false,
+          "shuffled_trial_partner": 41
+        },
+        {
+          "trial_index": 14,
+          "text": "I hope my family is closer.",
+          "n_bins": 1030,
+          "text_in_training": false,
+          "shuffled_trial_partner": 47
+        },
+        {
+          "trial_index": 15,
+          "text": "What do you do here?",
+          "n_bins": 806,
+          "text_in_training": false,
+          "shuffled_trial_partner": 12
+        },
+        {
+          "trial_index": 16,
+          "text": "I do not have hope.",
+          "n_bins": 786,
+          "text_in_training": false,
+          "shuffled_trial_partner": 15
+        },
+        {
+          "trial_index": 17,
+          "text": "It is right.",
+          "n_bins": 546,
+          "text_in_training": false,
+          "shuffled_trial_partner": 32
+        },
+        {
+          "trial_index": 18,
+          "text": "I do not like glasses.",
+          "n_bins": 869,
+          "text_in_training": false,
+          "shuffled_trial_partner": 36
+        },
+        {
+          "trial_index": 19,
+          "text": "Bring my nurse.",
+          "n_bins": 689,
+          "text_in_training": false,
+          "shuffled_trial_partner": 14
+        },
+        {
+          "trial_index": 20,
+          "text": "Are you coming up here.",
+          "n_bins": 1332,
+          "text_in_training": false,
+          "shuffled_trial_partner": 9
+        },
+        {
+          "trial_index": 21,
+          "text": "I feel bad here.",
+          "n_bins": 665,
+          "text_in_training": false,
+          "shuffled_trial_partner": 42
+        },
+        {
+          "trial_index": 22,
+          "text": "You are not okay.",
+          "n_bins": 806,
+          "text_in_training": false,
+          "shuffled_trial_partner": 3
+        },
+        {
+          "trial_index": 23,
+          "text": "You have it like that.",
+          "n_bins": 714,
+          "text_in_training": false,
+          "shuffled_trial_partner": 39
+        },
+        {
+          "trial_index": 24,
+          "text": "I hope I have good family.",
+          "n_bins": 989,
+          "text_in_training": false,
+          "shuffled_trial_partner": 26
+        },
+        {
+          "trial_index": 25,
+          "text": "Not coming up.",
+          "n_bins": 648,
+          "text_in_training": false,
+          "shuffled_trial_partner": 24
+        },
+        {
+          "trial_index": 26,
+          "text": "You do not need glasses.",
+          "n_bins": 789,
+          "text_in_training": false,
+          "shuffled_trial_partner": 11
+        },
+        {
+          "trial_index": 27,
+          "text": "Is my nurse closer?",
+          "n_bins": 904,
+          "text_in_training": false,
+          "shuffled_trial_partner": 48
+        },
+        {
+          "trial_index": 28,
+          "text": "You are what?",
+          "n_bins": 527,
+          "text_in_training": false,
+          "shuffled_trial_partner": 31
+        },
+        {
+          "trial_index": 29,
+          "text": "They hope they have my faith.",
+          "n_bins": 1207,
+          "text_in_training": false,
+          "shuffled_trial_partner": 16
+        },
+        {
+          "trial_index": 30,
+          "text": "You are no good.",
+          "n_bins": 777,
+          "text_in_training": false,
+          "shuffled_trial_partner": 28
+        },
+        {
+          "trial_index": 31,
+          "text": "What is it you need?",
+          "n_bins": 998,
+          "text_in_training": false,
+          "shuffled_trial_partner": 44
+        },
+        {
+          "trial_index": 32,
+          "text": "They are not thirsty.",
+          "n_bins": 1207,
+          "text_in_training": false,
+          "shuffled_trial_partner": 19
+        },
+        {
+          "trial_index": 33,
+          "text": "I hope my nurse is here.",
+          "n_bins": 936,
+          "text_in_training": false,
+          "shuffled_trial_partner": 45
+        },
+        {
+          "trial_index": 34,
+          "text": "Is my music good?",
+          "n_bins": 721,
+          "text_in_training": false,
+          "shuffled_trial_partner": 37
+        },
+        {
+          "trial_index": 35,
+          "text": "Where are my glasses?",
+          "n_bins": 910,
+          "text_in_training": false,
+          "shuffled_trial_partner": 49
+        },
+        {
+          "trial_index": 36,
+          "text": "They are coming closer.",
+          "n_bins": 823,
+          "text_in_training": false,
+          "shuffled_trial_partner": 18
+        },
+        {
+          "trial_index": 37,
+          "text": "They do not have faith.",
+          "n_bins": 1002,
+          "text_in_training": false,
+          "shuffled_trial_partner": 25
+        },
+        {
+          "trial_index": 38,
+          "text": "Bring my family here, please.",
+          "n_bins": 942,
+          "text_in_training": false,
+          "shuffled_trial_partner": 10
+        },
+        {
+          "trial_index": 39,
+          "text": "I am here.",
+          "n_bins": 855,
+          "text_in_training": false,
+          "shuffled_trial_partner": 5
+        },
+        {
+          "trial_index": 40,
+          "text": "My family is not very tired.",
+          "n_bins": 1314,
+          "text_in_training": false,
+          "shuffled_trial_partner": 23
+        },
+        {
+          "trial_index": 41,
+          "text": "I am going outside.",
+          "n_bins": 797,
+          "text_in_training": false,
+          "shuffled_trial_partner": 8
+        },
+        {
+          "trial_index": 42,
+          "text": "How do you have it?",
+          "n_bins": 739,
+          "text_in_training": false,
+          "shuffled_trial_partner": 46
+        },
+        {
+          "trial_index": 43,
+          "text": "They do okay.",
+          "n_bins": 506,
+          "text_in_training": false,
+          "shuffled_trial_partner": 0
+        },
+        {
+          "trial_index": 44,
+          "text": "That is like success.",
+          "n_bins": 1788,
+          "text_in_training": false,
+          "shuffled_trial_partner": 33
+        },
+        {
+          "trial_index": 45,
+          "text": "How am I going outside?",
+          "n_bins": 728,
+          "text_in_training": false,
+          "shuffled_trial_partner": 22
+        },
+        {
+          "trial_index": 46,
+          "text": "You need it right here.",
+          "n_bins": 1005,
+          "text_in_training": false,
+          "shuffled_trial_partner": 30
+        },
+        {
+          "trial_index": 47,
+          "text": "You have no computer.",
+          "n_bins": 852,
+          "text_in_training": false,
+          "shuffled_trial_partner": 4
+        },
+        {
+          "trial_index": 48,
+          "text": "Do you have success?",
+          "n_bins": 863,
+          "text_in_training": false,
+          "shuffled_trial_partner": 34
+        },
+        {
+          "trial_index": 49,
+          "text": "I hope my nurse is comfortable.",
+          "n_bins": 893,
+          "text_in_training": false,
+          "shuffled_trial_partner": 2
+        }
+      ]
+    },
+    "paired_imagined_I04": {
+      "role": "paired_imagined",
+      "condition": "imagined",
+      "block": 4,
+      "n": 50,
+      "n_cues_in_training": 0,
+      "key": "imagined:B04",
+      "trials": [
+        {
+          "trial_index": 0,
+          "text": "I hope it is you.",
+          "n_bins": 1068,
+          "text_in_training": false,
+          "shuffled_trial_partner": 36
+        },
+        {
+          "trial_index": 1,
+          "text": "You up?",
+          "n_bins": 701,
+          "text_in_training": false,
+          "shuffled_trial_partner": 42
+        },
+        {
+          "trial_index": 2,
+          "text": "Is my nurse very hungry?",
+          "n_bins": 1477,
+          "text_in_training": false,
+          "shuffled_trial_partner": 33
+        },
+        {
+          "trial_index": 3,
+          "text": "They need it coming.",
+          "n_bins": 1735,
+          "text_in_training": false,
+          "shuffled_trial_partner": 49
+        },
+        {
+          "trial_index": 4,
+          "text": "I need good glasses.",
+          "n_bins": 1320,
+          "text_in_training": false,
+          "shuffled_trial_partner": 18
+        },
+        {
+          "trial_index": 5,
+          "text": "Bring my music here, please.",
+          "n_bins": 1105,
+          "text_in_training": false,
+          "shuffled_trial_partner": 29
+        },
+        {
+          "trial_index": 6,
+          "text": "Am I right?",
+          "n_bins": 942,
+          "text_in_training": false,
+          "shuffled_trial_partner": 12
+        },
+        {
+          "trial_index": 7,
+          "text": "I do feel it.",
+          "n_bins": 1325,
+          "text_in_training": false,
+          "shuffled_trial_partner": 11
+        },
+        {
+          "trial_index": 8,
+          "text": "I am coming right up.",
+          "n_bins": 1468,
+          "text_in_training": false,
+          "shuffled_trial_partner": 26
+        },
+        {
+          "trial_index": 9,
+          "text": "Yes, it is good.",
+          "n_bins": 1873,
+          "text_in_training": false,
+          "shuffled_trial_partner": 10
+        },
+        {
+          "trial_index": 10,
+          "text": "I need my music.",
+          "n_bins": 1719,
+          "text_in_training": false,
+          "shuffled_trial_partner": 44
+        },
+        {
+          "trial_index": 11,
+          "text": "I do need you.",
+          "n_bins": 1475,
+          "text_in_training": false,
+          "shuffled_trial_partner": 20
+        },
+        {
+          "trial_index": 12,
+          "text": "Do not clean it.",
+          "n_bins": 1255,
+          "text_in_training": false,
+          "shuffled_trial_partner": 25
+        },
+        {
+          "trial_index": 13,
+          "text": "How is that going?",
+          "n_bins": 1039,
+          "text_in_training": false,
+          "shuffled_trial_partner": 35
+        },
+        {
+          "trial_index": 14,
+          "text": "I hope my family is closer.",
+          "n_bins": 1266,
+          "text_in_training": false,
+          "shuffled_trial_partner": 37
+        },
+        {
+          "trial_index": 15,
+          "text": "What do you do here?",
+          "n_bins": 949,
+          "text_in_training": false,
+          "shuffled_trial_partner": 48
+        },
+        {
+          "trial_index": 16,
+          "text": "I do not have hope.",
+          "n_bins": 749,
+          "text_in_training": false,
+          "shuffled_trial_partner": 21
+        },
+        {
+          "trial_index": 17,
+          "text": "It is right.",
+          "n_bins": 466,
+          "text_in_training": false,
+          "shuffled_trial_partner": 16
+        },
+        {
+          "trial_index": 18,
+          "text": "I do not like glasses.",
+          "n_bins": 1352,
+          "text_in_training": false,
+          "shuffled_trial_partner": 14
+        },
+        {
+          "trial_index": 19,
+          "text": "Bring my nurse.",
+          "n_bins": 694,
+          "text_in_training": false,
+          "shuffled_trial_partner": 32
+        },
+        {
+          "trial_index": 20,
+          "text": "Are you coming up here.",
+          "n_bins": 799,
+          "text_in_training": false,
+          "shuffled_trial_partner": 17
+        },
+        {
+          "trial_index": 21,
+          "text": "I feel bad here.",
+          "n_bins": 1098,
+          "text_in_training": false,
+          "shuffled_trial_partner": 47
+        },
+        {
+          "trial_index": 22,
+          "text": "You are not okay.",
+          "n_bins": 1063,
+          "text_in_training": false,
+          "shuffled_trial_partner": 28
+        },
+        {
+          "trial_index": 23,
+          "text": "You have it like that.",
+          "n_bins": 763,
+          "text_in_training": false,
+          "shuffled_trial_partner": 34
+        },
+        {
+          "trial_index": 24,
+          "text": "I hope I have good family.",
+          "n_bins": 937,
+          "text_in_training": false,
+          "shuffled_trial_partner": 40
+        },
+        {
+          "trial_index": 25,
+          "text": "Not coming up.",
+          "n_bins": 1617,
+          "text_in_training": false,
+          "shuffled_trial_partner": 31
+        },
+        {
+          "trial_index": 26,
+          "text": "You do not need glasses.",
+          "n_bins": 1505,
+          "text_in_training": false,
+          "shuffled_trial_partner": 41
+        },
+        {
+          "trial_index": 27,
+          "text": "Is my nurse closer?",
+          "n_bins": 2104,
+          "text_in_training": false,
+          "shuffled_trial_partner": 38
+        },
+        {
+          "trial_index": 28,
+          "text": "You are what?",
+          "n_bins": 1134,
+          "text_in_training": false,
+          "shuffled_trial_partner": 0
+        },
+        {
+          "trial_index": 29,
+          "text": "They hope they have my faith.",
+          "n_bins": 2180,
+          "text_in_training": false,
+          "shuffled_trial_partner": 7
+        },
+        {
+          "trial_index": 30,
+          "text": "You are no good.",
+          "n_bins": 1399,
+          "text_in_training": false,
+          "shuffled_trial_partner": 2
+        },
+        {
+          "trial_index": 31,
+          "text": "What is it you need?",
+          "n_bins": 1398,
+          "text_in_training": false,
+          "shuffled_trial_partner": 8
+        },
+        {
+          "trial_index": 32,
+          "text": "They are not thirsty.",
+          "n_bins": 1588,
+          "text_in_training": false,
+          "shuffled_trial_partner": 22
+        },
+        {
+          "trial_index": 33,
+          "text": "I hope my nurse is here.",
+          "n_bins": 1336,
+          "text_in_training": false,
+          "shuffled_trial_partner": 19
+        },
+        {
+          "trial_index": 34,
+          "text": "Is my music good?",
+          "n_bins": 989,
+          "text_in_training": false,
+          "shuffled_trial_partner": 45
+        },
+        {
+          "trial_index": 35,
+          "text": "Where are my glasses?",
+          "n_bins": 1571,
+          "text_in_training": false,
+          "shuffled_trial_partner": 23
+        },
+        {
+          "trial_index": 36,
+          "text": "They are coming closer.",
+          "n_bins": 1227,
+          "text_in_training": false,
+          "shuffled_trial_partner": 1
+        },
+        {
+          "trial_index": 37,
+          "text": "They do not have faith.",
+          "n_bins": 2550,
+          "text_in_training": false,
+          "shuffled_trial_partner": 6
+        },
+        {
+          "trial_index": 38,
+          "text": "Bring my family here, please.",
+          "n_bins": 471,
+          "text_in_training": false,
+          "shuffled_trial_partner": 15
+        },
+        {
+          "trial_index": 39,
+          "text": "I am here.",
+          "n_bins": 764,
+          "text_in_training": false,
+          "shuffled_trial_partner": 43
+        },
+        {
+          "trial_index": 40,
+          "text": "My family is not very tired.",
+          "n_bins": 1214,
+          "text_in_training": false,
+          "shuffled_trial_partner": 30
+        },
+        {
+          "trial_index": 41,
+          "text": "I am going outside.",
+          "n_bins": 1054,
+          "text_in_training": false,
+          "shuffled_trial_partner": 46
+        },
+        {
+          "trial_index": 42,
+          "text": "How do you have it?",
+          "n_bins": 1135,
+          "text_in_training": false,
+          "shuffled_trial_partner": 5
+        },
+        {
+          "trial_index": 43,
+          "text": "They do okay.",
+          "n_bins": 1292,
+          "text_in_training": false,
+          "shuffled_trial_partner": 13
+        },
+        {
+          "trial_index": 44,
+          "text": "That is like success.",
+          "n_bins": 918,
+          "text_in_training": false,
+          "shuffled_trial_partner": 27
+        },
+        {
+          "trial_index": 45,
+          "text": "How am I going outside?",
+          "n_bins": 932,
+          "text_in_training": false,
+          "shuffled_trial_partner": 24
+        },
+        {
+          "trial_index": 46,
+          "text": "You need it right here.",
+          "n_bins": 961,
+          "text_in_training": false,
+          "shuffled_trial_partner": 4
+        },
+        {
+          "trial_index": 47,
+          "text": "You have no computer.",
+          "n_bins": 1158,
+          "text_in_training": false,
+          "shuffled_trial_partner": 3
+        },
+        {
+          "trial_index": 48,
+          "text": "Do you have success?",
+          "n_bins": 1235,
+          "text_in_training": false,
+          "shuffled_trial_partner": 39
+        },
+        {
+          "trial_index": 49,
+          "text": "I hope my nurse is comfortable.",
+          "n_bins": 1325,
+          "text_in_training": false,
+          "shuffled_trial_partner": 9
+        }
+      ]
+    },
+    "eval_imagined_E14": {
+      "role": "eval_imagined",
+      "condition": "imagined_eval",
+      "block": 14,
+      "n": 50,
+      "n_cues_in_training": 1,
+      "key": "imagined_eval:B14",
+      "trials": [
+        {
+          "trial_index": 0,
+          "text": "They are coming outside",
+          "n_bins": 1266,
+          "text_in_training": false,
+          "shuffled_trial_partner": 20
+        },
+        {
+          "trial_index": 1,
+          "text": "Are you tired?",
+          "n_bins": 761,
+          "text_in_training": false,
+          "shuffled_trial_partner": 28
+        },
+        {
+          "trial_index": 2,
+          "text": "It is right here",
+          "n_bins": 819,
+          "text_in_training": false,
+          "shuffled_trial_partner": 6
+        },
+        {
+          "trial_index": 3,
+          "text": "I am not okay",
+          "n_bins": 663,
+          "text_in_training": false,
+          "shuffled_trial_partner": 23
+        },
+        {
+          "trial_index": 4,
+          "text": "My nurse is right outside",
+          "n_bins": 939,
+          "text_in_training": false,
+          "shuffled_trial_partner": 46
+        },
+        {
+          "trial_index": 5,
+          "text": "I am not going",
+          "n_bins": 868,
+          "text_in_training": false,
+          "shuffled_trial_partner": 8
+        },
+        {
+          "trial_index": 6,
+          "text": "Are you going outside?",
+          "n_bins": 1512,
+          "text_in_training": false,
+          "shuffled_trial_partner": 39
+        },
+        {
+          "trial_index": 7,
+          "text": "It is okay",
+          "n_bins": 1335,
+          "text_in_training": false,
+          "shuffled_trial_partner": 37
+        },
+        {
+          "trial_index": 8,
+          "text": "Where is it?",
+          "n_bins": 794,
+          "text_in_training": false,
+          "shuffled_trial_partner": 38
+        },
+        {
+          "trial_index": 9,
+          "text": "Hello how are you?",
+          "n_bins": 819,
+          "text_in_training": false,
+          "shuffled_trial_partner": 13
+        },
+        {
+          "trial_index": 10,
+          "text": "My glasses are clean",
+          "n_bins": 1274,
+          "text_in_training": false,
+          "shuffled_trial_partner": 36
+        },
+        {
+          "trial_index": 11,
+          "text": "My glasses are comfortable",
+          "n_bins": 1751,
+          "text_in_training": false,
+          "shuffled_trial_partner": 25
+        },
+        {
+          "trial_index": 12,
+          "text": "I feel very hungry",
+          "n_bins": 874,
+          "text_in_training": false,
+          "shuffled_trial_partner": 34
+        },
+        {
+          "trial_index": 13,
+          "text": "You are not right",
+          "n_bins": 944,
+          "text_in_training": false,
+          "shuffled_trial_partner": 18
+        },
+        {
+          "trial_index": 14,
+          "text": "Do you feel comfortable?",
+          "n_bins": 991,
+          "text_in_training": false,
+          "shuffled_trial_partner": 17
+        },
+        {
+          "trial_index": 15,
+          "text": "Please bring my glasses here",
+          "n_bins": 2938,
+          "text_in_training": false,
+          "shuffled_trial_partner": 47
+        },
+        {
+          "trial_index": 16,
+          "text": "I am going outside",
+          "n_bins": 1179,
+          "text_in_training": false,
+          "shuffled_trial_partner": 45
+        },
+        {
+          "trial_index": 17,
+          "text": "I need my glasses",
+          "n_bins": 905,
+          "text_in_training": false,
+          "shuffled_trial_partner": 9
+        },
+        {
+          "trial_index": 18,
+          "text": "Please tell my family",
+          "n_bins": 1217,
+          "text_in_training": false,
+          "shuffled_trial_partner": 27
+        },
+        {
+          "trial_index": 19,
+          "text": "I am okay",
+          "n_bins": 1761,
+          "text_in_training": false,
+          "shuffled_trial_partner": 4
+        },
+        {
+          "trial_index": 20,
+          "text": "How do you like my music?",
+          "n_bins": 2216,
+          "text_in_training": false,
+          "shuffled_trial_partner": 12
+        },
+        {
+          "trial_index": 21,
+          "text": "I hope it is clean",
+          "n_bins": 917,
+          "text_in_training": false,
+          "shuffled_trial_partner": 1
+        },
+        {
+          "trial_index": 22,
+          "text": "What do you do?",
+          "n_bins": 1146,
+          "text_in_training": false,
+          "shuffled_trial_partner": 43
+        },
+        {
+          "trial_index": 23,
+          "text": "Bring my glasses please",
+          "n_bins": 970,
+          "text_in_training": false,
+          "shuffled_trial_partner": 29
+        },
+        {
+          "trial_index": 24,
+          "text": "How do you feel?",
+          "n_bins": 913,
+          "text_in_training": false,
+          "shuffled_trial_partner": 44
+        },
+        {
+          "trial_index": 25,
+          "text": "Do not feel bad",
+          "n_bins": 905,
+          "text_in_training": false,
+          "shuffled_trial_partner": 35
+        },
+        {
+          "trial_index": 26,
+          "text": "That is very clean",
+          "n_bins": 776,
+          "text_in_training": false,
+          "shuffled_trial_partner": 32
+        },
+        {
+          "trial_index": 27,
+          "text": "They are coming here",
+          "n_bins": 982,
+          "text_in_training": false,
+          "shuffled_trial_partner": 33
+        },
+        {
+          "trial_index": 28,
+          "text": "Please clean it",
+          "n_bins": 899,
+          "text_in_training": false,
+          "shuffled_trial_partner": 5
+        },
+        {
+          "trial_index": 29,
+          "text": "I am thirsty",
+          "n_bins": 704,
+          "text_in_training": false,
+          "shuffled_trial_partner": 40
+        },
+        {
+          "trial_index": 30,
+          "text": "My computer is clean",
+          "n_bins": 1824,
+          "text_in_training": false,
+          "shuffled_trial_partner": 15
+        },
+        {
+          "trial_index": 31,
+          "text": "They have faith",
+          "n_bins": 857,
+          "text_in_training": false,
+          "shuffled_trial_partner": 0
+        },
+        {
+          "trial_index": 32,
+          "text": "Faith is good",
+          "n_bins": 1142,
+          "text_in_training": false,
+          "shuffled_trial_partner": 31
+        },
+        {
+          "trial_index": 33,
+          "text": "My nurse is outside",
+          "n_bins": 1135,
+          "text_in_training": false,
+          "shuffled_trial_partner": 2
+        },
+        {
+          "trial_index": 34,
+          "text": "I do not feel comfortable",
+          "n_bins": 4501,
+          "text_in_training": false,
+          "shuffled_trial_partner": 42
+        },
+        {
+          "trial_index": 35,
+          "text": "Here is my computer",
+          "n_bins": 970,
+          "text_in_training": false,
+          "shuffled_trial_partner": 10
+        },
+        {
+          "trial_index": 36,
+          "text": "They are going outside",
+          "n_bins": 848,
+          "text_in_training": false,
+          "shuffled_trial_partner": 41
+        },
+        {
+          "trial_index": 37,
+          "text": "I am not hungry",
+          "n_bins": 767,
+          "text_in_training": false,
+          "shuffled_trial_partner": 24
+        },
+        {
+          "trial_index": 38,
+          "text": "No",
+          "n_bins": 548,
+          "text_in_training": false,
+          "shuffled_trial_partner": 22
+        },
+        {
+          "trial_index": 39,
+          "text": "I like my nurse",
+          "n_bins": 908,
+          "text_in_training": false,
+          "shuffled_trial_partner": 19
+        },
+        {
+          "trial_index": 40,
+          "text": "My family is here",
+          "n_bins": 903,
+          "text_in_training": true,
+          "shuffled_trial_partner": 30
+        },
+        {
+          "trial_index": 41,
+          "text": "I feel very comfortable",
+          "n_bins": 831,
+          "text_in_training": false,
+          "shuffled_trial_partner": 16
+        },
+        {
+          "trial_index": 42,
+          "text": "It is comfortable",
+          "n_bins": 637,
+          "text_in_training": false,
+          "shuffled_trial_partner": 26
+        },
+        {
+          "trial_index": 43,
+          "text": "My family is outside",
+          "n_bins": 1122,
+          "text_in_training": false,
+          "shuffled_trial_partner": 49
+        },
+        {
+          "trial_index": 44,
+          "text": "My family is very comfortable",
+          "n_bins": 1085,
+          "text_in_training": false,
+          "shuffled_trial_partner": 21
+        },
+        {
+          "trial_index": 45,
+          "text": "I am outside",
+          "n_bins": 641,
+          "text_in_training": false,
+          "shuffled_trial_partner": 14
+        },
+        {
+          "trial_index": 46,
+          "text": "Bring my glasses here",
+          "n_bins": 993,
+          "text_in_training": false,
+          "shuffled_trial_partner": 7
+        },
+        {
+          "trial_index": 47,
+          "text": "It is good",
+          "n_bins": 646,
+          "text_in_training": false,
+          "shuffled_trial_partner": 11
+        },
+        {
+          "trial_index": 48,
+          "text": "Yes",
+          "n_bins": 431,
+          "text_in_training": false,
+          "shuffled_trial_partner": 3
+        },
+        {
+          "trial_index": 49,
+          "text": "I need you",
+          "n_bins": 720,
+          "text_in_training": false,
+          "shuffled_trial_partner": 48
+        }
+      ]
+    }
+  },
+  "reorder_channels": true,
+  "seed": 42,
+  "train_trial_order": [
+    {
+      "block": 6,
+      "trial_index": 50
+    },
+    {
+      "block": 6,
+      "trial_index": 51
+    },
+    {
+      "block": 6,
+      "trial_index": 52
+    },
+    {
+      "block": 6,
+      "trial_index": 53
+    },
+    {
+      "block": 6,
+      "trial_index": 54
+    },
+    {
+      "block": 6,
+      "trial_index": 55
+    },
+    {
+      "block": 6,
+      "trial_index": 56
+    },
+    {
+      "block": 6,
+      "trial_index": 57
+    },
+    {
+      "block": 6,
+      "trial_index": 58
+    },
+    {
+      "block": 6,
+      "trial_index": 59
+    },
+    {
+      "block": 6,
+      "trial_index": 60
+    },
+    {
+      "block": 6,
+      "trial_index": 61
+    },
+    {
+      "block": 6,
+      "trial_index": 62
+    },
+    {
+      "block": 6,
+      "trial_index": 63
+    },
+    {
+      "block": 6,
+      "trial_index": 64
+    },
+    {
+      "block": 6,
+      "trial_index": 65
+    },
+    {
+      "block": 6,
+      "trial_index": 66
+    },
+    {
+      "block": 6,
+      "trial_index": 67
+    },
+    {
+      "block": 6,
+      "trial_index": 68
+    },
+    {
+      "block": 6,
+      "trial_index": 69
+    },
+    {
+      "block": 6,
+      "trial_index": 70
+    },
+    {
+      "block": 6,
+      "trial_index": 71
+    },
+    {
+      "block": 6,
+      "trial_index": 72
+    },
+    {
+      "block": 6,
+      "trial_index": 73
+    },
+    {
+      "block": 6,
+      "trial_index": 74
+    },
+    {
+      "block": 6,
+      "trial_index": 75
+    },
+    {
+      "block": 6,
+      "trial_index": 76
+    },
+    {
+      "block": 6,
+      "trial_index": 77
+    },
+    {
+      "block": 6,
+      "trial_index": 78
+    },
+    {
+      "block": 6,
+      "trial_index": 79
+    },
+    {
+      "block": 6,
+      "trial_index": 80
+    },
+    {
+      "block": 6,
+      "trial_index": 81
+    },
+    {
+      "block": 6,
+      "trial_index": 82
+    },
+    {
+      "block": 6,
+      "trial_index": 83
+    },
+    {
+      "block": 6,
+      "trial_index": 84
+    },
+    {
+      "block": 6,
+      "trial_index": 85
+    },
+    {
+      "block": 6,
+      "trial_index": 86
+    },
+    {
+      "block": 6,
+      "trial_index": 87
+    },
+    {
+      "block": 6,
+      "trial_index": 88
+    },
+    {
+      "block": 6,
+      "trial_index": 89
+    },
+    {
+      "block": 6,
+      "trial_index": 90
+    },
+    {
+      "block": 6,
+      "trial_index": 91
+    },
+    {
+      "block": 6,
+      "trial_index": 92
+    },
+    {
+      "block": 6,
+      "trial_index": 93
+    },
+    {
+      "block": 6,
+      "trial_index": 94
+    },
+    {
+      "block": 6,
+      "trial_index": 95
+    },
+    {
+      "block": 6,
+      "trial_index": 96
+    },
+    {
+      "block": 6,
+      "trial_index": 97
+    },
+    {
+      "block": 6,
+      "trial_index": 98
+    },
+    {
+      "block": 6,
+      "trial_index": 99
+    },
+    {
+      "block": 11,
+      "trial_index": 100
+    },
+    {
+      "block": 11,
+      "trial_index": 101
+    },
+    {
+      "block": 11,
+      "trial_index": 102
+    },
+    {
+      "block": 11,
+      "trial_index": 103
+    },
+    {
+      "block": 11,
+      "trial_index": 104
+    },
+    {
+      "block": 11,
+      "trial_index": 105
+    },
+    {
+      "block": 11,
+      "trial_index": 106
+    },
+    {
+      "block": 11,
+      "trial_index": 107
+    },
+    {
+      "block": 11,
+      "trial_index": 108
+    },
+    {
+      "block": 11,
+      "trial_index": 109
+    },
+    {
+      "block": 11,
+      "trial_index": 110
+    },
+    {
+      "block": 11,
+      "trial_index": 111
+    },
+    {
+      "block": 11,
+      "trial_index": 112
+    },
+    {
+      "block": 11,
+      "trial_index": 113
+    },
+    {
+      "block": 11,
+      "trial_index": 114
+    },
+    {
+      "block": 11,
+      "trial_index": 115
+    },
+    {
+      "block": 11,
+      "trial_index": 116
+    },
+    {
+      "block": 11,
+      "trial_index": 117
+    },
+    {
+      "block": 11,
+      "trial_index": 118
+    },
+    {
+      "block": 11,
+      "trial_index": 119
+    },
+    {
+      "block": 11,
+      "trial_index": 120
+    },
+    {
+      "block": 11,
+      "trial_index": 121
+    },
+    {
+      "block": 11,
+      "trial_index": 122
+    },
+    {
+      "block": 11,
+      "trial_index": 123
+    },
+    {
+      "block": 11,
+      "trial_index": 124
+    },
+    {
+      "block": 11,
+      "trial_index": 125
+    },
+    {
+      "block": 11,
+      "trial_index": 126
+    },
+    {
+      "block": 11,
+      "trial_index": 127
+    },
+    {
+      "block": 11,
+      "trial_index": 128
+    },
+    {
+      "block": 11,
+      "trial_index": 129
+    },
+    {
+      "block": 11,
+      "trial_index": 130
+    },
+    {
+      "block": 11,
+      "trial_index": 131
+    },
+    {
+      "block": 11,
+      "trial_index": 132
+    },
+    {
+      "block": 11,
+      "trial_index": 133
+    },
+    {
+      "block": 11,
+      "trial_index": 134
+    },
+    {
+      "block": 11,
+      "trial_index": 135
+    },
+    {
+      "block": 11,
+      "trial_index": 136
+    },
+    {
+      "block": 11,
+      "trial_index": 137
+    },
+    {
+      "block": 11,
+      "trial_index": 138
+    },
+    {
+      "block": 11,
+      "trial_index": 139
+    },
+    {
+      "block": 11,
+      "trial_index": 140
+    },
+    {
+      "block": 11,
+      "trial_index": 141
+    },
+    {
+      "block": 11,
+      "trial_index": 142
+    },
+    {
+      "block": 11,
+      "trial_index": 143
+    },
+    {
+      "block": 11,
+      "trial_index": 144
+    },
+    {
+      "block": 11,
+      "trial_index": 145
+    },
+    {
+      "block": 11,
+      "trial_index": 146
+    },
+    {
+      "block": 11,
+      "trial_index": 147
+    },
+    {
+      "block": 11,
+      "trial_index": 148
+    },
+    {
+      "block": 11,
+      "trial_index": 149
+    },
+    {
+      "block": 13,
+      "trial_index": 150
+    },
+    {
+      "block": 13,
+      "trial_index": 151
+    },
+    {
+      "block": 13,
+      "trial_index": 152
+    },
+    {
+      "block": 13,
+      "trial_index": 153
+    },
+    {
+      "block": 13,
+      "trial_index": 154
+    },
+    {
+      "block": 13,
+      "trial_index": 155
+    },
+    {
+      "block": 13,
+      "trial_index": 156
+    },
+    {
+      "block": 13,
+      "trial_index": 157
+    },
+    {
+      "block": 13,
+      "trial_index": 158
+    },
+    {
+      "block": 13,
+      "trial_index": 159
+    },
+    {
+      "block": 13,
+      "trial_index": 160
+    },
+    {
+      "block": 13,
+      "trial_index": 161
+    },
+    {
+      "block": 13,
+      "trial_index": 162
+    },
+    {
+      "block": 13,
+      "trial_index": 163
+    },
+    {
+      "block": 13,
+      "trial_index": 164
+    },
+    {
+      "block": 13,
+      "trial_index": 165
+    },
+    {
+      "block": 13,
+      "trial_index": 166
+    },
+    {
+      "block": 13,
+      "trial_index": 167
+    },
+    {
+      "block": 13,
+      "trial_index": 168
+    },
+    {
+      "block": 13,
+      "trial_index": 169
+    },
+    {
+      "block": 13,
+      "trial_index": 170
+    },
+    {
+      "block": 13,
+      "trial_index": 171
+    },
+    {
+      "block": 13,
+      "trial_index": 172
+    },
+    {
+      "block": 13,
+      "trial_index": 173
+    },
+    {
+      "block": 13,
+      "trial_index": 174
+    },
+    {
+      "block": 13,
+      "trial_index": 175
+    },
+    {
+      "block": 13,
+      "trial_index": 176
+    },
+    {
+      "block": 13,
+      "trial_index": 177
+    },
+    {
+      "block": 13,
+      "trial_index": 178
+    },
+    {
+      "block": 13,
+      "trial_index": 179
+    },
+    {
+      "block": 13,
+      "trial_index": 180
+    },
+    {
+      "block": 13,
+      "trial_index": 181
+    },
+    {
+      "block": 13,
+      "trial_index": 182
+    },
+    {
+      "block": 13,
+      "trial_index": 183
+    },
+    {
+      "block": 13,
+      "trial_index": 184
+    },
+    {
+      "block": 13,
+      "trial_index": 185
+    },
+    {
+      "block": 13,
+      "trial_index": 186
+    },
+    {
+      "block": 13,
+      "trial_index": 187
+    },
+    {
+      "block": 13,
+      "trial_index": 188
+    },
+    {
+      "block": 13,
+      "trial_index": 189
+    },
+    {
+      "block": 13,
+      "trial_index": 190
+    },
+    {
+      "block": 13,
+      "trial_index": 191
+    },
+    {
+      "block": 13,
+      "trial_index": 192
+    },
+    {
+      "block": 13,
+      "trial_index": 193
+    },
+    {
+      "block": 13,
+      "trial_index": 194
+    },
+    {
+      "block": 13,
+      "trial_index": 195
+    },
+    {
+      "block": 13,
+      "trial_index": 196
+    },
+    {
+      "block": 13,
+      "trial_index": 197
+    },
+    {
+      "block": 13,
+      "trial_index": 198
+    },
+    {
+      "block": 13,
+      "trial_index": 199
+    }
+  ],
+  "code_version": {
+    "source": "sync",
+    "commit": "4921905c05f80cc33976a0b0504d8b4acb308977",
+    "dirty": false,
+    "diff_sha256": null,
+    "pushed_at": "2026-10-22T01:43:14Z"
+  },
+  "config_sha256": "eaf40d3022a04133dddc483ff864000fce271c59a35e2634495fbbd3096f1fb4"
+}

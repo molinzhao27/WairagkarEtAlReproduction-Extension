@@ -45,3 +45,33 @@ def test_silent_outputs_counted_not_scored():
         [0.0, np.nan, np.nan]
     img = ks.summarize_run(df, frame_s=0.01)["zero_shot"]["pooled"]["roles"]["paired_imagined"]
     assert img["n_silent"] == 6 and img["excess"]["n"] == 34
+
+
+def test_set_decoded_in_every_fold_counts_once_when_pooled():
+    """The eval block is the same trials in every fold: pooled, each trial counts once (mean over the folds'
+    outputs), so four identical copies give exactly the one-fold statistics, not a p value from 4x the trials."""
+    rng = np.random.default_rng(0)
+    rows = []
+    vals = [(rng.normal(0.5, 0.05), rng.normal(0.01, 0.05), int(rng.integers(1, 11))) for _ in range(30)]
+    for fold in ("fold_A03", "fold_A06", "fold_A11", "fold_A13"):
+        for i, (null, gain, rank) in enumerate(vals):
+            rows.append(dict(model="zero_shot", input="real", fold=fold, role="eval_imagined", set="eval_imagined_E14",
+                             trial_index=i, text=f"cue {i}", n_frames=1000, tts_est_speech_fraction=0.2,
+                             tts_mel_corr=null + gain, shuffled_trial_tts_mel_corr=null, own_rank=rank, n_cues=10,
+                             asr_word_errors=4, asr_ref_words=5, shuffled_trial_asr_word_errors=6,
+                             shuffled_trial_asr_ref_words=5))
+    df = pd.DataFrame(rows)
+    one = ks.summarize_run(df[df.fold == "fold_A03"], frame_s=0.01)["zero_shot"]["pooled"]["roles"]["eval_imagined"]
+    pooled = ks.summarize_run(df, frame_s=0.01)["zero_shot"]["pooled"]["roles"]["eval_imagined"]
+    assert pooled["n"] == 30 and pooled["collapsed_over_folds"] == 4
+    assert pooled["excess"]["wilcoxon_p"] == one["excess"]["wilcoxon_p"]
+    assert abs(pooled["excess"]["mean"] - one["excess"]["mean"]) < 1e-12
+    # the per-fold rows keep every fold's own outputs
+    folds = ks.summarize_run(df, frame_s=0.01)["zero_shot"]["folds"]
+    assert all(f["roles"]["eval_imagined"]["n"] == 30 for f in folds.values())
+    # identification on the per-trial mean rank: top-1 share and a Wilcoxon test against chance (5.5 of 10)
+    df2 = df.assign(null_lenmatched_mean=df.shuffled_trial_tts_mel_corr, null_all_mean=df.shuffled_trial_tts_mel_corr,
+                    est_speech_s=2.0, early_speech_s=1.0)
+    ident = ks._identification_mean(ks.collapse_repeated(df2)[0])
+    assert ident["n"] == 30 and ident["rank_test"] == "wilcoxon_mean_rank_vs_chance"
+    assert abs(ident["top1_rate"] - np.mean([r == 1 for _, _, r in vals])) < 1e-12
