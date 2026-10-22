@@ -1,0 +1,22 @@
+# Core experiment, first full run (user-approved 2026-10-22): fit on Kunz ATTEMPTED with the v2 targets (D-037: segment-
+# driven syllable timing) and the tuned recipe (D-039: one new input layer, frozen base, 15 epochs), 4 folds (hold out
+# one attempted block; test it, its paired imagined block and the eval block 14), plus the day-193 decoder zero-shot
+# as the within-run baseline. Primary null: length-matched (D-031).
+#
+#   host (two processes, two folds each, CPU, chiplet 1 + the CPUs lent by the BIT session; AGENTS.md):
+#   CUDA_VISIBLE_DEVICES= .venv/bin/python -I scripts/kunz_experiment.py --config configs/experiments/kunz_v2_recipeB.yaml --folds 3 6
+#   CUDA_VISIBLE_DEVICES= .venv/bin/python -I scripts/kunz_experiment.py --config configs/experiments/kunz_v2_recipeB.yaml --folds 11 13
+
+base_experiment: configs/experiments/kunz_full.yaml
+
+run_name: kunz_v2_recipeB
+
+training:
+  epochs: 15                               # D-039 (= kunz_full's value, stated here for clarity)
+
+experiment:
+  name: kunz_v2_recipeB
+  attempted_file: data/processed/kunz_targets_v2/t15.2024.03.03_attempted.npz   # v2 targets (D-037); v1 untouched
+  run_variants: [frozen]                   # D-039: fine-tuning the base overfits on the dev setting
+  include_leaky: false                     # CPU budget: score only the clean sets (held-out attempted, paired
+                                           #   imagined, eval block 14); leaky sets add nothing to the core question
