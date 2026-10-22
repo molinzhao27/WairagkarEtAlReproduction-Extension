@@ -1,0 +1,8 @@
+# Main Kunz run with the manual syllable targets (D-041, adopted under the D-040 rule). Same recipe as
+# kunz_v2_recipeB.yaml (D-039: one new input layer, frozen base, 15 epochs; folds 3, 6, 11, 13); only the
+# attempted targets change.
+base_experiment: configs/experiments/kunz_v2_recipeB.yaml
+run_name: kunz_v3_manual
+experiment:
+  name: kunz_v3_manual
+  attempted_file: data/processed/kunz_targets_manual/t15.2024.03.03_attempted.npz
