@@ -1,0 +1,28 @@
+{
+ "name": "ma01",
+ "created": "2026-10-22T01:37:07",
+ "session": "t15.2024.03.03_attempted",
+ "saved": "data/processed/kunz_targets_manual/t15.2024.03.03_attempted.npz",
+ "n_trials": 200,
+ "answers_per_trial": {
+  "min": 3,
+  "median": 3.0,
+  "max": 4
+ },
+ "speech_fraction_per_trial": {
+  "min": 0.10820624546114742,
+  "median": 0.47707221108433007,
+  "max": 0.6816770186335404
+ },
+ "target_fraction_outside_unit_range": 0.0,
+ "all_finite": true,
+ "code_version": {
+  "source": "sync",
+  "commit": "6db701571be609d52877ae7ec1524604073d5776",
+  "dirty": false,
+  "diff_sha256": null,
+  "pushed_at": "2026-10-22T01:10:43Z"
+ },
+ "config_sha256": "3521ad673b50f6f8b3da29274d12a93c3f566bd6aacbf4490853e42798d4ca4e",
+ "files_sha256": "f72ea41ba4e3c45517d1666ac36ec077bf5ee51366d3bf928749d2cd9c8ba71c"
+}
