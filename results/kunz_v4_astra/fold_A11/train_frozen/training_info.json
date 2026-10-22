@@ -1,0 +1,815 @@
+{
+  "variant": "frozen",
+  "freeze_base": true,
+  "init": "data/raw/wairagkar/t15_neural_data/t15_day195/brain2voice_t15_day193.h5",
+  "n_train_trials": 135,
+  "n_validation_trials": 15,
+  "validation_trials": [
+    {
+      "block": 3,
+      "trial_index": 12
+    },
+    {
+      "block": 3,
+      "trial_index": 13
+    },
+    {
+      "block": 3,
+      "trial_index": 29
+    },
+    {
+      "block": 6,
+      "trial_index": 60
+    },
+    {
+      "block": 6,
+      "trial_index": 61
+    },
+    {
+      "block": 6,
+      "trial_index": 76
+    },
+    {
+      "block": 6,
+      "trial_index": 90
+    },
+    {
+      "block": 6,
+      "trial_index": 99
+    },
+    {
+      "block": 13,
+      "trial_index": 156
+    },
+    {
+      "block": 13,
+      "trial_index": 157
+    },
+    {
+      "block": 13,
+      "trial_index": 158
+    },
+    {
+      "block": 13,
+      "trial_index": 163
+    },
+    {
+      "block": 13,
+      "trial_index": 171
+    },
+    {
+      "block": 13,
+      "trial_index": 191
+    },
+    {
+      "block": 13,
+      "trial_index": 193
+    }
+  ],
+  "excluded_too_short": [],
+  "epochs_configured": 15,
+  "epochs_run": 15,
+  "early_stopped": false,
+  "best_epoch_by_val_loss": 15,
+  "export_weights": "final",
+  "history": {
+    "loss": [
+      0.013020341284573078,
+      0.011924941092729568,
+      0.011404842138290405,
+      0.011023522354662418,
+      0.010719282552599907,
+      0.010456248186528683,
+      0.01024258229881525,
+      0.01004280149936676,
+      0.009851747192442417,
+      0.009664705954492092,
+      0.009492677636444569,
+      0.009343908168375492,
+      0.009193221107125282,
+      0.00906288716942072,
+      0.008935298770666122
+    ],
+    "val_loss": [
+      0.017583556473255157,
+      0.01691725291311741,
+      0.01671147160232067,
+      0.016430281102657318,
+      0.016133379191160202,
+      0.01594606041908264,
+      0.01578816957771778,
+      0.01568710431456566,
+      0.015586743131279945,
+      0.01564064249396324,
+      0.01566176861524582,
+      0.015616247430443764,
+      0.01557525061070919,
+      0.015571514144539833,
+      0.01554965227842331
+    ],
+    "val_accuracy": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "wall_time_s": 1947.8427934646606,
+  "exported": "data/checkpoints/kunz_v4_astra/fold_A11/train_frozen/inference_layer00.h5",
+  "exported_sha256": "67ffb4419a1c86db242c21979b6fca9091bb00437655464b000b7ab871b7ec77",
+  "training_config_sha256": "6d2a4ff2f4ccd3994a410e935a107aef1a239644683c62ed33055f0550205401",
+  "training_fingerprint": {
+    "seed": 42,
+    "deterministic_ops": true,
+    "model": {
+      "n_features": 512,
+      "n_targets": 20,
+      "window_len": 60,
+      "step_size": 1,
+      "transformer_input_shape": [
+        30,
+        128
+      ],
+      "head_size": 128,
+      "n_heads": 4,
+      "n_transformer_blocks": 8,
+      "mlp_units": [
+        1024,
+        512
+      ],
+      "dropout": 0.5,
+      "n_session_layers": 1
+    },
+    "training": {
+      "batch_size": 1024,
+      "epochs": 15,
+      "early_stopping_patience": 10,
+      "learning_rate": 0.0005,
+      "adam_beta_1": 0.9,
+      "adam_beta_2": 0.98,
+      "adam_epsilon": 1e-09,
+      "huber_delta": 1.35,
+      "n_augmentations": 3,
+      "augmentation_params": {
+        "sd_gaussian_noise": 1.2,
+        "sd_constant_offset": 0.6,
+        "offset_aug_factor_for_thresh": 0.67,
+        "sd_cumulative_noise": 0.02
+      },
+      "validation": {
+        "n_trials": 15,
+        "fraction": null,
+        "pool": null
+      },
+      "monitor": "val_loss",
+      "monitor_mode": "min",
+      "reshuffle_each_epoch": false,
+      "resample_augmentations_each_epoch": false,
+      "drop_remainder": false,
+      "save_best_checkpoint": true,
+      "save_final_checkpoint": true,
+      "export_weights": "final",
+      "export_layers": null,
+      "init": {
+        "source": "inference_h5",
+        "freeze_base": true
+      },
+      "sessions": [],
+      "held_out_sessions": []
+    },
+    "variant": "frozen",
+    "session": "t15.2024.03.03",
+    "reorder_channels": true,
+    "train_trials": [
+      [
+        3,
+        0
+      ],
+      [
+        3,
+        1
+      ],
+      [
+        3,
+        2
+      ],
+      [
+        3,
+        3
+      ],
+      [
+        3,
+        4
+      ],
+      [
+        3,
+        5
+      ],
+      [
+        3,
+        6
+      ],
+      [
+        3,
+        7
+      ],
+      [
+        3,
+        8
+      ],
+      [
+        3,
+        9
+      ],
+      [
+        3,
+        10
+      ],
+      [
+        3,
+        11
+      ],
+      [
+        3,
+        12
+      ],
+      [
+        3,
+        13
+      ],
+      [
+        3,
+        14
+      ],
+      [
+        3,
+        15
+      ],
+      [
+        3,
+        16
+      ],
+      [
+        3,
+        17
+      ],
+      [
+        3,
+        18
+      ],
+      [
+        3,
+        19
+      ],
+      [
+        3,
+        20
+      ],
+      [
+        3,
+        21
+      ],
+      [
+        3,
+        22
+      ],
+      [
+        3,
+        23
+      ],
+      [
+        3,
+        24
+      ],
+      [
+        3,
+        25
+      ],
+      [
+        3,
+        26
+      ],
+      [
+        3,
+        27
+      ],
+      [
+        3,
+        28
+      ],
+      [
+        3,
+        29
+      ],
+      [
+        3,
+        30
+      ],
+      [
+        3,
+        31
+      ],
+      [
+        3,
+        32
+      ],
+      [
+        3,
+        33
+      ],
+      [
+        3,
+        34
+      ],
+      [
+        3,
+        35
+      ],
+      [
+        3,
+        36
+      ],
+      [
+        3,
+        37
+      ],
+      [
+        3,
+        38
+      ],
+      [
+        3,
+        39
+      ],
+      [
+        3,
+        40
+      ],
+      [
+        3,
+        41
+      ],
+      [
+        3,
+        42
+      ],
+      [
+        3,
+        43
+      ],
+      [
+        3,
+        44
+      ],
+      [
+        3,
+        45
+      ],
+      [
+        3,
+        46
+      ],
+      [
+        3,
+        47
+      ],
+      [
+        3,
+        48
+      ],
+      [
+        3,
+        49
+      ],
+      [
+        6,
+        50
+      ],
+      [
+        6,
+        51
+      ],
+      [
+        6,
+        52
+      ],
+      [
+        6,
+        53
+      ],
+      [
+        6,
+        54
+      ],
+      [
+        6,
+        55
+      ],
+      [
+        6,
+        56
+      ],
+      [
+        6,
+        57
+      ],
+      [
+        6,
+        58
+      ],
+      [
+        6,
+        59
+      ],
+      [
+        6,
+        60
+      ],
+      [
+        6,
+        61
+      ],
+      [
+        6,
+        62
+      ],
+      [
+        6,
+        63
+      ],
+      [
+        6,
+        64
+      ],
+      [
+        6,
+        65
+      ],
+      [
+        6,
+        66
+      ],
+      [
+        6,
+        67
+      ],
+      [
+        6,
+        68
+      ],
+      [
+        6,
+        69
+      ],
+      [
+        6,
+        70
+      ],
+      [
+        6,
+        71
+      ],
+      [
+        6,
+        72
+      ],
+      [
+        6,
+        73
+      ],
+      [
+        6,
+        74
+      ],
+      [
+        6,
+        75
+      ],
+      [
+        6,
+        76
+      ],
+      [
+        6,
+        77
+      ],
+      [
+        6,
+        78
+      ],
+      [
+        6,
+        79
+      ],
+      [
+        6,
+        80
+      ],
+      [
+        6,
+        81
+      ],
+      [
+        6,
+        82
+      ],
+      [
+        6,
+        83
+      ],
+      [
+        6,
+        84
+      ],
+      [
+        6,
+        85
+      ],
+      [
+        6,
+        86
+      ],
+      [
+        6,
+        87
+      ],
+      [
+        6,
+        88
+      ],
+      [
+        6,
+        89
+      ],
+      [
+        6,
+        90
+      ],
+      [
+        6,
+        91
+      ],
+      [
+        6,
+        92
+      ],
+      [
+        6,
+        93
+      ],
+      [
+        6,
+        94
+      ],
+      [
+        6,
+        95
+      ],
+      [
+        6,
+        96
+      ],
+      [
+        6,
+        97
+      ],
+      [
+        6,
+        98
+      ],
+      [
+        6,
+        99
+      ],
+      [
+        13,
+        150
+      ],
+      [
+        13,
+        151
+      ],
+      [
+        13,
+        152
+      ],
+      [
+        13,
+        153
+      ],
+      [
+        13,
+        154
+      ],
+      [
+        13,
+        155
+      ],
+      [
+        13,
+        156
+      ],
+      [
+        13,
+        157
+      ],
+      [
+        13,
+        158
+      ],
+      [
+        13,
+        159
+      ],
+      [
+        13,
+        160
+      ],
+      [
+        13,
+        161
+      ],
+      [
+        13,
+        162
+      ],
+      [
+        13,
+        163
+      ],
+      [
+        13,
+        164
+      ],
+      [
+        13,
+        165
+      ],
+      [
+        13,
+        166
+      ],
+      [
+        13,
+        167
+      ],
+      [
+        13,
+        168
+      ],
+      [
+        13,
+        169
+      ],
+      [
+        13,
+        170
+      ],
+      [
+        13,
+        171
+      ],
+      [
+        13,
+        172
+      ],
+      [
+        13,
+        173
+      ],
+      [
+        13,
+        174
+      ],
+      [
+        13,
+        175
+      ],
+      [
+        13,
+        176
+      ],
+      [
+        13,
+        177
+      ],
+      [
+        13,
+        178
+      ],
+      [
+        13,
+        179
+      ],
+      [
+        13,
+        180
+      ],
+      [
+        13,
+        181
+      ],
+      [
+        13,
+        182
+      ],
+      [
+        13,
+        183
+      ],
+      [
+        13,
+        184
+      ],
+      [
+        13,
+        185
+      ],
+      [
+        13,
+        186
+      ],
+      [
+        13,
+        187
+      ],
+      [
+        13,
+        188
+      ],
+      [
+        13,
+        189
+      ],
+      [
+        13,
+        190
+      ],
+      [
+        13,
+        191
+      ],
+      [
+        13,
+        192
+      ],
+      [
+        13,
+        193
+      ],
+      [
+        13,
+        194
+      ],
+      [
+        13,
+        195
+      ],
+      [
+        13,
+        196
+      ],
+      [
+        13,
+        197
+      ],
+      [
+        13,
+        198
+      ],
+      [
+        13,
+        199
+      ]
+    ],
+    "input_files_sha256": {
+      "attempted_file": "55584176338ff2e128a8430cbcea0f5d1b9dc927f17a53558bdc1f57a0cf4afd",
+      "electrode_mapping": "bd9a932a3fbc7ce171e1e6c8d83fc674b62042156eb79db475836097e73e3e48",
+      "init": "fd476519fb7f0a7880efb1cbcd328a4915cd1473a23a2eb8d4939d6f34ad006b"
+    }
+  },
+  "input_files": {
+    "attempted_file": "data/processed/kunz_targets_manual_astra/t15.2024.03.03_attempted.npz",
+    "electrode_mapping": "third_party/brain_to_voice/dependencies/T15_electrode_mapping_256.json",
+    "init": "data/raw/wairagkar/t15_neural_data/t15_day195/brain2voice_t15_day193.h5"
+  },
+  "code_version": {
+    "source": "sync",
+    "commit": "c237b18fbabeebdabab3758c07d3e0f8b4837c83",
+    "dirty": false,
+    "diff_sha256": null,
+    "pushed_at": "2026-10-22T19:05:49Z"
+  },
+  "config_sha256": "78ff43b2991ad3e89e74f9034e08fa06b3ce5c87fbd014b2a86ee06ef9ecf4bd"
+}
