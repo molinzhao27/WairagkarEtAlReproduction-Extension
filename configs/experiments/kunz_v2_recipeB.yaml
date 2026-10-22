@@ -3,7 +3,7 @@
 # one attempted block; test it, its paired imagined block and the eval block 14), plus the day-193 decoder zero-shot
 # as the within-run baseline. Primary null: length-matched (D-031).
 #
-#   host (two processes, two folds each, CPU, chiplet 1 + the CPUs lent by the BIT session; AGENTS.md):
+#   host (two processes, two folds each, CPU; AGENTS.md CPU split):
 #   CUDA_VISIBLE_DEVICES= .venv/bin/python -I scripts/kunz_experiment.py --config configs/experiments/kunz_v2_recipeB.yaml --folds 3 6
 #   CUDA_VISIBLE_DEVICES= .venv/bin/python -I scripts/kunz_experiment.py --config configs/experiments/kunz_v2_recipeB.yaml --folds 11 13
 
