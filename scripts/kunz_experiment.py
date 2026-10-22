@@ -3,6 +3,7 @@
 
     CUDA_VISIBLE_DEVICES= nice -n 19 .venv/bin/python -I scripts/kunz_experiment.py \\
         --config configs/experiments/kunz_pilot.yaml [--stage all|train|decode|score]
+    # the user's spare PC (own GPU, no gate; scripts/remote/pc_launch.sh): add --device gpu
 
 Per fold (held-out attempted block X; ``wvx.kunz_experiment.build_fold``), in this order:
 
@@ -531,7 +532,8 @@ def decode_model(model: str, fold, cfg, dirs: Dirs, overwrite: bool) -> list[str
         header = {"model": model, "model_path": _rel(path), "model_sha256": model_sha, "input": inp,
                   "reorder_channels": bool(cfg["experiment"]["reorder_channels"]), "seed": cfg["seed"],
                   "fold": fold.name, "created": datetime.datetime.now().isoformat(timespec="seconds"),
-                  "decode_settings": decode_settings(cfg, inp), "code_version": version_label(_code_version())}
+                  "decode_settings": decode_settings(cfg, inp), "code_version": version_label(_code_version()),
+                  "runtime_device": (cfg.get("runtime") or {}).get("device")}   # provenance only, not a reuse criterion
         out = dirs.predictions(model, inp)
         save_predictions(out, header, preds)
         log(f"{fold.name}/{model}/{inp}: {len(preds)} trials decoded in {time.time() - t0:.0f} s -> {_rel(out)}")
@@ -1339,9 +1341,13 @@ def main(argv=None) -> int:
                     help="decode even if up-to-date predictions exist (then rescore)")
     ap.add_argument("--smoke", action="store_true",
                     help="tiny end-to-end check: name <name>_smoke, 1 epoch, few trials (not a result)")
+    ap.add_argument("--device", choices=["auto", "cpu", "gpu"], default=None,
+                    help="override runtime.device (where the run goes, not what it computes; recorded per fold)")
     args = ap.parse_args(argv)
 
     over: dict = {"experiment": {}}
+    if args.device:
+        over["runtime"] = {"device": args.device}
     if args.folds:
         over["experiment"]["folds"] = args.folds
     if args.variants:

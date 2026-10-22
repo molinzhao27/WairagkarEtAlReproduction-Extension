@@ -104,6 +104,7 @@ third_party/LPCNet/src/.dirstamp
 
 # GPU host SSH target (machine-local)
 scripts/remote/host.env
+scripts/remote/pc.env
 
 # Code version on the host, written by sync.sh push (wvx.provenance)
 .wvx_version.json

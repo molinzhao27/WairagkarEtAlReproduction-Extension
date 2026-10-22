@@ -369,6 +369,13 @@ def configure_device(device: str) -> None:
     elif device == "gpu":
         if not gpus:
             raise RuntimeError("runtime.device is 'gpu' but TensorFlow sees no GPU")
+        try:
+            for g in gpus:  # allocate as needed, so two processes can share one GPU (the spare PC runs two)
+                tf.config.experimental.set_memory_growth(g, True)
+        except RuntimeError as e:
+            raise RuntimeError("runtime.device=gpu must be applied before TensorFlow runs any op") from e
+        # Full float32 matmuls, as on the CPU (TF32 would round them to 10 mantissa bits on Ampere and newer).
+        tf.config.experimental.enable_tensor_float_32_execution(False)
     elif device != "auto":
         raise ValueError(f"runtime.device must be auto, cpu or gpu, got {device!r}")
 

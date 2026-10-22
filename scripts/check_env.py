@@ -6,6 +6,7 @@ compares the devices, and smoke-tests the LPCNet binaries. Exits nonzero on any 
 
     mamba run -n wvx python scripts/check_env.py           # Mac dev env
     TF_USE_LEGACY_KERAS=1 .venv/bin/python scripts/check_env.py   # GPU-host venv
+    .venv/bin/python scripts/check_env.py --require-gpu               # spare PC: no GPU visible = failure
 """
 
 import sys
@@ -26,6 +27,7 @@ from pathlib import Path
 os.environ.setdefault("TF_USE_LEGACY_KERAS", "1")
 os.environ.setdefault("TF_CPP_MIN_LOG_LEVEL", "2")
 
+REQUIRE_GPU = "--require-gpu" in sys.argv[1:]
 BATCH = 64
 REL_TOL = 1e-4  # max|GPU - CPU| / max|CPU| allowed for outputs and gradients (TF32 disabled for the comparison)
 
@@ -87,6 +89,8 @@ for d in cpus + gpus:
     print(f"  {d.name}  ({d.device_type}){extra}")
 if not gpus:
     print("  no GPU visible: CPU-only run")
+if REQUIRE_GPU:
+    check(bool(gpus), "a GPU is visible to TensorFlow (--require-gpu)")
 
 # ------------------------------------------------------------------ build their model from their config
 section("model (vendored models/brain2voice.py via lib/model_utils.build_model)")
