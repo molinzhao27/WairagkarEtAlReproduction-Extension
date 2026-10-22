@@ -1,0 +1,204 @@
+# Manual syllable alignment by external annotator agents (after D-037): blind task packages, answers, scoring on
+# the blind calibration set, and Kunz targets from the answers. Code: src/wvx/manual_alignment.py,
+# scripts/manual_alignment.py; package templates and the standalone tools in configs/manual_alignment/.
+# Merged over syllable_benchmark.yaml (itself over kunz_targets.yaml, reproduce_inference.yaml, default.yaml), so the
+# benchmark cells, the forced TTS syllables, the arm-B mapping and the validation settings apply unchanged.
+#
+#   host (project .venv): package -> scan          Mac: deliver (host -> ~/manual_alignment/<name>/)
+#   Mac: collect (answers/ -> host)                 host: ingest -> score -> targets
+#
+# Blindness: the package (on the Mac, user-approved exception 2026-10-21) never holds the session, cell, decoder,
+# calibration flag or true timing of a real item. The key (item id -> source) and every true timing of a real item
+# stay on the host. The config seed fixes WHICH trials are used; a secret per-package salt (kept in the key) fixes
+# the ids, their order and the batches, so the public seed cannot undo the blinding.
+# Tags: [USER] the user's brief; [CHOICE] ours.
+
+base_experiment: configs/experiments/syllable_benchmark.yaml
+
+run_name: manual_alignment
+
+paths:
+  manual_alignment: data/processed/manual_alignment         # <name>/ (the package), <name>_key.json, <name>_answers/,
+                                                            #   <name>_work/ (ingest + score details with item ids); host only
+  manual_alignment_results: results/manual_alignment        # small summaries WITHOUT item ids (results/ reaches the Mac)
+  manual_targets: data/processed/kunz_targets_manual        # [USER] new directory; never v1 or v2
+
+runtime:
+  threads: {intra_op: 4, inter_op: 1, omp: 4}               # [USER] <= 4 threads (two other jobs share our CPUs)
+  nice: 19
+alignment:
+  n_workers: 4                                              # alignment threads in score/targets (arm B: no LPCNet)
+benchmark:
+  n_workers: 4
+
+manual_alignment:
+  templates: configs/manual_alignment                       # README.md, instructions.md, ORCHESTRATOR_PROMPT.md, tools/
+  schema:                                                   # version tags written into every package file
+    item: wvx-manual-alignment-item/1
+    response: wvx-manual-alignment-response/1
+    reference: wvx-manual-alignment-reference/1
+    manifest: wvx-manual-alignment-manifest/1
+    settings: wvx-manual-alignment-settings/1
+
+  # --------------------------------------------------------------------------------------- which items
+  calibration:                       # BLIND: scored against their syl_indices / _syl targets, never shown with truth
+    groups:
+      day195: {cells: [day195_m172, day195_m165], n_trials: 60, enabled: true}   # [USER] the same trials in both cells
+      day193: {cells: [day193_m165], n_trials: 40, enabled: true}                # [USER] optional confirmation
+    # [CHOICE] eligible trials: their syl_indices well formed (non-empty, ordered, inside the trial; 5 day193 trials
+    # are not) so every score is defined; nothing else is filtered.
+  production:
+    cells: [kunz_attempted]          # [USER] all 200 Kunz attempted trials
+  examples:                          # few-shot worked examples, WITH their reference spans, in examples/
+    cell: day195_m172                # same decoder age as the blind set, trials outside every other set
+    n: 3
+    require_equal_counts: true       # reference count = TTS count, so the example answer is a valid response
+    max_duration_s: 12.0             # short enough to read in one image row or two
+  practice:                          # [USER] items WITH reference spans (practice/truth/), for local feedback
+    groups:
+      day195: {cells: [day195_m172, day195_m165], n_items: 34}   # distinct trials; each shown with one of the cells
+      day193: {cells: [day193_m165], n_items: 6}
+    items_per_round: 4               # each worker gets fresh items in every round (never re-annotates seen truth)
+    max_rounds: 3
+  exclude_shared_text: true          # [CHOICE] examples and practice use no cue that any real item uses
+  ids:
+    hex_chars: 10                    # real item id: 10 hex characters
+    practice_prefix: p               # practice id: "p" + hex (separate namespace: "p" is not a hex digit)
+    example_prefix: example_
+    salt_bytes: 16
+
+  # ------------------------------------------------------------------------------------ work split
+  workers:
+    n: 30                            # [USER] flat team of 30 worker agents
+    id_format: "w{:02d}"
+  batching:
+    items_per_batch: 20
+    redundancy_k: 3                  # [CHOICE, confirm] every real item goes to k different workers (k worker
+                                     #   groups; items sharing a trial never go to the same worker)
+    extra_batch_id: extra            # answers for re-assigned items (QC) use this batch id
+
+  # ------------------------------------------------------------------------------------ item content
+  # One time axis for everything: the neural timeline, frame k (10 ms bin k) centred at (k + 0.5) * 10 ms. The decoder
+  # output's audio lags its features by syllables.audio_lag_ms (15 ms, measured), so the spectrogram frames are cut
+  # from the audio at the same centres plus that lag. Answers in seconds map to bins by round(t / 10 ms) (half up).
+  arrays:
+    dtype: float16                   # [USER] mel, loudness, neural (dB/z resolution <= 0.03 at these magnitudes)
+    time_dtype: float32              # the time axis needs better than float16 (13 s -> 8 ms steps in float16)
+  mel:
+    n_fft: 512                       # 32 ms FFT
+    win_length: 400                  # 25 ms Hann window
+    window: hann
+    n_mels: 64
+    fmin_hz: 0.0
+    fmax_hz: 8000.0
+    htk: false
+    norm: slaney
+    amin: 1.0e-10
+    top_db: 70.0                     # dB relative to the item's loudest bin; floored here
+  loudness:                          # panel 2: the smoothed LPCNet c0 envelope the c0-dip method uses (wvx.alignment.envelope_db)
+    reference: item_max              # plotted as dB relative to the item's loudest frame (levels differ between decoders)
+  neural:                            # panel 3: overall neural activity
+    enabled: true
+    features: spikepow               # spikepow (first 256 columns) | threshcross (last 256) | both
+    smooth_ms: 40.0                  # Gaussian sigma
+    normalize: zscore                # within the trial
+
+  # Tool and image settings, copied into the package's settings.json (the tools read nothing else).
+  display:
+    px_per_second: 100               # overview: 10 px per 0.1 s grid step, the same scale in every image
+    seconds_per_row: 10.0            # longer trials wrap into rows (trials run 4-42 s; median 12.7 s day195, 7.6 s Kunz)
+    row_overlap_s: 0.5               # each row repeats this much of its neighbours
+    dpi: 100
+    font_size: 9
+    panel_heights_px: [150, 110, 70] # spectrogram, loudness, neural
+    strip_height_px: 40              # overlay lanes (answer, reference) above the spectrogram
+    panel_gap_px: 6
+    row_gap_px: 46                   # room for the time labels under each row
+    margin_px: {left: 84, right: 24, top: 18, bottom: 8, title_line: 15}
+    title_chars_per_line: 150
+    zoom_width_px: 1600              # render/overlay with --start/--end
+    min_minor_px: 8                  # smallest minor grid step that keeps >= this many px between lines ...
+    tick_steps_s: [[0.01, 0.1], [0.02, 0.2], [0.05, 0.5], [0.1, 1.0], [0.2, 2.0], [0.5, 5.0], [1.0, 10.0]]  # [minor, major]
+    spectrogram_cmap: magma
+    freq_ticks_hz: [250, 500, 1000, 2000, 4000, 8000]
+    loudness_headroom_db: 2.0
+    span_alpha: 0.22
+    label_px_per_char: 6.5         # a span label is shortened to its index when its bar is narrower than this x length
+    show_auto_boundaries: false      # [USER] default off (anchoring): faint marks of the B/current spans
+  peaks:
+    min_prominence_db: 1.0           # report-only listing of loudness peaks and the dips between them
+  values:
+    default_step_s: 0.01
+    bands_hz: [[0, 500], [500, 2000], [2000, 8000]]
+
+  # ------------------------------------------------------------------------------------ answers
+  response:
+    min_span_s: 0.01                 # a span must hold at least one 10 ms bin
+    tolerance_s: 1.0e-9              # float slack in the comparisons
+    confidence_values: [high, medium, low]
+    worker_id_pattern: "^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$"
+    batch_file_pattern: "^batch_[0-9]{3}$"
+    extra_file_pattern: "^extra(_[0-9]+)?$"
+  aggregate:
+    method: median                   # [USER] per syllable, start and end separately (stays ordered and valid)
+    min_answers: 1
+  agreement:
+    tolerance_ms: 100                # [USER] % of pairwise start differences within this
+    flag_median_abs_start_ms: 100    # [CHOICE] flag an item when its median pairwise |start difference| exceeds this
+    min_answers: 2
+  practice_scoring:
+    tolerance_ms: 100                # % of reference syllable starts with an answered start within this
+
+  # ------------------------------------------------------------------------------------ scoring
+  scoring:
+    baseline: {method: current, arm: B, tts_side: forced}   # D-037 winner, same code (scripts/syllable_benchmark.score_run)
+  # [USER] pre-registered adoption rule, fixed before any answer exists: manual is adopted for the Kunz targets only if
+  # its mean target r over the primary cells (mean of the per-cell means, as D-033) beats B/current on the SAME trials
+  # by >= min_improvement. [CHOICE] and only if aggregated answers cover >= min_coverage of the selected trials of every
+  # primary cell (otherwise: not adopted, coverage too low).
+  adoption:
+    primary_cells: [day195_m172, day195_m165]
+    metric: target_r_mean
+    min_improvement: 0.02
+    min_coverage: 0.9
+
+  targets:
+    require_all_trials: true         # every production trial needs an aggregated answer
+    protected: [data/processed/kunz_targets, data/processed/kunz_targets_v2]   # never written
+
+  # ------------------------------------------------------------------------------------ blindness scan
+  blindness:
+    # JSON keys anywhere in the package must not match (case-insensitive)
+    forbidden_key_patterns: [session, cell, calib, product, trial, model, decoder, block, condition, syl_indices,
+                             word_indices, speech_indices, onset, offset, kunz, wairagkar, source, origin, "day[0-9]",
+                             truth, true_]
+    # nor may any text (Markdown, Python, settings, manifest; the cue-derived fields of item files are exempt)
+    forbidden_text_patterns: ["t15", "day[ _-]?[0-9]{3}", "_m[0-9]{3}", kunz, wairagkar, calibrat, production,
+                              syl_indices, word_indices, speech_indices, brain2voice, "\\.h5\\b", "_key\\.json"]
+    cue_fields: [text, label, word, phones]
+    min_truth_values: 4              # a true-timing leak = all >= this many boundaries of a blind item, in order
+    value_tolerance: 1.0e-6
+
+  # ------------------------------------------------------------------------------------ delivery (Mac <-> host)
+  delivery:
+    mac_root: ~/manual_alignment     # [USER] outside the repo: recorded exception, the package only
+    container: wvx
+    host_repo: /workspace/WairagkarEtAlReproduction-Extension
+    host_python: .venv/bin/python
+    scan_threads: 2
+    answer_suffixes: [.json, .md]
+    max_answer_file_bytes: 5000000
+    max_answer_files: 5000
+
+  # ------------------------------------------------------------------------------------ agents
+  orchestrator:
+    worker_model: GPT 6.1 Sol        # [USER]
+    worker_model_id: null            # the exact Codex model id; null leaves a placeholder in ORCHESTRATOR_PROMPT.md
+  local_setup:                       # tools/requirements.txt: pinned, wheels for macOS arm64
+    requirements:
+      - 'numpy==2.0.2; python_version < "3.10"'
+      - 'matplotlib==3.9.4; python_version < "3.10"'
+      - 'numpy==2.2.6; python_version >= "3.10" and python_version < "3.11"'
+      - 'matplotlib==3.10.7; python_version >= "3.10" and python_version < "3.11"'
+      - 'numpy==2.3.4; python_version >= "3.11"'
+      - 'matplotlib==3.10.7; python_version >= "3.11"'

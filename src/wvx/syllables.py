@@ -247,7 +247,7 @@ def tts_syllables(words: Sequence[Interval], phones: Sequence[Interval], onsets:
     silence, unknown = set(fa["silence_labels"]), str(fa["unknown_label"])
     ph = [p for p in phones if p[2] not in silence]
     mids = np.array([(s + e) / 2 for s, e, _ in ph]) if ph else np.zeros(0)
-    out_words, syl, unk, no_vowel = [], [], [], []
+    out_words, syl, unk, no_vowel, syl_word, syl_phones = [], [], [], [], [], []
     for ws, we, w in words:
         if w in silence:
             continue
@@ -261,8 +261,10 @@ def tts_syllables(words: Sequence[Interval], phones: Sequence[Interval], onsets:
             no_vowel.append(w)
         for a, b in parts:
             syl.append((ph[idx[a]][0], ph[idx[b - 1]][1]))
+            syl_word.append(len(out_words) - 1)
+            syl_phones.append(labels[a:b])
     return {"words": out_words, "syllables_s": [list(s) for s in syl], "unknown_words": unk,
-            "words_without_vowel": no_vowel}
+            "words_without_vowel": no_vowel, "syllable_words": syl_word, "syllable_phones": syl_phones}
 
 
 def seconds_to_frames(seg_s: Sequence[Sequence[float]], cfg: Mapping[str, Any], n_frames: Optional[int] = None,
@@ -397,7 +399,24 @@ def decoder_segments(method: str, env_db: np.ndarray, cfg: Mapping[str, Any],
         return nuclei_to_segments(nuc, cuts, al.speech_mask(env_db, cfg))
     if method == "sylber":
         return seconds_to_frames(record["segments_s"], cfg, n_frames=n)
+    if method == "manual":
+        return manual_segments(record["spans_s"], cfg, n)
     raise ValueError(f"unknown method {method!r}")
+
+
+def manual_segments(spans_s: Sequence[Sequence[float]], cfg: Mapping[str, Any], n_frames: int) -> np.ndarray:
+    """Manual syllable spans (``wvx.manual_alignment``: one per TTS syllable, in seconds read off the NEURAL timeline,
+    so no synthesis lag) -> (K, 2) [onset, offset) frames, each time to the nearest frame boundary (half up).
+
+    Not a ``METHODS`` entry: ``decoder_segments("manual", ...)`` reads ``record["spans_s"]``, and arm B pairs the K
+    spans with the K TTS syllables one to one. Invalid spans (empty, overlapping, outside) raise, never get fixed.
+    """
+    from wvx.alignment import check_segments
+
+    seg = np.asarray(spans_s, dtype=np.float64).reshape(-1, 2)
+    if not np.all(np.isfinite(seg)):
+        raise ValueError("manual spans must be finite")
+    return check_segments(np.floor(seg * 1000.0 / frame_ms(cfg) + 0.5).astype(np.int64), int(n_frames), "manual")
 
 
 # ------------------------------------------------------------- arm B: segment-driven mapping
