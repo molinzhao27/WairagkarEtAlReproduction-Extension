@@ -20,6 +20,9 @@
 #  * cuDNN must be >= 9.7 for sm_120 -> 9.10.2.21. CUDA 12.9.1 user-space libs run on the CUDA 13.2 driver.
 #  * If the image exports LD_LIBRARY_PATH to its own CUDA 13 / cuDNN libraries, unset it for this venv so TF loads
 #    the pip CUDA 12 libraries below.
+#  * TF 2.21's RUNPATH misses nvidia/cusolver: without LD_LIBRARY_PATH listing .venv/.../site-packages/nvidia/*/lib,
+#    dlopen("libcusolver.so.11") fails and TF registers no GPU (found on the spare PC, RTX 4070, 2026-10-22;
+#    scripts/remote/pc_launch.sh sets it). Set the same on the host before its first GPU run.
 #  * A bare `import keras` is Keras 3; alias it before importing lib/inference_utils.py:
 #    sys.modules["keras"] = tf_keras; sys.modules["keras.models"] = tf_keras.models
 
