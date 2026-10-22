@@ -13,7 +13,13 @@ resynthesis of the TTS of EVERY distinct cue of the set (voice ``tts.voice``, co
 ``wvx.kunz_experiment.cue_null_stats`` (length-matched k from kunz_full.yaml) and ``identification``, the same
 functions as scripts/kunz_experiment.py. No targets, no ASR. These models were never trained on the session.
 
-Writes results/cue_identification/<cell>.json (per-trial rows and the summary) and summary.md.
+Writes results/cue_identification/<cell>.json (per-trial rows and the summary) and summary.md. ``--summary-only``
+rebuilds summary.md from those files.
+
+Every 50-word-vocabulary trial of t15_day195 has its own sentence (146 trials, 146 cues), while a Kunz block has
+50. summary.md therefore also gives identification **among 50 candidates**: per trial, the expected top-1 and rank
+if the other 49 candidates were a random draw from the other cues (exact, hypergeometric, from the own cue's rank
+among all of them: P(top-1) = C(N - K, 49) / C(N, 49), with N other cues and K of them scoring at least as high).
 """
 
 from __future__ import annotations
@@ -32,6 +38,50 @@ from wvx.experiment_config import apply_thread_env, load_experiment_config  # no
 OUT = "results/cue_identification"
 
 
+def among(rows, m: int = 50) -> dict:
+    """Expected identification among ``m`` candidates (the own cue + m - 1 drawn at random from the others)."""
+    import numpy as np
+    from scipy.special import comb
+
+    top1, rank = [], []
+    for r in rows:
+        if not np.isfinite(r["own_rank"]):
+            continue
+        n_other, k = int(r["n_cues"]) - 1, int(r["own_rank"]) - 1
+        if n_other < m - 1:
+            raise ValueError(f"only {n_other + 1} cues, fewer than {m}")
+        top1.append(comb(n_other - k, m - 1, exact=True) / comb(n_other, m - 1, exact=True))
+        rank.append(1 + k * (m - 1) / n_other)
+    return {"m": m, "n": len(top1), "top1_rate": float(np.mean(top1)), "top1_chance": 1.0 / m,
+            "median_expected_rank": float(np.median(rank)), "mean_expected_rank": float(np.mean(rank))}
+
+
+def write_summary(out_dir: Path, summaries: dict) -> None:
+    """summary.md from every <cell>.json in ``out_dir`` (cells may run as separate processes)."""
+    rows_by = {}
+    for f in sorted(out_dir.glob("*.json")):
+        d = json.loads(f.read_text())
+        summaries.setdefault(f.stem, d["summary"])
+        rows_by[f.stem] = d["trials"]
+    s0 = next(iter(summaries.values()))
+    lines = ["# Own-cue identification on Wairagkar data (Kunz scoring)", "",
+             f"Trials: `{s0['category']}`. Each decoded output vs the TTS of every distinct cue of the set; DTW "
+             "mel_corr; rank of the own cue (1 = best); excess over the 10 length-matched cues. Same functions as the "
+             "Kunz runs (scripts/cue_identification.py). The models were never trained on these sessions. Every trial "
+             "here has its own sentence, so the last two columns rescale to 50 candidates, as in a Kunz block "
+             "(expected over random draws of the other 49).", "",
+             "| cell | decoder age (days) | n | cues | top-1 (chance) | median rank (p) | excess length-matched (p) | "
+             "top-1 among 50 (chance 0.02) | median rank / 50 |",
+             "|---|---|---|---|---|---|---|---|---|"]
+    for cell, s in sorted(summaries.items(), key=lambda kv: kv[1]["age_days"] or 0):
+        i_, ex, a = s["identification"], s["excess_lenmatched"], among(rows_by[cell])
+        lines.append(f"| {cell} | {s['age_days']} | {s['n_trials']} | {s['n_distinct_cues']} | "
+                     f"{i_['top1_rate']:.3f} ({i_['top1_chance']:.3f}) | {i_['median_rank']:.1f} ({i_['uniform_rank_p']:.1e}) | "
+                     f"{ex['mean']:.3f} ({ex['wilcoxon_p']:.1e}) | {a['top1_rate']:.3f} | {a['median_expected_rank']:.1f} |")
+    (out_dir / "summary.md").write_text("\n".join(lines) + "\n")
+    print("\n".join(lines))
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--cells", nargs="+", required=True)
@@ -39,7 +89,11 @@ def main(argv=None) -> int:
     ap.add_argument("--cells-config", default="configs/experiments/syllable_benchmark.yaml")
     ap.add_argument("--scoring-config", default="configs/experiments/kunz_full.yaml")
     ap.add_argument("--workers", type=int, default=8)
+    ap.add_argument("--summary-only", action="store_true", help="rebuild summary.md from the existing <cell>.json")
     args = ap.parse_args(argv)
+    if args.summary_only:
+        write_summary(resolve_path(OUT), {})
+        return 0
     cfg_c = load_experiment_config(args.cells_config)
     cfg = load_experiment_config(args.scoring_config)
     apply_thread_env(cfg)
@@ -115,22 +169,7 @@ def main(argv=None) -> int:
             print(f"[cue_identification] {cell}: {len(sel)} trials, {len(cue_texts)} cues, top-1 {i_['top1_rate']:.3f} "
                   f"(chance {i_['top1_chance']:.3f}), median rank {i_['median_rank']:.1f}, excess {ex['mean']:.3f} "
                   f"({time.time() - t0:.0f} s)", flush=True)
-    # summary.md from every cell scored so far (cells may run as separate processes)
-    for f in sorted(out_dir.glob("*.json")):
-        summaries.setdefault(f.stem, json.loads(f.read_text())["summary"])
-    lines = ["# Own-cue identification on Wairagkar data (Kunz scoring)", "",
-             f"Trials: `{args.category}`. Each decoded output vs the TTS ({voice}) of every distinct cue of the set; "
-             f"DTW mel_corr; rank of the own cue (1 = best); excess over the {k} length-matched cues. Same functions "
-             "as the Kunz runs (scripts/cue_identification.py). The models were never trained on these sessions.", "",
-             "| cell | decoder age (days) | n | cues | top-1 (chance) | median rank (p) | excess length-matched (p) |",
-             "|---|---|---|---|---|---|---|"]
-    for cell, s in sorted(summaries.items(), key=lambda kv: kv[1]["age_days"] or 0):
-        i_, ex = s["identification"], s["excess_lenmatched"]
-        lines.append(f"| {cell} | {s['age_days']} | {s['n_trials']} | {s['n_distinct_cues']} | "
-                     f"{i_['top1_rate']:.3f} ({i_['top1_chance']:.3f}) | {i_['median_rank']:.1f} ({i_['uniform_rank_p']:.1e}) | "
-                     f"{ex['mean']:.3f} ({ex['wilcoxon_p']:.1e}) |")
-    (out_dir / "summary.md").write_text("\n".join(lines) + "\n")
-    print("\n".join(lines))
+    write_summary(out_dir, summaries)
     return 0
 
 
