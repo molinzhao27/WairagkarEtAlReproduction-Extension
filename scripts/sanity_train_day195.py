@@ -53,7 +53,6 @@ import hashlib  # noqa: E402
 import json  # noqa: E402
 import os  # noqa: E402
 import platform  # noqa: E402
-import subprocess  # noqa: E402
 import time  # noqa: E402
 from pathlib import Path  # noqa: E402
 
@@ -87,12 +86,11 @@ def _sha256(path: Path) -> str:
 
 
 def _git_commit():
-    try:
-        out = subprocess.run(["git", "rev-parse", "HEAD"], cwd=REPO_ROOT, capture_output=True, check=True)
-        dirty = subprocess.run(["git", "status", "--porcelain"], cwd=REPO_ROOT, capture_output=True).stdout
-    except (OSError, subprocess.CalledProcessError):
-        return None
-    return out.stdout.decode().strip() + ("+uncommitted" if dirty.strip() else "")
+    """The code's commit (wvx.provenance: git, or the .wvx_version.json that sync.sh push writes on a remote)."""
+    from wvx.provenance import code_version
+
+    v = code_version()
+    return None if not v.get("commit") else v["commit"] + ("+uncommitted" if v.get("dirty") else "")
 
 
 def _jsonable(obj):
