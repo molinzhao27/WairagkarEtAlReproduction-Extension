@@ -22,6 +22,9 @@ Per fold (held-out attempted block X; ``wvx.kunz_experiment.build_fold``), in th
    other cues, mean over the ``nulls.length_matched_k`` cues closest in TTS speech duration, and the rank of
    the own cue; ``wvx.kunz_experiment.cue_null_stats``), plus its speech content (speech frames, speech
    seconds within the first ``evaluation.early_window_s``, peak dBFS) from the metrics' silence detector.
+   LPCNet and the metrics run in ``evaluation.n_workers`` worker processes, the ASR in ``n_workers // its
+   cpu_threads`` more, each with its own model (D-046: in threads, the GIL and one serialized ASR model kept a
+   run at ~4 cores). Same scores either way: per-clip ASR seeds, and no metric depends on the process.
 
 Every Kunz trial goes through ``wvx.kunz_experiment.prepare_neural`` (reorder_channels) before training
 and before every decode. Thread caps (``runtime.threads``) are applied before numpy/TensorFlow load.
@@ -54,6 +57,7 @@ import sys
 sys.dont_write_bytecode = True  # -I ignores PYTHONDONTWRITEBYTECODE; keep third_party/ free of __pycache__
 
 import argparse  # noqa: E402
+import contextlib  # noqa: E402
 import csv  # noqa: E402
 import datetime  # noqa: E402
 import functools  # noqa: E402
@@ -559,7 +563,9 @@ class ASR:
 
     ``__call__(wav, sr, text)`` transcribes and scores; ``rescore(text, hyp)`` scores an existing transcript
     against another cue (shuffled-trial null). Calls are serialized: one model, and the text front end
-    (g2p/NLTK) is not known to be thread-safe.
+    (g2p/NLTK) is not known to be thread-safe. Within ``worker_processes(n)`` the calls run in n spawned worker
+    processes instead, one call at a time in each, with a model of its own: wvx.asr seeds every clip from the clip
+    and the config alone, so a transcript does not depend on the process, the order or earlier clips.
     """
 
     _ROLES = {"wav": ("wav", "audio", "waveform", "signal"), "sr": ("sr", "sample_rate", "fs"),
@@ -574,6 +580,8 @@ class ASR:
         self.bind = self._bind(self.fn)
         self.lock = threading.Lock()
         self.status = f"{a['module']}.{a['function']}{inspect.signature(self.fn)} with cfg {a.get('cfg')}"
+        self.cpu_threads = None   # threads per call, if the module reports them (make_asr)
+        self.pool = None          # worker processes (worker_processes)
 
     @classmethod
     def _bind(cls, fn) -> dict:
@@ -588,18 +596,36 @@ class ASR:
                 bind[pname] = role
         return bind
 
+    def _run(self, function: str, *args, **kwargs) -> dict:
+        from wvx import kunz_experiment as kx
+
+        if self.pool is not None:
+            return self.pool.submit(kx.call, self.a["module"], function, *args, **kwargs).result()
+        with self.lock:
+            return getattr(self.mod, function)(*args, **kwargs)
+
     def __call__(self, wav, sr, text) -> dict:
         vals = {"wav": wav, "sr": sr, "text": text, "cfg": self.a.get("cfg")}
-        with self.lock:
-            out = self.fn(**{p: vals[r] for p, r in self.bind.items()})
+        out = self._run(self.a["function"], **{p: vals[r] for p, r in self.bind.items()})
         return _prefixed("asr_", out)
 
     def rescore(self, text, hyp) -> dict:
         if self.rescore_fn is None:
             return {}
-        with self.lock:
-            out = self.rescore_fn(text, hyp, self.a.get("cfg"))
-        return _prefixed("asr_", out)
+        return _prefixed("asr_", self._run(self.a["rescore_function"], text, hyp, self.a.get("cfg")))
+
+    @contextlib.contextmanager
+    def worker_processes(self, n: int):
+        """Run the calls in ``n`` worker processes (spawned: this process runs TensorFlow threads) while inside."""
+        import multiprocessing
+        from concurrent.futures import ProcessPoolExecutor
+
+        with ProcessPoolExecutor(max_workers=int(n), mp_context=multiprocessing.get_context("spawn")) as pool:
+            self.pool = pool
+            try:
+                yield self
+            finally:
+                self.pool = None
 
 
 def make_asr(cfg):
@@ -628,12 +654,14 @@ def make_asr(cfg):
                "beam_size": c.get("decode", {}).get("beam_size"),
                "constrained_method": c.get("constrained", {}).get("method")}
         asr.status += f"; effective settings {eff}"
+        asr.cpu_threads = c.get("cpu_threads")
     return asr, asr.status
 
 
 def _prefixed(prefix: str, scores: dict) -> dict:
-    return {(k if k.startswith(prefix) else f"{prefix}{k}"): (v.item() if hasattr(v, "item") else v)
-            for k, v in dict(scores).items()}
+    from wvx.kunz_experiment import prefixed
+
+    return prefixed(prefix, scores)
 
 
 def metric_cfg(override) -> dict:
@@ -800,18 +828,39 @@ def write_score_matrix(path: Path, rows: list[dict]) -> None:
     os.replace(tmp, path)
 
 
+def audio_scorer(refs: References, cfg):
+    """Worker processes (``evaluation.n_workers``) that vocode and score the outputs (``wvx.kunz_experiment.
+    score_output``; the config and the references go to each worker once, one BLAS thread each).
+
+    The LPCNet feature conversion and the metrics' DTW (librosa, numba without ``nogil``) hold the GIL, so in this
+    process's threads they ran one at a time. Spawned, not forked: this process runs TensorFlow threads.
+    """
+    import multiprocessing
+    from concurrent.futures import ProcessPoolExecutor
+
+    from wvx import kunz_experiment as kx
+
+    e = cfg["experiment"]["evaluation"]
+    return ProcessPoolExecutor(
+        max_workers=int(e["n_workers"]), mp_context=multiprocessing.get_context("spawn"),
+        initializer=kx.init_output_scoring,
+        initargs=(cfg, refs.tts, refs.target, refs.sr, e["tts_metrics"], e["target_metrics"],
+                  metric_hop_s(e["tts_metrics"]), float(e["early_window_s"]), 1))
+
+
 def score_model(model: str, fold, partners, cfg, dirs: Dirs, refs: References, asr, pool) -> list[dict]:
+    """Score every output of ``model``: in ``pool``'s threads, each output goes to a worker process for its audio
+    and audio scores (``audio_scorer``), then to the ASR (worker processes of its own, see run_fold)."""
     import numpy as np
 
-    from wvx import inference, kunz_experiment as kx, metrics, synthesis
+    from wvx import kunz_experiment as kx, synthesis
     from wvx.metrics import normalize_text
 
     ex = cfg["experiment"]
     e = ex["evaluation"]
     save = model in _expand(e["save_audio"]["predictions"], cfg)
-    tts_cfg, tgt_cfg = e["tts_metrics"], e["target_metrics"]
     asr_inputs, hyp_key = set(e["asr"].get("inputs") or []), e["asr"].get("hypothesis_key")
-    k_len, early_s, hop_s = int(ex["nulls"]["length_matched_k"]), float(e["early_window_s"]), metric_hop_s(tts_cfg)
+    k_len = int(ex["nulls"]["length_matched_k"])
     sr = refs.sr
     model_path = dirs.model_path(model, cfg)
     model_sha = _sha256(model_path) if model_path.is_file() else None
@@ -843,32 +892,22 @@ def score_model(model: str, fold, partners, cfg, dirs: Dirs, refs: References, a
         except Exception as ex_:  # record and go on (e.g. silent output -> metric undefined)
             row[f"{prefix}error"] = f"{type(ex_).__name__}: {ex_}"
 
-    def mel(ref, wav):
-        try:
-            return float(metrics.mel_spectrogram_correlation(ref, wav, sr, tts_cfg))
-        except Exception:  # same policy as safe(): undefined, never fatal
-            return float("nan")
-
     def one(task):
         inp, meta, s, i, t, pred = task
         idx = int(t.meta["trial_index"])
         row = {"model": model, "input": inp, "set": s.name, "role": s.role, "condition": s.condition,
                "block": s.block, "trial_index": idx, "text": t.text, "text_in_training": bool(s.text_in_training[i]),
                "n_bins": int(t.neural.shape[0]), "n_frames": int(pred.shape[0])}
-        wav = synthesis.decoder_output_to_waveform(pred, cfg)
+        partner = s.trials[partners[s.name][i]] if s.name in partners else None
+        wav, scores = audio.submit(kx.score_output, kx.OutputJob(
+            pred, t.text,
+            partner=(int(partner.meta["trial_index"]), partner.text) if inp == "real" and partner is not None else None,
+            cues=cues[s.name][1] if inp == "real" else None,     # cue nulls: the same output vs EVERY cue of its set
+            heldout=(idx, t.target) if s.role == "heldout_attempted" else None)).result()
         if save and inp == "real":
             synthesis.write_wav(dirs.audio / model / s.name / f"tr{idx:03d}.wav", wav, cfg)
-        safe(row, "tts_", lambda: metrics.evaluate(refs.tts[t.text], wav, sr, tts_cfg))
-        safe(row, "", lambda: kx.output_speech_stats(wav, metrics.speech_frame_mask(wav, sr, tts_cfg), hop_s, early_s))
-        partner = s.trials[partners[s.name][i]] if s.name in partners else None
-        if inp == "real" and partner is not None:
-            row["shuffled_trial_partner"] = int(partner.meta["trial_index"])
-            safe(row, "shuffled_trial_tts_", lambda: metrics.evaluate(refs.tts[partner.text], wav, sr, tts_cfg))
-        if inp == "real":  # cue nulls: the same output vs EVERY distinct cue of its set
-            row["_cue_scores"] = [mel(refs.tts[x], wav) for x in cues[s.name][1]]
+        row.update(scores)
         if s.role == "heldout_attempted":
-            safe(row, "", lambda: kx.feature_scores(pred, inference.align_to_predictions(t.target, len(pred))))
-            safe(row, "target_", lambda: metrics.evaluate(refs.target[idx], wav, sr, tgt_cfg))
             row["target_vs_tts_mel_corr"] = refs.target_vs_tts[idx].get("mel_corr")
         if asr is not None and inp in asr_inputs:
             safe(row, "", lambda: asr(wav, sr, t.text))
@@ -881,10 +920,11 @@ def score_model(model: str, fold, partners, cfg, dirs: Dirs, refs: References, a
 
     t0, rows = time.time(), []
     every = int(e["progress_every"])
-    for row in pool.map(one, tasks):
-        rows.append(row)
-        if len(rows) % every == 0:
-            log(f"  {model}: scored {len(rows)}/{len(tasks)} ({time.time() - t0:.0f} s)")
+    with audio_scorer(refs, cfg) as audio:
+        for row in pool.map(one, tasks):
+            rows.append(row)
+            if len(rows) % every == 0:
+                log(f"  {model}: scored {len(rows)}/{len(tasks)} ({time.time() - t0:.0f} s)")
     matrix = []
     for row, (inp, _, s, i, t, _) in zip(rows, tasks):
         scores = row.pop("_cue_scores", None)
@@ -1186,7 +1226,7 @@ def run_fold(block, data, cfg, args, ctx) -> dict:
     training: dict = {}
     asr, asr_status = (None, "not scored in this stage")
     n_workers = int(e["evaluation"]["n_workers"])
-    with ThreadPoolExecutor(max_workers=n_workers) as pool:
+    with ThreadPoolExecutor(max_workers=n_workers) as pool, contextlib.ExitStack() as workers:
         refs = None
 
         def score(model):
@@ -1194,6 +1234,10 @@ def run_fold(block, data, cfg, args, ctx) -> dict:
             if refs is None:
                 asr, asr_status = make_asr(cfg)
                 log(f"ASR: {asr_status}")
+                if isinstance(asr, ASR):   # one model per worker process, about as many cores as the audio workers
+                    n_asr = max(1, n_workers // int(asr.cpu_threads or n_workers))
+                    workers.enter_context(asr.worker_processes(n_asr))
+                    log(f"ASR: {n_asr} worker processes; audio and metrics: {n_workers} worker processes")
                 refs = References(fold, cfg, dirs, pool, asr)
                 if refs.asr_rows:
                     _write_json(dirs.results / "asr_references.json", refs.asr_rows)

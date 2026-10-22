@@ -14,12 +14,14 @@ a clear error, provenance in every output, and the cue nulls / ranks / score mat
 
 from __future__ import annotations
 
+import concurrent.futures
 import csv
 import importlib.util
 import json
 import math
 import os
 from argparse import Namespace
+from concurrent.futures import Future
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -27,6 +29,7 @@ import numpy as np
 import pytest
 
 from wvx import b2v
+from wvx import kunz_experiment as kx
 from wvx.config import REPO_ROOT
 from wvx.experiment_config import load_experiment_config
 from wvx.metrics import normalize_text
@@ -88,6 +91,28 @@ def _code(x):
 def fake_mel(ref, est):
     e, r = _code(est), _code(ref)
     return float("nan") if e == 0 else 1.0 / (1.0 + abs(r - e))
+
+
+class InlinePool:
+    """ProcessPoolExecutor stand-in: initializer and jobs run in this process, so the fake metrics apply."""
+
+    def __init__(self, max_workers=None, mp_context=None, initializer=None, initargs=()):
+        assert mp_context.get_start_method() == "spawn" and initargs[-1] == 1   # real workers: spawned, 1 BLAS thread
+        initializer(*initargs[:-1])                                             # (no BLAS cap in the test process)
+
+    def submit(self, fn, *args):
+        f = Future()
+        try:
+            f.set_result(fn(*args))
+        except Exception as ex:
+            f.set_exception(ex)
+        return f
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, *exc):
+        return False
 
 
 class World:
@@ -163,6 +188,7 @@ class World:
             "est_speech_fraction": float(_code(est) != 0)})
         monkeypatch.setattr(metrics, "speech_frame_mask", lambda wav, sr, cfg=None: np.abs(np.asarray(wav)[::HOP]) > 0)
         monkeypatch.setattr(ke, "References", fake_refs)
+        monkeypatch.setattr(concurrent.futures, "ProcessPoolExecutor", InlinePool)   # audio metrics: see InlinePool
         monkeypatch.setattr(ke, "make_asr", lambda cfg: (None, "disabled in test"))
         monkeypatch.setattr(ke, "make_progress_callback", lambda every: None)
         monkeypatch.setattr(ke, "_clear_tf_session", lambda: None)
@@ -268,6 +294,47 @@ def test_first_run_keys_predictions_trials_cues_and_partners(world):
     avi = s["results"]["per_model"]["frozen"]["attempted_vs_paired_imagined"]
     assert list(avi["excess_difference"]) == ["lenmatched", "all", "shuffled_trial"]
     assert "sensitivity_min_speech" in g and s["results"]["settings"]["primary_null"] == "lenmatched"
+
+
+class FakeASR:
+    """Transcript = the cue (lower case); fails on a silent output (code 0)."""
+
+    def __call__(self, wav, sr, text):
+        if _code(wav) == 0:
+            raise RuntimeError("no audio")
+        return {"asr_hyp_raw": text.lower(), "asr_word_errors": 0, "asr_ref_words": len(text.split())}
+
+    def rescore(self, text, hyp):
+        return {"asr_word_errors": int(text.lower() != hyp), "asr_ref_words": len(text.split())}
+
+
+def test_row_fields_keep_their_order_with_audio_scores_from_worker_processes(world, monkeypatch):
+    """Audio scores come back from a worker process while the thread runs ASR; the row is still assembled in the
+    order of the per-trial table: trial, audio scores, target_vs_tts, ASR, shuffled-trial ASR, provenance, nulls."""
+    monkeypatch.setattr(world.ke, "make_asr", lambda cfg: (FakeASR(), "fake"))
+    world.run()
+    rows = world.scores("frozen")
+    evaluate = ["mel_corr", "mcd", "ref_speech_fraction", "est_speech_fraction"]
+    nulls = list(kx.cue_null_stats([1.0, 0.5], 0, [1.0, 2.0], 1))
+    head = list(world.ke.BASE_FIELDS) + [f"tts_{k}" for k in evaluate] + [
+        "est_speech_frames", "est_speech_s", "early_speech_s", "peak_dbfs"]
+    asr = ["asr_hyp_raw", "asr_word_errors", "asr_ref_words"]
+    prov = ["predictions_sha256", "model_sha256", "score_settings_sha256", "config_sha256", "code_version"]
+    held = next(r for r in rows if r["input"] == "real" and r["role"] == "heldout_attempted")
+    assert list(held) == head + ["shuffled_trial_partner"] + [f"shuffled_trial_tts_{k}" for k in evaluate] + [
+        "feat_mse", "feat_corr_mean"] + [f"target_{k}" for k in evaluate] + ["target_vs_tts_mel_corr"] + asr + [
+        "shuffled_trial_asr_word_errors", "shuffled_trial_asr_ref_words"] + prov + nulls
+    assert held["asr_hyp_raw"] == held["text"].lower() and held["shuffled_trial_asr_word_errors"] == 1
+    shuf = next(r for r in rows if r["input"] == "shuffled_time" and r["role"] == "heldout_attempted")
+    assert list(shuf) == head + ["feat_mse", "feat_corr_mean"] + [f"target_{k}" for k in evaluate] + [
+        "target_vs_tts_mel_corr"] + asr + prov
+    img = next(r for r in rows if r["input"] == "real" and r["role"] == "paired_imagined")
+    assert list(img) == head + ["shuffled_trial_partner"] + [f"shuffled_trial_tts_{k}" for k in evaluate] + asr + [
+        "shuffled_trial_asr_word_errors", "shuffled_trial_asr_ref_words"] + prov + nulls
+    silent = next(r for r in world.scores("zero_shot")
+                  if r["input"] == "real" and r["set"] == "paired_imagined_I04" and r["text"] == world.silent_cue)
+    assert silent["error"] == "RuntimeError: no audio" and "asr_hyp_raw" not in silent   # ASR failure recorded
+    assert list(silent).index("error") == list(silent).index("shuffled_trial_tts_est_speech_fraction") + 1
 
 
 # ------------------------------------------------------------------------------------ resume

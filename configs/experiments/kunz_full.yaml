@@ -96,7 +96,8 @@ experiment:
     shuffled_time_models: [trained, zero_shot]   # "trained" = every trained variant
 
   evaluation:
-    n_workers: 8                           # threads for LPCNet synthesis + metrics (<= runtime.threads.intra_op)
+    n_workers: 8                           # worker processes for LPCNet + metrics (and as many scoring threads);
+                                           #   ASR gets n_workers // its cpu_threads processes (D-046)
     tts_voice: null                        # null = tts.voice (the voice the targets were made with)
     tts_corpus: null                       # null = kunz.corpus
     # Metric settings for comparisons with the TTS (target-free; different length and timing, so the
@@ -116,15 +117,16 @@ experiment:
     early_window_s: 4.0
     # ASR hook (extension metric; configs/asr.yaml): used when this module/function exists at scoring time;
     # columns stay empty otherwise (then re-run with --stage score). The hypothesis is also re-scored against
-    # the shuffled-trial partner's cue (null; no second transcription). Calls are serialized (one model).
+    # the shuffled-trial partner's cue (null; no second transcription). Calls run in worker processes, one
+    # model and one call at a time in each; per-clip seeds make a transcript independent of the process.
     asr:
       enabled: true
       module: wvx.asr
       function: evaluate_wav               # (wav, sr, reference_text, cfg) -> dict
       rescore_function: score_text         # (reference_text, hypothesis_text, cfg) -> dict, for the null
       hypothesis_key: hyp_raw              # raw transcript in evaluate_wav's output
-      # Passed as its `cfg` (merged over configs/asr.yaml there). Threads: 4 + the LPCNet/metric workers
-      # stay within runtime.threads; never download during an experiment run.
+      # Passed as its `cfg` (merged over configs/asr.yaml there). Threads: 4 per ASR worker process; never
+      # download during an experiment run.
       cfg: {asr: {cpu_threads: 4, model: {allow_download: false}, per: {allow_download: false}}}
       inputs: [real, shuffled_time]        # which decoder outputs are transcribed
       references: true                     # also transcribe the TTS and aligned-target audio (ceiling)
