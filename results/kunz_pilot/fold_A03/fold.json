@@ -2772,5 +2772,13 @@
       "block": 13,
       "trial_index": 199
     }
-  ]
+  ],
+  "code_version": {
+    "source": "sync",
+    "commit": "78b3f3bf8bc198851c6c48e17cf200902209c70d",
+    "dirty": false,
+    "diff_sha256": null,
+    "pushed_at": "2026-10-21T23:40:40Z"
+  },
+  "config_sha256": "e2c3e47c2edbc4b0212b68c3a5c2900f98c00103db09d0fb316f3a75703c841b"
 }
