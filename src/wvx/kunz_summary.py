@@ -22,6 +22,12 @@ difference under each null; per-fold p values Holm-adjusted across the folds; an
 restricted to outputs with at least ``min_speech_s`` of decoded speech. Tables without these columns (older
 runs) give exactly the older summary.
 
+**Sets decoded in every fold** (the eval block: the same trials, scored by each fold's model) enter a pooled
+scope once per trial (:func:`collapse_repeated`): per-trial values averaged over the folds' outputs, so n counts
+distinct trials and the pooled tests are not inflated by the repeats (fixed 2026-10-22; before, the pooled eval
+rows counted each trial once per fold). Their rank test is then a Wilcoxon test of the per-trial mean rank
+against chance, (n_cues + 1) / 2, and top-1 is the mean over the folds' models.
+
 Pure pandas/numpy/scipy; no TensorFlow.
 """
 
@@ -36,6 +42,7 @@ from wvx import kunz_experiment as kx
 # per_trial.csv columns (labels written by scripts/kunz_experiment.py, not tunables)
 METRIC, NULL, SPEECH = "tts_mel_corr", "shuffled_trial_tts_mel_corr", "tts_est_speech_fraction"
 ATTEMPTED, IMAGINED = "heldout_attempted", "paired_imagined"
+TOP1 = "_top1_share"  # added by collapse_repeated
 CUE_NULL_COLUMNS = ("null_lenmatched_mean", "null_all_mean", "own_rank", "n_cues", "est_speech_s", "early_speech_s")
 _ASR = (("wer", "word_errors", "ref_words"), ("per", "phone_errors", "ref_phones"))
 # The base config of every Kunz experiment: settings used when a caller passes none (cf. configs/metrics.yaml
@@ -93,7 +100,59 @@ def _null_excess(df, order) -> dict:
 
 
 def _identification(df) -> dict:
+    if TOP1 in df and df[TOP1].notna().any():  # collapsed over folds: mean ranks, not one rank per output
+        return _identification_mean(df)
     return kx.identification(df["own_rank"].astype(float), df["n_cues"].astype(float))
+
+
+def _identification_mean(df) -> dict:
+    """Identification for a set collapsed over folds: per trial, the mean own rank over the folds' outputs.
+    Under the null every rank is uniform on 1..n_cues, so the mean rank is symmetric about (n_cues + 1) / 2:
+    two-sided Wilcoxon signed-rank test of mean rank - (n_cues + 1) / 2. top1_rate: mean over trials of the
+    share of the folds' outputs that ranked the own cue first."""
+    r, n, t = (df[c].astype(float).to_numpy() for c in ("own_rank", "n_cues", TOP1))
+    ok = np.isfinite(r) & np.isfinite(n) & (n >= 1)
+    out = {"n": int(ok.sum()), "n_undefined": int((~ok).sum()), "rank_test": "wilcoxon_mean_rank_vs_chance"}
+    if ok.any():
+        r, n, t = r[ok], n[ok], t[ok]
+        multi = n > 1
+        d = r - (n + 1) / 2
+        p = float("nan")
+        if d.size >= 2 and np.any(d != 0):
+            from scipy.stats import wilcoxon
+
+            p = float(wilcoxon(d).pvalue)
+        out.update(top1_rate=float(np.mean(t)), top1_chance=float(np.mean(1.0 / n)), median_rank=float(np.median(r)),
+                   median_n_cues=float(np.median(n)),
+                   mean_normalized_rank=float(np.mean((r[multi] - 1) / (n[multi] - 1))) if multi.any() else float("nan"),
+                   uniform_rank_p=p)
+    return out
+
+
+def collapse_repeated(df) -> tuple:
+    """For a pooled scope: the rows of every role whose trials occur in more than one fold (the eval block)
+    replaced by one row per trial, numeric columns averaged over the folds (NaN-skipping: a silent output adds
+    nothing to the mean), ``fold`` = "mean of folds", plus the column ``TOP1`` (share of the folds' outputs
+    with own rank 1). Returns (frame, {role: number of folds averaged})."""
+    import pandas as pd
+
+    if "set" not in df:  # no set names: nothing can be identified as the same trial
+        return df, {}
+    parts, collapsed = [], {}
+    for role, g in df.groupby("role", sort=False):
+        if not g.duplicated(["set", "trial_index"]).any():  # same set and trial in two folds = a repeat
+            parts.append(g)
+            continue
+        num = [c for c in g.select_dtypes("number").columns if c != "trial_index"]
+        if "own_rank" in g:
+            g = g.assign(**{TOP1: (g["own_rank"].astype(float) == 1).astype(float).where(g["own_rank"].notna())})
+            num.append(TOP1)
+        grp = g.groupby(["set", "trial_index"], sort=True)
+        c = grp[[x for x in g.columns if x not in num and x not in ("set", "trial_index")]].first().join(grp[num].mean())
+        c = c.reset_index().assign(fold="mean of folds")
+        collapsed[role] = int(g["fold"].nunique())
+        parts.append(c)
+    return pd.concat(parts, ignore_index=True), collapsed
 
 
 def role_block(df, frame_s: float, order: Optional[list] = None) -> dict:
@@ -168,9 +227,11 @@ def sensitivity_block(df, order, min_speech_s: float) -> dict:
     return out
 
 
-def scope_block(df, frame_s: float, settings: Optional[dict] = None) -> dict:
+def scope_block(df, frame_s: float, settings: Optional[dict] = None, collapsed: Optional[dict] = None) -> dict:
     order = kx.null_order(settings["primary_null"]) if settings else None
     out = {"roles": {r: role_block(g, frame_s, order) for r, g in df.groupby("role", sort=False)}}
+    for r, k in (collapsed or {}).items():
+        out["roles"][r]["collapsed_over_folds"] = k
     a, b = df[df.role == ATTEMPTED], df[df.role == IMAGINED]
     if len(a) and len(b):
         out["attempted_vs_imagined"] = {
@@ -226,7 +287,8 @@ def summarize_run(df, frame_s: float, settings: Optional[dict] = None) -> dict:
             st = dict(settings or default_settings())
             st["null_order"] = kx.null_order(st["primary_null"])
         res = out[model] = {"folds": {f: scope_block(g, frame_s, st) for f, g in m.groupby("fold", sort=True)}}
-        res["pooled"] = scope_block(m, frame_s, st)
+        pooled, collapsed = collapse_repeated(m)
+        res["pooled"] = scope_block(pooled, frame_s, st, collapsed)
         folds = [v for v in res["folds"].values() if "attempted_vs_imagined" in v]
         res["consistency"] = {
             "n_folds": len(folds),
@@ -296,6 +358,11 @@ def _legacy_model_section(model: str, res: dict) -> list[str]:
     return lines
 
 
+def _role_label(role: str, r: Mapping) -> str:
+    k = r.get("collapsed_over_folds")
+    return f"{role} (per-trial mean of {k} folds)" if k else role
+
+
 def _ident_cells(i: Mapping, fold: bool) -> str:
     return (f"{_f(i.get('top1_rate'), 2)} ({_f(i.get('top1_chance'), 2)}) | "
             f"{_f(i.get('median_rank'), 1)} / {_f(i.get('median_n_cues'), 0)} ({_ph(i, 'uniform_rank_p', fold)})")
@@ -315,7 +382,7 @@ def _cue_model_section(model: str, res: dict) -> list[str]:
             ex = " | ".join(f"{_f(r['nulls'][n]['excess'].get('mean'))} ({_ph(r['nulls'][n]['excess'], 'wilcoxon_p', fold)})"
                             for n in order)
             lines.append(
-                f"| {name} | {role} | {r['n']} ({r['n_silent']}) | {_f(r['speech_s'].get('mean'), 2)} / "
+                f"| {name} | {_role_label(role, r)} | {r['n']} ({r['n_silent']}) | {_f(r['speech_s'].get('mean'), 2)} / "
                 f"{_f(r['output_s'].get('mean'), 1)} | {_f(r['early_speech_s'].get('mean'), 2)} | "
                 f"{_f(r['mel_corr_vs_tts'].get('mean'))} | {ex} | {_ident_cells(r['identification'], fold)} | "
                 f"{_f(r['asr']['wer'], 2)} ({_f(r['asr']['wer_null_shuffled_trial'], 2)}) |")
@@ -348,7 +415,7 @@ def _cue_model_section(model: str, res: dict) -> list[str]:
     for name, sc, fold in scopes:
         for role, r in sc["sensitivity"]["roles"].items():
             ex = " | ".join(f"{_f(r['nulls'][n].get('mean'))} ({_ph(r['nulls'][n], 'wilcoxon_p', fold)})" for n in order)
-            lines.append(f"| {name} | {role} | {r['n_kept']} / {r['n']} | {ex} | "
+            lines.append(f"| {name} | {_role_label(role, sc['roles'].get(role, {}))} | {r['n_kept']} / {r['n']} | {ex} | "
                          f"{_ident_cells(r['identification'], False)} |")
     lines += ["", f"| scope | {dh} |", "|---" * (1 + len(order)) + "|"]
     for name, sc, fold in scopes:
@@ -382,7 +449,9 @@ def markdown(summary: dict, title: str) -> str:
              f"Primary null: **{_SHORT[st['primary_null']]}** (experiment.summary.primary_null), listed first. "
              "Excess = own cue - null, paired per output (Wilcoxon p). Identification: rank of the own cue among all "
              "cues of the set (1 = best); top-1 rate (chance = mean 1/cues), median rank / cues, p = exact rank-sum "
-             "test against uniform ranks. Attempted vs imagined: difference of the excesses (Mann-Whitney U, "
+             "test against uniform ranks. A set decoded in every fold (the eval block) enters the pooled rows once per "
+             "trial: values averaged over the folds' models, n = distinct trials, rank p = Wilcoxon test of the mean "
+             "rank against chance. Attempted vs imagined: difference of the excesses (Mann-Whitney U, "
              "unpaired). Per-fold p values: raw [Holm-adjusted across the folds]. Silent outputs (no speech frame) "
              f"have no mel_corr and are counted separately. Early speech: decoded speech seconds within the first "
              f"{_f(st['early_window_s'], 0)} s of the output. WER: faster-whisper small.en, unconstrained, pooled (null "

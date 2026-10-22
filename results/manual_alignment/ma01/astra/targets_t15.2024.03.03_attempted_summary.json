@@ -1,0 +1,29 @@
+{
+ "name": "ma01",
+ "label": "astra",
+ "created": "2026-10-22T02:12:17",
+ "session": "t15.2024.03.03_attempted",
+ "saved": "data/processed/kunz_targets_manual_astra/t15.2024.03.03_attempted.npz",
+ "n_trials": 200,
+ "answers_per_trial": {
+  "min": 3,
+  "median": 3.0,
+  "max": 3
+ },
+ "speech_fraction_per_trial": {
+  "min": 0.10493827160493827,
+  "median": 0.45322334520444324,
+  "max": 0.650294695481336
+ },
+ "target_fraction_outside_unit_range": 0.0,
+ "all_finite": true,
+ "code_version": {
+  "source": "sync",
+  "commit": "d95d4502d49bc4edff1e5ce02df57c9b3c3e55a4",
+  "dirty": false,
+  "diff_sha256": null,
+  "pushed_at": "2026-10-22T02:08:10Z"
+ },
+ "config_sha256": "3521ad673b50f6f8b3da29274d12a93c3f566bd6aacbf4490853e42798d4ca4e",
+ "files_sha256": "f72ea41ba4e3c45517d1666ac36ec077bf5ee51366d3bf928749d2cd9c8ba71c"
+}
