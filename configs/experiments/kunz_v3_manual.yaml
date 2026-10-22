@@ -3,6 +3,9 @@
 # attempted targets change.
 base_experiment: configs/experiments/kunz_v2_recipeB.yaml
 run_name: kunz_v3_manual
+runtime:
+  threads: {intra_op: 8, inter_op: 1, omp: 8}   # 2 processes x 8 on chiplet 1 only (16 CPUs; the BIT session needs
+                                                #   chiplet 0 free of our load, 2026-10-22). Results don't depend on it.
 experiment:
   name: kunz_v3_manual
   attempted_file: data/processed/kunz_targets_manual/t15.2024.03.03_attempted.npz
