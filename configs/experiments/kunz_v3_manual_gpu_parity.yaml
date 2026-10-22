@@ -1,0 +1,12 @@
+# D-042 check 4 (training parity), not a result: the host's kunz_v3_manual config, fold A03, ONE epoch, on the spare
+# PC's GPU. Its validation loss is compared with the host CPU run's epoch 1 (learning rate is constant, so epoch 1
+# does not depend on the epoch count):
+#   .venv/bin/python -I scripts/kunz_experiment.py --config configs/experiments/kunz_v3_manual_gpu_parity.yaml \
+#       --stage train --device gpu
+base_experiment: configs/experiments/kunz_v3_manual.yaml
+run_name: kunz_v3_manual_gpu_parity
+training:
+  epochs: 1
+experiment:
+  name: kunz_v3_manual_gpu_parity
+  folds: [3]

@@ -1,0 +1,9 @@
+# Main Kunz run with the Astra manual targets (user decision 2026-10-22, D-045; D-044: Astra +0.009 target r over
+# Sol, below the pre-registered 0.02). Same recipe as kunz_v3_manual.yaml (one new input layer, frozen base,
+# 15 epochs; folds 3, 6, 11, 13); only the attempted targets change. Runs on the spare PC's GPU (D-042):
+#   WVX_PC_ROOT=... bash scripts/remote/pc_launch.sh configs/experiments/kunz_v4_astra.yaml "3 6" "11 13"
+base_experiment: configs/experiments/kunz_v3_manual.yaml
+run_name: kunz_v4_astra
+experiment:
+  name: kunz_v4_astra
+  attempted_file: data/processed/kunz_targets_manual_astra/t15.2024.03.03_attempted.npz
