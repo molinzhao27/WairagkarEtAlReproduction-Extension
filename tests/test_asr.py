@@ -30,6 +30,20 @@ def test_vocabulary_is_the_50_word_set():
         assert w in VOCAB
 
 
+def test_vocabulary_check_is_cached_but_still_applies_per_settings():
+    v = asr.vocabulary()
+    v.append("zzz")                                            # the caller's copy, not the cached one
+    assert asr.vocabulary() == VOCAB and asr.vocabulary() is not asr.vocabulary()
+    bad = {"text": {"replacements": [["okay", "ok"]]}}         # "okay" is not normalized under these text settings
+    for _ in range(2):                                         # a failed check is never cached
+        with pytest.raises(ValueError, match="normalized"):
+            asr.vocabulary(bad)
+    with pytest.raises(ValueError, match="duplicates"):
+        asr.vocabulary({"constrained": {"vocabulary": ["hello", "hello"]}})
+    assert asr.vocabulary({"constrained": {"vocabulary": ["hello", "you"]}}) == ["hello", "you"]
+    assert asr.vocabulary() == VOCAB
+
+
 def test_config_defaults_are_cpu_and_small():
     c = asr.load_asr_config()
     assert c["device"] == "cpu" and c["cpu_threads"] <= 8
@@ -245,3 +259,34 @@ def test_sampled_transcripts_depend_only_on_the_clip():
     assert first["asr_sampled"] and other["asr_sampled"] and again["asr_sampled"]
     assert first["asr_seed"] == again["asr_seed"] != other["asr_seed"]
     assert first["text"] == again["text"]
+
+
+@pytest.mark.skipif(not _whisper_ready(), reason="faster-whisper or the small.en model not installed here")
+def test_sampling_on_a_fresh_model_matches_redoing_the_whole_decode():
+    """D-056 on the real model: the sampling steps on a fresh (or preloaded) model give the transcripts of the old
+    scheme, which redid the whole decode on a model loaded right after setting the clip's seed."""
+    from faster_whisper import WhisperModel
+
+    # log_prob_threshold 0 fails every decode (log probabilities are negative): beam search, then both sampled steps
+    cfg = {**NO_PER, "model": {"allow_download": False, "verify_sha256": False}, "preload_fresh_model": True,
+           "decode": {"temperature": [0.0, 0.6, 1.0], "log_prob_threshold": 0.0, "no_speech_threshold": None}}
+    c = asr._cfg(cfg)
+    sr = 16000
+    rng = np.random.default_rng(1)
+    t = np.arange(3 * sr) / sr
+    clips = [0.1 * np.sin(2 * np.pi * f * t) * (1 + np.sin(2 * np.pi * 3 * t)) + 0.02 * rng.standard_normal(t.size)
+             for f in (210.0, 330.0)]
+    want = []
+    for clip in clips:
+        audio = asr.prepare_audio(clip, sr, c)
+        asr._set_random_seed(asr.clip_seed(audio, asr.base_seed(c)))
+        m = WhisperModel(str(asr.model_dir(c)), device="cpu", compute_type=c["compute_type"],
+                         cpu_threads=int(c["cpu_threads"]), num_workers=int(c["num_workers"]), local_files_only=True)
+        segs = list(m.transcribe(audio, **c["decode"])[0])
+        del m
+        assert segs and max(s.temperature for s in segs) > 0
+        want.append((" ".join(s.text.strip() for s in segs).strip(), float(np.mean([s.avg_logprob for s in segs])),
+                     float(max(s.temperature for s in segs))))
+    for k in (0, 1, 0, 1):   # the repeats run on preloaded spares
+        out = asr.transcribe_detailed(clips[k], sr, cfg)
+        assert out["asr_sampled"] and (out["text"], out["avg_logprob"], out["max_temperature"]) == want[k], k
