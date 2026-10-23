@@ -25,3 +25,5 @@ manual_alignment:
     id_format: "a{:02d}"       # GPT-6 Astra workers, as in D-043
   adoption:
     primary_cells: [day195_m165]
+  orchestrator:
+    worker_model: GPT-6 Astra    # [USER] "we can do syllable timing reliably with astra agents"
