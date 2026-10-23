@@ -1,0 +1,17 @@
+# D-058 (pre-registered): the macOS voice Alex as the TTS voice; target check (scripts/knnvc.py check --config this).
+base_experiment: configs/experiments/voice_cost_day195.yaml   # seed
+
+run_name: alex
+
+runtime:
+  threads: {intra_op: 8, inter_op: 1, omp: 8}               # host, chiplet 1
+
+knnvc:                                                        # for the target check (scripts/knnvc.py check)
+  name: alex
+  source_voice: Aman (English (India))
+  voice: Alex
+  data_config: configs/experiments/voice_cost_day195.yaml
+  placement_config: configs/experiments/manual_alignment.yaml
+  check_session: t15_day195
+  train_trials_from: results/sanity_train_day195_from165_ep15/data.json
+  auto_cell: day195_m165
