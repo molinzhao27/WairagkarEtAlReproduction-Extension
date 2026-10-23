@@ -1,0 +1,59 @@
+{
+ "variants": {
+  "splice_oracle": {
+   "n_trials": 158,
+   "fallback_missing_word": 12,
+   "fallback_word_mismatch": 0,
+   "fallback_no_timing": 0,
+   "vs_theirs_word_target_r": {
+    "n": 158,
+    "n_nan": 0,
+    "mean": 0.7270461014722124,
+    "sd": 0.11322968732473021,
+    "median": 0.755708716391314,
+    "q25": 0.6845079467851642,
+    "q75": 0.8022661619356489
+   },
+   "fraction_outside_unit_range": 1.1822185075335878e-05,
+   "file": "data/processed/word_splice/day195_from_day025_day193_splice_oracle.npz"
+  },
+  "splice_auto": {
+   "n_trials": 158,
+   "fallback_missing_word": 12,
+   "fallback_word_mismatch": 0,
+   "fallback_no_timing": 0,
+   "vs_theirs_word_target_r": {
+    "n": 158,
+    "n_nan": 0,
+    "mean": 0.3498569274928553,
+    "sd": 0.11929127569877303,
+    "median": 0.36898660079684054,
+    "q25": 0.24819453299654162,
+    "q75": 0.44562547547647713
+   },
+   "fraction_outside_unit_range": 0.0,
+   "file": "data/processed/word_splice/day195_from_day025_day193_splice_auto.npz"
+  }
+ },
+ "name": "day195_from_day025_day193",
+ "config": "configs/experiments/word_splice.yaml",
+ "inventory": {
+  "sessions": [
+   "t15_day025",
+   "t15_day193"
+  ],
+  "n_trials": 621,
+  "n_skipped": 4,
+  "n_words": 50,
+  "exemplars_per_word_min": 12
+ },
+ "auto_cell": "day195_m165",
+ "code_version": {
+  "source": "sync",
+  "commit": "1d4d0461fab78cf5f78cf494f93a86edefee3c6b",
+  "dirty": false,
+  "diff_sha256": null,
+  "pushed_at": "2026-10-23T00:40:42Z"
+ },
+ "wall_time_s": 1.9962449073791504
+}
