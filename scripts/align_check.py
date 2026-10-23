@@ -74,7 +74,7 @@ def main(argv=None) -> int:
         p = np.random.default_rng([seed, key]).permutation(n)
         return sorted(p[: n // 2].tolist()), sorted(p[n // 2:].tolist())
 
-    def run(label, xs, targets, fit_idx, ev_idx, ref_frames, ceiling=None):
+    def run(label, xs, targets, fit_idx, ev_idx, ref_frames, ceiling=None, ref_trials=None):
         """Fit every variant on xs[fit_idx] (neural only), score on xs[ev_idx]."""
         ev = sorted(np.random.default_rng([seed, 7]).choice(ev_idx, size=min(int(a["n_eval"]), len(ev_idx)),
                                                             replace=False).tolist())
@@ -88,6 +88,10 @@ def main(argv=None) -> int:
                 maps[v["name"]] = na.fit_standardize(fit_frames, ref_frames)
             elif v["kind"] == "coral":
                 maps[v["name"]] = na.fit_coral(fit_frames, ref_frames, float(v["shrink"]))
+            elif v["kind"] == "adversarial":
+                maps[v["name"]], ainfo = na.fit_adversarial(day_layer, [xs[i] for i in fit_idx], ref_trials, v,
+                                                            log=lambda m_: log(f"{label} {v['name']}:{m_}"))
+                out.setdefault("fit", {})[v["name"]] = ainfo
             elif v["kind"] == "mmd":
                 w, info = na.fit_mmd_layer(day_layer, fit_frames.astype(np.float32), ref_frames.astype(np.float32),
                                            v, log=None)
@@ -136,12 +140,15 @@ def main(argv=None) -> int:
     fi, ei = halves(len(ref_x), 0)
     ref_targets = [t.target for t in ref.trials]
     ref_frames_fit = na.frames([ref_x[i] for i in fi])  # the "reference" = the fit half, undrifted
-    und = run(f"{a['ref_session']} undrifted (identity check)", ref_x, ref_targets, ei, ei, ref_frames_fit)
+    ref_trials_fit = [ref_x[i] for i in fi]
+    und = run(f"{a['ref_session']} undrifted (identity check)", ref_x, ref_targets, ei, ei, ref_frames_fit,
+              ref_trials=ref_trials_fit)
     ceil = und["variants"]["zero_shot"]["feat_r"]
     results.append(und)
     results.append(run(f"{a['ref_session']} + synthetic drift", [drift(x) for x in ref_x], ref_targets, ei, ei,
-                       ref_frames_fit, ceiling=ceil))
+                       ref_frames_fit, ceiling=ceil, ref_trials=ref_trials_fit))
     ref_frames_all = na.frames(ref_x)
+    ref_trials_all = ref_x
     del ref
     for s in a["sessions"]:
         if s == a.get("dev_session"):
@@ -149,7 +156,7 @@ def main(argv=None) -> int:
         sess = wairagkar_data.load_session(data_dir, s, 0, cfg)
         xs = [kx.prepare_neural(t.neural, cfg) for t in sess.trials]
         fi, ei = halves(len(xs), int(s.split("day")[1]))
-        results.append(run(s, xs, [t.target for t in sess.trials], fi, ei, ref_frames_all))
+        results.append(run(s, xs, [t.target for t in sess.trials], fi, ei, ref_frames_all, ref_trials=ref_trials_all))
         del sess, xs
     out = {"name": a["name"], "config": args.config, "model": path.name, "ref_session": a["ref_session"],
            "created": datetime.datetime.now().isoformat(timespec="seconds"), "code_version": code_version(),

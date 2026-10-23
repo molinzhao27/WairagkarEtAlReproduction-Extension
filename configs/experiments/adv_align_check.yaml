@@ -1,0 +1,14 @@
+# D-065 (pre-registered): the adversarial converter validated like D-063 (scripts/align_check.py; same halves, drift,
+# evaluation trials and seeds as align_check.yaml). Gates in notes/DECISIONS.md D-065.
+#   PC: .venv/bin/python -I scripts/align_check.py --config configs/experiments/adv_align_check.yaml --device gpu
+base_experiment: configs/experiments/align_check.yaml
+
+run_name: adv_align_check
+
+align_check:
+  name: m165_adversarial
+  variants:
+    - {name: adv_id0, kind: adversarial, hidden: 512, window: 60, batch: 64, steps: 2000, n_critic: 5, lr: 1.0e-4,
+       beta_1: 0.0, beta_2: 0.9, gp: 10.0, lam_id: 0.0, critic_channels: 128, seed: 1, log_every: 250}
+    - {name: adv_id1, kind: adversarial, hidden: 512, window: 60, batch: 64, steps: 2000, n_critic: 5, lr: 1.0e-4,
+       beta_1: 0.0, beta_2: 0.9, gp: 10.0, lam_id: 1.0, critic_channels: 128, seed: 1, log_every: 250}

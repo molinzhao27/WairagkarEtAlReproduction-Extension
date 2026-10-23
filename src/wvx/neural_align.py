@@ -260,3 +260,121 @@ def fit_paired_layer(day_layer, X: np.ndarray, Y: np.ndarray, settings: Mapping[
     return w1, {"kind": "word_layer", "history": hist, "n_frames": int(len(Xc) * steps),
                 "weight_change_rel": float(np.sqrt(sum(((a - c) ** 2).sum() for a, c in zip(w1, w0))
                                                    / sum((c ** 2).sum() for c in w0)))}
+
+
+# ---------------------------------------------------- adversarial alignment, ADAN-style (D-065)
+
+class Converter:
+    """x' = x + relu(x W1 + b1) W2 + b2 per 10 ms bin (512 features in and out); W2, b2 start at zero, so the converter
+    starts as the identity. Applied in numpy after training."""
+
+    def __init__(self, W1, b1, W2, b2):
+        self.W1, self.b1, self.W2, self.b2 = (np.asarray(a, np.float64) for a in (W1, b1, W2, b2))
+
+    def __call__(self, x: np.ndarray) -> np.ndarray:
+        x = np.asarray(x, np.float64)
+        return (x + np.maximum(x @ self.W1 + self.b1, 0) @ self.W2 + self.b2).astype(np.float32)
+
+    def info(self) -> dict:
+        return {"kind": "adversarial", "W2_rms": float(np.sqrt((self.W2 ** 2).mean())),
+                "b2_abs_mean": float(np.abs(self.b2).mean())}
+
+
+def sample_windows(trials, n: int, length: int, rng: np.random.Generator) -> np.ndarray:
+    """``n`` random windows of ``length`` bins from a list of (T, F) trials (trial chosen by its number of windows)."""
+    sizes = np.array([max(len(x) - length + 1, 0) for x in trials], float)
+    p = sizes / sizes.sum()
+    out = np.empty((n, length, trials[0].shape[1]), np.float32)
+    for k, i in enumerate(rng.choice(len(trials), size=n, p=p)):
+        s = rng.integers(0, int(sizes[i]))
+        out[k] = trials[i][s: s + length]
+    return out
+
+
+def fit_adversarial(day_layer, new_trials, ref_trials, settings: Mapping[str, Any], log=None) -> tuple[Converter, dict]:
+    """WGAN-GP between converted new-session windows and reference-session windows, both read through the FROZEN
+    original day layer (60-bin windows -> pooled -> (30, 128) embeddings, standardized with the reference
+    embeddings' per-dimension mean and s.d.). Critic: three 1-D convolutions over time (kernel 3, LeakyReLU 0.2),
+    mean over time, linear. Converter loss: -critic(converted) + ``lam_id`` x mean squared change of the input.
+    settings: hidden, window, batch, steps (converter updates), n_critic, lr, beta_1, beta_2, gp, lam_id,
+    critic_channels, seed, log_every."""
+    import tensorflow as tf
+
+    s = settings
+    rng = np.random.default_rng(int(s["seed"]))
+    tf.random.set_seed(int(s["seed"]))
+    F, H, Wn, B = new_trials[0].shape[1], int(s["hidden"]), int(s["window"]), int(s["batch"])
+    init = tf.keras.initializers.GlorotUniform(seed=int(s["seed"]))
+    W1 = tf.Variable(init((F, H)))
+    b1 = tf.Variable(tf.zeros(H))
+    W2 = tf.Variable(tf.zeros((H, F)))
+    b2 = tf.Variable(tf.zeros(F))
+    gen_vars = [W1, b1, W2, b2]
+
+    def convert(x):
+        return x + tf.matmul(tf.nn.relu(tf.matmul(x, W1) + b1), W2) + b2
+
+    ref_win = sample_windows(ref_trials, 2048, Wn, rng)
+    z_ref = []
+    for k in range(0, len(ref_win), 256):
+        z_ref.append(day_layer(tf.nn.avg_pool1d(ref_win[k: k + 256], 2, 2, "VALID"), training=False).numpy())
+    z_ref = np.concatenate(z_ref).reshape(-1, 128)
+    mu = tf.constant(z_ref.mean(0), tf.float32)
+    sd = tf.constant(np.where(z_ref.std(0) > 1e-6, z_ref.std(0), 1.0), tf.float32)
+
+    def emb(x):
+        return (day_layer(tf.nn.avg_pool1d(x, 2, 2, "VALID"), training=False) - mu) / sd
+
+    C = int(s["critic_channels"])
+    cinit = tf.keras.initializers.GlorotUniform(seed=int(s["seed"]) + 1)
+    K1, K2, K3 = (tf.Variable(cinit((3, i, C))) for i in (128, C, C))
+    c1, c2, c3 = (tf.Variable(tf.zeros(C)) for _ in range(3))
+    Wo, bo = tf.Variable(cinit((C, 1))), tf.Variable(tf.zeros(1))
+    crit_vars = [K1, c1, K2, c2, K3, c3, Wo, bo]
+
+    def critic(z):
+        h = tf.nn.leaky_relu(tf.nn.conv1d(z, K1, 1, "SAME") + c1, 0.2)
+        h = tf.nn.leaky_relu(tf.nn.conv1d(h, K2, 1, "SAME") + c2, 0.2)
+        h = tf.nn.leaky_relu(tf.nn.conv1d(h, K3, 1, "SAME") + c3, 0.2)
+        return tf.matmul(tf.reduce_mean(h, axis=1), Wo) + bo
+
+    opt_c = tf.keras.optimizers.Adam(float(s["lr"]), beta_1=float(s["beta_1"]), beta_2=float(s["beta_2"]))
+    opt_g = tf.keras.optimizers.Adam(float(s["lr"]), beta_1=float(s["beta_1"]), beta_2=float(s["beta_2"]))
+
+    @tf.function
+    def critic_step(xn, xr, eps):
+        with tf.GradientTape() as tape:
+            zf, zr = emb(convert(xn)), emb(xr)
+            zi = eps * zr + (1 - eps) * zf
+            with tf.GradientTape() as gt:
+                gt.watch(zi)
+                di = critic(zi)
+            gn = tf.sqrt(tf.reduce_sum(tf.square(gt.gradient(di, zi)), axis=[1, 2]) + 1e-12)
+            w = tf.reduce_mean(critic(zr)) - tf.reduce_mean(critic(zf))
+            loss = -w + float(s["gp"]) * tf.reduce_mean(tf.square(gn - 1.0))
+        opt_c.apply_gradients(zip(tape.gradient(loss, crit_vars), crit_vars))
+        return w
+
+    @tf.function
+    def gen_step(xn):
+        with tf.GradientTape() as tape:
+            xc = convert(xn)
+            adv = -tf.reduce_mean(critic(emb(xc)))
+            idp = tf.reduce_mean(tf.square(xc - xn))
+            loss = adv + float(s["lam_id"]) * idp
+        opt_g.apply_gradients(zip(tape.gradient(loss, gen_vars), gen_vars))
+        return adv, idp
+
+    hist = []
+    for it in range(int(s["steps"])):
+        for _ in range(int(s["n_critic"])):
+            w = critic_step(tf.constant(sample_windows(new_trials, B, Wn, rng)),
+                            tf.constant(sample_windows(ref_trials, B, Wn, rng)),
+                            tf.constant(rng.uniform(size=(B, 1, 1)).astype(np.float32)))
+        adv, idp = gen_step(tf.constant(sample_windows(new_trials, B, Wn, rng)))
+        if it % int(s["log_every"]) == 0 or it == int(s["steps"]) - 1:
+            hist.append({"step": it, "wasserstein": float(w), "identity_mse": float(idp)})
+            if log:
+                log(f"  adversarial step {it}: critic distance {float(w):.3f}, input change {float(idp):.4f}")
+    conv = Converter(W1.numpy(), b1.numpy(), W2.numpy(), b2.numpy())
+    return conv, {"kind": "adversarial", "history": hist, **conv.info()}

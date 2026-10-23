@@ -77,3 +77,20 @@ def test_word_maps_recover_a_known_mixing():
         err = np.mean([np.abs(m(seg) - temps[w]).mean() for w, seg in occ])
         assert err < 0.1, (m.kind, err)
     assert na.fit_procrustes(Y, Y).info()["offdiag_rms"] < 1e-6     # identity when nothing changed
+
+
+def test_converter_starts_as_identity_and_adversarial_runs():
+    tf = pytest.importorskip("tensorflow")
+    r = np.random.default_rng(0)
+    layer = tf.keras.Sequential([tf.keras.Input((30, 16)), tf.keras.layers.Dense(16, activation="relu"),
+                                 tf.keras.layers.Dense(128, activation="relu")])
+    ref = [r.normal(size=(200, 16)).astype(np.float32) for _ in range(6)]
+    new = [(x @ (np.eye(16) + 0.3 * r.normal(size=(16, 16))) + 0.5).astype(np.float32) for x in ref]
+    s = {"hidden": 32, "window": 60, "batch": 16, "steps": 2, "n_critic": 2, "lr": 1e-4, "beta_1": 0.0,
+         "beta_2": 0.9, "gp": 10.0, "lam_id": 1.0, "critic_channels": 16, "seed": 0, "log_every": 1}
+    conv0 = na.Converter(np.ones((16, 4)), np.zeros(4), np.zeros((4, 16)), np.zeros(16))
+    assert np.allclose(conv0(ref[0]), ref[0], atol=1e-6)
+    conv, info = na.fit_adversarial(layer, new, ref, s)
+    assert conv(new[0]).shape == new[0].shape and len(info["history"]) == 2
+    w = na.sample_windows(ref, 5, 60, np.random.default_rng(1))
+    assert w.shape == (5, 60, 16)
