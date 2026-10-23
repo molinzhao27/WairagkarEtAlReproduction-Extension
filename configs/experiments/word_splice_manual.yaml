@@ -1,0 +1,17 @@
+# D-061 (pre-registered): word-splice targets on manual (Astra) timing for the dev test on t15_day195.
+#   host, after `manual_alignment.py ingest --name ma02 --config configs/experiments/manual_alignment_ma02.yaml`:
+#   CUDA_VISIBLE_DEVICES= nice -n 19 .venv/bin/python -I scripts/word_splice.py --config configs/experiments/word_splice_manual.yaml
+base_experiment: configs/experiments/word_splice.yaml
+
+run_name: word_splice_manual
+
+word_splice:
+  name: day195_manual_from_day025_day193
+  variants: [splice_manual]
+  placement_config: configs/experiments/manual_alignment_f5clone.yaml   # D-059: F5 clone, never Aman (fallback voice
+                                                                        # and syllable -> word membership)
+  manual:
+    name: ma02
+    config: configs/experiments/manual_alignment_ma02.yaml
+    label: null
+    cell: day195_m165
