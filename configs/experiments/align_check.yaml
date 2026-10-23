@@ -1,0 +1,25 @@
+# D-063 validation of target-free alignment (scripts/align_check.py, wvx.neural_align) on sessions other than the
+# dev test session: fit on half of a session's trials (neural only), score the other half against their targets.
+# Settings below are chosen HERE (on these sessions), then frozen for the day195 dev test.
+base_experiment: configs/experiments/voice_cost_day195.yaml   # data loading (their targets), channel reorder
+
+run_name: align_check
+
+runtime:
+  device: cpu
+  threads: {intra_op: 12, inter_op: 2, omp: 12}               # host, chiplet 1
+
+align_check:
+  name: m165_sessions172_193
+  seed: 20261023
+  model: data/raw/wairagkar/t15_neural_data/t15_day172/brain2voice_t15_day165.h5
+  ref_session: t15_day165
+  dev_session: t15_day195            # refused if listed below
+  sessions: [t15_day172, t15_day179, t15_day186, t15_day193]
+  n_eval: 40                         # seeded trials of the held-out half decoded per variant
+  control: {log_gain_sd: 0.3, offset_sd: 0.5, mix_sd: 0.5}
+  variants:
+    - {name: standardize, kind: standardize}
+    - {name: coral_s0.1, kind: coral, shrink: 0.1}
+    - {name: mmd_l2_0, kind: mmd, steps: 800, batch: 900, lr: 1.0e-4, l2: 0.0, sigma_scales: [0.5, 1.0, 2.0], seed: 1, log_every: 100}
+    - {name: mmd_l2_100, kind: mmd, steps: 800, batch: 900, lr: 1.0e-4, l2: 100.0, sigma_scales: [0.5, 1.0, 2.0], seed: 1, log_every: 100}
