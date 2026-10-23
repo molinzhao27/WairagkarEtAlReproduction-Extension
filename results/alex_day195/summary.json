@@ -1,0 +1,584 @@
+{
+  "created": "2026-10-23T06:55:10",
+  "config_file": "configs/experiments/alex_day195.yaml",
+  "smoke": false,
+  "git_commit": "ab1a528bdbb4f0b454f5664ffb4f93256142647b",
+  "seed": 42,
+  "design": {
+    "session": "t15_day195",
+    "n_train_pool": 158,
+    "n_test": 147,
+    "trial_types": {
+      "Evaluation trial": 130,
+      "Evaluation trial (free response)": 7,
+      "Evaluation trial (mimed speech)": 10,
+      "Training data": 12,
+      "Training data (50-word vocab)": 146
+    },
+    "init_and_zero_shot": "data/raw/wairagkar/t15_neural_data/t15_day172/brain2voice_t15_day165.h5",
+    "reorder_channels": true,
+    "recipe": {
+      "epochs": 15,
+      "batch_size": 1024,
+      "learning_rate": 0.0005,
+      "n_augmentations": 3,
+      "validation": {
+        "n_trials": 15,
+        "fraction": null,
+        "pool": null
+      },
+      "init": {
+        "source": "inference_h5",
+        "path": "data/raw/wairagkar/t15_neural_data/t15_day172/brain2voice_t15_day165.h5",
+        "freeze_base": true
+      },
+      "export_weights": "final"
+    },
+    "references": "their targets: feat_* vs the scaled+smoothed decoder target; mel_corr etc. vs the LPCNet resynthesis of their raw stored targets (target_audio_source raw)",
+    "asr": "wvx.asr.evaluate_wav, unconstrained (constrained is NaN when the reference has words outside the 50-word vocabulary)"
+  },
+  "models": {
+    "zero_shot": {
+      "path": "data/raw/wairagkar/t15_neural_data/t15_day172/brain2voice_t15_day165.h5",
+      "sha256": "fa75c8d75cce9b70f784ce43d37d13b9e01c326a09e74b8fbd323fcda6de80aa"
+    },
+    "trained_tts_oracle": {
+      "path": "data/checkpoints/alex_day195/train_tts_oracle/inference_layer00.h5",
+      "sha256": null
+    },
+    "trained_tts_auto": {
+      "path": "data/checkpoints/alex_day195/train_tts_auto/inference_layer00.h5",
+      "sha256": null
+    }
+  },
+  "training": {},
+  "ours_targets": null,
+  "tts_targets": {},
+  "results": {
+    "per_model": {
+      "zero_shot": {
+        "Evaluation trial": {
+          "n": 130,
+          "feat_corr_mean": {
+            "n": 130,
+            "n_nan": 0,
+            "mean": 0.4245185313884952,
+            "sd": 0.07021553652565508,
+            "median": 0.42860879231261884,
+            "q25": 0.3804863781934016,
+            "q75": 0.46402411488188156
+          },
+          "feat_mse": {
+            "n": 130,
+            "n_nan": 0,
+            "mean": 0.035693977990447864,
+            "sd": 0.005423448477853845,
+            "median": 0.03490629101115527,
+            "q25": 0.032881929746039484,
+            "q75": 0.03886899418435138
+          },
+          "mel_corr": {
+            "n": 130,
+            "n_nan": 0,
+            "mean": 0.7493103027197074,
+            "sd": 0.04620980614574399,
+            "median": 0.7541793649677364,
+            "q25": 0.7189592827985845,
+            "q75": 0.7823444044166175
+          },
+          "mel_corr_framewise": {
+            "n": 130,
+            "n_nan": 0,
+            "mean": 0.7251490926820144,
+            "sd": 0.05875253482370959,
+            "median": 0.7297041040915304,
+            "q25": 0.692857782413434,
+            "q75": 0.7609837923391074
+          },
+          "mcd": {
+            "n": 130,
+            "n_nan": 0,
+            "mean": 6.034134900725547,
+            "sd": 0.5864539842938354,
+            "median": 5.934582871584665,
+            "q25": 5.603159034871143,
+            "q75": 6.422292845280601
+          },
+          "est_speech_fraction": {
+            "n": 130,
+            "n_nan": 0,
+            "mean": 0.3675196988755582,
+            "sd": 0.05822966543127529,
+            "median": 0.3710134526222215,
+            "q25": 0.3350191950293447,
+            "q75": 0.40354491389892844
+          },
+          "asr_wer": {
+            "n": 130,
+            "n_nan": 0,
+            "mean": 0.811056166056166,
+            "sd": 0.3686252803060099,
+            "median": 0.8,
+            "q25": 0.5595238095238095,
+            "q75": 1.0
+          },
+          "asr_cer": {
+            "n": 130,
+            "n_nan": 0,
+            "mean": 0.5721362726525899,
+            "sd": 0.21328514058990103,
+            "median": 0.5769230769230769,
+            "q25": 0.44029411764705884,
+            "q75": 0.6936141304347826
+          },
+          "asr_per": {
+            "n": 130,
+            "n_nan": 0,
+            "mean": 0.6770343850862893,
+            "sd": 0.23102974489762063,
+            "median": 0.69375,
+            "q25": 0.5416666666666666,
+            "q75": 0.8
+          },
+          "asr_pooled": {
+            "wer_pooled": 0.7924757281553398,
+            "wer_n_trials": 130,
+            "cer_pooled": 0.5662049861495845,
+            "cer_n_trials": 130,
+            "per_pooled": 0.6702632714717307,
+            "per_n_trials": 130,
+            "empty_transcript_fraction": 0.0,
+            "n_trials_constrained_defined": 0
+          },
+          "n_errors": {
+            "error": 0,
+            "asr_error": 0
+          }
+        },
+        "Evaluation trial (free response)": {
+          "n": 7,
+          "feat_corr_mean": {
+            "n": 7,
+            "n_nan": 0,
+            "mean": 0.38640701935694527,
+            "sd": 0.051772867242382156,
+            "median": 0.3868777734117024,
+            "q25": 0.35065656376894827,
+            "q75": 0.41834465145888244
+          },
+          "feat_mse": {
+            "n": 7,
+            "n_nan": 0,
+            "mean": 0.035145009412503266,
+            "sd": 0.006537508192477306,
+            "median": 0.03574543792150486,
+            "q25": 0.030882951178184008,
+            "q75": 0.04032198567278378
+          },
+          "mel_corr": {
+            "n": 7,
+            "n_nan": 0,
+            "mean": 0.728295180883979,
+            "sd": 0.059555274038381956,
+            "median": 0.7504784247466364,
+            "q25": 0.6831373751993308,
+            "q75": 0.776466287750583
+          },
+          "mel_corr_framewise": {
+            "n": 7,
+            "n_nan": 0,
+            "mean": 0.7132391276728741,
+            "sd": 0.045473070217509876,
+            "median": 0.6968665467277511,
+            "q25": 0.6792034810674714,
+            "q75": 0.742091904730626
+          },
+          "mcd": {
+            "n": 7,
+            "n_nan": 0,
+            "mean": 6.018303056437252,
+            "sd": 0.6096218266092032,
+            "median": 5.832820451718403,
+            "q25": 5.545559439416622,
+            "q75": 6.317406231946806
+          },
+          "est_speech_fraction": {
+            "n": 7,
+            "n_nan": 0,
+            "mean": 0.30141175749344307,
+            "sd": 0.021444153976099327,
+            "median": 0.31218274111675126,
+            "q25": 0.2881034296967605,
+            "q75": 0.3164788249833179
+          },
+          "asr_wer": {
+            "n": 7,
+            "n_nan": 0,
+            "mean": 1.0471320346320347,
+            "sd": 0.2918122305940316,
+            "median": 0.9166666666666666,
+            "q25": 0.8545454545454545,
+            "q75": 1.2999999999999998
+          },
+          "asr_cer": {
+            "n": 7,
+            "n_nan": 0,
+            "mean": 0.6817671304154999,
+            "sd": 0.19072193158816703,
+            "median": 0.6538461538461539,
+            "q25": 0.5918367346938775,
+            "q75": 0.6773715415019763
+          },
+          "asr_per": {
+            "n": 7,
+            "n_nan": 0,
+            "mean": 0.8161852937461457,
+            "sd": 0.2031973697307524,
+            "median": 0.8,
+            "q25": 0.746684350132626,
+            "q75": 0.8495475113122172
+          },
+          "asr_pooled": {
+            "wer_pooled": 1.0,
+            "wer_n_trials": 7,
+            "cer_pooled": 0.6385964912280702,
+            "cer_n_trials": 7,
+            "per_pooled": 0.7582417582417582,
+            "per_n_trials": 7,
+            "empty_transcript_fraction": 0.0,
+            "n_trials_constrained_defined": 0
+          },
+          "n_errors": {
+            "error": 0,
+            "asr_error": 0
+          }
+        },
+        "Evaluation trial (mimed speech)": {
+          "n": 10,
+          "feat_corr_mean": {
+            "n": 10,
+            "n_nan": 0,
+            "mean": 0.39089243756220665,
+            "sd": 0.06217820236918037,
+            "median": 0.3750630634379425,
+            "q25": 0.3435687053722762,
+            "q75": 0.4128448437655441
+          },
+          "feat_mse": {
+            "n": 10,
+            "n_nan": 0,
+            "mean": 0.03625169717158704,
+            "sd": 0.005490984958758313,
+            "median": 0.03650628305945848,
+            "q25": 0.03281960528255765,
+            "q75": 0.03806763762089371
+          },
+          "mel_corr": {
+            "n": 10,
+            "n_nan": 0,
+            "mean": 0.7017689415504524,
+            "sd": 0.07433494391213077,
+            "median": 0.7067381307349205,
+            "q25": 0.6301193418218549,
+            "q75": 0.7603445466003482
+          },
+          "mel_corr_framewise": {
+            "n": 10,
+            "n_nan": 0,
+            "mean": 0.7112784241789352,
+            "sd": 0.07532166642248081,
+            "median": 0.7109790278510457,
+            "q25": 0.671037047616104,
+            "q75": 0.7526721948950267
+          },
+          "mcd": {
+            "n": 10,
+            "n_nan": 0,
+            "mean": 6.370812417619679,
+            "sd": 0.4196035494753462,
+            "median": 6.3958220337364065,
+            "q25": 6.195814006083811,
+            "q75": 6.539470593239675
+          },
+          "est_speech_fraction": {
+            "n": 10,
+            "n_nan": 0,
+            "mean": 0.3577685956358102,
+            "sd": 0.06342189341332488,
+            "median": 0.3660413257104053,
+            "q25": 0.32151510543390105,
+            "q75": 0.38861340679522494
+          },
+          "asr_wer": {
+            "n": 10,
+            "n_nan": 0,
+            "mean": 0.9047619047619048,
+            "sd": 0.38647452676567223,
+            "median": 0.9166666666666667,
+            "q25": 0.6785714285714286,
+            "q75": 1.0
+          },
+          "asr_cer": {
+            "n": 10,
+            "n_nan": 0,
+            "mean": 0.7212938500181064,
+            "sd": 0.4466907421483945,
+            "median": 0.6534090909090908,
+            "q25": 0.5842105263157895,
+            "q75": 0.7285575048732943
+          },
+          "asr_per": {
+            "n": 10,
+            "n_nan": 0,
+            "mean": 0.7857858807858806,
+            "sd": 0.3858560067506365,
+            "median": 0.7136363636363636,
+            "q25": 0.6038461538461538,
+            "q75": 0.831043956043956
+          },
+          "asr_pooled": {
+            "wer_pooled": 0.92,
+            "wer_n_trials": 10,
+            "cer_pooled": 0.7129186602870813,
+            "cer_n_trials": 10,
+            "per_pooled": 0.8014705882352942,
+            "per_n_trials": 10,
+            "empty_transcript_fraction": 0.0,
+            "n_trials_constrained_defined": 0
+          },
+          "n_errors": {
+            "error": 0,
+            "asr_error": 0
+          }
+        },
+        "pooled": {
+          "n": 147,
+          "feat_corr_mean": {
+            "n": 147,
+            "n_nan": 0,
+            "mean": 0.42041620810629293,
+            "sd": 0.06953253908861035,
+            "median": 0.42484199936208783,
+            "q25": 0.373816960158312,
+            "q75": 0.462194578939938
+          },
+          "feat_mse": {
+            "n": 147,
+            "n_nan": 0,
+            "mean": 0.03570577670994297,
+            "sd": 0.005444219806882318,
+            "median": 0.03513736792552426,
+            "q25": 0.03266575877161961,
+            "q75": 0.0388993723966218
+          },
+          "mel_corr": {
+            "n": 147,
+            "n_nan": 0,
+            "mean": 0.7450754764303017,
+            "sd": 0.05030923500809414,
+            "median": 0.750775308987639,
+            "q25": 0.7140113747713897,
+            "q75": 0.7802918937732382
+          },
+          "mel_corr_framewise": {
+            "n": 147,
+            "n_nan": 0,
+            "mean": 0.723638368599737,
+            "sd": 0.05918038107380299,
+            "median": 0.7261206658283692,
+            "q25": 0.6925582108608217,
+            "q75": 0.7607691303138429
+          },
+          "mcd": {
+            "n": 147,
+            "n_nan": 0,
+            "mean": 6.056284235820264,
+            "sd": 0.5807667304523241,
+            "median": 5.983815227258893,
+            "q25": 5.608386021129117,
+            "q75": 6.462398887767994
+          },
+          "est_speech_fraction": {
+            "n": 147,
+            "n_nan": 0,
+            "mean": 0.3637083613104406,
+            "sd": 0.058857091355179504,
+            "median": 0.3689727463312369,
+            "q25": 0.3235856357912553,
+            "q75": 0.39870778154193615
+          },
+          "asr_wer": {
+            "n": 147,
+            "n_nan": 0,
+            "mean": 0.8286724141315978,
+            "sd": 0.3684158412772172,
+            "median": 0.8,
+            "q25": 0.5714285714285714,
+            "q75": 1.0
+          },
+          "asr_cer": {
+            "n": 147,
+            "n_nan": 0,
+            "mean": 0.5875035636593623,
+            "sd": 0.23632780703527015,
+            "median": 0.5862068965517241,
+            "q25": 0.44975490196078427,
+            "q75": 0.6978260869565217
+          },
+          "asr_per": {
+            "n": 147,
+            "n_nan": 0,
+            "mean": 0.6910586797639415,
+            "sd": 0.2440797396740164,
+            "median": 0.7058823529411765,
+            "q25": 0.543560606060606,
+            "q75": 0.8165266106442577
+          },
+          "asr_pooled": {
+            "wer_pooled": 0.8138297872340425,
+            "wer_n_trials": 147,
+            "cer_pooled": 0.5787037037037037,
+            "cer_n_trials": 147,
+            "per_pooled": 0.683111954459203,
+            "per_n_trials": 147,
+            "empty_transcript_fraction": 0.0,
+            "n_trials_constrained_defined": 0
+          },
+          "n_errors": {
+            "error": 0,
+            "asr_error": 0
+          }
+        }
+      }
+    },
+    "comparisons": {},
+    "target_audio_asr": {
+      "Evaluation trial": {
+        "n": 130,
+        "asr_wer": {
+          "n": 130,
+          "n_nan": 0,
+          "mean": 0.0041025641025641026,
+          "sd": 0.02690314545563664,
+          "median": 0.0,
+          "q25": 0.0,
+          "q75": 0.0
+        },
+        "asr_pooled": {
+          "wer_pooled": 0.0036407766990291263,
+          "wer_n_trials": 130,
+          "cer_pooled": 0.002770083102493075,
+          "cer_n_trials": 130,
+          "per_pooled": 0.0030211480362537764,
+          "per_n_trials": 130,
+          "empty_transcript_fraction": 0.0,
+          "n_trials_constrained_defined": 0
+        }
+      },
+      "Evaluation trial (free response)": {
+        "n": 7,
+        "asr_wer": {
+          "n": 7,
+          "n_nan": 0,
+          "mean": 0.0,
+          "sd": 0.0,
+          "median": 0.0,
+          "q25": 0.0,
+          "q75": 0.0
+        },
+        "asr_pooled": {
+          "wer_pooled": 0.0,
+          "wer_n_trials": 7,
+          "cer_pooled": 0.0,
+          "cer_n_trials": 7,
+          "per_pooled": 0.0,
+          "per_n_trials": 7,
+          "empty_transcript_fraction": 0.0,
+          "n_trials_constrained_defined": 0
+        }
+      },
+      "Evaluation trial (mimed speech)": {
+        "n": 10,
+        "asr_wer": {
+          "n": 10,
+          "n_nan": 0,
+          "mean": 0.0,
+          "sd": 0.0,
+          "median": 0.0,
+          "q25": 0.0,
+          "q75": 0.0
+        },
+        "asr_pooled": {
+          "wer_pooled": 0.0,
+          "wer_n_trials": 10,
+          "cer_pooled": 0.0,
+          "cer_n_trials": 10,
+          "per_pooled": 0.0,
+          "per_n_trials": 10,
+          "empty_transcript_fraction": 0.0,
+          "n_trials_constrained_defined": 0
+        }
+      },
+      "pooled": {
+        "n": 147,
+        "asr_wer": {
+          "n": 147,
+          "n_nan": 0,
+          "mean": 0.0036281179138321993,
+          "sd": 0.025322652068314473,
+          "median": 0.0,
+          "q25": 0.0,
+          "q75": 0.0
+        },
+        "asr_pooled": {
+          "wer_pooled": 0.0031914893617021275,
+          "wer_n_trials": 147,
+          "cer_pooled": 0.0024366471734892786,
+          "cer_n_trials": 147,
+          "per_pooled": 0.0026565464895635673,
+          "per_n_trials": 147,
+          "empty_transcript_fraction": 0.0,
+          "n_trials_constrained_defined": 0
+        }
+      }
+    },
+    "direction": "differences are a - b; lower is better for ['feat_mse', 'mcd', 'asr_wer', 'asr_cer', 'asr_per']"
+  },
+  "timing_s": {
+    "decode_zero_shot_s": 22.917478322982788,
+    "score_zero_shot_s": 172.06635332107544
+  },
+  "outputs": {
+    "per_trial_csv": "results/alex_day195/per_trial.csv",
+    "audio": "results/audio/alex_day195",
+    "checkpoints": "data/checkpoints/alex_day195"
+  },
+  "runtime": {
+    "device": "gpu",
+    "threads": {
+      "intra_op": 16,
+      "inter_op": 2,
+      "omp": 16
+    },
+    "env": {
+      "OMP_NUM_THREADS": "16",
+      "MKL_NUM_THREADS": "16",
+      "OPENBLAS_NUM_THREADS": "16",
+      "NUMBA_NUM_THREADS": "16",
+      "TF_NUM_INTRAOP_THREADS": "16",
+      "TF_NUM_INTEROP_THREADS": "2"
+    },
+    "tf_intra_op": 16,
+    "tf_inter_op": 2,
+    "CUDA_VISIBLE_DEVICES": null,
+    "nice": 19,
+    "devices": [
+      "/device:CPU:0",
+      "/device:GPU:0"
+    ],
+    "python": "3.12.14",
+    "numpy": "2.5.4",
+    "tensorflow": "2.21.0",
+    "platform": "Linux-7.0.0-38-generic-x86_64-with-glibc2.39"
+  }
+}

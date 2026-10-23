@@ -1,0 +1,399 @@
+seed: 42
+paths:
+  data_root: data
+  raw_kunz: data/raw/kunz/sentenceData
+  raw_wairagkar: data/raw/wairagkar
+  processed: data/processed
+  checkpoints: data/checkpoints/alex_day195
+  results: results/alex_day195
+  figures: figures
+  brain_to_voice: third_party/brain_to_voice
+  lpcnet: third_party/LPCNet
+  wairagkar_neural_data: data/raw/wairagkar/t15_neural_data
+  pretrained_model: data/raw/wairagkar/t15_neural_data/t15_day195/brain2voice_t15_day193.h5
+  b2v_session_layers: third_party/brain_to_voice/configs/training_data_args.yaml
+  lpc_norm: third_party/brain_to_voice/dependencies/T15_lpcnet_features_norm_macOS_TTS.json
+  electrode_mapping: third_party/brain_to_voice/dependencies/T15_electrode_mapping_256.json
+  tts_features: data/processed/tts
+  kunz_processed: data/processed/kunz
+  kunz_targets: data/processed/kunz_targets
+  alignment_validation: results/alignment_validation
+  training_sessions: data/processed/wairagkar
+model:
+  n_features: 512
+  n_targets: 20
+  window_len: 60
+  step_size: 1
+  transformer_input_shape:
+  - 30
+  - 128
+  head_size: 128
+  n_heads: 4
+  n_transformer_blocks: 8
+  mlp_units:
+  - 1024
+  - 512
+  dropout: 0.5
+  n_session_layers: 1
+runtime:
+  device: gpu
+  deterministic_ops: true
+  threads:
+    intra_op: 16
+    inter_op: 2
+    omp: 16
+  nice: 19
+run_name: train_tts_oracle
+wairagkar_data:
+  neural_file: '{session}_neural_data.mat'
+  target_file: '{session}_target_speech_feats.mat'
+  keys:
+    spikepow: spikepow_trials
+    threshcross: threshcross_trials
+    cues: cues
+    cues_fallback: sentences
+    target: target_speech_feats_word
+  held_out_session_layers:
+    t15_day195: 20
+  targets: required
+  n_cepstral_coeff: 18
+  target_smoothing: true
+  target_smoothing_sigma: 2.0
+inference:
+  session: t15_day195
+  reorder_channels: true
+  batch_size: 256
+  max_trials: null
+  synthesize: true
+  save_predictions: true
+  target_audio_source: raw
+  audio_subdir: audio
+closed_loop:
+  audio_key: brain2voice_pred_audio_16kHz
+  description_key: trial_description
+  sample_rate: 16000
+  bin_ms: 10
+  lag_search_frames: 10
+synthesis:
+  lpcnet_binary: lpcnet_demo
+  ffmpeg: ffmpeg
+  sample_rate: 16000
+  samples_per_frame: 160
+  n_frame_floats: 36
+  encode_tmp_wav_subtype: PCM_24
+  wav_subtype: PCM_16
+  timeout_s: 600
+  preflight_timeout_s: 30
+  tmp_root: data/processed/tmp
+  keep_tmp: false
+  strip_ld_library_path: true
+metrics: {}
+tts:
+  engine: macos_say
+  say_binary: /usr/bin/say
+  voice: Aman (English (India))
+  rate_wpm: null
+  word_pause_ms: null
+  file_format: WAVE
+  data_format: LEI16
+  pad_ms: 200
+  silence_ms: 500
+  n_workers: 8
+  timeout_s: 60
+  retries: 2
+voice_id:
+  locale_prefix: en_
+  n_sentences: 60
+  exclude:
+  - Bad News
+  - Bahh
+  - Bells
+  - Boing
+  - Bubbles
+  - Cellos
+  - Good News
+  - Jester
+  - Organ
+  - Superstar
+  - Trinoids
+  - Whisper
+  - Wobble
+  - Zarvox
+  voiced_corr_min: 0.0
+  male_max_f0_hz: 165.0
+  silence_share_grid:
+  - 0.0
+  - 0.9
+  - 0.005
+  distance_features:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  - 10
+  - 11
+  - 12
+  - 13
+  - 14
+  - 15
+  - 16
+  - 17
+  - 19
+  reference_features:
+  - 1
+  - 2
+  - 3
+  - 4
+  - 5
+  - 6
+  - 7
+  - 8
+  - 9
+  - 10
+  - 11
+  - 12
+  - 13
+  - 14
+  - 15
+  - 16
+  - 17
+  speech_mask_db: 30.0
+  male_voices_unlabelled:
+  - Eddy
+  - Grandpa
+  - Reed
+  - Rocko
+  - Ralph
+  - Albert
+  pitch_period_scale: 0.02
+  pitch_period_offset: 100.0
+alignment:
+  c0_offset: 4.0
+  c0_scale: 4.242640687119285
+  n_workers: 8
+  envelope:
+    source: c0
+    smooth_ms: 15.0
+    amin: 1.0e-05
+  segmentation:
+    speech_threshold_db: 30.0
+    floor_percentile: 10.0
+    floor_margin_db: 6.0
+    min_gap_ms: 60.0
+    min_region_ms: 50.0
+    min_dip_db: 3.0
+    min_syllable_ms: 60.0
+  dtw:
+    feature: range
+    delta_weight: 1.0
+    metric: euclidean
+    band_rad: null
+    speech_only: true
+  mapping:
+    snap: true
+    snap_tolerance_ms: 100.0
+    min_syllable_frames: 2
+  stretch:
+    domain: features
+    interp: linear
+    gap_fill: silence
+    silence_pitch: hold
+    audio_n_fft: 512
+syllables:
+  tts_side: envelope
+  method: current
+  count_constraint: false
+  arm: A
+validation:
+  data_dir: data/raw/wairagkar/t15_neural_data
+  sessions: []
+  reorder_channels: auto
+  reorder_until_day: 195
+  max_trials: null
+  speech_indices_file: '{session}_speech_indices.mat'
+  syllable_key: syl_indices
+  word_key: word_indices
+  their_target_key: target_speech_feats_syl
+  closed_loop_audio_key: brain2voice_pred_audio_16kHz
+  pcm_full_scale: 32768.0
+  tolerances_ms:
+  - 50
+  - 100
+  - 200
+  speech_mask_db: 30.0
+  max_lag_frames: 30
+  chance_shift: 1
+kunz:
+  conditions:
+  - attempted
+  decoder: data/raw/wairagkar/t15_neural_data/t15_day195/brain2voice_t15_day193.h5
+  reorder_channels: true
+  corpus: kunz_50words
+training:
+  batch_size: 1024
+  epochs: 15
+  early_stopping_patience: 10
+  learning_rate: 0.0005
+  adam_beta_1: 0.9
+  adam_beta_2: 0.98
+  adam_epsilon: 1.0e-09
+  huber_delta: 1.35
+  n_augmentations: 3
+  augmentation_params:
+    sd_gaussian_noise: 1.2
+    sd_constant_offset: 0.6
+    offset_aug_factor_for_thresh: 0.67
+    sd_cumulative_noise: 0.02
+  validation:
+    n_trials: 15
+    fraction: null
+    pool: null
+  monitor: val_loss
+  monitor_mode: min
+  reshuffle_each_epoch: false
+  resample_augmentations_each_epoch: false
+  drop_remainder: false
+  save_best_checkpoint: true
+  save_final_checkpoint: true
+  export_weights: final
+  export_layers: null
+  overwrite: false
+  verbose: 2
+  init:
+    source: inference_h5
+    path: data/raw/wairagkar/t15_neural_data/t15_day172/brain2voice_t15_day165.h5
+    freeze_base: true
+  sessions: []
+  held_out_sessions: []
+  log_every_batches: 50
+experiment:
+  name: kunz_pilot
+  results_root: results
+  checkpoints_root: data/checkpoints
+  audio_root: results/audio
+  session: t15.2024.03.03
+  attempted_file: '{kunz_targets}/t15.2024.03.03_attempted.npz'
+  imagined_file: '{kunz_processed}/t15.2024.03.03_imagined.npz'
+  imagined_eval_file: '{kunz_processed}/t15.2024.03.03_imagined_eval.npz'
+  zero_shot_model: data/raw/wairagkar/t15_neural_data/t15_day195/brain2voice_t15_day193.h5
+  reorder_channels: true
+  pairs:
+    3: 4
+    6: 7
+    11: 9
+    13: 12
+  eval_block: 14
+  include_leaky: true
+  folds:
+  - 3
+  variants:
+    frozen:
+      freeze_base: true
+    finetuned:
+      freeze_base: false
+  run_variants:
+  - frozen
+  zero_shot: true
+  max_train_trials: null
+  max_trials_per_set: null
+  smoke:
+    max_train_trials: 6
+    max_trials_per_set: 3
+    epochs: 1
+    val_trials: 2
+    log_every_batches: 5
+  nulls:
+    shuffled_trial: true
+    length_matched_k: 10
+    shuffled_time_models:
+    - trained
+  evaluation:
+    n_workers: 8
+    tts_voice: null
+    tts_corpus: null
+    tts_metrics:
+      evaluate:
+        mel_corr_framewise: false
+    target_metrics: {}
+    save_audio:
+      predictions:
+      - trained
+      references: true
+    progress_every: 50
+    early_window_s: 4.0
+    asr:
+      enabled: true
+      module: wvx.asr
+      function: evaluate_wav
+      rescore_function: score_text
+      hypothesis_key: hyp_raw
+      cfg:
+        asr:
+          cpu_threads: 4
+          model:
+            allow_download: false
+          per:
+            allow_download: false
+      inputs:
+      - real
+      - shuffled_time
+      references: true
+  summary:
+    primary_null: lenmatched
+    min_speech_s: 0.4
+sanity:
+  name: alex_day195
+  results_root: results
+  audio_root: results/audio
+  checkpoints_root: data/checkpoints
+  targets_root: data/processed
+  session: t15_day195
+  data_dir: data/raw/wairagkar/t15_neural_data
+  layer: 0
+  train_session_name: t15_day195_train
+  zero_shot_model: data/raw/wairagkar/t15_neural_data/t15_day172/brain2voice_t15_day165.h5
+  description_key: trial_description
+  train_types:
+  - Training data (50-word vocab)
+  - Training data
+  test_types:
+  - Evaluation trial
+  - Evaluation trial (free response)
+  - Evaluation trial (mimed speech)
+  expected_counts:
+    train: 158
+    test: 147
+  target_variants:
+  - tts_oracle
+  - tts_auto
+  ours_targets:
+    voice: null
+    corpus: t15_day195
+    decoder: data/raw/wairagkar/t15_neural_data/t15_day195/brain2voice_t15_day193.h5
+  evaluation:
+    n_workers: 12
+    save_audio: true
+    progress_every: 25
+    asr:
+      enabled: true
+      cfg:
+        asr:
+          cpu_threads: 4
+          model:
+            allow_download: false
+          per:
+            allow_download: false
+      target_audio: true
+  smoke:
+    max_train_trials: 6
+    val_trials: 2
+    epochs: 1
+    max_test_per_type: 2
+    log_every_batches: 5
+  tts_targets:
+    config: configs/experiments/manual_alignment_alex.yaml
