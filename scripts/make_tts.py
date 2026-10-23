@@ -267,7 +267,7 @@ def cmd_rank(cfg, args) -> int:
         "code_version": code_version(),
         "config_sha256": config_sha256(cfg),
     }
-    path = Path(cfg["paths"]["alignment_validation"]) / "voice_ranking.json"
+    path = Path(args.out).resolve() if args.out else Path(cfg["paths"]["alignment_validation"]) / "voice_ranking.json"
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(out, indent=2))
     print(f"[rank] suggested: {out['suggested_voice']}  -> {path.relative_to(REPO_ROOT)}")
@@ -307,6 +307,7 @@ def main(argv=None) -> int:
     r = sub.add_parser("rank")
     r.add_argument("--sentences", required=True)
     r.add_argument("--voices", nargs="*", default=None, help="default: every candidate voice")
+    r.add_argument("--out", default=None, help="output JSON (default: results/alignment_validation/voice_ranking.json)")
     r.add_argument("--reference", default=None,
                    help="their_target_speech_stats.json (speech-frame moments of their released targets)")
     g = sub.add_parser("generate")
