@@ -339,6 +339,30 @@ def tts_targets(variant: str, sess, train, cfg, dirs: Dirs) -> tuple[dict, dict]
     return out, info
 
 
+def file_targets(variant: str, sess, train, cfg, dirs: Dirs) -> tuple[dict, dict]:
+    """Training targets made elsewhere (``sanity.target_files[variant]``: an .npz with one ``trNNN`` array per training
+    trial and a JSON ``header``), e.g. the word-splice targets of scripts/word_splice.py (D-052)."""
+    import numpy as np
+
+    from wvx import kunz_experiment as kx
+
+    path = resolve_path(cfg["sanity"]["target_files"][variant])
+    with np.load(path, allow_pickle=False) as z:
+        header = json.loads(str(z["header"]))
+        missing = [i for i in train if f"tr{i:03d}" not in z.files]
+        if missing:
+            raise SystemExit(f"{_rel(path)} lacks {len(missing)} training trials, e.g. {missing[:5]}")
+        out = {i: z[f"tr{i:03d}"].astype(np.float32) for i in train}
+    for i, y in out.items():
+        if y.shape != sess.trials[i].target.shape:
+            raise ValueError(f"trial {i}: {variant} target {y.shape}, theirs {sess.trials[i].target.shape}")
+    r = [kx.feature_scores(out[i], sess.trials[i].target)["feat_corr_mean"] for i in train]
+    info = {"variant": variant, "file": _rel(path), "sha256": _sha256(path), "header": header,
+            "vs_theirs_word_target_r": kx.describe(r)}
+    log(f"{variant}: {len(out)} targets from {_rel(path)}; r vs their targets {info['vs_theirs_word_target_r']['mean']:.3f}")
+    return out, info
+
+
 def conv_targets(variant: str, sess, train, cfg, dirs: Dirs) -> tuple[dict, dict]:
     """D-051: the ``CONV_VARIANTS[variant]`` TTS targets (``tts_targets``, cached) converted toward their voice with
     the ridge map of ``sanity.voice_conversion.model`` (``wvx.voice_conversion``; fit on another session)."""
@@ -435,7 +459,7 @@ def train_variant(variant: str, sess, train, targets: dict, cfg, dirs: Dirs, ret
         "targets": {"theirs": "their target_speech_feats_word (scaled + smoothed by their loader)",
                     "ours": "our option-(b) alignment (wvx.targets), scaled + smoothed by their transform"}.get(
                         variant, TTS_VARIANTS.get(variant, f"{CONV_VARIANTS[variant]} converted (D-051)"
-                                              if variant in CONV_VARIANTS else variant)),
+                                              if variant in CONV_VARIANTS else f"from a file: {variant}")),
         "freeze_base": t["init"]["freeze_base"],
         "init": _rel(resolve_path(t["init"]["path"])),
         "n_train_trials": len(split["train"]),
@@ -647,7 +671,7 @@ def summarize(rows: list[dict], target_rows: list[dict], cfg) -> dict:
     pairs = [(m, ZERO_SHOT) for m in trained if ZERO_SHOT in models]
     for a, b in (("trained_ours", "trained_theirs"), ("trained_tts_oracle", "trained_theirs"),
                  ("trained_tts_auto", "trained_theirs"), ("trained_tts_auto", "trained_tts_oracle"),
-                 ("trained_conv_auto", "trained_conv_oracle")):
+                 ("trained_conv_auto", "trained_conv_oracle"), ("trained_splice_auto", "trained_splice_oracle")):
         if a in trained and b in trained:
             pairs.append((a, b))
     for a, b in pairs:
@@ -723,7 +747,8 @@ def main(argv=None) -> int:
                          "log_every_batches": sm["log_every_batches"]},
         })
         s = cfg["sanity"]
-    unknown = set(s["target_variants"]) - {"theirs", "ours", *TTS_VARIANTS, *CONV_VARIANTS}
+    file_variants = set((s.get("target_files") or {}))
+    unknown = set(s["target_variants"]) - {"theirs", "ours", *TTS_VARIANTS, *CONV_VARIANTS, *file_variants}
     if unknown:
         raise SystemExit(f"unknown target variants {sorted(unknown)} "
                          f"(theirs, ours, {', '.join(TTS_VARIANTS)}, {', '.join(CONV_VARIANTS)})")
@@ -850,7 +875,8 @@ def main(argv=None) -> int:
                     timing["ours_targets_s"] = time.time() - t0
                 else:
                     t0 = time.time()
-                    make = conv_targets if v in CONV_VARIANTS else tts_targets
+                    make = (file_targets if v in (s.get("target_files") or {}) else
+                            conv_targets if v in CONV_VARIANTS else tts_targets)
                     tgt, tts_info[v] = make(v, sess, train, cfg, dirs)
                     timing[f"{v}_targets_s"] = time.time() - t0
                 t0 = time.time()

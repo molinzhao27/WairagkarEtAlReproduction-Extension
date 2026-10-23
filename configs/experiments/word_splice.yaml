@@ -1,0 +1,21 @@
+# D-052 (pre-registered): targets spliced from THEIR word recordings, for the dev test on t15_day195.
+#   host: CUDA_VISIBLE_DEVICES= nice -n 19 .venv/bin/python -I scripts/word_splice.py --config configs/experiments/word_splice.yaml
+base_experiment: configs/experiments/voice_cost_day195.yaml   # seed, runtime threads
+
+run_name: word_splice
+
+runtime:
+  threads: {intra_op: 8, inter_op: 1, omp: 8}               # host, chiplet 1
+
+paths:
+  word_splice: data/processed/word_splice                     # spliced training targets (.npz)
+
+word_splice:
+  name: day195_from_day025_day193
+  inventory_sessions: [t15_day025, t15_day193]                # never the evaluated session
+  inventory_category: Training data (50-word vocab)
+  eval_session: t15_day195
+  train_trials_from: results/voice_cost_day195/data.json     # the dev run's exact training trials
+  data_config: configs/experiments/voice_cost_day195.yaml      # their targets as the dev training loads them
+  placement_config: configs/experiments/manual_alignment.yaml  # TTS + syllables + arm B (as tts_oracle / tts_auto)
+  auto_cell: day195_m165                                       # saved decode of the day-165 decoder on day195
