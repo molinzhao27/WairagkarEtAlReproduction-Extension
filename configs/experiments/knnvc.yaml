@@ -1,0 +1,25 @@
+# D-054 (pre-registered): kNN-VC conversion of the Aman TTS toward their voice (scripts/knnvc.py, knnvc_convert.py).
+base_experiment: configs/experiments/voice_cost_day195.yaml   # seed
+
+run_name: knnvc
+
+runtime:
+  threads: {intra_op: 8, inter_op: 1, omp: 8}               # host, chiplet 1
+
+knnvc:
+  name: aman_knnvc_day025_day193
+  models_dir: data/processed/models/knnvc                     # code/ at c616845 + v0.1 weights (SHA256SUMS)
+  work_dir: data/processed/knnvc_work/aman_knnvc_day025_day193
+  matching_sessions: [t15_day025, t15_day193]                 # their voice; never the evaluated session
+  matching_category: Training data (50-word vocab)
+  matching_margin_frames: 5                                   # around the first/last word span
+  source_voice: Aman (English (India))
+  voice: Aman kNN-VC                                          # the converted corpus' voice name (slug aman_knn_vc)
+  corpora: [t15_day195, kunz_50words]                         # dev check/test, and Kunz later
+  max_lag_frames: 6
+  workers: 8
+  data_config: configs/experiments/voice_cost_day195.yaml
+  placement_config: configs/experiments/manual_alignment.yaml
+  check_session: t15_day195
+  train_trials_from: results/sanity_train_day195_from165_ep15/data.json
+  auto_cell: day195_m165
