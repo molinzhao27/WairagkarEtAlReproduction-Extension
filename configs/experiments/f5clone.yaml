@@ -21,6 +21,8 @@ f5clone:
   voice: F5 clone
   corpora: [t15_day195, kunz_50words]
   workers: 8
+  qc_max_attempts: 4                                          # regenerate cues whose transcript is not word-perfect
+  qc_cpu_threads: 4
   data_config: configs/experiments/voice_cost_day195.yaml
   placement_config: configs/experiments/manual_alignment.yaml
 
