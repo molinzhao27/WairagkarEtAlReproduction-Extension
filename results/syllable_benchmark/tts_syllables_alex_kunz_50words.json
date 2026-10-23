@@ -1,0 +1,418 @@
+{
+ "created": "2026-10-23T06:48:55",
+ "voice": "Alex",
+ "corpus": "kunz_50words",
+ "settings": {
+  "syllabification": {
+   "rule": "maximal_onset",
+   "onset_source": "cmudict",
+   "min_onset_words": 1
+  },
+  "audio_lag_ms": 15.0,
+  "forced_alignment": {
+   "aligner": "montreal-forced-aligner",
+   "version": "3.4.3",
+   "acoustic_model": "english_us_arpa",
+   "acoustic_model_version": "3.0.0",
+   "acoustic_model_sha256": "d35ce271ded357d833d2f4b8d1041dc3748b9538567ba13f2c697f4e4126711b",
+   "dictionary": "english_us_arpa",
+   "dictionary_version": "3.0.0",
+   "dictionary_sha256": "e8c6c7b036ae2b7c78d2768b8dc6b1f9359175b842956d00b48c53c9c332e6b0",
+   "args": [
+    "--clean",
+    "--final_clean",
+    "--single_speaker",
+    "--output_format",
+    "json"
+   ],
+   "num_jobs": 8,
+   "word_tier": "words",
+   "phone_tier": "phones",
+   "silence_labels": [
+    "",
+    "sil",
+    "sp",
+    "<eps>"
+   ],
+   "unknown_label": "spn",
+   "syllables_file": "syllables.json"
+  }
+ },
+ "versions": {
+  "cmudict": "1.1.3"
+ },
+ "n_legal_onsets": 146,
+ "runtime": {
+  "threads": {
+   "intra_op": 8,
+   "inter_op": 2,
+   "omp": 8
+  },
+  "env": {
+   "OMP_NUM_THREADS": "8",
+   "MKL_NUM_THREADS": "8",
+   "OPENBLAS_NUM_THREADS": "8",
+   "NUMBA_NUM_THREADS": "8",
+   "TF_NUM_INTRAOP_THREADS": "8",
+   "TF_NUM_INTEROP_THREADS": "2"
+  },
+  "nice": 19,
+  "CUDA_VISIBLE_DEVICES": ""
+ },
+ "code_version": {
+  "source": "sync",
+  "commit": "ab1a528bdbb4f0b454f5664ffb4f93256142647b",
+  "dirty": false,
+  "diff_sha256": null,
+  "pushed_at": "2026-10-23T06:46:39Z"
+ },
+ "config_sha256": "2571c83cc866a56043f46e0b2fb49c695e6b24cb942ca3ae010edbf182b0e10f",
+ "n_utterances": 250,
+ "n_aligned": 250,
+ "missing_alignments": [],
+ "unknown_words": [],
+ "words_without_vowel": [],
+ "count_agreement_with_cmudict": 0.892,
+ "n_count_mismatches": 27,
+ "count_mismatches": [
+  {
+   "text": "I hope my family is closer.",
+   "words": [
+    "i",
+    "hope",
+    "my",
+    "family",
+    "is",
+    "closer"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "I hope I have good family.",
+   "words": [
+    "i",
+    "hope",
+    "i",
+    "have",
+    "good",
+    "family"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "Bring my family here, please.",
+   "words": [
+    "bring",
+    "my",
+    "family",
+    "here",
+    "please"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "My family is not very tired.",
+   "words": [
+    "my",
+    "family",
+    "is",
+    "not",
+    "very",
+    "tired"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "Tell my family they feel hungry.",
+   "words": [
+    "tell",
+    "my",
+    "family",
+    "they",
+    "feel",
+    "hungry"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "My family is good.",
+   "words": [
+    "my",
+    "family",
+    "is",
+    "good"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 6
+  },
+  {
+   "text": "Do they have family?",
+   "words": [
+    "do",
+    "they",
+    "have",
+    "family"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 6
+  },
+  {
+   "text": "My family is okay.",
+   "words": [
+    "my",
+    "family",
+    "is",
+    "okay"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "Please bring my family here.",
+   "words": [
+    "please",
+    "bring",
+    "my",
+    "family",
+    "here"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "What do I tell my family?",
+   "words": [
+    "what",
+    "do",
+    "i",
+    "tell",
+    "my",
+    "family"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "I hope my family is good.",
+   "words": [
+    "i",
+    "hope",
+    "my",
+    "family",
+    "is",
+    "good"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "Is my family coming?",
+   "words": [
+    "is",
+    "my",
+    "family",
+    "coming"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "Yes, my family is going here.",
+   "words": [
+    "yes",
+    "my",
+    "family",
+    "is",
+    "going",
+    "here"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "I hope you like my family.",
+   "words": [
+    "i",
+    "hope",
+    "you",
+    "like",
+    "my",
+    "family"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "They hope my family is okay.",
+   "words": [
+    "they",
+    "hope",
+    "my",
+    "family",
+    "is",
+    "okay"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "Please tell my family I am coming.",
+   "words": [
+    "please",
+    "tell",
+    "my",
+    "family",
+    "i",
+    "am",
+    "coming"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "Is my family coming outside?",
+   "words": [
+    "is",
+    "my",
+    "family",
+    "coming",
+    "outside"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "My family is coming closer.",
+   "words": [
+    "my",
+    "family",
+    "is",
+    "coming",
+    "closer"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "I hope you have family.",
+   "words": [
+    "i",
+    "hope",
+    "you",
+    "have",
+    "family"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "I hope I have very good family.",
+   "words": [
+    "i",
+    "hope",
+    "i",
+    "have",
+    "very",
+    "good",
+    "family"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "My family is tired.",
+   "words": [
+    "my",
+    "family",
+    "is",
+    "tired"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "My family is here.",
+   "words": [
+    "my",
+    "family",
+    "is",
+    "here"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 6
+  },
+  {
+   "text": "My family is not like that.",
+   "words": [
+    "my",
+    "family",
+    "is",
+    "not",
+    "like",
+    "that"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "Please tell my family",
+   "words": [
+    "please",
+    "tell",
+    "my",
+    "family"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 6
+  },
+  {
+   "text": "My family is here",
+   "words": [
+    "my",
+    "family",
+    "is",
+    "here"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 6
+  },
+  {
+   "text": "My family is outside",
+   "words": [
+    "my",
+    "family",
+    "is",
+    "outside"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "My family is very comfortable",
+   "words": [
+    "my",
+    "family",
+    "is",
+    "very",
+    "comfortable"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  }
+ ],
+ "syllables_per_utterance": {
+  "min": 1,
+  "median": 5.0,
+  "max": 10
+ },
+ "syllable_ms": {
+  "min": 50.0,
+  "median": 240.0,
+  "max": 610.0
+ }
+}

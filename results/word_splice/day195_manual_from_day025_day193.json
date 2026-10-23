@@ -1,0 +1,55 @@
+{
+ "variants": {
+  "splice_manual": {
+   "n_trials": 158,
+   "fallback_missing_word": 12,
+   "fallback_word_mismatch": 0,
+   "fallback_no_timing": 0,
+   "vs_theirs_word_target_r": {
+    "n": 158,
+    "n_nan": 0,
+    "mean": 0.5811070730721063,
+    "sd": 0.10727552294858904,
+    "median": 0.5961449792917297,
+    "q25": 0.5292462046209181,
+    "q75": 0.6525547381787596
+   },
+   "fraction_outside_unit_range": 1.9466894716609834e-06,
+   "file": "data/processed/word_splice/day195_manual_from_day025_day193_splice_manual.npz"
+  }
+ },
+ "manual": {
+  "package": "ma02",
+  "label": null,
+  "cell": "day195_m165",
+  "files_sha256": "fd1e5fe58c7d6ef9c048da99e7c97c7a3bf5088c57e02aa244e049ea60291218",
+  "n_trials_with_answers": 158,
+  "n_trials": 158,
+  "answers_per_trial": {
+   "min": 3,
+   "median": 3.0,
+   "max": 3
+  }
+ },
+ "name": "day195_manual_from_day025_day193",
+ "config": "configs/experiments/word_splice_manual.yaml",
+ "inventory": {
+  "sessions": [
+   "t15_day025",
+   "t15_day193"
+  ],
+  "n_trials": 621,
+  "n_skipped": 4,
+  "n_words": 50,
+  "exemplars_per_word_min": 12
+ },
+ "auto_cell": "day195_m165",
+ "code_version": {
+  "source": "sync",
+  "commit": "783ce011ca8197523df6e2a3888e2634a5b837cc",
+  "dirty": false,
+  "diff_sha256": null,
+  "pushed_at": "2026-10-23T08:21:16Z"
+ },
+ "wall_time_s": 1.627941608428955
+}

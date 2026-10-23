@@ -1,0 +1,37 @@
+{
+ "name": "ma02",
+ "created": "2026-10-23T08:18:42",
+ "counts": {
+  "items": 158,
+  "practice_items": 34,
+  "examples": 3,
+  "workers": 30,
+  "batches": 30,
+  "redundancy_k": 3,
+  "items_per_batch": 20
+ },
+ "sets": {
+  "calibration": 158,
+  "production": 0
+ },
+ "size_mb": {
+  ".json": 0.41,
+  ".md": 0.02,
+  ".npz": 9.5,
+  ".png": 31.08,
+  ".py": 0.05,
+  ".sha256": 0.06,
+  ".txt": 0.0,
+  "total": 41.13
+ },
+ "scan": "passed",
+ "wall_time_s": 80.08660316467285,
+ "code_version": {
+  "source": "sync",
+  "commit": "12ddfc97994da146eab2cffdfd4c968f88e7ca61",
+  "dirty": false,
+  "diff_sha256": null,
+  "pushed_at": "2026-10-23T08:17:20Z"
+ },
+ "config_sha256": "0a749d33e4d6b862fd18618f96fa3b66add6bdc2b882a5334783e99584f27f0e"
+}
