@@ -60,12 +60,12 @@ def embed(day_layer, xp, steps: int):
 
 def frechet(a, b) -> float:
     import numpy as np
-    from scipy import linalg
 
     mu = a.mean(0) - b.mean(0)
     ca, cb = np.cov(a, rowvar=False), np.cov(b, rowvar=False)
-    s, _ = linalg.sqrtm(ca @ cb, disp=False)
-    return float(mu @ mu + np.trace(ca + cb - 2 * np.real(s)))
+    # Tr((ca cb)^(1/2)) = sum of the square roots of the eigenvalues of ca cb (real, >= 0 for PSD ca, cb)
+    ev = np.clip(np.real(np.linalg.eigvals(ca @ cb)), 0, None)
+    return float(mu @ mu + np.trace(ca) + np.trace(cb) - 2 * np.sqrt(ev).sum())
 
 
 def mmd2(a, b, sigma: float) -> float:
