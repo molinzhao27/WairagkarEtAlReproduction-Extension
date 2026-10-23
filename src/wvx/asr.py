@@ -40,12 +40,17 @@ Definitions
   The detector is relative to the loudest frame, so in practice only (near-)digital silence is skipped.
 - SEEDING (temperature fallback samples): every clip gets its own seed, ``clip_seed`` = SHA-256 of the config seed
   and the exact samples Whisper is given, so a transcript depends only on the audio and the config, never on clip
-  order, threads or earlier decodes. CTranslate2 keeps one RNG per worker thread, seeded once, at that thread's first
-  use, from the global seed (``ctranslate2.set_random_seed``; src/random.cc, unchanged up to 4.8.3), and has no
-  per-call seed, so reseeding does not reset the generators of a loaded model's worker threads. A decode that
-  samples (recorded by wrapping the CTranslate2 model's ``generate``) is therefore discarded and redone on a freshly
-  loaded model, with fresh worker threads, right after ``set_random_seed(clip seed)``, under one lock. Beam-search
-  decodes draw no random numbers and are kept as they are.
+  order, threads or earlier decodes. CTranslate2 keeps one RNG per worker thread, created at that thread's first
+  sampling op from the global seed (``ctranslate2.set_random_seed``; src/random.cc, unchanged up to 4.8.3; the
+  Multinomial and GumbelMax ops draw in the calling worker thread), and has no per-call seed, so reseeding does not
+  reset the generator of a thread that has sampled. The sampling steps of a decode (``generate`` calls with
+  ``sampling_topk`` != 1, seen by wrapping the CTranslate2 model) therefore run on a fresh model, one that has never
+  sampled, right after ``set_random_seed(clip seed)``, under one lock: the decode's first sampling call switches it to
+  that model, with every later call. The steps before it (encoder, beam search) draw no random numbers and run on the
+  cached model; their outputs are bitwise those of a fresh model. Until D-056 the whole decode was redone on a
+  freshly loaded model: same transcripts, twice the work. With ``preload_fresh_model`` the next fresh model is loaded
+  in the background once one is used; its worker thread creates no generator until it samples, so it is equivalent
+  to a model loaded right after seeding.
 
 Heavy dependencies (faster_whisper, g2p_en/nltk) are imported lazily, so the rest of the repo and the pure text
 functions work without them. Model files and NLTK data live inside the repo (``data/processed/models``).
@@ -360,8 +365,8 @@ def score_text(reference_text: str, hypothesis_text: str, cfg: ConfigLike = None
 
 _MODELS: dict = {}
 _MODEL_LOCK = threading.Lock()
-# One Whisper decode at a time: the CTranslate2 seed is process-global, and a sampled decode must run on the fresh
-# model right after its seed is set (module docstring, SEEDING).
+# One Whisper decode at a time: the CTranslate2 seed is process-global, and the sampling steps of a decode must run on
+# the fresh model right after its seed is set (module docstring, SEEDING).
 _DECODE_LOCK = threading.Lock()
 SEEDING = "per_clip_sha256_v1"  # recorded in effective_settings(); bump if clip_seed or the scheme changes
 # CTranslate2's "no seed set" value (src/random.cc: default_seed = unsigned(-1) -> std::random_device): never used.
@@ -416,19 +421,44 @@ def ensure_model(cfg: ConfigLike = None) -> Path:
 class _SamplingRecorder:
     """Stands in for ``WhisperModel.model`` (a ``ctranslate2.models.Whisper``) and records whether a ``generate`` call
     drew random numbers: CTranslate2 samples whenever ``sampling_topk`` != 1 (default 1 = argmax / beam search);
-    faster-whisper passes ``sampling_topk=0`` with ``sampling_temperature`` > 0 for each temperature-fallback step."""
+    faster-whisper passes ``sampling_topk=0`` with ``sampling_temperature`` > 0 for each temperature-fallback step.
+
+    During a seeded decode (``_decode``: ``seed`` and ``take_fresh`` set) the first sampling call takes a fresh model
+    (``take_fresh()``), sets the clip's seed, and goes to that model, as does every later call of the decode (module
+    docstring, SEEDING). The calls before it (encoder, beam search) draw no random number and run on ``inner``."""
 
     def __init__(self, inner):
         self._inner = inner
         self.sampled = False
+        self.seed = None          # the clip seed of the current decode (None: record only)
+        self.take_fresh = None    # () -> a CTranslate2 model whose worker thread has not sampled yet
+        self.fresh = None         # the fresh model the current decode switched to
+
+    def _target(self):
+        return self._inner if self.fresh is None else self.fresh
 
     def generate(self, *args, **kwargs):
         if int(kwargs.get("sampling_topk", 1)) != 1:
             self.sampled = True
-        return self._inner.generate(*args, **kwargs)
+            if self.fresh is None and self.seed is not None:
+                self.fresh = self.take_fresh()
+                _set_random_seed(self.seed)
+        return self._target().generate(*args, **kwargs)
 
     def __getattr__(self, name):
-        return getattr(self._inner, name)
+        return getattr(self._target(), name)
+
+
+def _model_key(c: dict) -> tuple:
+    return str(model_dir(c)), c["device"], c["compute_type"], int(c["cpu_threads"]), int(c["num_workers"])
+
+
+def _load_ct2(c: dict, d: Path):
+    """The CTranslate2 model exactly as faster-whisper's ``WhisperModel`` constructs it for these settings."""
+    import ctranslate2
+
+    return ctranslate2.models.Whisper(str(d), device="cpu", compute_type=c["compute_type"],
+                                      intra_threads=int(c["cpu_threads"]), inter_threads=int(c["num_workers"]))
 
 
 def _load_whisper(c: dict, d: Path):
@@ -441,8 +471,9 @@ def _load_whisper(c: dict, d: Path):
 
 
 def _model(c: dict):
-    """The cached model (one per settings), used for every decode; its sampled decodes are redone (``_fresh_model``)."""
-    key = (str(model_dir(c)), c["device"], c["compute_type"], int(c["cpu_threads"]), int(c["num_workers"]))
+    """The cached model (one per settings), used for every decode; the sampling steps of a decode run on a fresh model
+    (``_fresh_model``)."""
+    key = _model_key(c)
     with _MODEL_LOCK:
         if key not in _MODELS:
             if c["device"] != "cpu":
@@ -453,11 +484,34 @@ def _model(c: dict):
         return _MODELS[key]
 
 
+# Fresh models loaded in the background (``preload_fresh_model``), one per settings key, never used before they are
+# taken. Filled and emptied under _DECODE_LOCK.
+_SPARES: dict = {}
+_LOADER: list = []   # the single background loader thread (a ThreadPoolExecutor), created on first use
+
+
 def _fresh_model(c: dict):
-    """A newly loaded model: new CTranslate2 worker threads, whose RNGs are seeded at first use from the seed set just
-    before (``_set_random_seed``). Called only for decodes that sample, after ``_model(c)`` verified the files."""
+    """A CTranslate2 model that has never sampled: its worker thread has no random generator yet (CTranslate2 creates it
+    at the thread's first sampling op, from the seed set at that moment). The spare loaded in the background if there
+    is one, else loaded now. Called only for decodes that sample, after ``_model(c)`` verified the files."""
+    spare = _SPARES.pop(_model_key(c), None)
+    if spare is not None:
+        return spare.result()
     _set_cache_env(c)
-    return _load_whisper(c, model_dir(c))
+    return _load_ct2(c, model_dir(c))
+
+
+def _preload(c: dict) -> None:
+    """Start loading the next fresh model in the background (it releases the GIL), unless one is loaded already."""
+    key = _model_key(c)
+    if key in _SPARES:
+        return
+    if not _LOADER:
+        from concurrent.futures import ThreadPoolExecutor
+
+        _LOADER.append(ThreadPoolExecutor(max_workers=1, thread_name_prefix="wvx-asr-preload"))
+    _set_cache_env(c)
+    _SPARES[key] = _LOADER[0].submit(_load_ct2, c, model_dir(c))
 
 
 def _set_random_seed(seed: int) -> None:
@@ -500,12 +554,22 @@ def speech_frames(wav: np.ndarray, sr: int, cfg: ConfigLike = None) -> int:
     return int(np.count_nonzero(metrics.speech_frame_mask(x, sr, _silence_metrics_cfg(c))))
 
 
-def _decode(model, audio: np.ndarray, dec: dict):
-    """(segments, sampled): the decoded segments and whether any generate() call sampled."""
+def _decode(model, audio: np.ndarray, dec: dict, seed: Optional[int] = None, c: Optional[dict] = None):
+    """(segments, sampled): the decoded segments and whether any generate() call sampled. With ``seed`` (and ``c``),
+    the sampling steps run on a fresh model seeded with it (``_SamplingRecorder``); a new spare is then preloaded
+    (``preload_fresh_model``). Call under _DECODE_LOCK."""
     rec = model.model
-    rec.sampled = False
-    segments, _info = model.transcribe(audio, **dec)
-    segments = list(segments)  # the generator does the decoding
+    rec.sampled, rec.fresh = False, None
+    if seed is not None:
+        rec.seed, rec.take_fresh = int(seed), (lambda: _fresh_model(c))
+    try:
+        segments, _info = model.transcribe(audio, **dec)
+        segments = list(segments)  # the generator does the decoding
+    finally:
+        used_fresh = rec.fresh is not None
+        rec.seed, rec.take_fresh, rec.fresh = None, None, None   # the used fresh model is dropped here
+    if used_fresh and c["preload_fresh_model"]:
+        _preload(c)
     return segments, bool(rec.sampled)
 
 
@@ -555,7 +619,7 @@ def transcribe_detailed(wav: np.ndarray, sr: int, cfg: ConfigLike = None,
     max_compression_ratio (gzip ratio of the text; > decode.compression_ratio_threshold flags repetition loops),
     max_temperature (> 0 = a temperature-fallback re-decode was used), skipped_silent (no speech frame: Whisper not
     called, text ""), speech_frames (None if silence.skip_silent is off), asr_seed (this clip's sampling seed; None
-    if skipped) and asr_sampled (a decode sampled, so the text comes from the seeded re-decode on a fresh model)."""
+    if skipped) and asr_sampled (a decode step sampled; those steps ran on a fresh model seeded with asr_seed)."""
     c = _cfg(cfg)
     n_speech = None
     if c["silence"]["skip_silent"]:
@@ -570,15 +634,8 @@ def transcribe_detailed(wav: np.ndarray, sr: int, cfg: ConfigLike = None,
     dec = dict(c["decode"])
     if initial_prompt is not None:
         dec["initial_prompt"] = initial_prompt
-    with _DECODE_LOCK:
-        segments, sampled = _decode(_model(c), audio, dec)
-        if sampled:  # redo with this clip's seed on fresh worker threads (module docstring, SEEDING)
-            _set_random_seed(seed)
-            fresh = _fresh_model(c)
-            try:
-                segments, sampled = _decode(fresh, audio, dec)
-            finally:
-                del fresh
+    with _DECODE_LOCK:  # sampling steps on a fresh model seeded with this clip's seed (module docstring, SEEDING)
+        segments, sampled = _decode(_model(c), audio, dec, seed, c)
     return {
         "text": " ".join(s.text.strip() for s in segments).strip(),
         "n_segments": len(segments),
@@ -619,8 +676,8 @@ def evaluate_wav(wav: np.ndarray, sr: int, reference_text: str, cfg: ConfigLike 
 
 def effective_settings(cfg: ConfigLike = None) -> dict:
     """Every setting that determines a transcript or a score (JSON-ready), for provenance and overwrite checks.
-    Left out: cpu_threads / num_workers (meant to change speed only; result files record them separately), download
-    and cache locations."""
+    Left out: cpu_threads / num_workers / preload_fresh_model (meant to change speed only; result files record the
+    thread counts separately), download and cache locations."""
     import copy
 
     c = copy.deepcopy(_cfg(cfg))

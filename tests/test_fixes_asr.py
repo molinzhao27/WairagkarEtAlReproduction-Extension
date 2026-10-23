@@ -1,9 +1,10 @@
 """Fixes to wvx.asr (2026-10-21 audit): per-clip sampling seeds and silent-clip skipping.
 
 No faster-whisper needed: Whisper is replaced by a stand-in that behaves like faster-whisper's temperature fallback
-on top of CTranslate2's RNG (one generator per worker thread, seeded once from the global seed at the thread's first
-use; a newly loaded model has new threads). With that RNG, reseeding a loaded model does nothing, which is why
-wvx.asr redoes a sampled decode on a fresh model right after setting the clip's seed.
+on top of CTranslate2's RNG (one generator per worker thread, created from the global seed at the thread's first
+sampling op; a newly loaded model has new threads). With that RNG, reseeding a loaded model does nothing, which is why
+wvx.asr runs the sampling steps of a decode on a fresh model right after setting the clip's seed (D-056; until then it
+redid the whole decode on a fresh model, ``_old_scheme`` below).
 """
 
 from __future__ import annotations
@@ -43,6 +44,8 @@ class _CT2:
     def __init__(self):
         self._rng = None
         self.generate_calls = []
+        self.seed_at_load = _CT2.seed
+        _CT2.created.append(self)
 
     def generate(self, audio, **kw):
         self.generate_calls.append(kw)
@@ -60,7 +63,6 @@ class _FakeWhisper:
     def __init__(self):
         self.model = asr._SamplingRecorder(_CT2())
         self.n_transcribe = 0
-        _CT2.created.append(self)
 
     def transcribe(self, audio, **dec):
         self.n_transcribe += 1
@@ -77,10 +79,18 @@ class _FakeWhisper:
         return iter([seg]), None
 
 
+def _settle():
+    """Wait for background preloads (the stand-in loads instantly, but in another thread)."""
+    for f in list(asr._SPARES.values()):
+        f.result()
+
+
 @pytest.fixture
 def fake_whisper(monkeypatch):
-    """Persistent model + fresh models + the global seed, all stand-ins. Yields a namespace for inspection."""
+    """Persistent model + fresh models + the global seed, all stand-ins. Yields a namespace for inspection.
+    Fresh models: ``_load_ct2`` makes a stand-in CTranslate2 model (also when preloaded in the background)."""
     _CT2.seed, _CT2.created = None, []
+    asr._SPARES.clear()
     persistent = _FakeWhisper()
     ns = SimpleNamespace(persistent=persistent, seeds_set=[])
 
@@ -89,9 +99,24 @@ def fake_whisper(monkeypatch):
         _CT2.seed = int(seed)
 
     monkeypatch.setattr(asr, "_model", lambda c: persistent)
-    monkeypatch.setattr(asr, "_fresh_model", lambda c: _FakeWhisper())
+    monkeypatch.setattr(asr, "_load_ct2", lambda c, d: _CT2())
     monkeypatch.setattr(asr, "_set_random_seed", set_seed)
     yield ns
+    _settle()
+    asr._SPARES.clear()
+
+
+def _old_scheme(audio_wav, cfg):
+    """The pre-D-056 scheme with the same stand-ins: decode on the persistent model; if it sampled, set the clip's seed,
+    load a new model and redo the whole decode on it."""
+    c = asr._cfg(cfg)
+    audio = asr.prepare_audio(audio_wav, SR, c)
+    seed = asr.clip_seed(audio, asr.base_seed(c))
+    segments, sampled = asr._decode(asr._model(c), audio, dict(c["decode"]))
+    if sampled:
+        asr._set_random_seed(seed)
+        segments, sampled = asr._decode(_FakeWhisper(), audio, dict(c["decode"]))
+    return segments[0].text, sampled
 
 
 # ------------------------------------------------------------------------------------------- seed derivation
@@ -170,21 +195,75 @@ def test_transcripts_do_not_depend_on_order_or_threads(fake_whisper):
     assert len({a[k]["text"] for k in order if k % 2}) == 3   # different clips, different seeds
 
 
-def test_sampled_decode_is_redone_on_a_fresh_model_after_seeding(fake_whisper):
-    out = asr.transcribe_detailed(_clip(1), SR, NO_PER)
+def test_sampling_steps_run_on_a_fresh_model_after_seeding(fake_whisper):
+    out = asr.transcribe_detailed(_clip(1), SR, {**NO_PER, "preload_fresh_model": False})
     assert out["asr_sampled"] and out["max_temperature"] > 0
     assert fake_whisper.seeds_set == [out["asr_seed"]]
-    fresh = [m for m in _CT2.created if m is not fake_whisper.persistent]
-    assert len(fresh) == 1 and fresh[0].n_transcribe == 1
-    assert fake_whisper.persistent.n_transcribe == 1
+    persistent = fake_whisper.persistent.model._inner
+    fresh = [m for m in _CT2.created if m is not persistent]
+    assert len(fresh) == 1 and fake_whisper.persistent.n_transcribe == 1
+    # beam search on the cached model, the first sampling step (and everything after it) on the fresh one
+    assert [k.get("sampling_topk", 1) for k in persistent.generate_calls] == [1]
+    assert [k.get("sampling_topk", 1) for k in fresh[0].generate_calls] == [0]
+    # the draw is what a model loaded right after setting the clip's seed would make
+    assert out["text"] == f"sampled {np.random.default_rng(out['asr_seed']).integers(1 << 30)}"
+    assert fake_whisper.persistent.model.fresh is None and fake_whisper.persistent.model.seed is None
+
+
+def test_same_transcripts_as_redoing_the_whole_decode(fake_whisper):
+    """D-056 identity: routing the sampling steps to a fresh model (with or without a preloaded spare) gives the
+    transcripts of the old scheme, which redid the whole decode on a model loaded right after seeding."""
+    old = {k: _old_scheme(_clip(k), NO_PER) for k in range(6)}
+    assert sum(sampled for _, sampled in old.values()) == 3
+    for preload in (False, True):
+        cfg = {**NO_PER, "preload_fresh_model": preload}
+        for k in [5, 0, 3, 3, 1, 4, 2, 1]:
+            out = asr.transcribe_detailed(_clip(k), SR, cfg)
+            assert (out["text"], out["asr_sampled"]) == old[k], (preload, k)
+
+
+def test_preloaded_spare_is_loaded_in_the_background_and_used_once(fake_whisper):
+    cfg = {**NO_PER, "preload_fresh_model": True}
+    asr.transcribe_detailed(_clip(0), SR, cfg)              # no sampling: nothing loaded
+    assert not asr._SPARES and len(_CT2.created) == 1
+    first = asr.transcribe_detailed(_clip(1), SR, cfg)      # loads a fresh model now, then preloads a spare
+    _settle()
+    assert len(asr._SPARES) == 1 and len(_CT2.created) == 3
+    spare = _CT2.created[2]
+    assert spare.seed_at_load == first["asr_seed"] and not spare.generate_calls   # loaded under ANOTHER clip's seed
+    out = asr.transcribe_detailed(_clip(3), SR, cfg)        # takes the spare, seeds it, preloads the next one
+    _settle()
+    assert len(spare.generate_calls) == 1 and out["asr_seed"] != first["asr_seed"]
+    assert out["text"] == f"sampled {np.random.default_rng(out['asr_seed']).integers(1 << 30)}"
+    assert len(_CT2.created) == 4 and not _CT2.created[3].generate_calls
+    asr.transcribe_detailed(_clip(2), SR, cfg)              # beam only: the spare stays unused
+    _settle()
+    assert len(_CT2.created) == 4 and len(asr._SPARES) == 1
+
+
+def test_recorder_switches_once_and_forwards_everything_after():
+    inner, fresh, seeds = _CT2(), _CT2(), []
+    rec = asr._SamplingRecorder(inner)
+    rec.seed, rec.take_fresh = 7, lambda: (seeds.append("taken"), fresh)[1]
+    import unittest.mock
+
+    with unittest.mock.patch.object(asr, "_set_random_seed", lambda s: seeds.append(s)):
+        rec.generate(np.zeros(3), beam_size=5)
+        assert rec.fresh is None and not rec.sampled and rec.generate_calls is inner.generate_calls
+        rec.generate(np.zeros(3), beam_size=1, sampling_topk=0, sampling_temperature=0.2)
+        rec.generate(np.zeros(3), beam_size=1, sampling_topk=0, sampling_temperature=0.4)
+        rec.generate(np.zeros(3), beam_size=5)
+    assert seeds == ["taken", 7] and rec.sampled and rec.fresh is fresh
+    assert len(inner.generate_calls) == 1 and len(fresh.generate_calls) == 3
+    assert rec.generate_calls is fresh.generate_calls               # attributes now come from the fresh model
 
 
 def test_beam_only_decodes_never_seed_or_reload(fake_whisper):
     for k in range(4):
         asr.transcribe_detailed(_clip(k), SR, {**NO_PER, "decode": {"temperature": [0.0]}})
-    assert fake_whisper.seeds_set == [] and _CT2.created == [fake_whisper.persistent]
+    assert fake_whisper.seeds_set == [] and _CT2.created == [fake_whisper.persistent.model._inner]
     out = asr.transcribe_detailed(_clip(0), SR, NO_PER)    # fallback configured but not needed: no reload either
-    assert out["asr_sampled"] is False and fake_whisper.seeds_set == []
+    assert out["asr_sampled"] is False and fake_whisper.seeds_set == [] and not asr._SPARES
 
 
 # --------------------------------------------------------------------------------------------- silent clips
@@ -268,8 +347,9 @@ def test_effective_settings_track_what_changes_a_score():
     assert json.loads(json.dumps(base)) == base
     assert base["seeding"] == asr.SEEDING and base["seed"] == 42
     assert base["silence"]["skip_silent"] is True and "threshold_db" in base["silence"]["detector"]["silence"]
-    assert "cpu_threads" not in base
+    assert "cpu_threads" not in base and "preload_fresh_model" not in base
     assert asr.effective_settings({"cpu_threads": 2}) == base      # speed only
+    assert asr.effective_settings({"preload_fresh_model": False}) == base
     for override in ({"decode": {"temperature": [0.0]}}, {"silence": {"skip_silent": False}},
                      {"silence": {"metrics_overrides": {"silence": {"threshold_db": 30.0}}}}, {"seed": 1},
                      {"constrained": {"method": "prompt"}}):
