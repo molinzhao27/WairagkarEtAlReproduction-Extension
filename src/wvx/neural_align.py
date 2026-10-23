@@ -151,3 +151,112 @@ def set_day_layer(model, weights: list) -> Optional[list]:
     old = days[0].get_weights()
     days[0].set_weights(weights)
     return old
+
+
+# ------------------------------------------------------------------------- same-word alignment (D-064)
+
+def resample(seg: np.ndarray, n: int) -> np.ndarray:
+    """(T, F) -> (n, F) by linear interpolation along time (word occurrences to a common length)."""
+    seg = np.asarray(seg, np.float64)
+    if len(seg) == 1:
+        return np.repeat(seg, n, 0)
+    src = np.linspace(0, len(seg) - 1, n)
+    lo = np.floor(src).astype(int)
+    hi = np.minimum(lo + 1, len(seg) - 1)
+    w = (src - lo)[:, None]
+    return seg[lo] * (1 - w) + seg[hi] * w
+
+
+def word_occurrences(trials, word_spans, words, length: int, margin: int = 0) -> list:
+    """[(word, (length, F) pooled frames)] for every word with a span: spans are [onset, offset) in bins of the raw
+    (T, F) inputs; pooled by 2 as the model does, widened by ``margin`` pooled frames each side, then resampled."""
+    out = []
+    for x, spans, ws in zip(trials, word_spans, words):
+        if spans is None or len(spans) != len(ws):
+            continue
+        p = pool(np.asarray(x, np.float64))
+        for w, (a, b) in zip(ws, np.asarray(spans).reshape(-1, 2)):
+            a2, b2 = max(int(a) // 2 - margin, 0), min(int(b) // 2 + margin, len(p))
+            if b2 - a2 >= 2:
+                out.append((w, resample(p[a2:b2], length)))
+    return out
+
+
+def word_templates(occ: list, min_count: int) -> dict:
+    """{word: mean resampled occurrence} for words with at least ``min_count`` occurrences."""
+    by: dict = {}
+    for w, seg in occ:
+        by.setdefault(w, []).append(seg)
+    return {w: np.mean(v, axis=0) for w, v in by.items() if len(v) >= min_count}
+
+
+def paired_frames(occ: list, templates: dict) -> tuple[np.ndarray, np.ndarray, int]:
+    """(X new frames, Y template frames, number of occurrences used): every occurrence of a word with a template."""
+    xs, ys = [], []
+    for w, seg in occ:
+        if w in templates:
+            xs.append(seg), ys.append(templates[w])
+    if not xs:
+        raise ValueError("no word occurrence has a template")
+    return np.concatenate(xs), np.concatenate(ys), len(xs)
+
+
+def fit_ridge_to_identity(X: np.ndarray, Y: np.ndarray, lam_rel: float) -> LinearMap:
+    """x' = (x - mu_x) @ (I + D) + mu_y, D = ridge solution of (X - mu_x) D ~ (Y - mu_y) - (X - mu_x) with penalty
+    lam_rel x mean eigenvalue of the X covariance (shrinks the map toward the identity, not toward zero)."""
+    mx, my = X.mean(0), Y.mean(0)
+    Xc, Yc = X - mx, Y - my
+    G = Xc.T @ Xc
+    lam = float(lam_rel) * np.trace(G) / G.shape[0]
+    D = np.linalg.solve(G + lam * np.eye(G.shape[0]), Xc.T @ (Yc - Xc))
+    return LinearMap(mx, np.eye(G.shape[0]) + D, my, "word_ridge")
+
+
+def fit_procrustes(X: np.ndarray, Y: np.ndarray) -> LinearMap:
+    """x' = (x - mu_x) @ R + mu_y, R orthogonal minimizing |(X - mu_x) R - (Y - mu_y)| (no shrinkage)."""
+    mx, my = X.mean(0), Y.mean(0)
+    U, _, Vt = np.linalg.svd((X - mx).T @ (Y - my))
+    return LinearMap(mx, U @ Vt, my, "word_procrustes")
+
+
+def fit_paired_layer(day_layer, X: np.ndarray, Y: np.ndarray, settings: Mapping[str, Any], log=None) -> tuple[list, dict]:
+    """A copy of ``day_layer`` trained so that layer_new(X) ~ layer_old(Y) frame by frame (MSE on the 128-d
+    embeddings the frozen core reads), plus ``l2`` x mean squared weight change. settings: steps, batch, lr, l2,
+    seed, log_every."""
+    import tensorflow as tf
+
+    s = settings
+    rng = np.random.default_rng(int(s["seed"]))
+    tf.random.set_seed(int(s["seed"]))
+    w0 = [np.array(w) for w in day_layer.get_weights()]
+    steps = int(day_layer.input_shape[1])
+
+    def chunks(a):
+        n = (len(a) // steps) * steps
+        return a[:n].reshape(-1, steps, a.shape[1]).astype(np.float32)
+
+    Xc, Yc = chunks(X), chunks(Y)
+    Zy = day_layer(Yc, training=False).numpy()
+    layer = tf.keras.models.clone_model(day_layer)
+    layer.set_weights(w0)
+    opt = tf.keras.optimizers.Adam(learning_rate=float(s["lr"]))
+    w0_t = [tf.constant(w) for w in w0]
+    nb = max(1, int(s["batch"]) // steps)
+    hist = []
+    for it in range(int(s["steps"])):
+        idx = rng.choice(len(Xc), size=min(nb, len(Xc)), replace=False)
+        with tf.GradientTape() as tape:
+            zn = layer(Xc[idx], training=False)
+            m = tf.reduce_mean(tf.square(zn - Zy[idx]))
+            reg = tf.add_n([tf.reduce_mean(tf.square(w - w0w)) for w, w0w in zip(layer.trainable_weights, w0_t)])
+            loss = m + float(s["l2"]) * reg
+        g = tape.gradient(loss, layer.trainable_weights)
+        opt.apply_gradients(zip(g, layer.trainable_weights))
+        if it % int(s["log_every"]) == 0 or it == int(s["steps"]) - 1:
+            hist.append({"step": it, "mse": float(m), "reg": float(reg)})
+            if log:
+                log(f"  paired step {it}: MSE {float(m):.4f}, weight change {float(reg):.2e}")
+    w1 = layer.get_weights()
+    return w1, {"kind": "word_layer", "history": hist, "n_frames": int(len(Xc) * steps),
+                "weight_change_rel": float(np.sqrt(sum(((a - c) ** 2).sum() for a, c in zip(w1, w0))
+                                                   / sum((c ** 2).sum() for c in w0)))}

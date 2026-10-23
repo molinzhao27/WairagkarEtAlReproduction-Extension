@@ -58,3 +58,22 @@ def test_mmd_layer_reduces_mmd_and_identity_stays():
     assert h[-1]["mmd2"] < 0.5 * h[0]["mmd2"]
     w_same, info_same = na.fit_mmd_layer(layer, ref, ref, dict(s, steps=30, l2=1.0))
     assert info_same["weight_change_rel"] < 0.2
+
+
+def test_resample_endpoints_and_length():
+    seg = np.arange(10, dtype=float)[:, None] * [1, 2]
+    r = na.resample(seg, 4)
+    assert r.shape == (4, 2) and np.allclose(r[0], seg[0]) and np.allclose(r[-1], seg[-1])
+
+
+def test_word_maps_recover_a_known_mixing():
+    rng = np.random.default_rng(3)
+    F, L = 10, 8
+    temps = {w: rng.normal(size=(L, F)) for w in "abcdef"}
+    R = np.linalg.qr(rng.normal(size=(F, F)))[0]                    # a rotation (invisible to moment matching)
+    occ = [(w, (temps[w] + 0.05 * rng.normal(size=(L, F))) @ R.T + 0.3) for w in "abcdef" for _ in range(6)]
+    X, Y, n = na.paired_frames(occ, temps)
+    for m in (na.fit_procrustes(X, Y), na.fit_ridge_to_identity(X, Y, 1e-3)):
+        err = np.mean([np.abs(m(seg) - temps[w]).mean() for w, seg in occ])
+        assert err < 0.1, (m.kind, err)
+    assert na.fit_procrustes(Y, Y).info()["offdiag_rms"] < 1e-6     # identity when nothing changed

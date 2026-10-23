@@ -1,0 +1,29 @@
+# D-064 validation of same-word alignment (scripts/word_align_check.py, wvx.neural_align) on sessions other than the
+# dev test session; same halves, drift and evaluation trials as align_check.yaml (D-063). Settings are chosen HERE.
+base_experiment: configs/experiments/voice_cost_day195.yaml   # data loading (their targets), channel reorder
+
+run_name: word_align_check
+
+runtime:
+  device: gpu
+  threads: {intra_op: 12, inter_op: 2, omp: 12}
+
+word_align_check:
+  name: m165_sessions172_193
+  seed: 20261023                     # = align_check (same halves, drift, evaluation trials)
+  model: data/raw/wairagkar/t15_neural_data/t15_day172/brain2voice_t15_day165.h5
+  ref_session: t15_day165
+  dev_session: t15_day195            # refused if listed below
+  sessions: [t15_day172, t15_day179, t15_day186, t15_day193]
+  placement_config: configs/experiments/manual_alignment_f5clone.yaml   # only for the speech-index file keys
+  length: 16                         # pooled frames per resampled word (~320 ms of pooled time)
+  margin: 0
+  min_count: 3                       # a word needs >= 3 occurrences in the reference to get a template
+  n_eval: 40
+  control: {log_gain_sd: 0.3, offset_sd: 0.5, mix_sd: 0.5}
+  variants:
+    - {name: ridge_0.1, kind: word_ridge, lam_rel: 0.1}
+    - {name: ridge_1, kind: word_ridge, lam_rel: 1.0}
+    - {name: procrustes, kind: word_procrustes}
+    - {name: layer_l2_0, kind: word_layer, steps: 800, batch: 900, lr: 1.0e-4, l2: 0.0, seed: 1, log_every: 100}
+    - {name: layer_l2_100, kind: word_layer, steps: 800, batch: 900, lr: 1.0e-4, l2: 100.0, seed: 1, log_every: 100}
