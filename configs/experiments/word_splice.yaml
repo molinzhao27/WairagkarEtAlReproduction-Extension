@@ -15,7 +15,7 @@ word_splice:
   inventory_sessions: [t15_day025, t15_day193]                # never the evaluated session
   inventory_category: Training data (50-word vocab)
   eval_session: t15_day195
-  train_trials_from: results/voice_cost_day195/data.json     # the dev run's exact training trials
+  train_trials_from: results/sanity_train_day195_from165_ep15/data.json   # the dev training trials (= voice_cost_day195's, checked)
   data_config: configs/experiments/voice_cost_day195.yaml      # their targets as the dev training loads them
   placement_config: configs/experiments/manual_alignment.yaml  # TTS + syllables + arm B (as tts_oracle / tts_auto)
   auto_cell: day195_m165                                       # saved decode of the day-165 decoder on day195
