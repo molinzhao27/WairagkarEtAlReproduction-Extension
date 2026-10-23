@@ -469,6 +469,110 @@ def output_speech_stats(wav: np.ndarray, speech: np.ndarray, hop_s: float, early
     }
 
 
+# ------------------------------------------------------------------------- scoring in worker processes
+
+
+@dataclass
+class OutputJob:
+    """One decoded output to vocode and score (:func:`score_output`); small enough to send to a worker process."""
+
+    pred: np.ndarray                      # normalized decoder output (T, 20)
+    text: str                             # own cue (a key of the TTS references)
+    partner: Optional[tuple] = None       # (trial index, cue) of the shuffled-trial partner (real outputs)
+    cues: Optional[list] = None           # every distinct cue of the set (real outputs: cue nulls)
+    heldout: Optional[tuple] = None       # (trial index, training target) of a held-out attempted trial
+
+
+_REFS: dict = {}
+
+
+def init_output_scoring(cfg: Mapping[str, Any], tts: Mapping[str, np.ndarray], target: Mapping[int, np.ndarray],
+                        sr: int, tts_metrics: Optional[Mapping], target_metrics: Optional[Mapping], hop_s: float,
+                        early_window_s: float, blas_threads: Optional[int] = None) -> None:
+    """Hold what :func:`score_output` needs in this process: the config (LPCNet), TTS audio per cue, aligned-target
+    audio per held-out trial index, and the metric settings. A ``ProcessPoolExecutor`` initializer (so the
+    references go to each worker once).
+
+    ``blas_threads`` caps BLAS in a worker (the workers already run in parallel). Never 1 when the run itself
+    allows more: OpenBLAS then takes its single-thread path for large products, which rounds some of them
+    differently (the last bit of 1 of ~650 MCD values on fold A03); with 2 or more it takes the same path as with
+    the run's own count, and how many threads share a product does not change it."""
+    if blas_threads is not None:
+        from threadpoolctl import threadpool_limits
+
+        threadpool_limits(int(blas_threads), user_api="blas")
+    _REFS.clear()
+    _REFS.update(cfg=cfg, tts=tts, target=target, sr=sr, tts_metrics=tts_metrics, target_metrics=target_metrics,
+                 hop_s=hop_s, early_window_s=early_window_s)
+
+
+def prefixed(prefix: str, scores: Mapping) -> dict:
+    """Score names with ``prefix`` (unless they have it already), numpy scalars as Python scalars."""
+    return {(k if k.startswith(prefix) else f"{prefix}{k}"): (v.item() if hasattr(v, "item") else v)
+            for k, v in dict(scores).items()}
+
+
+def score_output(job: OutputJob) -> tuple[np.ndarray, dict]:
+    """LPCNet audio of one decoded output (``wvx.synthesis``; a failed synthesis raises) and its
+    :func:`audio_scores`. Uses only ``job`` and what :func:`init_output_scoring` holds, so it gives the same result in
+    any process. scripts/kunz_experiment.py runs it in worker processes: the LPCNet feature conversion and the
+    metrics' DTW (librosa, numba without ``nogil``) hold the GIL, so threads could not run them in parallel."""
+    from wvx import synthesis
+
+    wav = synthesis.decoder_output_to_waveform(job.pred, _REFS["cfg"])
+    return wav, audio_scores(wav, job)
+
+
+def audio_scores(wav: np.ndarray, job: OutputJob) -> dict:
+    """Audio scores of one decoded output's waveform, as per-trial fields in the per-trial table's order:
+
+    ``tts_*`` vs its own cue's TTS (``wvx.metrics.evaluate``); its speech content (:func:`output_speech_stats`);
+    ``shuffled_trial_partner`` and ``shuffled_trial_tts_*`` vs the partner's cue; ``_cue_scores``, the mel_corr vs
+    EVERY cue of the set (NaN where undefined); for a held-out attempted trial the feature scores vs its target and
+    ``target_*`` vs the aligned-target audio. A metric that fails is recorded as ``<prefix>error``, never fatal.
+    """
+    from wvx import metrics
+    from wvx.inference import align_to_predictions
+
+    ref = _REFS
+    sr, tts_cfg = ref["sr"], ref["tts_metrics"]
+    out: dict = {}
+
+    def safe(prefix, fn):
+        try:
+            out.update(prefixed(prefix, fn()))
+        except Exception as ex:  # record and go on (e.g. silent output -> metric undefined)
+            out[f"{prefix}error"] = f"{type(ex).__name__}: {ex}"
+
+    def mel(tts):
+        try:
+            return float(metrics.mel_spectrogram_correlation(tts, wav, sr, tts_cfg))
+        except Exception:  # same policy as safe(): undefined, never fatal
+            return float("nan")
+
+    safe("tts_", lambda: metrics.evaluate(ref["tts"][job.text], wav, sr, tts_cfg))
+    safe("", lambda: output_speech_stats(wav, metrics.speech_frame_mask(wav, sr, tts_cfg), ref["hop_s"],
+                                         ref["early_window_s"]))
+    if job.partner is not None:
+        idx, cue = job.partner
+        out["shuffled_trial_partner"] = int(idx)
+        safe("shuffled_trial_tts_", lambda: metrics.evaluate(ref["tts"][cue], wav, sr, tts_cfg))
+    if job.cues is not None:  # cue nulls: the same output vs EVERY distinct cue of its set
+        out["_cue_scores"] = [mel(ref["tts"][x]) for x in job.cues]
+    if job.heldout is not None:
+        idx, target = job.heldout
+        safe("", lambda: feature_scores(job.pred, align_to_predictions(target, len(job.pred))))
+        safe("target_", lambda: metrics.evaluate(ref["target"][idx], wav, sr, ref["target_metrics"]))
+    return out
+
+
+def call(module: str, function: str, *args, **kwargs):
+    """``module.function(*args, **kwargs)``, e.g. the configured ASR in a worker process of its own."""
+    import importlib
+
+    return getattr(importlib.import_module(module), function)(*args, **kwargs)
+
+
 # ----------------------------------------------------------------------------- resume / provenance
 
 

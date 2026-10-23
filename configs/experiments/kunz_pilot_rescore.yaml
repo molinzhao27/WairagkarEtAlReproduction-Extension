@@ -12,4 +12,4 @@ runtime:
 
 experiment:
   evaluation:
-    n_workers: 4                 # LPCNet synthesis + metric threads (not part of the scoring hash)
+    n_workers: 4                 # LPCNet + metric worker processes (not part of the scoring hash)
