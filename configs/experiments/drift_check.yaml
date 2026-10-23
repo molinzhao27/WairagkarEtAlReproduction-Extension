@@ -1,0 +1,28 @@
+# D-063 premise check for target-free adaptation (scripts/drift_check.py): across released models and the sessions
+# after each model's own, does embedding distance from the model's session predict its decoding quality?
+# Day layers are per week (D-009): a model's day layer covers its last session's week; ref_session is that last
+# session, and only sessions after the week are scored (never training data of the layer).
+base_experiment: configs/experiments/voice_cost_day195.yaml   # data loading (their targets), channel reorder
+
+run_name: drift_check
+
+runtime:
+  device: cpu
+  threads: {intra_op: 12, inter_op: 2, omp: 12}               # host, chiplet 1
+
+drift_check:
+  name: released_models_t15
+  seed: 20261023
+  n_decode: 60                 # seeded trials decoded per (model, session) for feature r
+  n_mmd: 2000                  # embedding frames per side for MMD^2
+  dev_session: t15_day195      # only its dev training trials are read (the dev test set stays untouched)
+  train_trials_from: results/sanity_train_day195_from165_ep15/data.json
+  models:
+    - {path: data/raw/wairagkar/t15_neural_data/t15_day172/brain2voice_t15_day165.h5, ref_session: t15_day165,
+       sessions: [t15_day172, t15_day174, t15_day179, t15_day181, t15_day186, t15_day188, t15_day193, t15_day195]}
+    - {path: data/raw/wairagkar/t15_neural_data/t15_day179/brain2voice_t15_day174.h5, ref_session: t15_day174,
+       sessions: [t15_day179, t15_day181, t15_day186, t15_day188, t15_day193, t15_day195]}
+    - {path: data/raw/wairagkar/t15_neural_data/t15_day186/brain2voice_t15_day181.h5, ref_session: t15_day181,
+       sessions: [t15_day186, t15_day188, t15_day193, t15_day195]}
+    - {path: data/raw/wairagkar/t15_neural_data/t15_day193/brain2voice_t15_day188.h5, ref_session: t15_day188,
+       sessions: [t15_day193, t15_day195]}
