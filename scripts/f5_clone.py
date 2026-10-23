@@ -102,7 +102,7 @@ def cmd_qc(cfg, recheck: bool = False) -> None:
                 continue
             y, _ = librosa.load(str(work / "generated" / corpus_name / f"s{j:04d}.wav"), sr=16000)
             r = asr.evaluate_wav(y, 16000, text, acfg)
-            n_checks = rows[j]["n_checks"] + 1 if prev else 1
+            n_checks = rows[j].get("n_checks", 1) + 1 if prev else 1
             rows[j] = {"cue": j, "text": text, "hyp": r.get("hyp_raw"), "wer": r.get("wer"), "n_checks": n_checks}
         bad = [r["cue"] for r in rows if not (r["wer"] == 0)]
         qpath.write_text(json.dumps({"n": len(rows), "n_not_perfect": len(bad), "redo": bad, "rows": rows},
