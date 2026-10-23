@@ -1,0 +1,35 @@
+# D-055 (pre-registered): zero-shot voice-cloning TTS (F5-TTS v1 base) in their voice.
+#   scripts/f5_clone.py ref|encode, scripts/f5_generate.py (F5 env), scripts/syllable_tts.py --voice "F5 clone",
+#   scripts/knnvc.py check --config configs/experiments/f5clone.yaml
+base_experiment: configs/experiments/voice_cost_day195.yaml   # seed
+
+run_name: f5clone
+
+runtime:
+  threads: {intra_op: 8, inter_op: 1, omp: 8}               # host, chiplet 1
+
+f5clone:
+  work_dir: data/processed/f5clone_work/f5_v1_day193
+  models_dir: data/processed/models/f5tts                     # HF cache: SWivid/F5-TTS F5TTS_v1_Base + vocos
+  ref_session: t15_day193                                     # never the evaluated session
+  ref_category: Training data (50-word vocab)
+  ref_n_sentences: 4
+  ref_max_s: 11.0                                             # F5 clips the reference at ~12 s
+  word_gap_s: 0.08
+  sentence_gap_s: 0.35
+  source_voice: Aman (English (India))                        # cue order of its corpora
+  voice: F5 clone
+  corpora: [t15_day195, kunz_50words]
+  workers: 8
+  data_config: configs/experiments/voice_cost_day195.yaml
+  placement_config: configs/experiments/manual_alignment.yaml
+
+knnvc:                                                        # for the target check (scripts/knnvc.py check)
+  name: f5clone_day193
+  source_voice: Aman (English (India))
+  voice: F5 clone
+  data_config: configs/experiments/voice_cost_day195.yaml
+  placement_config: configs/experiments/manual_alignment.yaml
+  check_session: t15_day195
+  train_trials_from: results/sanity_train_day195_from165_ep15/data.json
+  auto_cell: day195_m165
