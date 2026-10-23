@@ -14,6 +14,7 @@ inner_projector:
   n_components: 20
   pool_bins: 5                       # 50 ms fitting / comparison frames
   shrink: 0.1                        # covariance shrinkage toward the diagonal (paired)
+  length_matched_k: 10               # post hoc length control (D-035's k)
   speech_db: 15.0                    # speech frame: c0 envelope > silence frame + this
   silence_config: configs/experiments/manual_alignment_f5clone.yaml   # D-059: F5 clone, never Aman
   silence_corpus: kunz_50words

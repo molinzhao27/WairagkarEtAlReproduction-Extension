@@ -143,7 +143,9 @@ def main(argv=None) -> int:
         cand = list(range(len(refs)))
         for ti in I[i_out]:
             own = next(j for j, ta in enumerate(refs) if tg.text_key(ta.text) == tg.text_key(ti.text))
-            row = {"pair": f"A{a_out}/I{i_out}", "trial_index": int(ti.meta["trial_index"]), "text": ti.text}
+            row = {"pair": f"A{a_out}/I{i_out}", "trial_index": int(ti.meta["trial_index"]), "text": ti.text,
+                   "own": own, "len_imagined": int(X[id(ti)].shape[0]),
+                   "len_attempted": [int(X[id(ta)].shape[0]) for ta in refs]}
             for name in names:
                 m = maps[name]
                 x = X[id(ti)] if m is None else m(X[id(ti)])
@@ -152,7 +154,7 @@ def main(argv=None) -> int:
                 scores = [nm.dtw_similarity(q, ref[id(ta)][0], dtw_cfg) for ta in refs]
                 r, _ = nm.own_rank(scores, cand, own)
                 row[name] = {"rank": r, "top1": bool(r == 1.0), "speech_fraction": speech_fraction(p, x.shape[0]),
-                             "own_similarity": float(scores[own])}
+                             "own_similarity": float(scores[own]), "scores": [float(v) for v in scores]}
             rows.append(row)
         log(f"A{a_out}/I{i_out}: " + ", ".join(
             f"{n} rank {np.mean([r[n]['rank'] for r in rows if r['pair'] == f'A{a_out}/I{i_out}']):.1f}" for n in names)
@@ -170,6 +172,23 @@ def main(argv=None) -> int:
             b = sum(1 for r in rows if r[n]["top1"] and not r["none"]["top1"])
             cc = sum(1 for r in rows if r["none"]["top1"] and not r[n]["top1"])
             summary[n]["top1_gained_lost"] = [b, cc]
+    for r in rows:
+        cand_lm = nm.length_matched_candidates(r["len_attempted"], r["own"], int(c["length_matched_k"])).tolist()
+        r["length_matched_candidates"] = cand_lm
+        r["length_only_rank"] = nm.own_rank([-abs(r["len_imagined"] - L) for L in r["len_attempted"]],
+                                            list(range(len(r["len_attempted"]))), r["own"])[0]
+        for n in names:
+            r[n]["rank_length_matched"] = nm.own_rank(r[n]["scores"], cand_lm, r["own"])[0]
+    for n in names:
+        lm = [r[n]["rank_length_matched"] for r in rows]
+        summary[n]["length_matched_mean_rank"] = float(np.mean(lm))
+        summary[n]["length_matched_top1"] = float(np.mean([x == 1.0 for x in lm]))
+        if n != "none":
+            summary[n]["length_matched_vs_none"] = kx.paired(lm, [r["none"]["rank_length_matched"] for r in rows])
+    summary["length_only"] = {"mean_rank": float(np.mean([r["length_only_rank"] for r in rows])),
+                              "top1": float(np.mean([r["length_only_rank"] == 1.0 for r in rows]))}
+    summary["paired"]["length_matched_vs_shuffled"] = kx.paired([r["paired"]["rank_length_matched"] for r in rows],
+                                                                [r["paired_shuffled"]["rank_length_matched"] for r in rows])
     summary["paired"]["vs_shuffled_rank"] = kx.paired([r["paired"]["rank"] for r in rows],
                                                       [r["paired_shuffled"]["rank"] for r in rows])
     out = {"name": c["name"], "config": args.config, "created": datetime.datetime.now().isoformat(timespec="seconds"),
@@ -188,6 +207,19 @@ def main(argv=None) -> int:
         d = s.get("vs_none_rank")
         lines.append(f"| {n} | {s['mean_rank']:.2f} | " + (f"{d['mean']:+.2f} ({d['wilcoxon_p']:.2g})" if d else "–")
                      + f" | {100 * s['top1']:.1f}% | {100 * s['top5']:.1f}% | {s['speech_fraction']:.3f} |")
+    k_lm = int(c["length_matched_k"])
+    lines += ["", f"Post hoc (not pre-registered) length control: rank among the own + {k_lm} attempted trials closest in "
+              f"length to the own attempted trial (chance {(k_lm + 2) / 2:.1f}); length-only baseline over all 50: mean rank "
+              f"{summary['length_only']['mean_rank']:.2f}, top-1 {100 * summary['length_only']['top1']:.1f}%", "",
+              "| transform | length-matched mean rank | Δ vs none (p) | length-matched top-1 |", "|---|---|---|---|"]
+    for n in names:
+        s_ = summary[n]
+        d = s_.get("length_matched_vs_none")
+        lines.append(f"| {n} | {s_['length_matched_mean_rank']:.2f} | "
+                     + (f"{d['mean']:+.2f} ({d['wilcoxon_p']:.2g})" if d else "–")
+                     + f" | {100 * s_['length_matched_top1']:.1f}% |")
+    lm_vs = summary["paired"]["length_matched_vs_shuffled"]
+    lines += ["", f"paired vs paired_shuffled, length-matched: {lm_vs['mean']:+.2f} (p {lm_vs['wilcoxon_p']:.2g})"]
     vs = summary["paired"]["vs_shuffled_rank"]
     lines += ["", f"paired vs paired_shuffled: rank {vs['mean']:+.2f} (p {vs['wilcoxon_p']:.2g})", "",
               "Per fold (projector scale; share of the attempted − imagined mean difference inside the subspace):", ""]
