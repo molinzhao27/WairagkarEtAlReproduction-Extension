@@ -12,9 +12,9 @@ Variants (``wvx.word_splice``; ``variants``, default the first two): ``splice_or
 ``word_indices``; ``splice_auto`` on word spans from the arm-B mapped TTS syllables on the c0 dips of ``auto_cell``'s
 output; ``splice_manual`` (D-061) on word spans from aggregated manual syllable answers (``manual``: the package
 ``name``, its ``config`` and optional ``label``; ``cell``), syllable -> word membership from the placement voice's
-forced alignment. A trial with a word missing from the inventory, or whose aligner words do not match its cue, keeps
-the TTS target of the same timing (counted); for ``splice_manual`` that is the TTS placed one to one on the manual
-syllables.
+forced alignment; every training trial needs an answer. A trial with a word missing from the inventory, or whose
+aligner words do not match its cue, keeps the TTS target of the same timing (counted); for ``splice_manual`` that is
+the TTS placed one to one on the manual syllables.
 
 Writes ``paths.word_splice``/<name>_<variant>.npz (keys trNNN, header info) and results/word_splice/<name>.json.
 """
@@ -81,6 +81,9 @@ def manual_alignment_results(m, train, trials, corpus, preds, tts_segs, cfg_d, c
         raise SystemExit(f"package voice {cfg_m['tts']['voice']!r} != placement voice {cfg_p['tts']['voice']!r}")
     t2id = {it["trial"]: iid for iid, it in key["items"].items() if it["cell"] == m["cell"]}
     have = [i for i in train if i in t2id and t2id[i] in agg["items"]]
+    if len(have) < len(train):
+        raise SystemExit(f"{len(train) - len(have)} of {len(train)} training trials have no aggregated answer in "
+                         f"{m['name']}{sfx} (every trial needs one, D-061), e.g. {[i for i in train if i not in have][:5]}")
     res = [None] * len(train)
     if have:
         jj = [train.index(i) for i in have]
