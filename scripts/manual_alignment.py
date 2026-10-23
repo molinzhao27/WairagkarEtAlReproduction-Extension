@@ -249,7 +249,7 @@ def cmd_package(cfg, env_set, args) -> int:
     cells = Cells(cfg)
     names = sorted({c for g in s["calibration"]["groups"].values() if g["enabled"] for c in g["cells"]}
                    | set(s["production"]["cells"]) | {s["examples"]["cell"]}
-                   | {c for g in s["practice"]["groups"].values() for c in g["cells"]})
+                   | {c for g in s["practice"]["groups"].values() if g.get("enabled", True) for c in g["cells"]})
     info = {c: _cell_info(cfg, cells, c) for c in names}
     chosen = ma.choose_items(info, cfg, np.random.default_rng(int(cfg["seed"])))      # which trials: public seed
     stg = P["staging"]

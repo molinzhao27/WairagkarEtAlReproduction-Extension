@@ -102,8 +102,10 @@ def choose_items(info: Mapping[str, Mapping[str, Any]], cfg: Mapping[str, Any], 
     """Which (cell, trial) pairs become calibration, production, example and practice items.
 
     ``info[cell]``: {"session", "n", "wellformed" (their syllables usable, per trial; None for Kunz), "text" (cue
-    keys), "n_truth", "n_tts", "duration_s"} per trial. Calibration: per group, ``n_trials`` of the well-formed trials,
-    the same trials in every cell of the group. Production: every trial. Examples, then practice: well-formed trials
+    keys), "n_truth", "n_tts", "duration_s"} per trial. Calibration: per group, ``n_trials`` (or ``all``) of the
+    well-formed trials, the same trials in every cell of the group; ``trials_from`` (a JSON file with
+    ``train_trials``, e.g. a dev run's data.json) limits them to those trials. Groups with ``enabled: false`` (practice
+    too) are skipped. Production: every trial. Examples, then practice: well-formed trials
     of their sessions that no earlier set uses, without a cue of any real item (``exclude_shared_text``); examples
     also need as many true as TTS syllables and a short duration; each practice trial is shown with one of its
     group's cells. Every set is disjoint from every other by (session, trial); checked. Returns {"real", "examples",
@@ -126,7 +128,13 @@ def choose_items(info: Mapping[str, Mapping[str, Any]], cfg: Mapping[str, Any], 
         if not g["enabled"]:
             continue
         sess, c0 = session_of(g["cells"]), info[g["cells"][0]]
-        sel = select([i for i in range(c0["n"]) if c0["wellformed"][i]], int(g["n_trials"]), rng, f"calibration {gname}")
+        cands = [i for i in range(c0["n"]) if c0["wellformed"][i]]
+        if g.get("trials_from"):
+            from wvx.config import resolve_path
+            allowed = set(int(x) for x in json.loads(resolve_path(g["trials_from"]).read_text())["train_trials"])
+            cands = [i for i in cands if i in allowed]
+        n = len(cands) if str(g["n_trials"]) == "all" else int(g["n_trials"])
+        sel = select(cands, n, rng, f"calibration {gname}")
         used.setdefault(sess, set()).update(sel)
         calib += [item("calibration", gname, c, i) for c in g["cells"] for i in sel]
     for c in s["production"]["cells"]:
@@ -146,6 +154,8 @@ def choose_items(info: Mapping[str, Mapping[str, Any]], cfg: Mapping[str, Any], 
     used.setdefault(info[e["cell"]]["session"], set()).update(ex_sel)
     practice = []
     for gname, g in s["practice"]["groups"].items():
+        if not g.get("enabled", True):
+            continue
         sess = session_of(g["cells"])
         sel = select(eligible(g["cells"][0]), int(g["n_items"]), rng, f"practice {gname}")
         which = [g["cells"][j % len(g["cells"])] for j in range(len(sel))]

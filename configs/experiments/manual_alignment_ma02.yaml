@@ -1,0 +1,27 @@
+# D-061 (pre-registered): manual (Astra) syllable timing of the day195 dev training trials, for word-splice targets
+# timed like Kunz (no true timing). Package ma02: every well-formed dev training trial (results/sanity_train_day195_
+# from165_ep15/data.json) shown with the day-165 decoder's output (the decoder the dev test adapts), blind and scored.
+base_experiment: configs/experiments/manual_alignment.yaml
+
+tts:
+  voice: F5 clone              # D-059: never Aman. Syllable labels and syllable -> word membership come from the
+                               # F5 clone's forced alignment (D-055 syllables)
+
+manual_alignment:
+  calibration:
+    groups:
+      day195: {enabled: false}
+      day193: {enabled: false}
+      dev195: {cells: [day195_m165], n_trials: all, enabled: true,
+               trials_from: results/sanity_train_day195_from165_ep15/data.json}
+  production:
+    cells: []                  # Kunz already has manual answers (ma01); none here
+  practice:
+    groups:
+      day193: {enabled: false} # no F5 clone corpus for t15_day193; practice and examples come from day195 trials
+                               # outside the dev training set without a shared cue (exclude_shared_text)
+  workers:
+    n: 30
+    id_format: "a{:02d}"       # GPT-6 Astra workers, as in D-043
+  adoption:
+    primary_cells: [day195_m165]

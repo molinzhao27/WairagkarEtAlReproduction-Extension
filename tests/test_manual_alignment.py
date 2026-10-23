@@ -190,6 +190,24 @@ def test_choose_items_sets_are_disjoint(cfg):
     assert len(got["practice"]) == 11
 
 
+def test_choose_items_trials_from_and_disabled_groups(cfg, tmp_path):
+    f = tmp_path / "data.json"
+    f.write_text(json.dumps({"train_trials": [0, 2, 3, 4, 5, 7, 8, 11]}))
+    c = ma.load_config(overrides={"manual_alignment": {
+        "calibration": {"groups": {"day195": {"enabled": False}, "day193": {"enabled": False},
+                                   "dev": {"cells": ["day195_m165"], "n_trials": "all", "enabled": True,
+                                           "trials_from": str(f)}}},
+        "production": {"cells": []}, "examples": {"n": 1},
+        "practice": {"groups": {"day195": {"n_items": 2}, "day193": {"enabled": False}}}}})
+    info = _info()
+    got = ma.choose_items(info, c, np.random.default_rng(1))
+    cal = sorted(r["trial"] for r in got["real"])
+    allowed = {0, 2, 3, 4, 5, 7, 8, 11}
+    assert cal == sorted(i for i in allowed if info["day195_m165"]["wellformed"][i])      # all, and only those
+    assert {r["cell"] for r in got["real"]} == {"day195_m165"} and all(r["set"] == "calibration" for r in got["real"])
+    assert {r["group"] for r in got["practice"]} == {"day195"} and len(got["practice"]) == 2
+
+
 def test_select_refuses_too_few():
     with pytest.raises(ValueError):
         ma.select([1, 2], 3, np.random.default_rng(0), "x")
