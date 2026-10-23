@@ -378,3 +378,51 @@ def fit_adversarial(day_layer, new_trials, ref_trials, settings: Mapping[str, An
                 log(f"  adversarial step {it}: critic distance {float(w):.3f}, input change {float(idp):.4f}")
     conv = Converter(W1.numpy(), b1.numpy(), W2.numpy(), b2.numpy())
     return conv, {"kind": "adversarial", "history": hist, **conv.info()}
+
+
+# --------------------------------------------- same-day inner -> attempted conversion (D-067)
+
+def pca_basis(frames: np.ndarray, k: int) -> np.ndarray:
+    """(k, F) top-k principal axes (unstandardized covariance) of the frames, by decreasing variance."""
+    x = np.asarray(frames, np.float64)
+    w, v = np.linalg.eigh(np.cov(x, rowvar=False))
+    return v[:, np.argsort(w)[::-1][:k]].T
+
+
+def fit_projector(im: np.ndarray, att: np.ndarray, V: np.ndarray) -> tuple[LinearMap, dict]:
+    """Inside the subspace of ``V`` (k, F): shift imagined frames to the attempted mean and scale their deviations by
+    s = sqrt(tr C_att / tr C_im) (both in the subspace); outside it, unchanged.
+    x' = (x - mu_im) @ (I + (s - 1) P) + (I - P) mu_im + P mu_att, P = V^T V."""
+    mu_i, mu_a = im.mean(0), att.mean(0)
+    P = V.T @ V
+    ci, ca = (im - mu_i) @ V.T, (att - mu_a) @ V.T
+    s = float(np.sqrt((ca ** 2).sum() / len(ca) / ((ci ** 2).sum() / len(ci))))
+    F = im.shape[1]
+    d = mu_a - mu_i
+    info = {"scale": s, "pc_sd_ratio_att_over_im": (ca.std(0) / ci.std(0)).tolist(),
+            "mean_diff_norm": float(np.linalg.norm(d)),
+            "mean_diff_share_in_subspace": float(np.linalg.norm(d @ V.T) ** 2 / max(np.linalg.norm(d) ** 2, 1e-12))}
+    return LinearMap(mu_i, np.eye(F) + (s - 1) * P, (np.eye(F) - P) @ mu_i + P @ mu_a, "projector"), info
+
+
+def fit_paired_rotation(im_pairs: np.ndarray, att_pairs: np.ndarray, V: np.ndarray, shrink: float,
+                        mu_im: np.ndarray, mu_att: np.ndarray) -> tuple[LinearMap, dict]:
+    """Sentence-paired map inside the subspace of ``V``: in PC coordinates, imagined frames are whitened, rotated by
+    the orthogonal matrix that best matches them to their DTW-paired attempted frames (Procrustes in whitened
+    space = CCA with all canonical correlations kept at full scale, so no shrinkage), and re-colored with the
+    attempted covariance; outside the subspace, unchanged. Covariances shrunk ``shrink`` toward their diagonal."""
+    ci = (im_pairs - mu_im) @ V.T
+    ca = (att_pairs - mu_att) @ V.T
+
+    def shrunk(c):
+        C = np.cov(c, rowvar=False)
+        return (1 - shrink) * C + shrink * np.diag(np.diag(C))
+
+    Ci, Ca = shrunk(ci), shrunk(ca)
+    Wi, Ca_h = _sym_pow(Ci, -0.5), _sym_pow(Ca, 0.5)
+    U, S, Vt = np.linalg.svd((ci @ Wi).T @ (ca @ _sym_pow(Ca, -0.5)) / len(ci))
+    M_pc = Wi @ (U @ Vt) @ Ca_h
+    F = V.shape[1]
+    P = V.T @ V
+    info = {"canonical_correlations": S.tolist(), "n_pairs": int(len(ci))}
+    return LinearMap(mu_im, np.eye(F) - P + V.T @ M_pc @ V, (np.eye(F) - P) @ mu_im + P @ mu_att, "paired"), info

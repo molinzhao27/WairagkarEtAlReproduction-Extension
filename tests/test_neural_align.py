@@ -94,3 +94,32 @@ def test_converter_starts_as_identity_and_adversarial_runs():
     assert conv(new[0]).shape == new[0].shape and len(info["history"]) == 2
     w = na.sample_windows(ref, 5, 60, np.random.default_rng(1))
     assert w.shape == (5, 60, 16)
+
+
+def test_projector_shifts_and_scales_only_inside_the_subspace():
+    rng = np.random.default_rng(5)
+    F, k = 12, 3
+    V = np.linalg.qr(rng.normal(size=(F, F)))[0][:, :k].T
+    lat = rng.normal(size=(4000, k))
+    att = lat * 3 @ V + rng.normal(size=(4000, F)) * 0.5 + 2.0 * V[0]          # big subspace signal, offset on PC1
+    im = lat * 1 @ V + rng.normal(size=(4000, F)) * 0.5                          # same signal, 3x weaker, no offset
+    m, info = na.fit_projector(im, att, V)
+    y = m(im)
+    assert np.allclose((y.mean(0) - att.mean(0)) @ V.T, 0, atol=0.05)          # subspace mean -> attempted
+    assert abs(np.std(y @ V.T) / np.std(att @ V.T) - 1) < 0.05                   # subspace magnitude -> attempted
+    Q = np.eye(F) - V.T @ V
+    assert np.allclose(y @ Q, im @ Q, atol=1e-4)                                 # outside: unchanged
+    assert info["scale"] > 2.5
+
+
+def test_paired_rotation_recovers_a_rotation_inside_the_subspace():
+    rng = np.random.default_rng(6)
+    F, k = 10, 4
+    V = np.eye(F)[:k]
+    R = np.linalg.qr(rng.normal(size=(k, k)))[0]
+    a = rng.normal(size=(3000, k)) * [3, 2, 1.5, 1]
+    att = np.c_[a, rng.normal(size=(3000, F - k))]
+    im = np.c_[(a @ R) * 0.5 + 0.02 * rng.normal(size=(3000, k)), rng.normal(size=(3000, F - k))]
+    m, info = na.fit_paired_rotation(im, att, V, 0.0, im.mean(0), att.mean(0))
+    y = m(im)
+    assert np.mean(np.abs(y[:, :k] - att[:, :k])) < 0.15 and min(info["canonical_correlations"]) > 0.9

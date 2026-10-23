@@ -1,0 +1,21 @@
+# D-067 (pre-registered): same-day inner -> attempted conversion before decoding (scripts/inner_projector.py).
+base_experiment: configs/experiments/kunz_full.yaml          # Kunz data, channel reorder, the day-193 decoder
+
+run_name: inner_projector
+
+runtime:
+  device: cpu
+  threads: {intra_op: 12, inter_op: 2, omp: 12}               # host, chiplet 1
+
+inner_projector:
+  name: kunz_m193_zeroshot
+  seed: 20261023
+  pairs: {3: 4, 6: 7, 11: 9, 13: 12}
+  n_components: 20
+  pool_bins: 5                       # 50 ms fitting / comparison frames
+  shrink: 0.1                        # covariance shrinkage toward the diagonal (paired)
+  speech_db: 15.0                    # speech frame: c0 envelope > silence frame + this
+  silence_config: configs/experiments/manual_alignment_f5clone.yaml   # D-059: F5 clone, never Aman
+  silence_corpus: kunz_50words
+  dtw: {metric: cosine, step_sizes: [[1, 1], [0, 1], [1, 0]], weights_add: [0.0, 0.0, 0.0],
+        weights_mul: [1.0, 1.0, 1.0], global_constraints: false, band_rad: 0.25}
