@@ -16,7 +16,8 @@ ref     their voice: ``ref_n_sentences`` 50-word trials of ``ref_session`` (neve
         removed so the clone hears fluent speech), up to ``ref_max_s``; ref.txt = the sentences' cues.
         Also writes texts_<corpus>.json: the cues of each corpus in the source voice's corpus order.
 qc      transcribes every generated cue; the ones not word-perfect are regenerated with a new seed (F5 sometimes
-        speaks part of the reference text before a short cue), up to ``qc_max_attempts``; the rest are reported.
+        speaks part of the reference text before a short cue; f5_generate.py --only <redo> --attempt N, then
+        qc --recheck), up to ``qc_max_attempts``; the rest are reported.
 encode  generated 24 kHz audio -> 16 kHz -> LPCNet features -> a TTS corpus of voice ``voice`` (same cue order).
 """
 
@@ -80,9 +81,10 @@ def cmd_ref(cfg) -> None:
         log(f"texts: {corpus_name}: {len(corpus)} cues")
 
 
-def cmd_qc(cfg) -> None:
+def cmd_qc(cfg, recheck: bool = False) -> None:
     """Transcribe every generated cue (wvx.asr, as the scoring does); qc_<corpus>.json lists the cues whose transcript
-    is not word-perfect (WER > 0), to regenerate with scripts/f5_generate.py --only ... --attempt N."""
+    is not word-perfect (WER > 0), to regenerate with scripts/f5_generate.py --only ... --attempt N. ``recheck``:
+    transcribe only the cues of the existing qc file's redo list (just regenerated) and keep the other rows."""
     import librosa
 
     from wvx import asr
@@ -92,14 +94,19 @@ def cmd_qc(cfg) -> None:
     acfg = {"asr": {"cpu_threads": int(f.get("qc_cpu_threads", 4)), "model": {"allow_download": False}}}
     for corpus_name in f["corpora"]:
         texts = json.loads((work / f"texts_{corpus_name}.json").read_text())
-        rows = []
+        qpath = work / f"qc_{corpus_name}.json"
+        prev = json.loads(qpath.read_text()) if recheck else None
+        rows = prev["rows"] if prev else [None] * len(texts)
         for j, text in enumerate(texts):
+            if prev and j not in prev["redo"]:
+                continue
             y, _ = librosa.load(str(work / "generated" / corpus_name / f"s{j:04d}.wav"), sr=16000)
             r = asr.evaluate_wav(y, 16000, text, acfg)
-            rows.append({"cue": j, "text": text, "hyp": r.get("hyp_raw"), "wer": r.get("wer")})
+            n_checks = rows[j]["n_checks"] + 1 if prev else 1
+            rows[j] = {"cue": j, "text": text, "hyp": r.get("hyp_raw"), "wer": r.get("wer"), "n_checks": n_checks}
         bad = [r["cue"] for r in rows if not (r["wer"] == 0)]
-        (work / f"qc_{corpus_name}.json").write_text(json.dumps({"n": len(rows), "n_not_perfect": len(bad),
-                                                                 "redo": bad, "rows": rows}, indent=1) + "\n")
+        qpath.write_text(json.dumps({"n": len(rows), "n_not_perfect": len(bad), "redo": bad, "rows": rows},
+                                    indent=1) + "\n")
         log(f"qc {corpus_name}: {len(rows) - len(bad)}/{len(rows)} word-perfect; redo {bad[:20]}{'...' if len(bad) > 20 else ''}")
 
 
@@ -140,11 +147,15 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("step", choices=["ref", "qc", "encode"])
     ap.add_argument("--config", default="configs/experiments/f5clone.yaml")
+    ap.add_argument("--recheck", action="store_true", help="qc: only the cues of the existing redo list")
     args = ap.parse_args(argv)
     cfg = load_experiment_config(args.config)
     apply_thread_env(cfg)
     t0 = time.time()
-    {"ref": cmd_ref, "qc": cmd_qc, "encode": cmd_encode}[args.step](cfg)
+    if args.step == "qc":
+        cmd_qc(cfg, recheck=args.recheck)
+    else:
+        {"ref": cmd_ref, "encode": cmd_encode}[args.step](cfg)
     log(f"{args.step} done in {(time.time() - t0) / 60:.1f} min")
     return 0
 
