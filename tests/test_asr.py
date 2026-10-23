@@ -30,6 +30,20 @@ def test_vocabulary_is_the_50_word_set():
         assert w in VOCAB
 
 
+def test_vocabulary_check_is_cached_but_still_applies_per_settings():
+    v = asr.vocabulary()
+    v.append("zzz")                                            # the caller's copy, not the cached one
+    assert asr.vocabulary() == VOCAB and asr.vocabulary() is not asr.vocabulary()
+    bad = {"text": {"replacements": [["okay", "ok"]]}}         # "okay" is not normalized under these text settings
+    for _ in range(2):                                         # a failed check is never cached
+        with pytest.raises(ValueError, match="normalized"):
+            asr.vocabulary(bad)
+    with pytest.raises(ValueError, match="duplicates"):
+        asr.vocabulary({"constrained": {"vocabulary": ["hello", "hello"]}})
+    assert asr.vocabulary({"constrained": {"vocabulary": ["hello", "you"]}}) == ["hello", "you"]
+    assert asr.vocabulary() == VOCAB
+
+
 def test_config_defaults_are_cpu_and_small():
     c = asr.load_asr_config()
     assert c["device"] == "cpu" and c["cpu_threads"] <= 8

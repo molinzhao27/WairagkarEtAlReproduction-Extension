@@ -55,6 +55,7 @@ from __future__ import annotations
 
 import functools
 import hashlib
+import json
 import math
 import os
 import re
@@ -108,16 +109,25 @@ def _metrics_cfg() -> dict:
     return metrics.load_metrics_config()
 
 
+# Vocabularies that passed the check in ``vocabulary``, keyed by everything the check depends on (the word list, the
+# asr ``text`` settings and the metrics ``text`` settings, as JSON). score_text calls vocabulary() for every clip, and
+# the check (one normalize() per word, each merging configs) used to cost ~0.2 s per call.
+_CHECKED_VOCABULARIES: dict = {}
+
+
 def vocabulary(cfg: ConfigLike = None) -> list:
-    """The closed vocabulary, checked: normalized, unique, non-empty."""
+    """The closed vocabulary, checked: normalized, unique, non-empty (checked once per vocabulary and text settings)."""
     c = _cfg(cfg)
     vocab = list(c["constrained"]["vocabulary"])
-    bad = [w for w in vocab if not isinstance(w, str) or normalize(w, c) != w or " " in w]
-    if bad:
-        raise ValueError(f"vocabulary words must already be normalized single tokens: {bad}")
-    if len(set(vocab)) != len(vocab) or not vocab:
-        raise ValueError("vocabulary must be non-empty and free of duplicates")
-    return vocab
+    key = json.dumps([vocab, c["text"], _metrics_cfg()["text"]], sort_keys=True, default=repr)
+    if key not in _CHECKED_VOCABULARIES:
+        bad = [w for w in vocab if not isinstance(w, str) or normalize(w, c) != w or " " in w]
+        if bad:
+            raise ValueError(f"vocabulary words must already be normalized single tokens: {bad}")
+        if len(set(vocab)) != len(vocab) or not vocab:
+            raise ValueError("vocabulary must be non-empty and free of duplicates")
+        _CHECKED_VOCABULARIES[key] = tuple(vocab)
+    return list(_CHECKED_VOCABULARIES[key])
 
 
 # --------------------------------------------------------------------------------------------
