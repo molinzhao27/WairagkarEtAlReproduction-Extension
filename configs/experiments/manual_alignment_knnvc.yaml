@@ -1,0 +1,4 @@
+# Placement settings of the Kunz target pipeline (manual_alignment.yaml) with the TTS voice of D-054.
+base_experiment: configs/experiments/manual_alignment.yaml
+tts:
+  voice: Aman kNN-VC
