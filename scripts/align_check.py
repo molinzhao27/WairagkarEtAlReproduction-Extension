@@ -37,13 +37,19 @@ def log(msg: str) -> None:
 
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--device", choices=["auto", "cpu", "gpu"], default=None, help="override runtime.device")
     ap.add_argument("--config", default="configs/experiments/align_check.yaml")
     args = ap.parse_args(argv)
     cfg = load_experiment_config(args.config)
+    if args.device:
+        cfg["runtime"]["device"] = args.device
     apply_thread_env(cfg)
     from wvx import b2v
 
     b2v.use_keras2()
+    from wvx.training import configure_device
+
+    configure_device(cfg["runtime"].get("device", "auto"))
     import numpy as np
 
     from drift_check import embed, frechet
