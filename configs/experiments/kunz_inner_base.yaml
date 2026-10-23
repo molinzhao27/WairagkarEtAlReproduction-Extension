@@ -1,0 +1,20 @@
+# D-069 (pre-registered): full Kunz scoring of converted inner speech, zero-shot day-193 decoder only, TTS references
+# in the F5 clone voice (D-059: never Aman). One config per transform (kunz_inner_{none,gain,projector,paired}).
+#   host: CUDA_VISIBLE_DEVICES= nice -n 19 .venv/bin/python -I scripts/kunz_experiment.py --config <config> --folds 3 6   (and 11 13)
+base_experiment: configs/experiments/kunz_v2_recipeB.yaml
+
+runtime:
+  threads: {intra_op: 8, inter_op: 1, omp: 8}   # two processes x 8 on chiplet 1
+
+experiment:
+  attempted_file: "{kunz_processed}/t15.2024.03.03_attempted.npz"   # no targets: nothing is trained
+  imagined_file: "{kunz_processed}/t15.2024.03.03_imagined.npz"
+  imagined_eval_file: "{kunz_processed}/t15.2024.03.03_imagined_eval.npz"
+  run_variants: []
+  zero_shot: true
+  include_leaky: false
+  evaluation:
+    tts_voice: F5 clone
+    tts_corpus: kunz_50words
+    heldout_targets: false
+    save_audio: {predictions: [], references: false}

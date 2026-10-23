@@ -1,0 +1,9 @@
+# D-069: inner speech converted by 'projector' (wvx.inner_conversion; none = the original data).
+base_experiment: configs/experiments/kunz_inner_base.yaml
+
+run_name: kunz_inner_projector
+
+experiment:
+  name: kunz_inner_projector
+  imagined_file: data/processed/kunz_inner_conv/t15.2024.03.03_imagined_projector.npz
+  imagined_eval_file: data/processed/kunz_inner_conv/t15.2024.03.03_imagined_eval_projector.npz

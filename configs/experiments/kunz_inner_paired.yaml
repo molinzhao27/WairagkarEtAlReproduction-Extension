@@ -1,0 +1,9 @@
+# D-069: inner speech converted by 'paired' (wvx.inner_conversion; none = the original data).
+base_experiment: configs/experiments/kunz_inner_base.yaml
+
+run_name: kunz_inner_paired
+
+experiment:
+  name: kunz_inner_paired
+  imagined_file: data/processed/kunz_inner_conv/t15.2024.03.03_imagined_paired.npz
+  imagined_eval_file: data/processed/kunz_inner_conv/t15.2024.03.03_imagined_eval_paired.npz

@@ -1,0 +1,7 @@
+# D-069: inner speech converted by 'none' (wvx.inner_conversion; none = the original data).
+base_experiment: configs/experiments/kunz_inner_base.yaml
+
+run_name: kunz_inner_none
+
+experiment:
+  name: kunz_inner_none

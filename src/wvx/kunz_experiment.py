@@ -192,11 +192,13 @@ def build_fold(
     heldout_block: int,
     cfg: Mapping[str, Any],
     normalize=None,
+    require_targets: bool = True,
 ) -> Fold:
     """Training trials and evaluation sets for one held-out attempted block (see module docstring).
 
     Checks the pairing against the data (paired blocks must hold the same set of cues) and that no
-    paired-imagined or held-out cue is in the training set. ``normalize`` maps a cue to its comparison
+    paired-imagined or held-out cue is in the training set. ``require_targets`` False (zero-shot-only runs)
+    accepts training trials without targets. ``normalize`` maps a cue to its comparison
     key (default: ``wvx.metrics.normalize_text``).
     """
     if normalize is None:
@@ -219,7 +221,7 @@ def build_fold(
     train_blocks = [b for b in sorted(a_blocks) if b != heldout_block]
     train = [t for b in train_blocks for t in a_blocks[b]]
     train_keys = {normalize(t.text) for t in train}
-    if any(t.target is None for t in train):
+    if require_targets and any(t.target is None for t in train):
         raise ValueError("every training trial needs a target")
 
     def make(name, role, condition, block, trials):

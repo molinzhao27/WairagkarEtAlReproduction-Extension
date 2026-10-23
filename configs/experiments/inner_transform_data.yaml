@@ -1,0 +1,17 @@
+# D-069: converted copies of the Kunz imagined data (scripts/inner_transform_data.py), same settings as D-067.
+base_experiment: configs/experiments/inner_projector.yaml
+
+run_name: inner_transform_data
+
+inner_transform_data:
+  name: kunz_imagined_converted
+  out_dir: data/processed/kunz_inner_conv
+  transforms: [gain, projector, paired]
+  pairs: {3: 4, 6: 7, 11: 9, 13: 12}
+  n_components: 20
+  pool_bins: 5
+  shrink: 0.1
+  seed: 20261023
+  check_tol: 1.0e-3
+  dtw: {metric: cosine, step_sizes: [[1, 1], [0, 1], [1, 0]], weights_add: [0.0, 0.0, 0.0],
+        weights_mul: [1.0, 1.0, 1.0], global_constraints: false, band_rad: 0.25}

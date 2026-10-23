@@ -256,7 +256,9 @@ def make_fold(block: int, data, cfg):
     from wvx.metrics import normalize_text
 
     att, img, ev = data
-    fold = kx.build_fold(att, img, ev, block, cfg, normalize=normalize_text)
+    fold = kx.build_fold(att, img, ev, block, cfg, normalize=normalize_text,
+                         require_targets=bool(cfg["experiment"]["run_variants"])
+                         or bool(cfg["experiment"]["evaluation"].get("heldout_targets", True)))
     n = cfg["experiment"]["max_trials_per_set"]
     if n:
         for s in fold.sets:
@@ -778,7 +780,10 @@ class References:
         self.tts_speech_s = {text: float(np.sum(metrics.speech_frame_mask(wav, self.sr, e["tts_metrics"]))) * hop_s
                              for text, wav in self.tts.items()}
         w = int(cfg["model"]["window_len"])
-        held = [t for s in fold.sets if s.role == "heldout_attempted" for t in s.trials]
+        # evaluation.heldout_targets false (zero-shot-only runs, D-069): no aligned-target references and no
+        # target metrics for the held-out attempted trials, so an attempted file without targets is accepted
+        held = [t for s in fold.sets if s.role == "heldout_attempted" for t in s.trials] \
+            if e.get("heldout_targets", True) else []
 
         def target(t):
             n = t.neural.shape[0] - w + 1
@@ -908,11 +913,12 @@ def score_model(model: str, fold, partners, cfg, dirs: Dirs, refs: References, a
             pred, t.text,
             partner=(int(partner.meta["trial_index"]), partner.text) if inp == "real" and partner is not None else None,
             cues=cues[s.name][1] if inp == "real" else None,     # cue nulls: the same output vs EVERY cue of its set
-            heldout=(idx, t.target) if s.role == "heldout_attempted" else None)).result()
+            heldout=(idx, t.target) if s.role == "heldout_attempted" and t.target is not None and idx in refs.target
+            else None)).result()
         if save and inp == "real":
             synthesis.write_wav(dirs.audio / model / s.name / f"tr{idx:03d}.wav", wav, cfg)
         row.update(scores)
-        if s.role == "heldout_attempted":
+        if s.role == "heldout_attempted" and idx in refs.target_vs_tts:
             row["target_vs_tts_mel_corr"] = refs.target_vs_tts[idx].get("mel_corr")
         if asr is not None and inp in asr_inputs:
             safe(row, "", lambda: asr(wav, sr, t.text))
