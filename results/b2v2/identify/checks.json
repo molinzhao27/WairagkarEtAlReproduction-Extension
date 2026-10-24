@@ -1,0 +1,1648 @@
+{
+ "decision": "D-076 (post-hoc checks)",
+ "code_version": {
+  "source": "sync",
+  "commit": "d310edfaf61e4c8ffaa6d0ad14eb7ab66656b597",
+  "dirty": false,
+  "diff_sha256": null,
+  "pushed_at": "2026-10-24T17:35:38Z"
+ },
+ "created": "2026-10-24T17:35:54",
+ "summary": {
+  "leakage": {
+   "fold_3": {
+    "adaptation_sentences": 150,
+    "overlap_with_test": 0
+   },
+   "fold_6": {
+    "adaptation_sentences": 150,
+    "overlap_with_test": 0
+   },
+   "fold_11": {
+    "adaptation_sentences": 150,
+    "overlap_with_test": 0
+   },
+   "fold_13": {
+    "adaptation_sentences": 150,
+    "overlap_with_test": 0
+   },
+   "all_vs_block14": 0
+  },
+  "same_word_count": {
+   "n": 197,
+   "median_candidates": 14.0,
+   "top1": 0.5736040609137056,
+   "chance_top1": 0.09644670050761421,
+   "rank_fraction": 0.24229720380810257,
+   "chance_rank_fraction": 0.5482233502538071
+  },
+  "time_reversed": {
+   "mean_rank": 24.11,
+   "mean_rank_true": 11.94,
+   "top1": 0.025,
+   "p_true_vs_reversed": 1.075153346420208e-30
+  }
+ },
+ "rows": [
+  {
+   "gid": 200,
+   "fold": 3,
+   "rank": 7,
+   "rank_reversed": 16,
+   "rank_same_words": 1,
+   "n_same_words": 16
+  },
+  {
+   "gid": 201,
+   "fold": 3,
+   "rank": 1,
+   "rank_reversed": 1,
+   "rank_same_words": 1,
+   "n_same_words": 1
+  },
+  {
+   "gid": 202,
+   "fold": 3,
+   "rank": 42,
+   "rank_reversed": 45,
+   "rank_same_words": 13,
+   "n_same_words": 16
+  },
+  {
+   "gid": 203,
+   "fold": 3,
+   "rank": 8,
+   "rank_reversed": 19,
+   "rank_same_words": 1,
+   "n_same_words": 20
+  },
+  {
+   "gid": 204,
+   "fold": 3,
+   "rank": 1,
+   "rank_reversed": 20,
+   "rank_same_words": 1,
+   "n_same_words": 20
+  },
+  {
+   "gid": 205,
+   "fold": 3,
+   "rank": 33,
+   "rank_reversed": 45,
+   "rank_same_words": 9,
+   "n_same_words": 16
+  },
+  {
+   "gid": 206,
+   "fold": 3,
+   "rank": 3,
+   "rank_reversed": 2,
+   "rank_same_words": 2,
+   "n_same_words": 7
+  },
+  {
+   "gid": 207,
+   "fold": 3,
+   "rank": 1,
+   "rank_reversed": 6,
+   "rank_same_words": 1,
+   "n_same_words": 20
+  },
+  {
+   "gid": 208,
+   "fold": 3,
+   "rank": 6,
+   "rank_reversed": 18,
+   "rank_same_words": 1,
+   "n_same_words": 16
+  },
+  {
+   "gid": 209,
+   "fold": 3,
+   "rank": 11,
+   "rank_reversed": 14,
+   "rank_same_words": 4,
+   "n_same_words": 20
+  },
+  {
+   "gid": 210,
+   "fold": 3,
+   "rank": 22,
+   "rank_reversed": 18,
+   "rank_same_words": 12,
+   "n_same_words": 20
+  },
+  {
+   "gid": 211,
+   "fold": 3,
+   "rank": 1,
+   "rank_reversed": 5,
+   "rank_same_words": 1,
+   "n_same_words": 20
+  },
+  {
+   "gid": 212,
+   "fold": 3,
+   "rank": 1,
+   "rank_reversed": 12,
+   "rank_same_words": 1,
+   "n_same_words": 20
+  },
+  {
+   "gid": 213,
+   "fold": 3,
+   "rank": 16,
+   "rank_reversed": 17,
+   "rank_same_words": 7,
+   "n_same_words": 20
+  },
+  {
+   "gid": 214,
+   "fold": 3,
+   "rank": 42,
+   "rank_reversed": 46,
+   "rank_same_words": 2,
+   "n_same_words": 6
+  },
+  {
+   "gid": 215,
+   "fold": 3,
+   "rank": 1,
+   "rank_reversed": 12,
+   "rank_same_words": 1,
+   "n_same_words": 16
+  },
+  {
+   "gid": 216,
+   "fold": 3,
+   "rank": 1,
+   "rank_reversed": 20,
+   "rank_same_words": 1,
+   "n_same_words": 16
+  },
+  {
+   "gid": 217,
+   "fold": 3,
+   "rank": 1,
+   "rank_reversed": 6,
+   "rank_same_words": 1,
+   "n_same_words": 7
+  },
+  {
+   "gid": 218,
+   "fold": 3,
+   "rank": 8,
+   "rank_reversed": 33,
+   "rank_same_words": 1,
+   "n_same_words": 16
+  },
+  {
+   "gid": 219,
+   "fold": 3,
+   "rank": 6,
+   "rank_reversed": 7,
+   "rank_same_words": 5,
+   "n_same_words": 7
+  },
+  {
+   "gid": 220,
+   "fold": 3,
+   "rank": 1,
+   "rank_reversed": 32,
+   "rank_same_words": 1,
+   "n_same_words": 16
+  },
+  {
+   "gid": 221,
+   "fold": 3,
+   "rank": 1,
+   "rank_reversed": 10,
+   "rank_same_words": 1,
+   "n_same_words": 20
+  },
+  {
+   "gid": 222,
+   "fold": 3,
+   "rank": 1,
+   "rank_reversed": 10,
+   "rank_same_words": 1,
+   "n_same_words": 20
+  },
+  {
+   "gid": 223,
+   "fold": 3,
+   "rank": 3,
+   "rank_reversed": 27,
+   "rank_same_words": 1,
+   "n_same_words": 16
+  },
+  {
+   "gid": 224,
+   "fold": 3,
+   "rank": 1,
+   "rank_reversed": 43,
+   "rank_same_words": 1,
+   "n_same_words": 6
+  },
+  {
+   "gid": 225,
+   "fold": 3,
+   "rank": 8,
+   "rank_reversed": 11,
+   "rank_same_words": 6,
+   "n_same_words": 7
+  },
+  {
+   "gid": 226,
+   "fold": 3,
+   "rank": 1,
+   "rank_reversed": 37,
+   "rank_same_words": 1,
+   "n_same_words": 16
+  },
+  {
+   "gid": 227,
+   "fold": 3,
+   "rank": 21,
+   "rank_reversed": 18,
+   "rank_same_words": 11,
+   "n_same_words": 20
+  },
+  {
+   "gid": 228,
+   "fold": 3,
+   "rank": 1,
+   "rank_reversed": 2,
+   "rank_same_words": 1,
+   "n_same_words": 7
+  },
+  {
+   "gid": 229,
+   "fold": 3,
+   "rank": 13,
+   "rank_reversed": 36,
+   "rank_same_words": 1,
+   "n_same_words": 6
+  },
+  {
+   "gid": 230,
+   "fold": 3,
+   "rank": 1,
+   "rank_reversed": 11,
+   "rank_same_words": 1,
+   "n_same_words": 20
+  },
+  {
+   "gid": 231,
+   "fold": 3,
+   "rank": 14,
+   "rank_reversed": 29,
+   "rank_same_words": 2,
+   "n_same_words": 16
+  },
+  {
+   "gid": 232,
+   "fold": 3,
+   "rank": 1,
+   "rank_reversed": 26,
+   "rank_same_words": 1,
+   "n_same_words": 20
+  },
+  {
+   "gid": 233,
+   "fold": 3,
+   "rank": 1,
+   "rank_reversed": 38,
+   "rank_same_words": 1,
+   "n_same_words": 6
+  },
+  {
+   "gid": 234,
+   "fold": 3,
+   "rank": 3,
+   "rank_reversed": 35,
+   "rank_same_words": 1,
+   "n_same_words": 20
+  },
+  {
+   "gid": 235,
+   "fold": 3,
+   "rank": 2,
+   "rank_reversed": 37,
+   "rank_same_words": 1,
+   "n_same_words": 20
+  },
+  {
+   "gid": 236,
+   "fold": 3,
+   "rank": 13,
+   "rank_reversed": 38,
+   "rank_same_words": 6,
+   "n_same_words": 20
+  },
+  {
+   "gid": 237,
+   "fold": 3,
+   "rank": 1,
+   "rank_reversed": 29,
+   "rank_same_words": 1,
+   "n_same_words": 16
+  },
+  {
+   "gid": 238,
+   "fold": 3,
+   "rank": 46,
+   "rank_reversed": 46,
+   "rank_same_words": 15,
+   "n_same_words": 16
+  },
+  {
+   "gid": 239,
+   "fold": 3,
+   "rank": 1,
+   "rank_reversed": 3,
+   "rank_same_words": 1,
+   "n_same_words": 7
+  },
+  {
+   "gid": 240,
+   "fold": 3,
+   "rank": 3,
+   "rank_reversed": 46,
+   "rank_same_words": 1,
+   "n_same_words": 6
+  },
+  {
+   "gid": 241,
+   "fold": 3,
+   "rank": 16,
+   "rank_reversed": 19,
+   "rank_same_words": 7,
+   "n_same_words": 20
+  },
+  {
+   "gid": 242,
+   "fold": 3,
+   "rank": 2,
+   "rank_reversed": 18,
+   "rank_same_words": 1,
+   "n_same_words": 16
+  },
+  {
+   "gid": 243,
+   "fold": 3,
+   "rank": 2,
+   "rank_reversed": 3,
+   "rank_same_words": 1,
+   "n_same_words": 7
+  },
+  {
+   "gid": 244,
+   "fold": 3,
+   "rank": 5,
+   "rank_reversed": 27,
+   "rank_same_words": 1,
+   "n_same_words": 20
+  },
+  {
+   "gid": 245,
+   "fold": 3,
+   "rank": 1,
+   "rank_reversed": 31,
+   "rank_same_words": 1,
+   "n_same_words": 16
+  },
+  {
+   "gid": 246,
+   "fold": 3,
+   "rank": 18,
+   "rank_reversed": 29,
+   "rank_same_words": 2,
+   "n_same_words": 16
+  },
+  {
+   "gid": 247,
+   "fold": 3,
+   "rank": 38,
+   "rank_reversed": 38,
+   "rank_same_words": 20,
+   "n_same_words": 20
+  },
+  {
+   "gid": 248,
+   "fold": 3,
+   "rank": 13,
+   "rank_reversed": 30,
+   "rank_same_words": 5,
+   "n_same_words": 20
+  },
+  {
+   "gid": 249,
+   "fold": 3,
+   "rank": 1,
+   "rank_reversed": 50,
+   "rank_same_words": 1,
+   "n_same_words": 6
+  },
+  {
+   "gid": 250,
+   "fold": 6,
+   "rank": 3,
+   "rank_reversed": 5,
+   "rank_same_words": 3,
+   "n_same_words": 10
+  },
+  {
+   "gid": 251,
+   "fold": 6,
+   "rank": 16,
+   "rank_reversed": 36,
+   "rank_same_words": 1,
+   "n_same_words": 14
+  },
+  {
+   "gid": 252,
+   "fold": 6,
+   "rank": 8,
+   "rank_reversed": 9,
+   "rank_same_words": 2,
+   "n_same_words": 18
+  },
+  {
+   "gid": 253,
+   "fold": 6,
+   "rank": 1,
+   "rank_reversed": 13,
+   "rank_same_words": 1,
+   "n_same_words": 18
+  },
+  {
+   "gid": 254,
+   "fold": 6,
+   "rank": 14,
+   "rank_reversed": 17,
+   "rank_same_words": 1,
+   "n_same_words": 14
+  },
+  {
+   "gid": 255,
+   "fold": 6,
+   "rank": 46,
+   "rank_reversed": 47,
+   "rank_same_words": 1,
+   "n_same_words": 3
+  },
+  {
+   "gid": 256,
+   "fold": 6,
+   "rank": 42,
+   "rank_reversed": 49,
+   "rank_same_words": 2,
+   "n_same_words": 5
+  },
+  {
+   "gid": 257,
+   "fold": 6,
+   "rank": 30,
+   "rank_reversed": 34,
+   "rank_same_words": 5,
+   "n_same_words": 14
+  },
+  {
+   "gid": 258,
+   "fold": 6,
+   "rank": 1,
+   "rank_reversed": 18,
+   "rank_same_words": 1,
+   "n_same_words": 10
+  },
+  {
+   "gid": 259,
+   "fold": 6,
+   "rank": 1,
+   "rank_reversed": 13,
+   "rank_same_words": 1,
+   "n_same_words": 18
+  },
+  {
+   "gid": 260,
+   "fold": 6,
+   "rank": 1,
+   "rank_reversed": 15,
+   "rank_same_words": 1,
+   "n_same_words": 18
+  },
+  {
+   "gid": 261,
+   "fold": 6,
+   "rank": 31,
+   "rank_reversed": 30,
+   "rank_same_words": 8,
+   "n_same_words": 14
+  },
+  {
+   "gid": 262,
+   "fold": 6,
+   "rank": 6,
+   "rank_reversed": 16,
+   "rank_same_words": 1,
+   "n_same_words": 18
+  },
+  {
+   "gid": 263,
+   "fold": 6,
+   "rank": 2,
+   "rank_reversed": 11,
+   "rank_same_words": 1,
+   "n_same_words": 18
+  },
+  {
+   "gid": 264,
+   "fold": 6,
+   "rank": 1,
+   "rank_reversed": 2,
+   "rank_same_words": 1,
+   "n_same_words": 10
+  },
+  {
+   "gid": 265,
+   "fold": 6,
+   "rank": 7,
+   "rank_reversed": 10,
+   "rank_same_words": 1,
+   "n_same_words": 18
+  },
+  {
+   "gid": 266,
+   "fold": 6,
+   "rank": 1,
+   "rank_reversed": 4,
+   "rank_same_words": 1,
+   "n_same_words": 10
+  },
+  {
+   "gid": 267,
+   "fold": 6,
+   "rank": 1,
+   "rank_reversed": 40,
+   "rank_same_words": 1,
+   "n_same_words": 18
+  },
+  {
+   "gid": 268,
+   "fold": 6,
+   "rank": 1,
+   "rank_reversed": 14,
+   "rank_same_words": 1,
+   "n_same_words": 18
+  },
+  {
+   "gid": 269,
+   "fold": 6,
+   "rank": 2,
+   "rank_reversed": 20,
+   "rank_same_words": 1,
+   "n_same_words": 18
+  },
+  {
+   "gid": 270,
+   "fold": 6,
+   "rank": 1,
+   "rank_reversed": 1,
+   "rank_same_words": 1,
+   "n_same_words": 10
+  },
+  {
+   "gid": 271,
+   "fold": 6,
+   "rank": 30,
+   "rank_reversed": 37,
+   "rank_same_words": 6,
+   "n_same_words": 14
+  },
+  {
+   "gid": 272,
+   "fold": 6,
+   "rank": 3,
+   "rank_reversed": 2,
+   "rank_same_words": 3,
+   "n_same_words": 10
+  },
+  {
+   "gid": 273,
+   "fold": 6,
+   "rank": 8,
+   "rank_reversed": 38,
+   "rank_same_words": 1,
+   "n_same_words": 14
+  },
+  {
+   "gid": 274,
+   "fold": 6,
+   "rank": 15,
+   "rank_reversed": 35,
+   "rank_same_words": 7,
+   "n_same_words": 18
+  },
+  {
+   "gid": 275,
+   "fold": 6,
+   "rank": 44,
+   "rank_reversed": 44,
+   "rank_same_words": 3,
+   "n_same_words": 5
+  },
+  {
+   "gid": 276,
+   "fold": 6,
+   "rank": 2,
+   "rank_reversed": 10,
+   "rank_same_words": 1,
+   "n_same_words": 18
+  },
+  {
+   "gid": 277,
+   "fold": 6,
+   "rank": 22,
+   "rank_reversed": 24,
+   "rank_same_words": 2,
+   "n_same_words": 14
+  },
+  {
+   "gid": 278,
+   "fold": 6,
+   "rank": 44,
+   "rank_reversed": 43,
+   "rank_same_words": 3,
+   "n_same_words": 5
+  },
+  {
+   "gid": 279,
+   "fold": 6,
+   "rank": 4,
+   "rank_reversed": 17,
+   "rank_same_words": 1,
+   "n_same_words": 14
+  },
+  {
+   "gid": 280,
+   "fold": 6,
+   "rank": 29,
+   "rank_reversed": 29,
+   "rank_same_words": 16,
+   "n_same_words": 18
+  },
+  {
+   "gid": 281,
+   "fold": 6,
+   "rank": 1,
+   "rank_reversed": 20,
+   "rank_same_words": 1,
+   "n_same_words": 18
+  },
+  {
+   "gid": 282,
+   "fold": 6,
+   "rank": 1,
+   "rank_reversed": 7,
+   "rank_same_words": 1,
+   "n_same_words": 10
+  },
+  {
+   "gid": 283,
+   "fold": 6,
+   "rank": 40,
+   "rank_reversed": 40,
+   "rank_same_words": 18,
+   "n_same_words": 18
+  },
+  {
+   "gid": 284,
+   "fold": 6,
+   "rank": 1,
+   "rank_reversed": 1,
+   "rank_same_words": 1,
+   "n_same_words": 10
+  },
+  {
+   "gid": 285,
+   "fold": 6,
+   "rank": 45,
+   "rank_reversed": 48,
+   "rank_same_words": 1,
+   "n_same_words": 3
+  },
+  {
+   "gid": 286,
+   "fold": 6,
+   "rank": 8,
+   "rank_reversed": 21,
+   "rank_same_words": 1,
+   "n_same_words": 14
+  },
+  {
+   "gid": 287,
+   "fold": 6,
+   "rank": 7,
+   "rank_reversed": 7,
+   "rank_same_words": 7,
+   "n_same_words": 10
+  },
+  {
+   "gid": 288,
+   "fold": 6,
+   "rank": 10,
+   "rank_reversed": 16,
+   "rank_same_words": 2,
+   "n_same_words": 18
+  },
+  {
+   "gid": 289,
+   "fold": 6,
+   "rank": 14,
+   "rank_reversed": 26,
+   "rank_same_words": 1,
+   "n_same_words": 14
+  },
+  {
+   "gid": 290,
+   "fold": 6,
+   "rank": 38,
+   "rank_reversed": 39,
+   "rank_same_words": 10,
+   "n_same_words": 14
+  },
+  {
+   "gid": 291,
+   "fold": 6,
+   "rank": 35,
+   "rank_reversed": 34,
+   "rank_same_words": 7,
+   "n_same_words": 14
+  },
+  {
+   "gid": 292,
+   "fold": 6,
+   "rank": 17,
+   "rank_reversed": 30,
+   "rank_same_words": 1,
+   "n_same_words": 5
+  },
+  {
+   "gid": 293,
+   "fold": 6,
+   "rank": 46,
+   "rank_reversed": 47,
+   "rank_same_words": 4,
+   "n_same_words": 5
+  },
+  {
+   "gid": 294,
+   "fold": 6,
+   "rank": 5,
+   "rank_reversed": 19,
+   "rank_same_words": 5,
+   "n_same_words": 10
+  },
+  {
+   "gid": 295,
+   "fold": 6,
+   "rank": 18,
+   "rank_reversed": 45,
+   "rank_same_words": 2,
+   "n_same_words": 14
+  },
+  {
+   "gid": 296,
+   "fold": 6,
+   "rank": 24,
+   "rank_reversed": 26,
+   "rank_same_words": 14,
+   "n_same_words": 18
+  },
+  {
+   "gid": 297,
+   "fold": 6,
+   "rank": 40,
+   "rank_reversed": 50,
+   "rank_same_words": 1,
+   "n_same_words": 3
+  },
+  {
+   "gid": 298,
+   "fold": 6,
+   "rank": 3,
+   "rank_reversed": 14,
+   "rank_same_words": 1,
+   "n_same_words": 14
+  },
+  {
+   "gid": 299,
+   "fold": 6,
+   "rank": 2,
+   "rank_reversed": 21,
+   "rank_same_words": 1,
+   "n_same_words": 18
+  },
+  {
+   "gid": 300,
+   "fold": 11,
+   "rank": 1,
+   "rank_reversed": 34,
+   "rank_same_words": 1,
+   "n_same_words": 13
+  },
+  {
+   "gid": 301,
+   "fold": 11,
+   "rank": 2,
+   "rank_reversed": 27,
+   "rank_same_words": 1,
+   "n_same_words": 13
+  },
+  {
+   "gid": 302,
+   "fold": 11,
+   "rank": 5,
+   "rank_reversed": 18,
+   "rank_same_words": 2,
+   "n_same_words": 14
+  },
+  {
+   "gid": 303,
+   "fold": 11,
+   "rank": 1,
+   "rank_reversed": 2,
+   "rank_same_words": 1,
+   "n_same_words": 14
+  },
+  {
+   "gid": 304,
+   "fold": 11,
+   "rank": 25,
+   "rank_reversed": 43,
+   "rank_same_words": 7,
+   "n_same_words": 13
+  },
+  {
+   "gid": 305,
+   "fold": 11,
+   "rank": 1,
+   "rank_reversed": 21,
+   "rank_same_words": 1,
+   "n_same_words": 14
+  },
+  {
+   "gid": 306,
+   "fold": 11,
+   "rank": 1,
+   "rank_reversed": 26,
+   "rank_same_words": 1,
+   "n_same_words": 13
+  },
+  {
+   "gid": 307,
+   "fold": 11,
+   "rank": 3,
+   "rank_reversed": 6,
+   "rank_same_words": 3,
+   "n_same_words": 5
+  },
+  {
+   "gid": 308,
+   "fold": 11,
+   "rank": 1,
+   "rank_reversed": 5,
+   "rank_same_words": 1,
+   "n_same_words": 14
+  },
+  {
+   "gid": 309,
+   "fold": 11,
+   "rank": 5,
+   "rank_reversed": 4,
+   "rank_same_words": 2,
+   "n_same_words": 14
+  },
+  {
+   "gid": 310,
+   "fold": 11,
+   "rank": 1,
+   "rank_reversed": 9,
+   "rank_same_words": 1,
+   "n_same_words": 14
+  },
+  {
+   "gid": 311,
+   "fold": 11,
+   "rank": 15,
+   "rank_reversed": 35,
+   "rank_same_words": 1,
+   "n_same_words": 13
+  },
+  {
+   "gid": 312,
+   "fold": 11,
+   "rank": 1,
+   "rank_reversed": 3,
+   "rank_same_words": 1,
+   "n_same_words": 14
+  },
+  {
+   "gid": 313,
+   "fold": 11,
+   "rank": 25,
+   "rank_reversed": 45,
+   "rank_same_words": 1,
+   "n_same_words": 4
+  },
+  {
+   "gid": 314,
+   "fold": 11,
+   "rank": 27,
+   "rank_reversed": 30,
+   "rank_same_words": 3,
+   "n_same_words": 13
+  },
+  {
+   "gid": 315,
+   "fold": 11,
+   "rank": 1,
+   "rank_reversed": 30,
+   "rank_same_words": 1,
+   "n_same_words": 13
+  },
+  {
+   "gid": 316,
+   "fold": 11,
+   "rank": 1,
+   "rank_reversed": 10,
+   "rank_same_words": 1,
+   "n_same_words": 13
+  },
+  {
+   "gid": 317,
+   "fold": 11,
+   "rank": 7,
+   "rank_reversed": 20,
+   "rank_same_words": 1,
+   "n_same_words": 13
+  },
+  {
+   "gid": 318,
+   "fold": 11,
+   "rank": 1,
+   "rank_reversed": 27,
+   "rank_same_words": 1,
+   "n_same_words": 14
+  },
+  {
+   "gid": 319,
+   "fold": 11,
+   "rank": 2,
+   "rank_reversed": 28,
+   "rank_same_words": 1,
+   "n_same_words": 14
+  },
+  {
+   "gid": 320,
+   "fold": 11,
+   "rank": 34,
+   "rank_reversed": 42,
+   "rank_same_words": 7,
+   "n_same_words": 13
+  },
+  {
+   "gid": 321,
+   "fold": 11,
+   "rank": 2,
+   "rank_reversed": 3,
+   "rank_same_words": 2,
+   "n_same_words": 5
+  },
+  {
+   "gid": 322,
+   "fold": 11,
+   "rank": 1,
+   "rank_reversed": 8,
+   "rank_same_words": 1,
+   "n_same_words": 14
+  },
+  {
+   "gid": 323,
+   "fold": 11,
+   "rank": 1,
+   "rank_reversed": 24,
+   "rank_same_words": 1,
+   "n_same_words": 13
+  },
+  {
+   "gid": 324,
+   "fold": 11,
+   "rank": 4,
+   "rank_reversed": 21,
+   "rank_same_words": 1,
+   "n_same_words": 14
+  },
+  {
+   "gid": 325,
+   "fold": 11,
+   "rank": 9,
+   "rank_reversed": 19,
+   "rank_same_words": 2,
+   "n_same_words": 13
+  },
+  {
+   "gid": 326,
+   "fold": 11,
+   "rank": 3,
+   "rank_reversed": 48,
+   "rank_same_words": 1,
+   "n_same_words": 13
+  },
+  {
+   "gid": 327,
+   "fold": 11,
+   "rank": 11,
+   "rank_reversed": 11,
+   "rank_same_words": 5,
+   "n_same_words": 14
+  },
+  {
+   "gid": 328,
+   "fold": 11,
+   "rank": 3,
+   "rank_reversed": 7,
+   "rank_same_words": 1,
+   "n_same_words": 13
+  },
+  {
+   "gid": 329,
+   "fold": 11,
+   "rank": 5,
+   "rank_reversed": 7,
+   "rank_same_words": 3,
+   "n_same_words": 5
+  },
+  {
+   "gid": 330,
+   "fold": 11,
+   "rank": 1,
+   "rank_reversed": 1,
+   "rank_same_words": 1,
+   "n_same_words": 5
+  },
+  {
+   "gid": 331,
+   "fold": 11,
+   "rank": 14,
+   "rank_reversed": 33,
+   "rank_same_words": 1,
+   "n_same_words": 13
+  },
+  {
+   "gid": 332,
+   "fold": 11,
+   "rank": 1,
+   "rank_reversed": 13,
+   "rank_same_words": 1,
+   "n_same_words": 5
+  },
+  {
+   "gid": 333,
+   "fold": 11,
+   "rank": 37,
+   "rank_reversed": 36,
+   "rank_same_words": 12,
+   "n_same_words": 13
+  },
+  {
+   "gid": 334,
+   "fold": 11,
+   "rank": 17,
+   "rank_reversed": 25,
+   "rank_same_words": 1,
+   "n_same_words": 13
+  },
+  {
+   "gid": 335,
+   "fold": 11,
+   "rank": 13,
+   "rank_reversed": 23,
+   "rank_same_words": 4,
+   "n_same_words": 13
+  },
+  {
+   "gid": 336,
+   "fold": 11,
+   "rank": 4,
+   "rank_reversed": 18,
+   "rank_same_words": 1,
+   "n_same_words": 13
+  },
+  {
+   "gid": 337,
+   "fold": 11,
+   "rank": 37,
+   "rank_reversed": 48,
+   "rank_same_words": 1,
+   "n_same_words": 1
+  },
+  {
+   "gid": 338,
+   "fold": 11,
+   "rank": 18,
+   "rank_reversed": 28,
+   "rank_same_words": 1,
+   "n_same_words": 13
+  },
+  {
+   "gid": 339,
+   "fold": 11,
+   "rank": 1,
+   "rank_reversed": 2,
+   "rank_same_words": 1,
+   "n_same_words": 13
+  },
+  {
+   "gid": 340,
+   "fold": 11,
+   "rank": 2,
+   "rank_reversed": 28,
+   "rank_same_words": 1,
+   "n_same_words": 13
+  },
+  {
+   "gid": 341,
+   "fold": 11,
+   "rank": 6,
+   "rank_reversed": 38,
+   "rank_same_words": 1,
+   "n_same_words": 13
+  },
+  {
+   "gid": 342,
+   "fold": 11,
+   "rank": 20,
+   "rank_reversed": 33,
+   "rank_same_words": 5,
+   "n_same_words": 13
+  },
+  {
+   "gid": 343,
+   "fold": 11,
+   "rank": 1,
+   "rank_reversed": 32,
+   "rank_same_words": 1,
+   "n_same_words": 4
+  },
+  {
+   "gid": 344,
+   "fold": 11,
+   "rank": 24,
+   "rank_reversed": 40,
+   "rank_same_words": 2,
+   "n_same_words": 13
+  },
+  {
+   "gid": 345,
+   "fold": 11,
+   "rank": 41,
+   "rank_reversed": 48,
+   "rank_same_words": 2,
+   "n_same_words": 4
+  },
+  {
+   "gid": 346,
+   "fold": 11,
+   "rank": 8,
+   "rank_reversed": 14,
+   "rank_same_words": 3,
+   "n_same_words": 14
+  },
+  {
+   "gid": 347,
+   "fold": 11,
+   "rank": 27,
+   "rank_reversed": 40,
+   "rank_same_words": 8,
+   "n_same_words": 13
+  },
+  {
+   "gid": 348,
+   "fold": 11,
+   "rank": 41,
+   "rank_reversed": 50,
+   "rank_same_words": 3,
+   "n_same_words": 4
+  },
+  {
+   "gid": 349,
+   "fold": 11,
+   "rank": 12,
+   "rank_reversed": 26,
+   "rank_same_words": 7,
+   "n_same_words": 14
+  },
+  {
+   "gid": 350,
+   "fold": 13,
+   "rank": 1,
+   "rank_reversed": 7,
+   "rank_same_words": 1,
+   "n_same_words": 9
+  },
+  {
+   "gid": 351,
+   "fold": 13,
+   "rank": 4,
+   "rank_reversed": 44,
+   "rank_same_words": 1,
+   "n_same_words": 10
+  },
+  {
+   "gid": 352,
+   "fold": 13,
+   "rank": 4,
+   "rank_reversed": 25,
+   "rank_same_words": 1,
+   "n_same_words": 10
+  },
+  {
+   "gid": 353,
+   "fold": 13,
+   "rank": 14,
+   "rank_reversed": 20,
+   "rank_same_words": 1,
+   "n_same_words": 10
+  },
+  {
+   "gid": 354,
+   "fold": 13,
+   "rank": 37,
+   "rank_reversed": 40,
+   "rank_same_words": 2,
+   "n_same_words": 9
+  },
+  {
+   "gid": 355,
+   "fold": 13,
+   "rank": 28,
+   "rank_reversed": 45,
+   "rank_same_words": 5,
+   "n_same_words": 10
+  },
+  {
+   "gid": 356,
+   "fold": 13,
+   "rank": 13,
+   "rank_reversed": 16,
+   "rank_same_words": 4,
+   "n_same_words": 17
+  },
+  {
+   "gid": 357,
+   "fold": 13,
+   "rank": 6,
+   "rank_reversed": 3,
+   "rank_same_words": 6,
+   "n_same_words": 11
+  },
+  {
+   "gid": 358,
+   "fold": 13,
+   "rank": 1,
+   "rank_reversed": 26,
+   "rank_same_words": 1,
+   "n_same_words": 17
+  },
+  {
+   "gid": 359,
+   "fold": 13,
+   "rank": 1,
+   "rank_reversed": 26,
+   "rank_same_words": 1,
+   "n_same_words": 10
+  },
+  {
+   "gid": 360,
+   "fold": 13,
+   "rank": 3,
+   "rank_reversed": 36,
+   "rank_same_words": 2,
+   "n_same_words": 17
+  },
+  {
+   "gid": 361,
+   "fold": 13,
+   "rank": 5,
+   "rank_reversed": 21,
+   "rank_same_words": 1,
+   "n_same_words": 17
+  },
+  {
+   "gid": 362,
+   "fold": 13,
+   "rank": 13,
+   "rank_reversed": 23,
+   "rank_same_words": 4,
+   "n_same_words": 17
+  },
+  {
+   "gid": 363,
+   "fold": 13,
+   "rank": 39,
+   "rank_reversed": 36,
+   "rank_same_words": 1,
+   "n_same_words": 2
+  },
+  {
+   "gid": 364,
+   "fold": 13,
+   "rank": 4,
+   "rank_reversed": 19,
+   "rank_same_words": 2,
+   "n_same_words": 17
+  },
+  {
+   "gid": 365,
+   "fold": 13,
+   "rank": 38,
+   "rank_reversed": 48,
+   "rank_same_words": 4,
+   "n_same_words": 9
+  },
+  {
+   "gid": 366,
+   "fold": 13,
+   "rank": 1,
+   "rank_reversed": 5,
+   "rank_same_words": 1,
+   "n_same_words": 11
+  },
+  {
+   "gid": 367,
+   "fold": 13,
+   "rank": 26,
+   "rank_reversed": 39,
+   "rank_same_words": 5,
+   "n_same_words": 10
+  },
+  {
+   "gid": 368,
+   "fold": 13,
+   "rank": 17,
+   "rank_reversed": 32,
+   "rank_same_words": 7,
+   "n_same_words": 17
+  },
+  {
+   "gid": 369,
+   "fold": 13,
+   "rank": 9,
+   "rank_reversed": 25,
+   "rank_same_words": 9,
+   "n_same_words": 11
+  },
+  {
+   "gid": 370,
+   "fold": 13,
+   "rank": 3,
+   "rank_reversed": 15,
+   "rank_same_words": 3,
+   "n_same_words": 11
+  },
+  {
+   "gid": 371,
+   "fold": 13,
+   "rank": 6,
+   "rank_reversed": 12,
+   "rank_same_words": 1,
+   "n_same_words": 17
+  },
+  {
+   "gid": 372,
+   "fold": 13,
+   "rank": 32,
+   "rank_reversed": 48,
+   "rank_same_words": 1,
+   "n_same_words": 1
+  },
+  {
+   "gid": 373,
+   "fold": 13,
+   "rank": 33,
+   "rank_reversed": 36,
+   "rank_same_words": 6,
+   "n_same_words": 10
+  },
+  {
+   "gid": 374,
+   "fold": 13,
+   "rank": 1,
+   "rank_reversed": 18,
+   "rank_same_words": 1,
+   "n_same_words": 10
+  },
+  {
+   "gid": 375,
+   "fold": 13,
+   "rank": 13,
+   "rank_reversed": 18,
+   "rank_same_words": 1,
+   "n_same_words": 10
+  },
+  {
+   "gid": 376,
+   "fold": 13,
+   "rank": 6,
+   "rank_reversed": 22,
+   "rank_same_words": 1,
+   "n_same_words": 17
+  },
+  {
+   "gid": 377,
+   "fold": 13,
+   "rank": 10,
+   "rank_reversed": 13,
+   "rank_same_words": 3,
+   "n_same_words": 17
+  },
+  {
+   "gid": 378,
+   "fold": 13,
+   "rank": 35,
+   "rank_reversed": 33,
+   "rank_same_words": 3,
+   "n_same_words": 9
+  },
+  {
+   "gid": 379,
+   "fold": 13,
+   "rank": 1,
+   "rank_reversed": 4,
+   "rank_same_words": 1,
+   "n_same_words": 11
+  },
+  {
+   "gid": 380,
+   "fold": 13,
+   "rank": 1,
+   "rank_reversed": 7,
+   "rank_same_words": 1,
+   "n_same_words": 11
+  },
+  {
+   "gid": 381,
+   "fold": 13,
+   "rank": 4,
+   "rank_reversed": 20,
+   "rank_same_words": 3,
+   "n_same_words": 11
+  },
+  {
+   "gid": 382,
+   "fold": 13,
+   "rank": 35,
+   "rank_reversed": 33,
+   "rank_same_words": 2,
+   "n_same_words": 9
+  },
+  {
+   "gid": 383,
+   "fold": 13,
+   "rank": 10,
+   "rank_reversed": 33,
+   "rank_same_words": 3,
+   "n_same_words": 10
+  },
+  {
+   "gid": 384,
+   "fold": 13,
+   "rank": 3,
+   "rank_reversed": 18,
+   "rank_same_words": 2,
+   "n_same_words": 17
+  },
+  {
+   "gid": 385,
+   "fold": 13,
+   "rank": 1,
+   "rank_reversed": 8,
+   "rank_same_words": 1,
+   "n_same_words": 17
+  },
+  {
+   "gid": 386,
+   "fold": 13,
+   "rank": 38,
+   "rank_reversed": 44,
+   "rank_same_words": 3,
+   "n_same_words": 9
+  },
+  {
+   "gid": 387,
+   "fold": 13,
+   "rank": 46,
+   "rank_reversed": 49,
+   "rank_same_words": 2,
+   "n_same_words": 2
+  },
+  {
+   "gid": 388,
+   "fold": 13,
+   "rank": 18,
+   "rank_reversed": 42,
+   "rank_same_words": 2,
+   "n_same_words": 9
+  },
+  {
+   "gid": 389,
+   "fold": 13,
+   "rank": 19,
+   "rank_reversed": 41,
+   "rank_same_words": 10,
+   "n_same_words": 17
+  },
+  {
+   "gid": 390,
+   "fold": 13,
+   "rank": 1,
+   "rank_reversed": 12,
+   "rank_same_words": 1,
+   "n_same_words": 11
+  },
+  {
+   "gid": 391,
+   "fold": 13,
+   "rank": 1,
+   "rank_reversed": 35,
+   "rank_same_words": 1,
+   "n_same_words": 17
+  },
+  {
+   "gid": 392,
+   "fold": 13,
+   "rank": 1,
+   "rank_reversed": 1,
+   "rank_same_words": 1,
+   "n_same_words": 11
+  },
+  {
+   "gid": 393,
+   "fold": 13,
+   "rank": 1,
+   "rank_reversed": 6,
+   "rank_same_words": 1,
+   "n_same_words": 11
+  },
+  {
+   "gid": 394,
+   "fold": 13,
+   "rank": 9,
+   "rank_reversed": 29,
+   "rank_same_words": 3,
+   "n_same_words": 17
+  },
+  {
+   "gid": 395,
+   "fold": 13,
+   "rank": 1,
+   "rank_reversed": 34,
+   "rank_same_words": 1,
+   "n_same_words": 9
+  },
+  {
+   "gid": 396,
+   "fold": 13,
+   "rank": 1,
+   "rank_reversed": 5,
+   "rank_same_words": 1,
+   "n_same_words": 17
+  },
+  {
+   "gid": 397,
+   "fold": 13,
+   "rank": 10,
+   "rank_reversed": 14,
+   "rank_same_words": 9,
+   "n_same_words": 11
+  },
+  {
+   "gid": 398,
+   "fold": 13,
+   "rank": 40,
+   "rank_reversed": 43,
+   "rank_same_words": 4,
+   "n_same_words": 9
+  },
+  {
+   "gid": 399,
+   "fold": 13,
+   "rank": 3,
+   "rank_reversed": 39,
+   "rank_same_words": 3,
+   "n_same_words": 17
+  }
+ ]
+}
