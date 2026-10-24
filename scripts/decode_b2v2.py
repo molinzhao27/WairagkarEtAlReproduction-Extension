@@ -7,8 +7,11 @@
 Every 10 ms bin of each trial: the last ``b2v2.decode.window_bins`` (paper: 800 ms) as 50 ms tokens ending there,
 the last output kept (``wvx.b2v2_model.decode_live``). ``--trials``: ``test`` / ``val`` / ``train`` (the run's
 split.json), ``benchmark``, or ``session:<name>:<split json>:<key>`` (trial indices in that session, e.g. the D-049
-day195 test trials; output name ``<name>_<key>``). Writes data/processed/b2v2_preds/<run_name>/<name>.npz: per trial ``g<gid>_cont`` (T, 20)
-float32 and ``g<gid>_best`` (T,) uint8 (argmax phoneme per bin), and a JSON header.
+day195 test trials; output name ``<name>_<key>``), or ``sel:<session>[:<blocks>]`` (e.g. ``sel:attempted:3,6``).
+``--mode chunked``: causal long-context decoding instead (``wvx.b2v2_model.decode_chunked``). Writes
+data/processed/b2v2_preds/<run_name>/<name>.npz: per trial ``g<gid>_cont`` (T, 20) float32 and ``g<gid>_best`` (T,)
+uint8 (argmax phoneme per bin); chunked decodes add ``g<gid>_best50`` / ``g<gid>_lp50`` (the phase-0 50 ms argmax
+and log-probabilities); and a JSON header.
 """
 
 from __future__ import annotations
@@ -32,6 +35,10 @@ def select(data, spec: str, run_dir: Path) -> list[int]:
         return json.loads((run_dir / "split.json").read_text())[spec]
     if spec == "benchmark":
         return [t["gid"] for t in data.trials if t["benchmark"]]
+    if spec.startswith("sel:"):                          # sel:<session>[:<block>,<block>...] (Kunz, D-076)
+        parts = spec.split(":")
+        blocks = set(int(k) for k in parts[2].split(",")) if len(parts) > 2 and parts[2] else None
+        return [t["gid"] for t in data.trials if t["session"] == parts[1] and (blocks is None or t.get("block") in blocks)]
     kind, name, path, key = spec.split(":")
     if kind != "session":
         raise SystemExit(f"unknown --trials {spec!r}")
@@ -81,6 +88,8 @@ def main(argv=None) -> int:
         else:
             c, lg, ph0 = bm.decode_chunked(model, x, pool, args.ctx, args.hop, input_id=input_id, device=device)
             out[f"g{g}_best50"] = ph0.argmax(-1).astype(np.uint8)
+            lp = ph0 - ph0.max(-1, keepdims=True)
+            out[f"g{g}_lp50"] = (lp - np.log(np.exp(lp).sum(-1, keepdims=True))).astype(np.float16)   # log-softmax
         out[f"g{g}_cont"] = c.astype(np.float32)
         out[f"g{g}_best"] = lg.argmax(-1).astype(np.uint8)
     header = {"run_name": run, "checkpoint": str(ckpt), "checkpoint_sha256": hashlib.sha256(ckpt.read_bytes()).hexdigest(),

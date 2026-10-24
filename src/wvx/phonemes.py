@@ -12,6 +12,8 @@ from __future__ import annotations
 
 from typing import Iterable, Mapping, Optional, Sequence
 
+import numpy as np
+
 PHONEMES = ("AA", "AE", "AH", "AO", "AW", "AY", "B", "CH", "D", "DH", "EH", "ER", "EY", "F", "G", "HH", "IH", "IY",
             "JH", "K", "L", "M", "N", "NG", "OW", "OY", "P", "R", "S", "SH", "T", "TH", "UH", "UW", "V", "W", "Y",
             "Z", "ZH")
@@ -91,3 +93,24 @@ def phoneme_error(ref: Sequence[int], hyp: Sequence[int], drop: Optional[Iterabl
     r = [x for x in ref if x not in d]
     h = [x for x in hyp if x not in d]
     return edit_distance(r, h), len(r)
+
+
+def ctc_log_likelihood(logp: np.ndarray, label: Sequence[int], blank: int = 0) -> float:
+    """log p(label | x) under CTC (forward algorithm) from per-frame log-probabilities ``logp`` (T, C)."""
+    T = logp.shape[0]
+    ext = np.array([blank] + [v for lab in label for v in (int(lab), blank)])
+    S = len(ext)
+    if T == 0:
+        return float("-inf")
+    skip = np.zeros(S, bool)
+    skip[2:] = (ext[2:] != blank) & (ext[2:] != ext[:-2])
+    alpha = np.full(S, -np.inf)
+    alpha[0] = logp[0, blank]
+    if S > 1:
+        alpha[1] = logp[0, ext[1]]
+    a1, a2 = np.full(S, -np.inf), np.full(S, -np.inf)
+    for t in range(1, T):
+        a1[1:] = alpha[:-1]
+        a2[2:] = alpha[:-2]
+        alpha = np.logaddexp(np.logaddexp(alpha, a1), np.where(skip, a2, -np.inf)) + logp[t, ext]
+    return float(np.logaddexp(alpha[-1], alpha[-2]) if S > 1 else alpha[-1])

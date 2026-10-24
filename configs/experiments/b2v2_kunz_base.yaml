@@ -1,0 +1,15 @@
+# D-076: the b2v2 decoder (D-075 stage 2 model, b2v2_all) on Kunz T15 2024.03.03. Shared settings; zero-shot decodes
+# use this run name (b2v2_kunz_z) with --checkpoint data/checkpoints/b2v2_all/final.pt.
+#   host: scripts/b2v2_phonemes.py (phonemes.json); PC: scripts/build_b2v2_kunz.py, decode_b2v2.py, identify_b2v2.py
+base_experiment: configs/experiments/b2v2_all.yaml
+
+run_name: b2v2_kunz_z
+
+b2v2:
+  data_dir: data/processed/b2v2_kunz
+  phonemes:
+    corpora: [kunz_50words]
+  kunz:
+    processed: data/processed/kunz
+    session: t15.2024.03.03
+    conditions: [attempted, imagined, imagined_eval]

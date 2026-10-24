@@ -10,7 +10,9 @@ the benchmark trials when ``exclude_benchmark``, minus ``exclude_sessions``; ``n
 held out for the validation loss. ``b2v2.adapt`` (optional) instead fine-tunes a trained model on one session: a new
 input projection initialized from the trained one, everything else frozen, trained on that session's training trials
 (``train_trials_from``: their indices in the session) with the ``loss`` named there (``ctc`` = text only,
-``cont`` = their real targets, ``both``).
+``cont`` = their real targets, ``both``). Kunz (D-076): ``train_blocks`` selects whole blocks of ``session`` instead
+of a trial file, and ``full_trial: true`` trains on whole trials through the long-context chunks
+(``adapt_full_trials``).
 
 Writes data/checkpoints/<run_name>/{final,best,last}.pt and results/b2v2/<run_name>/{split.json, log.jsonl,
 summary.json}.
@@ -45,13 +47,20 @@ def split_trials(data, cfg) -> dict:
     s, t = b.get("split") or {}, b["training"]
     rng = np.random.default_rng(int(t["seed"]))
     a = b.get("adapt")
-    if a:
+    if a and a.get("train_blocks") is not None:            # Kunz: whole blocks of one condition (D-076)
+        blocks = set(int(k) for k in a["train_blocks"])
+        pool = [x["gid"] for x in data.trials if x["session"] == a["session"] and x.get("block") in blocks]
+        test = []
+        n_val = int(a["n_validation"])
+    elif a:
         tr = json.loads(resolve_path(a["train_trials_from"]).read_text())
         idx = set(int(i) for i in tr[a.get("train_key", "train_trials")])
         pool = [x["gid"] for x in data.trials if x["session"] == a["session"] and x["index"] in idx]
         test = [x["gid"] for x in data.trials if x["session"] == a["session"]
                 and x["index"] in set(int(i) for i in tr[a.get("test_key", "test_trials")])]
         n_val = int(a["n_validation"])
+    if a and a.get("full_trial"):
+        pool = [g for g in pool if data.by_gid[g]["label"] is not None]
     else:
         max_day = int(s.get("max_day") or 10 ** 6)
         drop = set(s.get("exclude_sessions") or [])
@@ -62,6 +71,98 @@ def split_trials(data, cfg) -> dict:
     val = sorted(int(g) for g in rng.choice(pool, size=n_val, replace=False))
     train = [g for g in pool if g not in set(val)]
     return {"train": train, "val": val, "test": test}
+
+
+def adapt_full_trials(model, input_id, params, opt, data, split, b, t, run, ckpt_dir, res_dir, args, device) -> int:
+    """Text-only (CTC) adaptation on WHOLE trials (``adapt.full_trial``, D-076): each step ``batch_size`` trials, one
+    random 50 ms phase each, through ``wvx.b2v2_model.chunked_forward`` (the long-context chunks the decoder runs),
+    CTC against the full sentence divided by its length. Validation: the same loss at phase 0 on the held-out trials;
+    best.pt = the lowest validation loss."""
+    import numpy as np
+    import torch
+    from torch.nn import functional as F
+
+    from wvx import b2v2_data as bd, b2v2_model as bm
+    from wvx.provenance import code_version
+
+    pool, ctx, hop = int(b["data"]["pool"]), int(t["ctx"]), int(t["hop"])
+    steps, B = int(t["steps"]), int(t["batch_size"])
+    rng = np.random.default_rng(int(t["seed"]) + 2)
+    trials = [data.by_gid[g] for g in split["train"]]
+    bf16 = bool(t["bf16"]) and device.type == "cuda"
+
+    def trial_loss(tr, phase):
+        x, _ = data.trial_arrays(tr)
+        n_tok = (x.shape[0] - phase) // pool
+        tok = torch.as_tensor(bd.pool_tokens(x[phase: phase + pool * n_tok], pool), device=device)
+        with torch.autocast(device.type, dtype=torch.bfloat16, enabled=bf16):
+            _, lg = bm.chunked_forward(model, tok, ctx, hop, input_id)
+        lp = F.log_softmax(lg.float(), -1)[:, None]
+        lab = torch.as_tensor([tr["label"]], dtype=torch.long, device=device)
+        loss = F.ctc_loss(lp, lab, torch.tensor([n_tok]), torch.tensor([len(tr["label"])]), blank=0,
+                          reduction="sum", zero_infinity=True)
+        return loss / max(1, len(tr["label"]))
+
+    def validate() -> float:
+        model.eval()
+        with torch.no_grad():
+            v = float(np.mean([float(trial_loss(data.by_gid[g], 0)) for g in split["val"]]))
+        model.train()
+        return v
+
+    def save(name, step, best):
+        torch.save({"state": model.state_dict(), "opt": opt.state_dict(), "step": step, "best": best,
+                    "model_cfg": model.cfg, "input_id": input_id, "config": args.config, "run_name": run,
+                    "code_version": code_version()}, ckpt_dir / name)
+
+    logf = None
+    if not args.smoke:
+        res_dir.mkdir(parents=True, exist_ok=True)
+        ckpt_dir.mkdir(parents=True, exist_ok=True)
+        (res_dir / "split.json").write_text(json.dumps(split) + "\n")
+        logf = open(res_dir / "log.jsonl", "a")
+    t0, hist = time.time(), []
+    best = validate()
+    log(f"{run}: whole-trial CTC adaptation, {len(trials)} trials ({len(split['val'])} validation); "
+        f"validation CTC before adaptation {best:.4f}")
+    hist.append({"step": 0, "val_ctc": best})
+    if not args.smoke:
+        save("best.pt", 0, best)
+    model.train()
+    for step in range(steps):
+        for g in opt.param_groups:
+            g["lr"] = bm.lr_at(step, t)
+        pick = rng.integers(0, len(trials), B)
+        loss = sum(trial_loss(trials[i], int(rng.integers(0, pool))) for i in pick) / B
+        opt.zero_grad(set_to_none=True)
+        loss.backward()
+        torch.nn.utils.clip_grad_norm_(params, float(t["grad_clip"]))
+        opt.step()
+        last = step + 1 == steps
+        if (step + 1) % int(t["val_every"]) == 0 or last:
+            v = validate()
+            rec = {"step": step + 1, "train_ctc": float(loss), "val_ctc": v, "lr": bm.lr_at(step, t),
+                   "s": time.time() - t0}
+            hist.append(rec)
+            log(json.dumps({k: (round(x, 5) if isinstance(x, float) else x) for k, x in rec.items()}))
+            if logf:
+                logf.write(json.dumps(rec) + "\n")
+                logf.flush()
+            if v < best:
+                best = v
+                if not args.smoke:
+                    save("best.pt", step + 1, best)
+    if args.smoke:
+        log(f"smoke test: {steps} steps in {time.time() - t0:.0f} s; nothing written")
+        return 0
+    save("final.pt", steps, best)
+    summary = {"run_name": run, "config": args.config, "decision": "D-076", "code_version": code_version(),
+               "created": datetime.datetime.now().isoformat(timespec="seconds"), "steps": steps, "mode": "full_trial",
+               "n_train": len(trials), "n_val": len(split["val"]), "best_val_ctc": best, "history": hist,
+               "n_trainable": sum(p.numel() for p in params), "wall_time_s": time.time() - t0, "device": str(device)}
+    (res_dir / "summary.json").write_text(json.dumps(summary, indent=1) + "\n")
+    log(f"done: {steps} steps in {(time.time() - t0) / 60:.1f} min, best validation CTC {best:.4f}")
+    return 0
 
 
 def main(argv=None) -> int:
@@ -113,6 +214,8 @@ def main(argv=None) -> int:
         log(f"resumed at step {start}")
     elif not args.smoke and (ckpt_dir / "final.pt").exists():
         raise SystemExit(f"{ckpt_dir}/final.pt exists; choose another run_name")
+    if a and a.get("full_trial"):
+        return adapt_full_trials(model, input_id, params, opt, data, split, b, t, run, ckpt_dir, res_dir, args, device)
 
     trials = [data.by_gid[g] for g in split["train"]]
     loss_kind = (a or {}).get("loss", "both")

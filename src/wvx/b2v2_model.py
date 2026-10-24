@@ -136,15 +136,28 @@ def decode_live(model: B2V2, x: np.ndarray, window_bins: int, pool: int, input_i
     return np.concatenate([np.repeat(c[:1], lead, 0), c]), np.concatenate([np.repeat(lg[:1], lead, 0), lg])
 
 
+def chunked_forward(model: B2V2, tok: torch.Tensor, ctx: int, hop: int, input_id: int = 0
+                    ) -> tuple[torch.Tensor, torch.Tensor]:
+    """One token sequence (n_tok, F) -> (continuous (n_tok, 20), phoneme logits (n_tok, 41)) by long-context chunks:
+    windows of ``ctx`` tokens every ``hop``, run as one batch; the first window keeps all its outputs, later ones
+    their last ``hop`` (each output then sees >= ctx - hop tokens, except at the start). Differentiable: text-only
+    adaptation on whole trials trains through exactly what decoding runs (D-076)."""
+    n = tok.shape[0]
+    starts = [0] + list(range(hop, max(1, n - ctx + hop), hop))
+    segs = [tok[s: s + ctx] for s in starts]
+    c, lg = model(nn.utils.rnn.pad_sequence(segs, batch_first=True), input_id)
+    keep = [0 if s == 0 else ctx - hop for s in starts]
+    return (torch.cat([c[i, k: len(x)] for i, (k, x) in enumerate(zip(keep, segs))]),
+            torch.cat([lg[i, k: len(x)] for i, (k, x) in enumerate(zip(keep, segs))]))
+
+
 @torch.no_grad()
 def decode_chunked(model: B2V2, x: np.ndarray, pool: int, ctx: int, hop: int, input_id: int = 0,
                    device: Optional[torch.device] = None) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """Causal long-context decoding (a cheaper alternative to ``decode_live`` with a long window): for each of the
-    ``pool`` phases, the trial's tokens (bins [p + pool*k, p + pool*(k+1))) in windows of ``ctx`` tokens every ``hop``;
-    the first window keeps all its outputs, later ones their last ``hop`` (each output then sees >= ctx - hop tokens,
-    except at the trial start). Every output is the frame of its token's last bin. Returns continuous (T, 20), phoneme
-    logits (T, 41) and the phase-0 logits per 50 ms token (n_tok, 41); the first ``pool - 1`` bins repeat the first
-    output."""
+    ``pool`` phases, the trial's tokens (bins [p + pool*k, p + pool*(k+1))) through ``chunked_forward``. Every output
+    is the frame of its token's last bin. Returns continuous (T, 20), phoneme logits (T, 41) and the phase-0 logits
+    per 50 ms token (n_tok, 41); the first ``pool - 1`` bins repeat the first output."""
     from wvx.b2v2_data import pool_tokens
 
     device = device or next(model.parameters()).device
@@ -157,20 +170,12 @@ def decode_chunked(model: B2V2, x: np.ndarray, pool: int, ctx: int, hop: int, in
         n_tok = (T - p) // pool
         if n_tok <= 0:
             continue
-        tok = pool_tokens(x[p: p + pool * n_tok], pool)
-        c_out = np.zeros((n_tok, cont.shape[1]), np.float32)
-        l_out = np.zeros((n_tok, logit.shape[1]), np.float32)
-        starts = [0] + list(range(hop, max(1, n_tok - ctx + hop), hop))
-        for s in starts:
-            seg = tok[s: s + ctx]
-            c, lg = model(torch.as_tensor(seg[None], device=device), input_id)
-            keep = 0 if s == 0 else ctx - hop
-            c_out[s + keep: s + len(seg)] = c[0, keep:].float().cpu().numpy()
-            l_out[s + keep: s + len(seg)] = lg[0, keep:].float().cpu().numpy()
+        tok = torch.as_tensor(pool_tokens(x[p: p + pool * n_tok], pool), device=device)
+        c, lg = chunked_forward(model, tok, ctx, hop, input_id)
         frames = p + pool * np.arange(n_tok) + pool - 1
-        cont[frames], logit[frames] = c_out, l_out
+        cont[frames], logit[frames] = c.float().cpu().numpy(), lg.float().cpu().numpy()
         if p == 0:
-            phase0 = l_out
+            phase0 = logit[frames].copy()
     first = int(np.argmax(~np.isnan(cont[:, 0])))
     cont[:first], logit[:first] = cont[first], logit[first]
     return cont, logit, phase0

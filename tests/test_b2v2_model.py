@@ -95,3 +95,26 @@ def test_decode_chunked_each_output_sees_its_window():
             want = m(torch.as_tensor(tok[s: k + 1])[None])[0][0, -1].detach().numpy()
             assert np.allclose(c[p + pool * k + pool - 1], want, atol=1e-5), (p, k)
     assert ph0.shape == (97 // pool, 41)
+
+
+def test_chunked_forward_matches_decode_and_has_gradients():
+    m = _model(3)
+    tok = torch.randn(23, 12, requires_grad=True)
+    c, lg = bm.chunked_forward(m, tok, ctx=8, hop=4)
+    assert c.shape == (23, 3) and lg.shape == (23, 41)
+    for k in (0, 7, 8, 13, 22):
+        s = 0 if k < 8 else 4 * ((k - 8) // 4 + 1)
+        assert torch.allclose(c[k], m(tok[s: k + 1][None])[0][0, -1], atol=1e-5)
+    lg.sum().backward()
+    assert tok.grad is not None and tok.grad.abs().sum() > 0
+
+
+def test_ctc_log_likelihood_matches_torch():
+    from wvx import phonemes as ph
+
+    rng = np.random.default_rng(0)
+    for T, label in ((12, [3, 3, 5]), (30, [2, 7, 1, 9, 9, 4]), (5, []), (9, [6])):
+        logp = torch.log_softmax(torch.as_tensor(rng.normal(size=(T, 41)), dtype=torch.float64), -1)
+        want = -torch.nn.functional.ctc_loss(logp[:, None], torch.tensor([label], dtype=torch.long),
+                                              torch.tensor([T]), torch.tensor([len(label)]), reduction="sum")
+        assert abs(ph.ctc_log_likelihood(logp.numpy(), label) - float(want)) < 1e-6
