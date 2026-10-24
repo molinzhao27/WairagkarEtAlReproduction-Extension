@@ -1,0 +1,1254 @@
+{
+ "run_name": "b2v2_ov_d1215_k7",
+ "name": "heldout",
+ "decision": "D-075",
+ "config": "configs/experiments/b2v2_ov_d1215_k7.yaml",
+ "code_version": {
+  "source": "sync",
+  "commit": "74a8da637f325b24b297f0e5f784caa54ebfb55e",
+  "dirty": false,
+  "diff_sha256": null,
+  "pushed_at": "2026-10-24T20:31:23Z"
+ },
+ "created": "2026-10-24T21:06:41",
+ "source": {
+  "run_name": "b2v2_ov_d1215_k7",
+  "checkpoint": "/home/molin/wvx/WairagkarEtAlReproduction-Extension/data/checkpoints/b2v2_ov_d1215_k7/best.pt",
+  "checkpoint_sha256": "b10c342f737c690825c268fbae6d79337102bc80bbbfa1a654abc0aca365c3ae",
+  "input_id": 1,
+  "trials": "sel:d1215:7",
+  "gids": [
+   71,
+   72,
+   73,
+   74,
+   75,
+   76,
+   77,
+   78,
+   79,
+   80,
+   81,
+   82,
+   83,
+   84,
+   85,
+   86,
+   87,
+   88,
+   89,
+   90,
+   91,
+   92,
+   93,
+   94,
+   95,
+   96,
+   97,
+   98,
+   99,
+   100,
+   101,
+   102,
+   103,
+   104,
+   105,
+   106,
+   107,
+   108,
+   109,
+   110,
+   111,
+   112,
+   113,
+   114,
+   115,
+   116,
+   117,
+   118,
+   119,
+   120
+  ],
+  "mode": "chunked",
+  "data_dir": "/home/molin/wvx/WairagkarEtAlReproduction-Extension/data/processed/b2v2_ov",
+  "window_bins": null,
+  "chunked": {
+   "ctx": 128,
+   "hop": 64
+  },
+  "pool": 5,
+  "device": "cuda",
+  "code_version": {
+   "source": "sync",
+   "commit": "297afee4e70f989e50bc10afbf38790bfd22ec9c",
+   "dirty": false,
+   "diff_sha256": null,
+   "pushed_at": "2026-10-24T20:25:44Z"
+  },
+  "decision": "D-075",
+  "created": "2026-10-24T20:31:10"
+ },
+ "speed_factor": 3.25,
+ "summary": {
+  "all": {
+   "n": 50,
+   "wer_orig": 1.0029940119760479,
+   "wer_fixed": 1.0,
+   "per": 0.9688644688644689,
+   "per_50ms": 0.9816849816849816
+  }
+ },
+ "rows": [
+  {
+   "gid": 71,
+   "session": "d1215",
+   "index": 71,
+   "benchmark": null,
+   "text": "I really like that show.",
+   "feat_r": NaN,
+   "phone_errors": 13,
+   "ref_phones": 13,
+   "phone_errors_50": 13,
+   "orig": {
+    "hyp": "It is... It is...",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Ugh, ugh, ugh, ugh.",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 72,
+   "session": "d1215",
+   "index": 72,
+   "benchmark": null,
+   "text": "A fairly good amount.",
+   "feat_r": NaN,
+   "phone_errors": 14,
+   "ref_phones": 14,
+   "phone_errors_50": 14,
+   "orig": {
+    "hyp": "",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Vroom Vroom Vroom Vroom",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 73,
+   "session": "d1215",
+   "index": 73,
+   "benchmark": null,
+   "text": "That pleased me.",
+   "feat_r": NaN,
+   "phone_errors": 10,
+   "ref_phones": 10,
+   "phone_errors_50": 10,
+   "orig": {
+    "hyp": "",
+    "errors": 3,
+    "words": 3,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Mm-hmm. Mm-hmm.",
+    "errors": 4,
+    "words": 3,
+    "wer": 1.3333333333333333
+   }
+  },
+  {
+   "gid": 74,
+   "session": "d1215",
+   "index": 74,
+   "benchmark": null,
+   "text": "We are good people.",
+   "feat_r": NaN,
+   "phone_errors": 12,
+   "ref_phones": 12,
+   "phone_errors_50": 12,
+   "orig": {
+    "hyp": "Mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "MMMMMMMMMMMMMMMMMM",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 75,
+   "session": "d1215",
+   "index": 75,
+   "benchmark": null,
+   "text": "I've heard him talk about that for hours.",
+   "feat_r": NaN,
+   "phone_errors": 23,
+   "ref_phones": 24,
+   "phone_errors_50": 23,
+   "orig": {
+    "hyp": "me",
+    "errors": 8,
+    "words": 8,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Ah, me, me, me, me!",
+    "errors": 8,
+    "words": 8,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 76,
+   "session": "d1215",
+   "index": 76,
+   "benchmark": null,
+   "text": "Of course.",
+   "feat_r": NaN,
+   "phone_errors": 5,
+   "ref_phones": 6,
+   "phone_errors_50": 5,
+   "orig": {
+    "hyp": "MMMMMMMMMMMM",
+    "errors": 2,
+    "words": 2,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Mmhmm.",
+    "errors": 2,
+    "words": 2,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 77,
+   "session": "d1215",
+   "index": 77,
+   "benchmark": null,
+   "text": "It wasn't even funny.",
+   "feat_r": NaN,
+   "phone_errors": 16,
+   "ref_phones": 16,
+   "phone_errors_50": 16,
+   "orig": {
+    "hyp": "MMMMMM MMMMMMMMMMMMM",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "MMMMMMMM",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 78,
+   "session": "d1215",
+   "index": 78,
+   "benchmark": null,
+   "text": "If only I could remember the name.",
+   "feat_r": NaN,
+   "phone_errors": 20,
+   "ref_phones": 22,
+   "phone_errors_50": 21,
+   "orig": {
+    "hyp": "All of you.",
+    "errors": 7,
+    "words": 7,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "MMMMMMMMMMMMMMMMMMMMMMMM",
+    "errors": 7,
+    "words": 7,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 79,
+   "session": "d1215",
+   "index": 79,
+   "benchmark": null,
+   "text": "I don't think the teachers are the problem.",
+   "feat_r": NaN,
+   "phone_errors": 25,
+   "ref_phones": 27,
+   "phone_errors_50": 26,
+   "orig": {
+    "hyp": "Why?",
+    "errors": 8,
+    "words": 8,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Hmmmhmmmhmmmhmmmhmmmhmmmm...",
+    "errors": 8,
+    "words": 8,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 80,
+   "session": "d1215",
+   "index": 80,
+   "benchmark": null,
+   "text": "Public relations.",
+   "feat_r": NaN,
+   "phone_errors": 14,
+   "ref_phones": 14,
+   "phone_errors_50": 14,
+   "orig": {
+    "hyp": "Mmm... Mmm... Mmm...",
+    "errors": 3,
+    "words": 2,
+    "wer": 1.5
+   },
+   "fixed": {
+    "hyp": "It is.",
+    "errors": 2,
+    "words": 2,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 81,
+   "session": "d1215",
+   "index": 81,
+   "benchmark": null,
+   "text": "It's real easy to swing in there for breakfast.",
+   "feat_r": NaN,
+   "phone_errors": 30,
+   "ref_phones": 31,
+   "phone_errors_50": 30,
+   "orig": {
+    "hyp": "Mmm..... Hmmm.....",
+    "errors": 9,
+    "words": 9,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "hmm hmm hmmm hmmmm hmmmm",
+    "errors": 9,
+    "words": 9,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 82,
+   "session": "d1215",
+   "index": 82,
+   "benchmark": null,
+   "text": "Then you find it again and lose it again.",
+   "feat_r": NaN,
+   "phone_errors": 25,
+   "ref_phones": 27,
+   "phone_errors_50": 26,
+   "orig": {
+    "hyp": "Mmmmmmmmmmm Mmmmmmmmmmmmmmm",
+    "errors": 9,
+    "words": 9,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "hmm",
+    "errors": 9,
+    "words": 9,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 83,
+   "session": "d1215",
+   "index": 83,
+   "benchmark": null,
+   "text": "We've got four kids.",
+   "feat_r": NaN,
+   "phone_errors": 12,
+   "ref_phones": 13,
+   "phone_errors_50": 12,
+   "orig": {
+    "hyp": "Ascendant whimpering",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "MMMMMMMMMMMMMM",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 84,
+   "session": "d1215",
+   "index": 84,
+   "benchmark": null,
+   "text": "My little girl likes blue more than pink.",
+   "feat_r": NaN,
+   "phone_errors": 26,
+   "ref_phones": 27,
+   "phone_errors_50": 26,
+   "orig": {
+    "hyp": "",
+    "errors": 8,
+    "words": 8,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "MMMMMMMMMMMMMMMMMMMMMM",
+    "errors": 8,
+    "words": 8,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 85,
+   "session": "d1215",
+   "index": 85,
+   "benchmark": null,
+   "text": "In May it will be five years since I met him.",
+   "feat_r": NaN,
+   "phone_errors": 28,
+   "ref_phones": 29,
+   "phone_errors_50": 29,
+   "orig": {
+    "hyp": "Ugh... Ugh...",
+    "errors": 11,
+    "words": 11,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "RRRRRRRRRRRRRRRRRRRRRRRRR!",
+    "errors": 11,
+    "words": 11,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 86,
+   "session": "d1215",
+   "index": 86,
+   "benchmark": null,
+   "text": "She used to love to do stuff like that.",
+   "feat_r": NaN,
+   "phone_errors": 25,
+   "ref_phones": 25,
+   "phone_errors_50": 25,
+   "orig": {
+    "hyp": "Or...",
+    "errors": 9,
+    "words": 9,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "part.",
+    "errors": 9,
+    "words": 9,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 87,
+   "session": "d1215",
+   "index": 87,
+   "benchmark": null,
+   "text": "My wife and daughter were kidnapped.",
+   "feat_r": NaN,
+   "phone_errors": 21,
+   "ref_phones": 21,
+   "phone_errors_50": 21,
+   "orig": {
+    "hyp": "Mmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmmm",
+    "errors": 6,
+    "words": 6,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "MMMMMMMMMMMMMMMM",
+    "errors": 6,
+    "words": 6,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 88,
+   "session": "d1215",
+   "index": 88,
+   "benchmark": null,
+   "text": "Satan rejoiced with his birth.",
+   "feat_r": NaN,
+   "phone_errors": 20,
+   "ref_phones": 20,
+   "phone_errors_50": 20,
+   "orig": {
+    "hyp": "I'm sorry.",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "It is, it is, it is.",
+    "errors": 6,
+    "words": 5,
+    "wer": 1.2
+   }
+  },
+  {
+   "gid": 89,
+   "session": "d1215",
+   "index": 89,
+   "benchmark": null,
+   "text": "It was his decision and you have to respect it.",
+   "feat_r": NaN,
+   "phone_errors": 33,
+   "ref_phones": 34,
+   "phone_errors_50": 33,
+   "orig": {
+    "hyp": "MMMMMMMMMMMM MMMMMMMMMMMM",
+    "errors": 10,
+    "words": 10,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "I love you. I love you.",
+    "errors": 9,
+    "words": 10,
+    "wer": 0.9
+   }
+  },
+  {
+   "gid": 90,
+   "session": "d1215",
+   "index": 90,
+   "benchmark": null,
+   "text": "No I didn't go to the store.",
+   "feat_r": NaN,
+   "phone_errors": 19,
+   "ref_phones": 19,
+   "phone_errors_50": 19,
+   "orig": {
+    "hyp": "",
+    "errors": 7,
+    "words": 7,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "It's not. It's not.",
+    "errors": 7,
+    "words": 7,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 91,
+   "session": "d1215",
+   "index": 91,
+   "benchmark": null,
+   "text": "We will head to Florida for vacation.",
+   "feat_r": NaN,
+   "phone_errors": 27,
+   "ref_phones": 27,
+   "phone_errors_50": 27,
+   "orig": {
+    "hyp": "hmm",
+    "errors": 7,
+    "words": 7,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Hm. Hm? Hm? Hm?",
+    "errors": 7,
+    "words": 7,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 92,
+   "session": "d1215",
+   "index": 92,
+   "benchmark": null,
+   "text": "Take a stash of books or small quiet toys.",
+   "feat_r": NaN,
+   "phone_errors": 27,
+   "ref_phones": 28,
+   "phone_errors_50": 28,
+   "orig": {
+    "hyp": "you",
+    "errors": 9,
+    "words": 9,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Ugh, ugh, ugh, ugh, ugh, ugh, ugh.",
+    "errors": 9,
+    "words": 9,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 93,
+   "session": "d1215",
+   "index": 93,
+   "benchmark": null,
+   "text": "I would reconsider where I was buying it from.",
+   "feat_r": NaN,
+   "phone_errors": 30,
+   "ref_phones": 30,
+   "phone_errors_50": 30,
+   "orig": {
+    "hyp": "you",
+    "errors": 9,
+    "words": 9,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Mmm. Mmm. Mmm. Mmm.",
+    "errors": 9,
+    "words": 9,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 94,
+   "session": "d1215",
+   "index": 94,
+   "benchmark": null,
+   "text": "It was written at a third grade level.",
+   "feat_r": NaN,
+   "phone_errors": 25,
+   "ref_phones": 25,
+   "phone_errors_50": 25,
+   "orig": {
+    "hyp": "1. Mm. Mm. Mm. Mm. Mm. Hmmm. Mm.",
+    "errors": 8,
+    "words": 8,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Mmm, mmm, mmm, mmm, mmm, mmm, mmm.",
+    "errors": 8,
+    "words": 8,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 95,
+   "session": "d1215",
+   "index": 95,
+   "benchmark": null,
+   "text": "I do not charge except for emergencies.",
+   "feat_r": NaN,
+   "phone_errors": 27,
+   "ref_phones": 28,
+   "phone_errors_50": 27,
+   "orig": {
+    "hyp": "you you",
+    "errors": 7,
+    "words": 7,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 7,
+    "words": 7,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 96,
+   "session": "d1215",
+   "index": 96,
+   "benchmark": null,
+   "text": "I'll be there in the afternoon.",
+   "feat_r": NaN,
+   "phone_errors": 18,
+   "ref_phones": 18,
+   "phone_errors_50": 18,
+   "orig": {
+    "hyp": "",
+    "errors": 6,
+    "words": 6,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "hmm",
+    "errors": 6,
+    "words": 6,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 97,
+   "session": "d1215",
+   "index": 97,
+   "benchmark": null,
+   "text": "Let's go visit for like a short weekend or something.",
+   "feat_r": NaN,
+   "phone_errors": 33,
+   "ref_phones": 36,
+   "phone_errors_50": 35,
+   "orig": {
+    "hyp": "MMMMMMMMMMMMMMMMMMMM",
+    "errors": 10,
+    "words": 10,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "This is like.",
+    "errors": 9,
+    "words": 10,
+    "wer": 0.9
+   }
+  },
+  {
+   "gid": 98,
+   "session": "d1215",
+   "index": 98,
+   "benchmark": null,
+   "text": "I think that's the way this is done.",
+   "feat_r": NaN,
+   "phone_errors": 21,
+   "ref_phones": 21,
+   "phone_errors_50": 21,
+   "orig": {
+    "hyp": "Mmm...",
+    "errors": 8,
+    "words": 8,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "I like it. I like it.",
+    "errors": 7,
+    "words": 8,
+    "wer": 0.875
+   }
+  },
+  {
+   "gid": 99,
+   "session": "d1215",
+   "index": 99,
+   "benchmark": null,
+   "text": "A part of the system.",
+   "feat_r": NaN,
+   "phone_errors": 15,
+   "ref_phones": 15,
+   "phone_errors_50": 15,
+   "orig": {
+    "hyp": "Hey.",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Heh, heh, heh, heh.",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 100,
+   "session": "d1215",
+   "index": 100,
+   "benchmark": null,
+   "text": "Everyone knows how to make a tuna fish sandwich.",
+   "feat_r": NaN,
+   "phone_errors": 32,
+   "ref_phones": 32,
+   "phone_errors_50": 32,
+   "orig": {
+    "hyp": "",
+    "errors": 9,
+    "words": 9,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "It's all about it. It's all about.",
+    "errors": 9,
+    "words": 9,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 101,
+   "session": "d1215",
+   "index": 101,
+   "benchmark": null,
+   "text": "I can't remember the guy's name.",
+   "feat_r": NaN,
+   "phone_errors": 18,
+   "ref_phones": 20,
+   "phone_errors_50": 19,
+   "orig": {
+    "hyp": "Mmhmm",
+    "errors": 6,
+    "words": 6,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "I'm sorry.",
+    "errors": 6,
+    "words": 6,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 102,
+   "session": "d1215",
+   "index": 102,
+   "benchmark": null,
+   "text": "What do you think about this research?",
+   "feat_r": NaN,
+   "phone_errors": 22,
+   "ref_phones": 23,
+   "phone_errors_50": 22,
+   "orig": {
+    "hyp": "Aah...Mm...Mm...Mm...Mm...Mm...Mhm... Aah...",
+    "errors": 7,
+    "words": 7,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "MMMMMMMMMMMMMM",
+    "errors": 7,
+    "words": 7,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 103,
+   "session": "d1215",
+   "index": 103,
+   "benchmark": null,
+   "text": "We love eating fresh vegetables in the summer.",
+   "feat_r": NaN,
+   "phone_errors": 27,
+   "ref_phones": 30,
+   "phone_errors_50": 29,
+   "orig": {
+    "hyp": "Mmm, Mmm, Mmm, Mmm, Mmm, Mmm, Mmm, you",
+    "errors": 8,
+    "words": 8,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 8,
+    "words": 8,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 104,
+   "session": "d1215",
+   "index": 104,
+   "benchmark": null,
+   "text": "You can see what I mean.",
+   "feat_r": NaN,
+   "phone_errors": 13,
+   "ref_phones": 14,
+   "phone_errors_50": 14,
+   "orig": {
+    "hyp": "",
+    "errors": 6,
+    "words": 6,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "MMMMMMMM",
+    "errors": 6,
+    "words": 6,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 105,
+   "session": "d1215",
+   "index": 105,
+   "benchmark": null,
+   "text": "I am an Asian woman with a white boyfriend.",
+   "feat_r": NaN,
+   "phone_errors": 26,
+   "ref_phones": 28,
+   "phone_errors_50": 27,
+   "orig": {
+    "hyp": "This...is...this...is... not anymore. Nn...n...n't...I... Mmm... Mmm...",
+    "errors": 9,
+    "words": 9,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Um, yes, yes, yes, yes, I'm not... I'm not...",
+    "errors": 9,
+    "words": 9,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 106,
+   "session": "d1215",
+   "index": 106,
+   "benchmark": null,
+   "text": "Because her statement was invalid.",
+   "feat_r": NaN,
+   "phone_errors": 25,
+   "ref_phones": 25,
+   "phone_errors_50": 25,
+   "orig": {
+    "hyp": "MMMMMMMMMMMMMMMMMM",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "MMMMMMMMMMMM",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 107,
+   "session": "d1215",
+   "index": 107,
+   "benchmark": null,
+   "text": "We felt guilty.",
+   "feat_r": NaN,
+   "phone_errors": 10,
+   "ref_phones": 11,
+   "phone_errors_50": 10,
+   "orig": {
+    "hyp": "MMMMMMMMMMMMMMMM",
+    "errors": 3,
+    "words": 3,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Mmm, that's good.",
+    "errors": 3,
+    "words": 3,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 108,
+   "session": "d1215",
+   "index": 108,
+   "benchmark": null,
+   "text": "I really like it.",
+   "feat_r": NaN,
+   "phone_errors": 10,
+   "ref_phones": 10,
+   "phone_errors_50": 10,
+   "orig": {
+    "hyp": "",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 109,
+   "session": "d1215",
+   "index": 109,
+   "benchmark": null,
+   "text": "You can sit in the sun all day around the pool.",
+   "feat_r": NaN,
+   "phone_errors": 28,
+   "ref_phones": 28,
+   "phone_errors_50": 28,
+   "orig": {
+    "hyp": "Ugh. you",
+    "errors": 11,
+    "words": 11,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 11,
+    "words": 11,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 110,
+   "session": "d1215",
+   "index": 110,
+   "benchmark": null,
+   "text": "I really don't want to see them go.",
+   "feat_r": NaN,
+   "phone_errors": 22,
+   "ref_phones": 22,
+   "phone_errors_50": 22,
+   "orig": {
+    "hyp": "hmm hmm hmm hmm",
+    "errors": 8,
+    "words": 8,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "MMMMMMMMMMMM",
+    "errors": 8,
+    "words": 8,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 111,
+   "session": "d1215",
+   "index": 111,
+   "benchmark": null,
+   "text": "They all want a reward or whatever.",
+   "feat_r": NaN,
+   "phone_errors": 23,
+   "ref_phones": 23,
+   "phone_errors_50": 23,
+   "orig": {
+    "hyp": "I... I... I...",
+    "errors": 7,
+    "words": 7,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "I'm... I'm... I'm... I'm...",
+    "errors": 7,
+    "words": 7,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 112,
+   "session": "d1215",
+   "index": 112,
+   "benchmark": null,
+   "text": "I've quit doing that myself.",
+   "feat_r": NaN,
+   "phone_errors": 17,
+   "ref_phones": 19,
+   "phone_errors_50": 17,
+   "orig": {
+    "hyp": "",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "No, no, no, no.",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 113,
+   "session": "d1215",
+   "index": 113,
+   "benchmark": null,
+   "text": "The restaurant must pass the inspection.",
+   "feat_r": NaN,
+   "phone_errors": 25,
+   "ref_phones": 28,
+   "phone_errors_50": 27,
+   "orig": {
+    "hyp": "MMMMMMMMMMMMMMMMMMMMMMMMMM",
+    "errors": 6,
+    "words": 6,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Mm-hmm.",
+    "errors": 6,
+    "words": 6,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 114,
+   "session": "d1215",
+   "index": 114,
+   "benchmark": null,
+   "text": "Where do you go camping at around here?",
+   "feat_r": NaN,
+   "phone_errors": 24,
+   "ref_phones": 24,
+   "phone_errors_50": 24,
+   "orig": {
+    "hyp": "hmmm hmmm hmmm hmmm hmmm hmmm hmmm hmmmm",
+    "errors": 8,
+    "words": 8,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 8,
+    "words": 8,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 115,
+   "session": "d1215",
+   "index": 115,
+   "benchmark": null,
+   "text": "I try to save that for the weekend.",
+   "feat_r": NaN,
+   "phone_errors": 23,
+   "ref_phones": 23,
+   "phone_errors_50": 23,
+   "orig": {
+    "hyp": "MMMMMMMMMMMM",
+    "errors": 8,
+    "words": 8,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Mmm. Mmm. Mmm.",
+    "errors": 8,
+    "words": 8,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 116,
+   "session": "d1215",
+   "index": 116,
+   "benchmark": null,
+   "text": "When does school start?",
+   "feat_r": NaN,
+   "phone_errors": 15,
+   "ref_phones": 15,
+   "phone_errors_50": 15,
+   "orig": {
+    "hyp": "Hey.",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "This is it.",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 117,
+   "session": "d1215",
+   "index": 117,
+   "benchmark": null,
+   "text": "We've only got these ones.",
+   "feat_r": NaN,
+   "phone_errors": 17,
+   "ref_phones": 17,
+   "phone_errors_50": 17,
+   "orig": {
+    "hyp": "MMMMMMMMMMMMMMMMMM",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "hmm hmm hmm hmm hmm",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 118,
+   "session": "d1215",
+   "index": 118,
+   "benchmark": null,
+   "text": "That's just the way it was.",
+   "feat_r": NaN,
+   "phone_errors": 17,
+   "ref_phones": 17,
+   "phone_errors_50": 17,
+   "orig": {
+    "hyp": "MMMMMMMMMM",
+    "errors": 6,
+    "words": 6,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "EePpPpPpPpPpPpPpP",
+    "errors": 6,
+    "words": 6,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 119,
+   "session": "d1215",
+   "index": 119,
+   "benchmark": null,
+   "text": "Vegetables grow in the fields.",
+   "feat_r": NaN,
+   "phone_errors": 21,
+   "ref_phones": 21,
+   "phone_errors_50": 21,
+   "orig": {
+    "hyp": "Mmmmm... It's... Mmmmm... Mmmmm...",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "I think this one is fine.",
+    "errors": 6,
+    "words": 5,
+    "wer": 1.2
+   }
+  },
+  {
+   "gid": 120,
+   "session": "d1215",
+   "index": 120,
+   "benchmark": null,
+   "text": "I had ended up in a very dimly lit area.",
+   "feat_r": NaN,
+   "phone_errors": 29,
+   "ref_phones": 30,
+   "phone_errors_50": 29,
+   "orig": {
+    "hyp": "Mmmmmm Mmmmmm Mmmmmm Mmmmmm you",
+    "errors": 10,
+    "words": 10,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "MMMMMMMMMMMMMMMMMM",
+    "errors": 10,
+    "words": 10,
+    "wer": 1.0
+   }
+  }
+ ],
+ "wall_time_s": 1107.8050737380981
+}

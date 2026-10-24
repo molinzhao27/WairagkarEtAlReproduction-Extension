@@ -1,0 +1,414 @@
+{
+ "run_name": "b2v2_ov_d0105_all",
+ "name": "crossday",
+ "decision": "D-075",
+ "config": "configs/experiments/b2v2_ov_d0105_all.yaml",
+ "code_version": {
+  "source": "sync",
+  "commit": "74a8da637f325b24b297f0e5f784caa54ebfb55e",
+  "dirty": false,
+  "diff_sha256": null,
+  "pushed_at": "2026-10-24T20:31:23Z"
+ },
+ "created": "2026-10-24T21:09:55",
+ "source": {
+  "run_name": "b2v2_ov_d0105_all",
+  "checkpoint": "/home/molin/wvx/WairagkarEtAlReproduction-Extension/data/checkpoints/b2v2_ov_d0105_all/best.pt",
+  "checkpoint_sha256": "d11e1f5f9d7fc01282076d0faa5b51327e5aeb89de28a7d4831f90c0eff38730",
+  "input_id": 1,
+  "trials": "sel:d1215_eval",
+  "gids": [
+   121,
+   122,
+   123,
+   124,
+   125,
+   126,
+   127,
+   128,
+   129,
+   130,
+   131,
+   132,
+   133,
+   134,
+   135
+  ],
+  "mode": "chunked",
+  "data_dir": "/home/molin/wvx/WairagkarEtAlReproduction-Extension/data/processed/b2v2_ov",
+  "window_bins": null,
+  "chunked": {
+   "ctx": 128,
+   "hop": 64
+  },
+  "pool": 5,
+  "device": "cuda",
+  "code_version": {
+   "source": "sync",
+   "commit": "74a8da637f325b24b297f0e5f784caa54ebfb55e",
+   "dirty": false,
+   "diff_sha256": null,
+   "pushed_at": "2026-10-24T20:31:23Z"
+  },
+  "decision": "D-075",
+  "created": "2026-10-24T20:36:08"
+ },
+ "speed_factor": 3.25,
+ "summary": {
+  "all": {
+   "n": 15,
+   "wer_orig": 0.9897959183673469,
+   "wer_fixed": 1.010204081632653,
+   "per": 0.9387096774193548,
+   "per_50ms": 0.9419354838709677
+  }
+ },
+ "rows": [
+  {
+   "gid": 121,
+   "session": "d1215_eval",
+   "index": 0,
+   "benchmark": null,
+   "text": "Which way is the tourist area?",
+   "feat_r": NaN,
+   "phone_errors": 19,
+   "ref_phones": 19,
+   "phone_errors_50": 19,
+   "orig": {
+    "hyp": "Mmmm Mmmm Mmmm Mmmm",
+    "errors": 6,
+    "words": 6,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Mmm, mmm, mmm.",
+    "errors": 6,
+    "words": 6,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 122,
+   "session": "d1215_eval",
+   "index": 1,
+   "benchmark": null,
+   "text": "I was raised in New York City.",
+   "feat_r": NaN,
+   "phone_errors": 18,
+   "ref_phones": 20,
+   "phone_errors_50": 18,
+   "orig": {
+    "hyp": "Mmmmmm Mmmmmm Mmmmmm",
+    "errors": 7,
+    "words": 7,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "hmm hmm hmm hmm",
+    "errors": 7,
+    "words": 7,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 123,
+   "session": "d1215_eval",
+   "index": 2,
+   "benchmark": null,
+   "text": "When do you leave your job?",
+   "feat_r": NaN,
+   "phone_errors": 16,
+   "ref_phones": 16,
+   "phone_errors_50": 16,
+   "orig": {
+    "hyp": "Mmmmmmmm Mmmmmmmm Mmmmmmmm",
+    "errors": 6,
+    "words": 6,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Heh, heh, heh...",
+    "errors": 6,
+    "words": 6,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 124,
+   "session": "d1215_eval",
+   "index": 3,
+   "benchmark": null,
+   "text": "That's the only pollution that's been there.",
+   "feat_r": NaN,
+   "phone_errors": 23,
+   "ref_phones": 27,
+   "phone_errors_50": 24,
+   "orig": {
+    "hyp": "It's... It's... It's near.",
+    "errors": 7,
+    "words": 7,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "I mean, he's near.",
+    "errors": 7,
+    "words": 7,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 125,
+   "session": "d1215_eval",
+   "index": 4,
+   "benchmark": null,
+   "text": "They needed a smaller setting.",
+   "feat_r": NaN,
+   "phone_errors": 18,
+   "ref_phones": 18,
+   "phone_errors_50": 18,
+   "orig": {
+    "hyp": "No.",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "No. No. No. No. No. No.",
+    "errors": 6,
+    "words": 5,
+    "wer": 1.2
+   }
+  },
+  {
+   "gid": 126,
+   "session": "d1215_eval",
+   "index": 5,
+   "benchmark": null,
+   "text": "They put it out in a video.",
+   "feat_r": NaN,
+   "phone_errors": 14,
+   "ref_phones": 17,
+   "phone_errors_50": 14,
+   "orig": {
+    "hyp": "Ehhhhh",
+    "errors": 7,
+    "words": 7,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Yeah, yeah, yeah.",
+    "errors": 7,
+    "words": 7,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 127,
+   "session": "d1215_eval",
+   "index": 6,
+   "benchmark": null,
+   "text": "Especially in the winter.",
+   "feat_r": NaN,
+   "phone_errors": 15,
+   "ref_phones": 16,
+   "phone_errors_50": 15,
+   "orig": {
+    "hyp": "",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "It's time.",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 128,
+   "session": "d1215_eval",
+   "index": 7,
+   "benchmark": null,
+   "text": "You like pets and things.",
+   "feat_r": NaN,
+   "phone_errors": 14,
+   "ref_phones": 16,
+   "phone_errors_50": 14,
+   "orig": {
+    "hyp": "MMMMMMMMMMMMMMMMMM",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "This is it.",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 129,
+   "session": "d1215_eval",
+   "index": 8,
+   "benchmark": null,
+   "text": "Like building a house or anything.",
+   "feat_r": NaN,
+   "phone_errors": 20,
+   "ref_phones": 21,
+   "phone_errors_50": 20,
+   "orig": {
+    "hyp": "Yes. Yes. Yes.",
+    "errors": 6,
+    "words": 6,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Yeah, it is.",
+    "errors": 6,
+    "words": 6,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 130,
+   "session": "d1215_eval",
+   "index": 9,
+   "benchmark": null,
+   "text": "Take a lot of chances.",
+   "feat_r": NaN,
+   "phone_errors": 15,
+   "ref_phones": 15,
+   "phone_errors_50": 15,
+   "orig": {
+    "hyp": "MMMMMMMMMMMMMMMM",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "hmm hmm hmm hmm",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 131,
+   "session": "d1215_eval",
+   "index": 10,
+   "benchmark": null,
+   "text": "I don't think I have insurance.",
+   "feat_r": NaN,
+   "phone_errors": 19,
+   "ref_phones": 21,
+   "phone_errors_50": 20,
+   "orig": {
+    "hyp": "MMMMMMMMMMMMMMMMMMMM",
+    "errors": 6,
+    "words": 6,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "I'm not going to do this anymore.",
+    "errors": 7,
+    "words": 6,
+    "wer": 1.1666666666666667
+   }
+  },
+  {
+   "gid": 132,
+   "session": "d1215_eval",
+   "index": 11,
+   "benchmark": null,
+   "text": "It's up north by Green Bay.",
+   "feat_r": NaN,
+   "phone_errors": 17,
+   "ref_phones": 17,
+   "phone_errors_50": 17,
+   "orig": {
+    "hyp": "This is not you.",
+    "errors": 6,
+    "words": 6,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Ah, ah, ah, ah, ah.",
+    "errors": 6,
+    "words": 6,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 133,
+   "session": "d1215_eval",
+   "index": 12,
+   "benchmark": null,
+   "text": "I always wanted to go to school for nursing.",
+   "feat_r": NaN,
+   "phone_errors": 28,
+   "ref_phones": 30,
+   "phone_errors_50": 28,
+   "orig": {
+    "hyp": "I was dizzy...",
+    "errors": 8,
+    "words": 9,
+    "wer": 0.8888888888888888
+   },
+   "fixed": {
+    "hyp": "I was busy. I thought that.",
+    "errors": 8,
+    "words": 9,
+    "wer": 0.8888888888888888
+   }
+  },
+  {
+   "gid": 134,
+   "session": "d1215_eval",
+   "index": 13,
+   "benchmark": null,
+   "text": "I make a lot of my Christmas presents every year.",
+   "feat_r": NaN,
+   "phone_errors": 32,
+   "ref_phones": 34,
+   "phone_errors_50": 31,
+   "orig": {
+    "hyp": "Mm-hmm",
+    "errors": 10,
+    "words": 10,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Mm-mm-mm-mm-mm-mm-mm-mm-mm.",
+    "errors": 10,
+    "words": 10,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 135,
+   "session": "d1215_eval",
+   "index": 14,
+   "benchmark": null,
+   "text": "I think a lot of the choices are good.",
+   "feat_r": NaN,
+   "phone_errors": 23,
+   "ref_phones": 23,
+   "phone_errors_50": 23,
+   "orig": {
+    "hyp": "I'm...",
+    "errors": 9,
+    "words": 9,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Uh, uh, uh, uh, uh, uh, uh.",
+    "errors": 9,
+    "words": 9,
+    "wer": 1.0
+   }
+  }
+ ],
+ "wall_time_s": 192.7554326057434
+}
