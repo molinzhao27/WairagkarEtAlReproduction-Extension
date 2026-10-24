@@ -23,6 +23,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
+from wvx import b2v  # noqa: E402,F401  (must come before TensorFlow, as in scripts/train.py)
 from wvx.config import resolve_path  # noqa: E402
 from wvx.experiment_config import apply_thread_env, load_experiment_config  # noqa: E402
 
