@@ -1,0 +1,43 @@
+# D-074 (pre-registered) synthetic-voice decoder, stage A (voice transfer): their released day-165 decoder fine-tuned
+# WHOLE (base + input layers) on Alex targets placed on their true syllables, sessions day109-day165 (never day195).
+#   PC: .venv/bin/python -I scripts/train.py --config configs/experiments/synth_transfer_le165.yaml
+base_experiment: configs/experiments/reproduce_training.yaml
+
+run_name: synth_transfer_le165
+
+runtime:
+  device: gpu
+
+paths:
+  training_sessions: data/processed/wairagkar_alex
+
+model:
+  step_size: 2                     # training windows every 20 ms (neighbouring windows are near-duplicates)
+  n_session_layers: 17             # layers 0-16 as theirs (10-16 used here); each starts as the day-165 layer
+
+training:
+  epochs: 10
+  early_stopping_patience: 3
+  learning_rate: 1.0e-4            # fine-tuning a trained network (theirs from scratch: 5e-4)
+  n_augmentations: 0               # memory on the PC (30 GB); their 3 copies are for training from scratch
+  sessions:
+    - {session: t15_day109, session_layer: 10}
+    - {session: t15_day110, session_layer: 10}
+    - {session: t15_day123, session_layer: 11}
+    - {session: t15_day132, session_layer: 12}
+    - {session: t15_day137, session_layer: 13}
+    - {session: t15_day139, session_layer: 13}
+    - {session: t15_day144, session_layer: 14}
+    - {session: t15_day146, session_layer: 14}
+    - {session: t15_day153, session_layer: 15}
+    - {session: t15_day165, session_layer: 16}
+  held_out_sessions: [{session: t15_day195}]
+  validation:
+    n_trials: 50
+    pool: [t15_day153, t15_day165]
+  init:
+    source: inference_h5
+    path: data/raw/wairagkar/t15_neural_data/t15_day172/brain2voice_t15_day165.h5
+    freeze_base: false
+  export_layers: [16]              # the day-165 layer: the dev test's starting decoder
+  export_weights: best             # lowest validation loss (fine-tuning; theirs: final)
