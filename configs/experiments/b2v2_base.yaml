@@ -1,0 +1,75 @@
+# D-075 brain2voice-2.0-style decoder (Wairagkar et al. 2026, bioRxiv 10.64898/2026.06.30.735633; code unreleased):
+# shared data, model and training settings. Stage configs (b2v2_*.yaml) set the split and the run name.
+# [PAPER] = their appendix tables A.1/A.2; [OURS] = a choice where the paper is silent or our setup differs.
+#   host:  scripts/b2v2_phonemes.py, scripts/build_b2v2_data.py (data); PC: scripts/train_b2v2.py (GPU)
+base_experiment: configs/experiments/reproduce_inference.yaml
+
+run_name: b2v2_base
+
+wairagkar_data:
+  target_smoothing: false            # [OURS] their targets scaled to [-1, 1], unsmoothed (the paper smooths nothing)
+
+runtime:
+  threads: {intra_op: 12, inter_op: 1, omp: 12}       # host chiplet 1 (16 CPUs)
+
+b2v2:
+  data_dir: data/processed/b2v2
+  benchmark_file: data/raw/wairagkar/t15_neural_data/test_idx.mat
+  benchmark_keys: [random_test_idx, video_test_idx]   # 90 + 38 = their 128 benchmark trials
+  speech_indices_file: "{session}_speech_indices.mat"
+  word_key: word_indices
+  description_key: trial_description
+  closed_loop_key: brain2voice_pred_audio_16kHz
+  phonemes:
+    voice_config: configs/experiments/manual_alignment_alex.yaml   # aligner words + phones of each cue (Alex TTS)
+    corpora: [t15_sessions, t15_day195]
+
+  model:
+    n_features: 512                  # [PAPER]
+    d_model: 384                     # [PAPER]
+    n_heads: 6                       # [PAPER]
+    d_ffn: 1536                      # [PAPER]
+    n_layers: 8                      # [PAPER]
+    dropout: 0.1                     # [PAPER]
+    n_targets: 20                    # [PAPER] continuous LPCNet features
+    n_phonemes: 41                   # [PAPER] 39 phonemes + silence + CTC blank (wvx.phonemes)
+    max_tokens: 256                  # positions available (training uses 128)
+    n_inputs: 1                      # [PAPER] one linear input projection
+
+  data:
+    pool: 5                          # [PAPER] 10 ms -> 50 ms tokens (mean of 5 bins)
+    context_tokens: 128              # [PAPER] 6.4 s windows
+    speech_feature: 0                # [OURS] speech mask: target c0 (energy) above the threshold
+    speech_threshold: null           # [OURS] set from meta.json's c0 inside vs outside words, before any training
+
+  augmentation:                      # [PAPER] values; [OURS] applied to the 50 ms model input
+    noise: 0.1
+    offset: 0.05
+    offset_tx_scale: 0.67
+    drift: 0.005
+    channel_mask: 0.10
+
+  training:
+    steps: 25000                     # [PAPER]
+    batch_size: 32                   # [PAPER]
+    lr: 1.0e-3                       # [PAPER]
+    min_lr: 1.0e-5                   # [PAPER]
+    warmup: 0.1                      # [PAPER] linear warm-up over the first 10%, then cosine
+    weight_decay: 0.01               # [PAPER]
+    grad_clip: 1.0                   # [PAPER]
+    bf16: true                       # [PAPER]
+    augment_from: 0.8                # [PAPER] augmentation in the last 20% of batches
+    weight_ramp: 0.3                 # [PAPER] speech:silence loss weight 1:1 -> 5:0.2 over the first 30%
+    speech_weight: 5.0
+    silence_weight: 0.2
+    ctc_weight: 0.1                  # [PAPER] phoneme loss weight (continuous loss weight 1: [OURS], their learned
+                                     # weighting balanced it against the token head, which we do not have)
+    n_validation: 30                 # [PAPER] validation trials (random, seeded)
+    val_every: 1000                  # [OURS]
+    val_windows_per_trial: 4         # [OURS] fixed seeded windows
+    checkpoint_every: 2500           # [OURS] resumable
+    export: final                    # [OURS] the paper trains a fixed schedule; best-validation weights kept too
+    seed: 0
+
+  decode:
+    window_bins: 800                 # [PAPER] simulated live inference: 800 ms window, shifted by 10 ms
