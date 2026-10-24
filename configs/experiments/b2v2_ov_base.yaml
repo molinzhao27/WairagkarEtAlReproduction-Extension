@@ -1,0 +1,16 @@
+# D-081: the b2v2 decoder on Kunz T15 open-vocabulary (125k-word) inner speech. Shared settings; zero-shot decodes
+# use this run name (b2v2_ov_z) with --checkpoint data/checkpoints/b2v2_all/final.pt.
+#   host: scripts/build_b2v2_openvocab.py (--phonemes in the wvx-syl env, then data); PC: train/decode/score
+base_experiment: configs/experiments/b2v2_kunz_base.yaml
+
+run_name: b2v2_ov_z
+
+b2v2:
+  data_dir: data/processed/b2v2_ov
+  openvocab:
+    adapter_config: configs/data/kunz.yaml          # D-023 preprocessing, release channel order (D-024)
+    files:                                           # name: raw file (sentenceData.zip, SHA-256 verified)
+      d1215: data/raw/kunz/sentenceData_all/sentenceData/t15.2024.12.15_imagined_125kwords.mat
+      d1215_eval: data/raw/kunz/sentenceData_all/sentenceData/t15.2024.12.15_imagined_125kwords_eval.mat
+      d0105: data/raw/kunz/sentenceData_all/sentenceData/t15.2025.01.05_imagined_125kwords.mat
+      d0105_eval: data/raw/kunz/sentenceData_all/sentenceData/t15.2025.01.05_imagined_125kwords_eval.mat
