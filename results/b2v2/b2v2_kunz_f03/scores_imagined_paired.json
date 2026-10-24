@@ -1,0 +1,1254 @@
+{
+ "run_name": "b2v2_kunz_f03",
+ "name": "imagined_paired",
+ "decision": "D-075",
+ "config": "configs/experiments/b2v2_kunz_f03.yaml",
+ "code_version": {
+  "source": "sync",
+  "commit": "c18e0e95845018cc41a3fa1a210cec95cce26ce1",
+  "dirty": false,
+  "diff_sha256": null,
+  "pushed_at": "2026-10-24T18:53:55Z"
+ },
+ "created": "2026-10-24T19:07:50",
+ "source": {
+  "run_name": "b2v2_kunz_f03",
+  "checkpoint": "/home/molin/wvx/WairagkarEtAlReproduction-Extension/data/checkpoints/b2v2_kunz_f03/best.pt",
+  "checkpoint_sha256": "8fa73ec7dcd447ebfde75497c5f28452412fdb6a791da96ae59984e0c2f071a9",
+  "input_id": 1,
+  "trials": "sel:imagined:4",
+  "gids": [
+   200,
+   201,
+   202,
+   203,
+   204,
+   205,
+   206,
+   207,
+   208,
+   209,
+   210,
+   211,
+   212,
+   213,
+   214,
+   215,
+   216,
+   217,
+   218,
+   219,
+   220,
+   221,
+   222,
+   223,
+   224,
+   225,
+   226,
+   227,
+   228,
+   229,
+   230,
+   231,
+   232,
+   233,
+   234,
+   235,
+   236,
+   237,
+   238,
+   239,
+   240,
+   241,
+   242,
+   243,
+   244,
+   245,
+   246,
+   247,
+   248,
+   249
+  ],
+  "mode": "chunked",
+  "data_dir": "/home/molin/wvx/WairagkarEtAlReproduction-Extension/data/processed/b2v2_kunz_proj/paired",
+  "window_bins": null,
+  "chunked": {
+   "ctx": 128,
+   "hop": 64
+  },
+  "pool": 5,
+  "device": "cuda",
+  "code_version": {
+   "source": "sync",
+   "commit": "c18e0e95845018cc41a3fa1a210cec95cce26ce1",
+   "dirty": false,
+   "diff_sha256": null,
+   "pushed_at": "2026-10-24T18:53:55Z"
+  },
+  "decision": "D-075",
+  "created": "2026-10-24T18:55:35"
+ },
+ "speed_factor": 3.25,
+ "summary": {
+  "all": {
+   "n": 50,
+   "wer_orig": 0.908675799086758,
+   "wer_fixed": 0.867579908675799,
+   "per": 0.7055016181229773,
+   "per_50ms": 0.6245954692556634
+  }
+ },
+ "rows": [
+  {
+   "gid": 200,
+   "session": "imagined",
+   "index": 0,
+   "benchmark": null,
+   "text": "I hope it is you.",
+   "feat_r": NaN,
+   "phone_errors": 7,
+   "ref_phones": 10,
+   "phone_errors_50": 6,
+   "orig": {
+    "hyp": "I, my, I, I, is, you.",
+    "errors": 3,
+    "words": 5,
+    "wer": 0.6
+   },
+   "fixed": {
+    "hyp": "I-I-I-I-I-I-I-I-I-It Is You",
+    "errors": 8,
+    "words": 5,
+    "wer": 1.6
+   }
+  },
+  {
+   "gid": 201,
+   "session": "imagined",
+   "index": 1,
+   "benchmark": null,
+   "text": "You up?",
+   "feat_r": NaN,
+   "phone_errors": 7,
+   "ref_phones": 4,
+   "phone_errors_50": 5,
+   "orig": {
+    "hyp": "Hey, how are you?",
+    "errors": 4,
+    "words": 2,
+    "wer": 2.0
+   },
+   "fixed": {
+    "hyp": "Hey, how are you?",
+    "errors": 4,
+    "words": 2,
+    "wer": 2.0
+   }
+  },
+  {
+   "gid": 202,
+   "session": "imagined",
+   "index": 2,
+   "benchmark": null,
+   "text": "Is my nurse very hungry?",
+   "feat_r": NaN,
+   "phone_errors": 16,
+   "ref_phones": 17,
+   "phone_errors_50": 16,
+   "orig": {
+    "hyp": "I",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Y-y-y-y",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 203,
+   "session": "imagined",
+   "index": 3,
+   "benchmark": null,
+   "text": "They need it coming.",
+   "feat_r": NaN,
+   "phone_errors": 8,
+   "ref_phones": 12,
+   "phone_errors_50": 7,
+   "orig": {
+    "hyp": "I am a man, a man, a man, a man.",
+    "errors": 10,
+    "words": 4,
+    "wer": 2.5
+   },
+   "fixed": {
+    "hyp": "Oh, yeah, yeah, yeah, yeah, come on.",
+    "errors": 7,
+    "words": 4,
+    "wer": 1.75
+   }
+  },
+  {
+   "gid": 204,
+   "session": "imagined",
+   "index": 4,
+   "benchmark": null,
+   "text": "I need good glasses.",
+   "feat_r": NaN,
+   "phone_errors": 8,
+   "ref_phones": 13,
+   "phone_errors_50": 4,
+   "orig": {
+    "hyp": "I... need... the... lesson.",
+    "errors": 2,
+    "words": 4,
+    "wer": 0.5
+   },
+   "fixed": {
+    "hyp": "I need to listen.",
+    "errors": 2,
+    "words": 4,
+    "wer": 0.5
+   }
+  },
+  {
+   "gid": 205,
+   "session": "imagined",
+   "index": 5,
+   "benchmark": null,
+   "text": "Bring my music here, please.",
+   "feat_r": NaN,
+   "phone_errors": 13,
+   "ref_phones": 19,
+   "phone_errors_50": 13,
+   "orig": {
+    "hyp": "Why... I... need... here...",
+    "errors": 4,
+    "words": 5,
+    "wer": 0.8
+   },
+   "fixed": {
+    "hyp": "I need it here.",
+    "errors": 4,
+    "words": 5,
+    "wer": 0.8
+   }
+  },
+  {
+   "gid": 206,
+   "session": "imagined",
+   "index": 6,
+   "benchmark": null,
+   "text": "Am I right?",
+   "feat_r": NaN,
+   "phone_errors": 5,
+   "ref_phones": 6,
+   "phone_errors_50": 4,
+   "orig": {
+    "hyp": "Ahhhhhh...",
+    "errors": 3,
+    "words": 3,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Oh, I'm late.",
+    "errors": 3,
+    "words": 3,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 207,
+   "session": "imagined",
+   "index": 7,
+   "benchmark": null,
+   "text": "I do feel it.",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 8,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "I knew it.",
+    "errors": 2,
+    "words": 4,
+    "wer": 0.5
+   },
+   "fixed": {
+    "hyp": "I-I-I-I-I",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 208,
+   "session": "imagined",
+   "index": 8,
+   "benchmark": null,
+   "text": "I am coming right up.",
+   "feat_r": NaN,
+   "phone_errors": 7,
+   "ref_phones": 13,
+   "phone_errors_50": 7,
+   "orig": {
+    "hyp": "I... I... I...",
+    "errors": 4,
+    "words": 5,
+    "wer": 0.8
+   },
+   "fixed": {
+    "hyp": "I-I-I-I-I-I'm late.",
+    "errors": 6,
+    "words": 5,
+    "wer": 1.2
+   }
+  },
+  {
+   "gid": 209,
+   "session": "imagined",
+   "index": 9,
+   "benchmark": null,
+   "text": "Yes, it is good.",
+   "feat_r": NaN,
+   "phone_errors": 10,
+   "ref_phones": 10,
+   "phone_errors_50": 10,
+   "orig": {
+    "hyp": "",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Hey, yeah.",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 210,
+   "session": "imagined",
+   "index": 10,
+   "benchmark": null,
+   "text": "I need my music.",
+   "feat_r": NaN,
+   "phone_errors": 11,
+   "ref_phones": 12,
+   "phone_errors_50": 10,
+   "orig": {
+    "hyp": "We need you. Sure.",
+    "errors": 3,
+    "words": 4,
+    "wer": 0.75
+   },
+   "fixed": {
+    "hyp": "I don't need sir",
+    "errors": 3,
+    "words": 4,
+    "wer": 0.75
+   }
+  },
+  {
+   "gid": 211,
+   "session": "imagined",
+   "index": 11,
+   "benchmark": null,
+   "text": "I do need you.",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 8,
+   "phone_errors_50": 4,
+   "orig": {
+    "hyp": "I hate you. I hate you.",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "I am with you.",
+    "errors": 2,
+    "words": 4,
+    "wer": 0.5
+   }
+  },
+  {
+   "gid": 212,
+   "session": "imagined",
+   "index": 12,
+   "benchmark": null,
+   "text": "Do not clean it.",
+   "feat_r": NaN,
+   "phone_errors": 5,
+   "ref_phones": 11,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "MMMMMMMMMMMMMM",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Hey, hey, hey, hey.",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 213,
+   "session": "imagined",
+   "index": 13,
+   "benchmark": null,
+   "text": "How is that going?",
+   "feat_r": NaN,
+   "phone_errors": 7,
+   "ref_phones": 11,
+   "phone_errors_50": 8,
+   "orig": {
+    "hyp": "Mmmm... Mmmm...",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "I don't know, is it?",
+    "errors": 5,
+    "words": 4,
+    "wer": 1.25
+   }
+  },
+  {
+   "gid": 214,
+   "session": "imagined",
+   "index": 14,
+   "benchmark": null,
+   "text": "I hope my family is closer.",
+   "feat_r": NaN,
+   "phone_errors": 17,
+   "ref_phones": 19,
+   "phone_errors_50": 15,
+   "orig": {
+    "hyp": "th-th-th-th-th-th-th-th-th...",
+    "errors": 9,
+    "words": 6,
+    "wer": 1.5
+   },
+   "fixed": {
+    "hyp": "I heard you.",
+    "errors": 5,
+    "words": 6,
+    "wer": 0.8333333333333334
+   }
+  },
+  {
+   "gid": 215,
+   "session": "imagined",
+   "index": 15,
+   "benchmark": null,
+   "text": "What do you do here?",
+   "feat_r": NaN,
+   "phone_errors": 4,
+   "ref_phones": 12,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "You... You...",
+    "errors": 4,
+    "words": 5,
+    "wer": 0.8
+   },
+   "fixed": {
+    "hyp": "What? You, you, you're here.",
+    "errors": 2,
+    "words": 5,
+    "wer": 0.4
+   }
+  },
+  {
+   "gid": 216,
+   "session": "imagined",
+   "index": 16,
+   "benchmark": null,
+   "text": "I do not have hope.",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 12,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "I do not have power.",
+    "errors": 1,
+    "words": 5,
+    "wer": 0.2
+   },
+   "fixed": {
+    "hyp": "I do not have money.",
+    "errors": 1,
+    "words": 5,
+    "wer": 0.2
+   }
+  },
+  {
+   "gid": 217,
+   "session": "imagined",
+   "index": 17,
+   "benchmark": null,
+   "text": "It is right.",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 7,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "Hey, you white.",
+    "errors": 3,
+    "words": 3,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Eh, you right.",
+    "errors": 2,
+    "words": 3,
+    "wer": 0.6666666666666666
+   }
+  },
+  {
+   "gid": 218,
+   "session": "imagined",
+   "index": 18,
+   "benchmark": null,
+   "text": "I do not like glasses.",
+   "feat_r": NaN,
+   "phone_errors": 9,
+   "ref_phones": 15,
+   "phone_errors_50": 7,
+   "orig": {
+    "hyp": "I'm in my house.",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "I am in my office.",
+    "errors": 4,
+    "words": 5,
+    "wer": 0.8
+   }
+  },
+  {
+   "gid": 219,
+   "session": "imagined",
+   "index": 19,
+   "benchmark": null,
+   "text": "Bring my nurse.",
+   "feat_r": NaN,
+   "phone_errors": 9,
+   "ref_phones": 9,
+   "phone_errors_50": 9,
+   "orig": {
+    "hyp": "Hey, hey, yeah.",
+    "errors": 3,
+    "words": 3,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Hey",
+    "errors": 3,
+    "words": 3,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 220,
+   "session": "imagined",
+   "index": 20,
+   "benchmark": null,
+   "text": "Are you coming up here.",
+   "feat_r": NaN,
+   "phone_errors": 12,
+   "ref_phones": 14,
+   "phone_errors_50": 13,
+   "orig": {
+    "hyp": "Are you? Are you?",
+    "errors": 3,
+    "words": 5,
+    "wer": 0.6
+   },
+   "fixed": {
+    "hyp": "Are you?",
+    "errors": 3,
+    "words": 5,
+    "wer": 0.6
+   }
+  },
+  {
+   "gid": 221,
+   "session": "imagined",
+   "index": 21,
+   "benchmark": null,
+   "text": "I feel bad here.",
+   "feat_r": NaN,
+   "phone_errors": 9,
+   "ref_phones": 10,
+   "phone_errors_50": 5,
+   "orig": {
+    "hyp": "I... am... you.",
+    "errors": 3,
+    "words": 4,
+    "wer": 0.75
+   },
+   "fixed": {
+    "hyp": "I will marry you.",
+    "errors": 3,
+    "words": 4,
+    "wer": 0.75
+   }
+  },
+  {
+   "gid": 222,
+   "session": "imagined",
+   "index": 22,
+   "benchmark": null,
+   "text": "You are not okay.",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 10,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "You are the one.",
+    "errors": 2,
+    "words": 4,
+    "wer": 0.5
+   },
+   "fixed": {
+    "hyp": "You are not mine.",
+    "errors": 1,
+    "words": 4,
+    "wer": 0.25
+   }
+  },
+  {
+   "gid": 223,
+   "session": "imagined",
+   "index": 23,
+   "benchmark": null,
+   "text": "You have it like that.",
+   "feat_r": NaN,
+   "phone_errors": 5,
+   "ref_phones": 13,
+   "phone_errors_50": 4,
+   "orig": {
+    "hyp": "You...",
+    "errors": 4,
+    "words": 5,
+    "wer": 0.8
+   },
+   "fixed": {
+    "hyp": "Are you...",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 224,
+   "session": "imagined",
+   "index": 24,
+   "benchmark": null,
+   "text": "I hope I have good family.",
+   "feat_r": NaN,
+   "phone_errors": 9,
+   "ref_phones": 17,
+   "phone_errors_50": 7,
+   "orig": {
+    "hyp": "I hope you have needed something.",
+    "errors": 3,
+    "words": 6,
+    "wer": 0.5
+   },
+   "fixed": {
+    "hyp": "I hope you have me.",
+    "errors": 3,
+    "words": 6,
+    "wer": 0.5
+   }
+  },
+  {
+   "gid": 225,
+   "session": "imagined",
+   "index": 25,
+   "benchmark": null,
+   "text": "Not coming up.",
+   "feat_r": NaN,
+   "phone_errors": 8,
+   "ref_phones": 10,
+   "phone_errors_50": 9,
+   "orig": {
+    "hyp": "Where have you come?",
+    "errors": 4,
+    "words": 3,
+    "wer": 1.3333333333333333
+   },
+   "fixed": {
+    "hyp": "I love you, ho.",
+    "errors": 4,
+    "words": 3,
+    "wer": 1.3333333333333333
+   }
+  },
+  {
+   "gid": 226,
+   "session": "imagined",
+   "index": 26,
+   "benchmark": null,
+   "text": "You do not need glasses.",
+   "feat_r": NaN,
+   "phone_errors": 11,
+   "ref_phones": 16,
+   "phone_errors_50": 6,
+   "orig": {
+    "hyp": "Not you. No, not me. Not us.",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "You earned no not need of us.",
+    "errors": 4,
+    "words": 5,
+    "wer": 0.8
+   }
+  },
+  {
+   "gid": 227,
+   "session": "imagined",
+   "index": 27,
+   "benchmark": null,
+   "text": "Is my nurse closer?",
+   "feat_r": NaN,
+   "phone_errors": 10,
+   "ref_phones": 12,
+   "phone_errors_50": 10,
+   "orig": {
+    "hyp": "You. Why. You.",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "you like you",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 228,
+   "session": "imagined",
+   "index": 28,
+   "benchmark": null,
+   "text": "You are what?",
+   "feat_r": NaN,
+   "phone_errors": 4,
+   "ref_phones": 7,
+   "phone_errors_50": 4,
+   "orig": {
+    "hyp": "You are... Why?",
+    "errors": 1,
+    "words": 3,
+    "wer": 0.3333333333333333
+   },
+   "fixed": {
+    "hyp": "You are what?",
+    "errors": 0,
+    "words": 3,
+    "wer": 0.0
+   }
+  },
+  {
+   "gid": 229,
+   "session": "imagined",
+   "index": 29,
+   "benchmark": null,
+   "text": "They hope they have my faith.",
+   "feat_r": NaN,
+   "phone_errors": 11,
+   "ref_phones": 15,
+   "phone_errors_50": 11,
+   "orig": {
+    "hyp": "Yay, yay, yay, have more, yay.",
+    "errors": 5,
+    "words": 6,
+    "wer": 0.8333333333333334
+   },
+   "fixed": {
+    "hyp": "Yay, yay, yay, have more.",
+    "errors": 5,
+    "words": 6,
+    "wer": 0.8333333333333334
+   }
+  },
+  {
+   "gid": 230,
+   "session": "imagined",
+   "index": 30,
+   "benchmark": null,
+   "text": "You are no good.",
+   "feat_r": NaN,
+   "phone_errors": 7,
+   "ref_phones": 9,
+   "phone_errors_50": 6,
+   "orig": {
+    "hyp": "You are...",
+    "errors": 2,
+    "words": 4,
+    "wer": 0.5
+   },
+   "fixed": {
+    "hyp": "you",
+    "errors": 3,
+    "words": 4,
+    "wer": 0.75
+   }
+  },
+  {
+   "gid": 231,
+   "session": "imagined",
+   "index": 31,
+   "benchmark": null,
+   "text": "What is it you need?",
+   "feat_r": NaN,
+   "phone_errors": 12,
+   "ref_phones": 12,
+   "phone_errors_50": 10,
+   "orig": {
+    "hyp": "Hey, this is how you think.",
+    "errors": 4,
+    "words": 5,
+    "wer": 0.8
+   },
+   "fixed": {
+    "hyp": "Hey, is it high in the day?",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 232,
+   "session": "imagined",
+   "index": 32,
+   "benchmark": null,
+   "text": "They are not thirsty.",
+   "feat_r": NaN,
+   "phone_errors": 10,
+   "ref_phones": 12,
+   "phone_errors_50": 9,
+   "orig": {
+    "hyp": "I'm here. My heart. Thank you.",
+    "errors": 6,
+    "words": 4,
+    "wer": 1.5
+   },
+   "fixed": {
+    "hyp": "I'm here with my... feet.",
+    "errors": 5,
+    "words": 4,
+    "wer": 1.25
+   }
+  },
+  {
+   "gid": 233,
+   "session": "imagined",
+   "index": 33,
+   "benchmark": null,
+   "text": "I hope my nurse is here.",
+   "feat_r": NaN,
+   "phone_errors": 7,
+   "ref_phones": 14,
+   "phone_errors_50": 7,
+   "orig": {
+    "hyp": "I... know... I... miss... is...",
+    "errors": 4,
+    "words": 6,
+    "wer": 0.6666666666666666
+   },
+   "fixed": {
+    "hyp": "I hope my news is",
+    "errors": 2,
+    "words": 6,
+    "wer": 0.3333333333333333
+   }
+  },
+  {
+   "gid": 234,
+   "session": "imagined",
+   "index": 34,
+   "benchmark": null,
+   "text": "Is my music good?",
+   "feat_r": NaN,
+   "phone_errors": 7,
+   "ref_phones": 13,
+   "phone_errors_50": 7,
+   "orig": {
+    "hyp": "You made me.",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Mmm, mmm, mmm.",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 235,
+   "session": "imagined",
+   "index": 35,
+   "benchmark": null,
+   "text": "Where are my glasses?",
+   "feat_r": NaN,
+   "phone_errors": 11,
+   "ref_phones": 13,
+   "phone_errors_50": 10,
+   "orig": {
+    "hyp": "Mmhmm. Mmmh. Mmmhmm. Mmmhmm. Mmmhmm.",
+    "errors": 5,
+    "words": 4,
+    "wer": 1.25
+   },
+   "fixed": {
+    "hyp": "There you go.",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 236,
+   "session": "imagined",
+   "index": 36,
+   "benchmark": null,
+   "text": "They are coming closer.",
+   "feat_r": NaN,
+   "phone_errors": 12,
+   "ref_phones": 14,
+   "phone_errors_50": 13,
+   "orig": {
+    "hyp": "",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "You are again.",
+    "errors": 3,
+    "words": 4,
+    "wer": 0.75
+   }
+  },
+  {
+   "gid": 237,
+   "session": "imagined",
+   "index": 37,
+   "benchmark": null,
+   "text": "They do not have faith.",
+   "feat_r": NaN,
+   "phone_errors": 7,
+   "ref_phones": 13,
+   "phone_errors_50": 5,
+   "orig": {
+    "hyp": "I'm making you my house.",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Hey! I really knew how to help.",
+    "errors": 7,
+    "words": 5,
+    "wer": 1.4
+   }
+  },
+  {
+   "gid": 238,
+   "session": "imagined",
+   "index": 38,
+   "benchmark": null,
+   "text": "Bring my family here, please.",
+   "feat_r": NaN,
+   "phone_errors": 19,
+   "ref_phones": 19,
+   "phone_errors_50": 19,
+   "orig": {
+    "hyp": "",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 239,
+   "session": "imagined",
+   "index": 39,
+   "benchmark": null,
+   "text": "I am here.",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 6,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "I have you.",
+    "errors": 2,
+    "words": 3,
+    "wer": 0.6666666666666666
+   },
+   "fixed": {
+    "hyp": "I am here.",
+    "errors": 0,
+    "words": 3,
+    "wer": 0.0
+   }
+  },
+  {
+   "gid": 240,
+   "session": "imagined",
+   "index": 40,
+   "benchmark": null,
+   "text": "My family is not very tired.",
+   "feat_r": NaN,
+   "phone_errors": 16,
+   "ref_phones": 21,
+   "phone_errors_50": 8,
+   "orig": {
+    "hyp": "I think it's not me.",
+    "errors": 5,
+    "words": 6,
+    "wer": 0.8333333333333334
+   },
+   "fixed": {
+    "hyp": "I think it's not good, I think.",
+    "errors": 6,
+    "words": 6,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 241,
+   "session": "imagined",
+   "index": 41,
+   "benchmark": null,
+   "text": "I am going outside.",
+   "feat_r": NaN,
+   "phone_errors": 11,
+   "ref_phones": 12,
+   "phone_errors_50": 11,
+   "orig": {
+    "hyp": "Hmmm...",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "MMMMMMMMMMMMMMMMMMMMMMMM",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 242,
+   "session": "imagined",
+   "index": 42,
+   "benchmark": null,
+   "text": "How do you have it?",
+   "feat_r": NaN,
+   "phone_errors": 9,
+   "ref_phones": 11,
+   "phone_errors_50": 5,
+   "orig": {
+    "hyp": "I, you, you, have it.",
+    "errors": 2,
+    "words": 5,
+    "wer": 0.4
+   },
+   "fixed": {
+    "hyp": "I knew you had it.",
+    "errors": 3,
+    "words": 5,
+    "wer": 0.6
+   }
+  },
+  {
+   "gid": 243,
+   "session": "imagined",
+   "index": 43,
+   "benchmark": null,
+   "text": "They do okay.",
+   "feat_r": NaN,
+   "phone_errors": 7,
+   "ref_phones": 7,
+   "phone_errors_50": 7,
+   "orig": {
+    "hyp": "Hmm... What is it?",
+    "errors": 4,
+    "words": 3,
+    "wer": 1.3333333333333333
+   },
+   "fixed": {
+    "hyp": "Seeing none, opportunities.",
+    "errors": 3,
+    "words": 3,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 244,
+   "session": "imagined",
+   "index": 44,
+   "benchmark": null,
+   "text": "That is like success.",
+   "feat_r": NaN,
+   "phone_errors": 8,
+   "ref_phones": 14,
+   "phone_errors_50": 7,
+   "orig": {
+    "hyp": "Let me display the same.",
+    "errors": 5,
+    "words": 4,
+    "wer": 1.25
+   },
+   "fixed": {
+    "hyp": "Let me this light, say...",
+    "errors": 5,
+    "words": 4,
+    "wer": 1.25
+   }
+  },
+  {
+   "gid": 245,
+   "session": "imagined",
+   "index": 45,
+   "benchmark": null,
+   "text": "How am I going outside?",
+   "feat_r": NaN,
+   "phone_errors": 10,
+   "ref_phones": 14,
+   "phone_errors_50": 7,
+   "orig": {
+    "hyp": "I'm here I'm here",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Ah, hey, hi, hey, hey.",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 246,
+   "session": "imagined",
+   "index": 46,
+   "benchmark": null,
+   "text": "You need it right here.",
+   "feat_r": NaN,
+   "phone_errors": 7,
+   "ref_phones": 13,
+   "phone_errors_50": 7,
+   "orig": {
+    "hyp": "Yoooooouuuuuuuuuuuuuuuuuuuuuuuhh...",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "No, no, no, no, no.",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 247,
+   "session": "imagined",
+   "index": 47,
+   "benchmark": null,
+   "text": "You have no computer.",
+   "feat_r": NaN,
+   "phone_errors": 13,
+   "ref_phones": 15,
+   "phone_errors_50": 13,
+   "orig": {
+    "hyp": "Yum, yum, yum, yum.",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Yeah yeah yeah.",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 248,
+   "session": "imagined",
+   "index": 48,
+   "benchmark": null,
+   "text": "Do you have success?",
+   "feat_r": NaN,
+   "phone_errors": 11,
+   "ref_phones": 13,
+   "phone_errors_50": 11,
+   "orig": {
+    "hyp": "I'm sorry.",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "My own name, sir.",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 249,
+   "session": "imagined",
+   "index": 49,
+   "benchmark": null,
+   "text": "I hope my nurse is comfortable.",
+   "feat_r": NaN,
+   "phone_errors": 15,
+   "ref_phones": 21,
+   "phone_errors_50": 12,
+   "orig": {
+    "hyp": "I know this is a shame.",
+    "errors": 5,
+    "words": 6,
+    "wer": 0.8333333333333334
+   },
+   "fixed": {
+    "hyp": "I hope this is okay.",
+    "errors": 3,
+    "words": 6,
+    "wer": 0.5
+   }
+  }
+ ],
+ "wall_time_s": 444.928142786026
+}
