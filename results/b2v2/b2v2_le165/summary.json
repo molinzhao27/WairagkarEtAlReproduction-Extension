@@ -1,0 +1,39 @@
+{
+ "run_name": "b2v2_le165",
+ "config": "configs/experiments/b2v2_le165.yaml",
+ "decision": "D-075",
+ "code_version": {
+  "source": "sync",
+  "commit": "2a1b73fd67a00a98daa3587e1626b73d8459c99a",
+  "dirty": false,
+  "diff_sha256": null,
+  "pushed_at": "2026-10-24T14:46:24Z"
+ },
+ "created": "2026-10-24T15:13:53",
+ "steps": 25000,
+ "n_train": 6069,
+ "n_val": 30,
+ "n_test": 0,
+ "adapt": null,
+ "loss": "both",
+ "best_val": 0.02379832463338971,
+ "final": {
+  "loss": 0.09443331636488438,
+  "cont": 0.07595841534435749,
+  "ctc": 0.18474900610744954,
+  "speech": 0.3803208908438683,
+  "ctc_on": 0.988125,
+  "step": 25000,
+  "lr": 1.0000004825139904e-05,
+  "s": 1308.1933250427246,
+  "val": {
+   "cont": 0.024445213843137026,
+   "ctc": 0.26570380851626396
+  }
+ },
+ "n_params": 14712637,
+ "n_trainable": 14712637,
+ "wall_time_s": 1308.481600522995,
+ "device": "cuda",
+ "torch": "2.5.1+cu124"
+}

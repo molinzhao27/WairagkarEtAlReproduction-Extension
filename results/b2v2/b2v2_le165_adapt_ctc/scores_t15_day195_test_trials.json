@@ -1,0 +1,3598 @@
+{
+ "run_name": "b2v2_le165_adapt_ctc",
+ "name": "t15_day195_test_trials",
+ "decision": "D-075",
+ "config": "configs/experiments/b2v2_le165_adapt_ctc.yaml",
+ "code_version": {
+  "source": "sync",
+  "commit": "2a1b73fd67a00a98daa3587e1626b73d8459c99a",
+  "dirty": false,
+  "diff_sha256": null,
+  "pushed_at": "2026-10-24T14:46:24Z"
+ },
+ "created": "2026-10-24T15:24:31",
+ "source": {
+  "run_name": "b2v2_le165_adapt_ctc",
+  "checkpoint": "/home/molin/wvx/WairagkarEtAlReproduction-Extension/data/checkpoints/b2v2_le165_adapt_ctc/best.pt",
+  "checkpoint_sha256": "ab25b058c2f77658fe6c275f759ef845e5fbbd60096de350baa12e5927724a74",
+  "input_id": 1,
+  "trials": "session:t15_day195:results/sanity_train_day195_from165_ep15/data.json:test_trials",
+  "gids": [
+   8330,
+   8331,
+   8332,
+   8333,
+   8334,
+   8335,
+   8336,
+   8337,
+   8338,
+   8339,
+   8340,
+   8341,
+   8342,
+   8343,
+   8344,
+   8345,
+   8346,
+   8347,
+   8348,
+   8349,
+   8350,
+   8351,
+   8352,
+   8353,
+   8354,
+   8355,
+   8356,
+   8357,
+   8358,
+   8359,
+   8360,
+   8361,
+   8362,
+   8363,
+   8364,
+   8365,
+   8366,
+   8367,
+   8368,
+   8369,
+   8370,
+   8371,
+   8372,
+   8373,
+   8374,
+   8375,
+   8376,
+   8377,
+   8378,
+   8379,
+   8380,
+   8381,
+   8382,
+   8383,
+   8384,
+   8385,
+   8386,
+   8387,
+   8388,
+   8389,
+   8390,
+   8391,
+   8392,
+   8393,
+   8394,
+   8395,
+   8396,
+   8397,
+   8398,
+   8399,
+   8400,
+   8401,
+   8402,
+   8403,
+   8404,
+   8405,
+   8406,
+   8407,
+   8408,
+   8409,
+   8410,
+   8411,
+   8412,
+   8413,
+   8414,
+   8415,
+   8416,
+   8417,
+   8418,
+   8419,
+   8420,
+   8421,
+   8422,
+   8423,
+   8424,
+   8425,
+   8426,
+   8427,
+   8440,
+   8441,
+   8442,
+   8443,
+   8444,
+   8445,
+   8446,
+   8447,
+   8448,
+   8449,
+   8450,
+   8451,
+   8452,
+   8453,
+   8454,
+   8455,
+   8456,
+   8457,
+   8458,
+   8459,
+   8460,
+   8461,
+   8462,
+   8463,
+   8464,
+   8465,
+   8466,
+   8467,
+   8468,
+   8469,
+   8470,
+   8471,
+   8472,
+   8473,
+   8474,
+   8475,
+   8476,
+   8477,
+   8478,
+   8479,
+   8480,
+   8481,
+   8482,
+   8483,
+   8484,
+   8485,
+   8486,
+   8487,
+   8488
+  ],
+  "mode": "chunked",
+  "window_bins": null,
+  "chunked": {
+   "ctx": 128,
+   "hop": 64
+  },
+  "pool": 5,
+  "device": "cuda",
+  "code_version": {
+   "source": "sync",
+   "commit": "2a1b73fd67a00a98daa3587e1626b73d8459c99a",
+   "dirty": false,
+   "diff_sha256": null,
+   "pushed_at": "2026-10-24T14:46:24Z"
+  },
+  "decision": "D-075",
+  "created": "2026-10-24T15:16:25"
+ },
+ "speed_factor": 3.25,
+ "summary": {
+  "all": {
+   "n": 147,
+   "wer_orig": 0.5085106382978724,
+   "wer_fixed": 0.4648936170212766,
+   "per": 0.3127134724857685,
+   "per_50ms": 0.2557874762808349,
+   "feat_r": 0.4950349088406415
+  },
+  "random": {
+   "n": 13,
+   "wer_orig": 0.5348837209302325,
+   "wer_fixed": 0.5116279069767442,
+   "per": 0.3170731707317073,
+   "per_50ms": 0.2682926829268293,
+   "feat_r": 0.4839025261403468
+  },
+  "video": {
+   "n": 10,
+   "wer_orig": 0.46,
+   "wer_fixed": 0.4,
+   "per": 0.29411764705882354,
+   "per_50ms": 0.21323529411764705,
+   "feat_r": 0.48583651922048743
+  }
+ },
+ "rows": [
+  {
+   "gid": 8330,
+   "session": "t15_day195",
+   "index": 146,
+   "benchmark": null,
+   "text": "I am where I need to be right now.",
+   "feat_r": 0.4533180096416718,
+   "phone_errors": 8,
+   "ref_phones": 19,
+   "phone_errors_50": 9,
+   "orig": {
+    "hyp": "I. Am. More. Need you. To. Me. From. Now.",
+    "errors": 5,
+    "words": 9,
+    "wer": 0.5555555555555556
+   },
+   "fixed": {
+    "hyp": "I am your need to know.",
+    "errors": 5,
+    "words": 9,
+    "wer": 0.5555555555555556
+   }
+  },
+  {
+   "gid": 8331,
+   "session": "t15_day195",
+   "index": 147,
+   "benchmark": null,
+   "text": "The child tried to play with me today.",
+   "feat_r": 0.5343849154984551,
+   "phone_errors": 2,
+   "ref_phones": 24,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "We shall hide you away with me today.",
+    "errors": 5,
+    "words": 8,
+    "wer": 0.625
+   },
+   "fixed": {
+    "hyp": "They tried hard to play with me today.",
+    "errors": 3,
+    "words": 8,
+    "wer": 0.375
+   }
+  },
+  {
+   "gid": 8332,
+   "session": "t15_day195",
+   "index": 148,
+   "benchmark": null,
+   "text": "Have you seen any such thing?",
+   "feat_r": 0.5313982517942322,
+   "phone_errors": 7,
+   "ref_phones": 17,
+   "phone_errors_50": 5,
+   "orig": {
+    "hyp": "Have. You. Me. Are. You. Just. Thing.",
+    "errors": 4,
+    "words": 6,
+    "wer": 0.6666666666666666
+   },
+   "fixed": {
+    "hyp": "Have you, me, and your, flesh, thing.",
+    "errors": 4,
+    "words": 6,
+    "wer": 0.6666666666666666
+   }
+  },
+  {
+   "gid": 8333,
+   "session": "t15_day195",
+   "index": 149,
+   "benchmark": null,
+   "text": "People will be here on time.",
+   "feat_r": 0.3825274620610692,
+   "phone_errors": 3,
+   "ref_phones": 18,
+   "phone_errors_50": 4,
+   "orig": {
+    "hyp": "Hello. Where. May. Here. On. Time.",
+    "errors": 3,
+    "words": 6,
+    "wer": 0.5
+   },
+   "fixed": {
+    "hyp": "Hello, new name here on time.",
+    "errors": 3,
+    "words": 6,
+    "wer": 0.5
+   }
+  },
+  {
+   "gid": 8334,
+   "session": "t15_day195",
+   "index": 150,
+   "benchmark": null,
+   "text": "Having been through it, I am sure.",
+   "feat_r": 0.5906886846052253,
+   "phone_errors": 7,
+   "ref_phones": 19,
+   "phone_errors_50": 5,
+   "orig": {
+    "hyp": "I... am... you... I... am... you...",
+    "errors": 5,
+    "words": 7,
+    "wer": 0.7142857142857143
+   },
+   "fixed": {
+    "hyp": "I've been through it. I am sure.",
+    "errors": 1,
+    "words": 7,
+    "wer": 0.14285714285714285
+   }
+  },
+  {
+   "gid": 8335,
+   "session": "t15_day195",
+   "index": 151,
+   "benchmark": null,
+   "text": "Every house I have seen is big.",
+   "feat_r": 0.5466344474840884,
+   "phone_errors": 5,
+   "ref_phones": 19,
+   "phone_errors_50": 4,
+   "orig": {
+    "hyp": "Powering... Us... I... Have... Z... Is... A...",
+    "errors": 4,
+    "words": 7,
+    "wer": 0.5714285714285714
+   },
+   "fixed": {
+    "hyp": "Hurry. Ask. I. Have. The. Is. A.",
+    "errors": 4,
+    "words": 7,
+    "wer": 0.5714285714285714
+   }
+  },
+  {
+   "gid": 8336,
+   "session": "t15_day195",
+   "index": 152,
+   "benchmark": null,
+   "text": "Do you like my new voice?",
+   "feat_r": 0.5534604766702301,
+   "phone_errors": 0,
+   "ref_phones": 14,
+   "phone_errors_50": 0,
+   "orig": {
+    "hyp": "You, you, like, my, new voice.",
+    "errors": 1,
+    "words": 6,
+    "wer": 0.16666666666666666
+   },
+   "fixed": {
+    "hyp": "You, you, like my new voice.",
+    "errors": 1,
+    "words": 6,
+    "wer": 0.16666666666666666
+   }
+  },
+  {
+   "gid": 8337,
+   "session": "t15_day195",
+   "index": 153,
+   "benchmark": null,
+   "text": "What choice does she have?",
+   "feat_r": 0.46658875978187575,
+   "phone_errors": 6,
+   "ref_phones": 14,
+   "phone_errors_50": 5,
+   "orig": {
+    "hyp": "What. Just. As. We. Have.",
+    "errors": 3,
+    "words": 5,
+    "wer": 0.6
+   },
+   "fixed": {
+    "hyp": "What does he have?",
+    "errors": 2,
+    "words": 5,
+    "wer": 0.4
+   }
+  },
+  {
+   "gid": 8338,
+   "session": "t15_day195",
+   "index": 154,
+   "benchmark": null,
+   "text": "My car is getting quite old.",
+   "feat_r": 0.5178384689384246,
+   "phone_errors": 6,
+   "ref_phones": 19,
+   "phone_errors_50": 4,
+   "orig": {
+    "hyp": "My. Car. Is. Any. Why. Home.",
+    "errors": 3,
+    "words": 6,
+    "wer": 0.5
+   },
+   "fixed": {
+    "hyp": "My heart is AYO.",
+    "errors": 4,
+    "words": 6,
+    "wer": 0.6666666666666666
+   }
+  },
+  {
+   "gid": 8339,
+   "session": "t15_day195",
+   "index": 155,
+   "benchmark": null,
+   "text": "Our group plans to go there next week.",
+   "feat_r": 0.4679745522192797,
+   "phone_errors": 6,
+   "ref_phones": 26,
+   "phone_errors_50": 5,
+   "orig": {
+    "hyp": "Our... room... is... to... go... there... next... week.",
+    "errors": 2,
+    "words": 8,
+    "wer": 0.25
+   },
+   "fixed": {
+    "hyp": "Are you really pleased to go there next week?",
+    "errors": 4,
+    "words": 8,
+    "wer": 0.5
+   }
+  },
+  {
+   "gid": 8340,
+   "session": "t15_day195",
+   "index": 156,
+   "benchmark": null,
+   "text": "I could come back later.",
+   "feat_r": 0.511868555310702,
+   "phone_errors": 9,
+   "ref_phones": 14,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "I. Am. Back. Later.",
+    "errors": 2,
+    "words": 5,
+    "wer": 0.4
+   },
+   "fixed": {
+    "hyp": "I am back later.",
+    "errors": 2,
+    "words": 5,
+    "wer": 0.4
+   }
+  },
+  {
+   "gid": 8341,
+   "session": "t15_day195",
+   "index": 157,
+   "benchmark": null,
+   "text": "I have never heard of it really.",
+   "feat_r": 0.4683937944940018,
+   "phone_errors": 4,
+   "ref_phones": 19,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "I have never heard of it really.",
+    "errors": 0,
+    "words": 7,
+    "wer": 0.0
+   },
+   "fixed": {
+    "hyp": "I have never heard of it really.",
+    "errors": 0,
+    "words": 7,
+    "wer": 0.0
+   }
+  },
+  {
+   "gid": 8342,
+   "session": "t15_day195",
+   "index": 158,
+   "benchmark": null,
+   "text": "It was a great year for them.",
+   "feat_r": 0.5197510951677138,
+   "phone_errors": 6,
+   "ref_phones": 19,
+   "phone_errors_50": 5,
+   "orig": {
+    "hyp": "It was a year for time.",
+    "errors": 2,
+    "words": 7,
+    "wer": 0.2857142857142857
+   },
+   "fixed": {
+    "hyp": "It was a good year for some.",
+    "errors": 2,
+    "words": 7,
+    "wer": 0.2857142857142857
+   }
+  },
+  {
+   "gid": 8343,
+   "session": "t15_day195",
+   "index": 159,
+   "benchmark": null,
+   "text": "I will keep this with me for now.",
+   "feat_r": 0.5616717429894034,
+   "phone_errors": 4,
+   "ref_phones": 20,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "I will know this with me for now.",
+    "errors": 1,
+    "words": 8,
+    "wer": 0.125
+   },
+   "fixed": {
+    "hyp": "I will live this with me for now.",
+    "errors": 1,
+    "words": 8,
+    "wer": 0.125
+   }
+  },
+  {
+   "gid": 8344,
+   "session": "t15_day195",
+   "index": 160,
+   "benchmark": null,
+   "text": "She said she will need more time.",
+   "feat_r": 0.5156337470834902,
+   "phone_errors": 6,
+   "ref_phones": 19,
+   "phone_errors_50": 6,
+   "orig": {
+    "hyp": "She. That. You. Will. Be. My. Time.",
+    "errors": 4,
+    "words": 7,
+    "wer": 0.5714285714285714
+   },
+   "fixed": {
+    "hyp": "Gee, the new will be more fun.",
+    "errors": 5,
+    "words": 7,
+    "wer": 0.7142857142857143
+   }
+  },
+  {
+   "gid": 8345,
+   "session": "t15_day195",
+   "index": 161,
+   "benchmark": "random",
+   "text": "I know it is hard to come by.",
+   "feat_r": 0.46844674555952864,
+   "phone_errors": 4,
+   "ref_phones": 18,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "I knew it is R to M I.",
+    "errors": 4,
+    "words": 8,
+    "wer": 0.5
+   },
+   "fixed": {
+    "hyp": "I knew it is R2MI.",
+    "errors": 5,
+    "words": 8,
+    "wer": 0.625
+   }
+  },
+  {
+   "gid": 8346,
+   "session": "t15_day195",
+   "index": 162,
+   "benchmark": null,
+   "text": "It would take us years.",
+   "feat_r": 0.5496730473097584,
+   "phone_errors": 1,
+   "ref_phones": 14,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "It would take us years.",
+    "errors": 0,
+    "words": 5,
+    "wer": 0.0
+   },
+   "fixed": {
+    "hyp": "It would have been used.",
+    "errors": 3,
+    "words": 5,
+    "wer": 0.6
+   }
+  },
+  {
+   "gid": 8347,
+   "session": "t15_day195",
+   "index": 163,
+   "benchmark": null,
+   "text": "This is my voice, how do I sound?",
+   "feat_r": 0.5111287205283146,
+   "phone_errors": 4,
+   "ref_phones": 19,
+   "phone_errors_50": 4,
+   "orig": {
+    "hyp": "This is my world. How do I sound?",
+    "errors": 1,
+    "words": 8,
+    "wer": 0.125
+   },
+   "fixed": {
+    "hyp": "This is my world. How do I turn?",
+    "errors": 2,
+    "words": 8,
+    "wer": 0.25
+   }
+  },
+  {
+   "gid": 8348,
+   "session": "t15_day195",
+   "index": 164,
+   "benchmark": "random",
+   "text": "I didn't know this was true.",
+   "feat_r": 0.5095230767312919,
+   "phone_errors": 5,
+   "ref_phones": 18,
+   "phone_errors_50": 6,
+   "orig": {
+    "hyp": "I really know this was true.",
+    "errors": 1,
+    "words": 6,
+    "wer": 0.16666666666666666
+   },
+   "fixed": {
+    "hyp": "I didn't know this was true.",
+    "errors": 0,
+    "words": 6,
+    "wer": 0.0
+   }
+  },
+  {
+   "gid": 8349,
+   "session": "t15_day195",
+   "index": 165,
+   "benchmark": null,
+   "text": "It will be more trouble for us.",
+   "feat_r": 0.4453235829364811,
+   "phone_errors": 10,
+   "ref_phones": 21,
+   "phone_errors_50": 8,
+   "orig": {
+    "hyp": "It will be my burden for us.",
+    "errors": 2,
+    "words": 7,
+    "wer": 0.2857142857142857
+   },
+   "fixed": {
+    "hyp": "It will be my honor for us.",
+    "errors": 2,
+    "words": 7,
+    "wer": 0.2857142857142857
+   }
+  },
+  {
+   "gid": 8350,
+   "session": "t15_day195",
+   "index": 166,
+   "benchmark": "random",
+   "text": "I don't think it is any less time.",
+   "feat_r": 0.4710165489855653,
+   "phone_errors": 2,
+   "ref_phones": 22,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "I will think it is any last time.",
+    "errors": 2,
+    "words": 8,
+    "wer": 0.25
+   },
+   "fixed": {
+    "hyp": "I won't think it is any last time.",
+    "errors": 2,
+    "words": 8,
+    "wer": 0.25
+   }
+  },
+  {
+   "gid": 8351,
+   "session": "t15_day195",
+   "index": 167,
+   "benchmark": "random",
+   "text": "The whole house will change.",
+   "feat_r": 0.5305814901064894,
+   "phone_errors": 6,
+   "ref_phones": 15,
+   "phone_errors_50": 5,
+   "orig": {
+    "hyp": "They all asked you in.",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "They all asked him in.",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 8352,
+   "session": "t15_day195",
+   "index": 168,
+   "benchmark": null,
+   "text": "I know everything you told them.",
+   "feat_r": 0.5090159375489405,
+   "phone_errors": 2,
+   "ref_phones": 19,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "I knew everything. You heard them.",
+    "errors": 2,
+    "words": 6,
+    "wer": 0.3333333333333333
+   },
+   "fixed": {
+    "hyp": "I know everything. You heard them.",
+    "errors": 1,
+    "words": 6,
+    "wer": 0.16666666666666666
+   }
+  },
+  {
+   "gid": 8353,
+   "session": "t15_day195",
+   "index": 169,
+   "benchmark": null,
+   "text": "You have a great job.",
+   "feat_r": 0.555081891534279,
+   "phone_errors": 0,
+   "ref_phones": 13,
+   "phone_errors_50": 0,
+   "orig": {
+    "hyp": "You. Have. A. Right. Come.",
+    "errors": 2,
+    "words": 5,
+    "wer": 0.4
+   },
+   "fixed": {
+    "hyp": "You have a great job.",
+    "errors": 0,
+    "words": 5,
+    "wer": 0.0
+   }
+  },
+  {
+   "gid": 8354,
+   "session": "t15_day195",
+   "index": 170,
+   "benchmark": "random",
+   "text": "Have they seen the paper?",
+   "feat_r": 0.4603792505621252,
+   "phone_errors": 3,
+   "ref_phones": 14,
+   "phone_errors_50": 1,
+   "orig": {
+    "hyp": "Have a... mmm... be... better.",
+    "errors": 4,
+    "words": 5,
+    "wer": 0.8
+   },
+   "fixed": {
+    "hyp": "That may even be better.",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 8355,
+   "session": "t15_day195",
+   "index": 171,
+   "benchmark": null,
+   "text": "Give me some more time, please.",
+   "feat_r": 0.4816374777636693,
+   "phone_errors": 5,
+   "ref_phones": 18,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "This may end some more time, please.",
+    "errors": 3,
+    "words": 6,
+    "wer": 0.5
+   },
+   "fixed": {
+    "hyp": "Leave me some more time, please.",
+    "errors": 1,
+    "words": 6,
+    "wer": 0.16666666666666666
+   }
+  },
+  {
+   "gid": 8356,
+   "session": "t15_day195",
+   "index": 172,
+   "benchmark": "random",
+   "text": "I like this kind of food very much.",
+   "feat_r": 0.44272332121053654,
+   "phone_errors": 7,
+   "ref_phones": 23,
+   "phone_errors_50": 7,
+   "orig": {
+    "hyp": "I love this line of food. Marry us.",
+    "errors": 4,
+    "words": 8,
+    "wer": 0.5
+   },
+   "fixed": {
+    "hyp": "I like this type of food very much.",
+    "errors": 1,
+    "words": 8,
+    "wer": 0.125
+   }
+  },
+  {
+   "gid": 8357,
+   "session": "t15_day195",
+   "index": 173,
+   "benchmark": null,
+   "text": "Everything is not about money.",
+   "feat_r": 0.5140658493412271,
+   "phone_errors": 6,
+   "ref_phones": 20,
+   "phone_errors_50": 6,
+   "orig": {
+    "hyp": "Everything is not about mine.",
+    "errors": 1,
+    "words": 5,
+    "wer": 0.2
+   },
+   "fixed": {
+    "hyp": "Everything is not about money.",
+    "errors": 0,
+    "words": 5,
+    "wer": 0.0
+   }
+  },
+  {
+   "gid": 8358,
+   "session": "t15_day195",
+   "index": 174,
+   "benchmark": null,
+   "text": "You must believe me about this.",
+   "feat_r": 0.5818873804418557,
+   "phone_errors": 4,
+   "ref_phones": 20,
+   "phone_errors_50": 5,
+   "orig": {
+    "hyp": "You must believe me about this.",
+    "errors": 0,
+    "words": 6,
+    "wer": 0.0
+   },
+   "fixed": {
+    "hyp": "You must believe me about this.",
+    "errors": 0,
+    "words": 6,
+    "wer": 0.0
+   }
+  },
+  {
+   "gid": 8359,
+   "session": "t15_day195",
+   "index": 175,
+   "benchmark": null,
+   "text": "I did that a lot when we were young.",
+   "feat_r": 0.49167001303706137,
+   "phone_errors": 7,
+   "ref_phones": 21,
+   "phone_errors_50": 6,
+   "orig": {
+    "hyp": "I do that a lot with me more than",
+    "errors": 5,
+    "words": 9,
+    "wer": 0.5555555555555556
+   },
+   "fixed": {
+    "hyp": "I do that a lot with me for fun.",
+    "errors": 5,
+    "words": 9,
+    "wer": 0.5555555555555556
+   }
+  },
+  {
+   "gid": 8360,
+   "session": "t15_day195",
+   "index": 176,
+   "benchmark": null,
+   "text": "My friend told me not to go.",
+   "feat_r": 0.49834241919208433,
+   "phone_errors": 8,
+   "ref_phones": 20,
+   "phone_errors_50": 7,
+   "orig": {
+    "hyp": "My. Her. Her. Me. That. To. Now.",
+    "errors": 4,
+    "words": 7,
+    "wer": 0.5714285714285714
+   },
+   "fixed": {
+    "hyp": "Might hurt, hurt, make that too low.",
+    "errors": 7,
+    "words": 7,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 8361,
+   "session": "t15_day195",
+   "index": 177,
+   "benchmark": null,
+   "text": "When is your family coming?",
+   "feat_r": 0.4131187045462351,
+   "phone_errors": 1,
+   "ref_phones": 19,
+   "phone_errors_50": 1,
+   "orig": {
+    "hyp": "What is your name?",
+    "errors": 3,
+    "words": 5,
+    "wer": 0.6
+   },
+   "fixed": {
+    "hyp": "What is your name?",
+    "errors": 3,
+    "words": 5,
+    "wer": 0.6
+   }
+  },
+  {
+   "gid": 8362,
+   "session": "t15_day195",
+   "index": 178,
+   "benchmark": null,
+   "text": "It grew a lot over the last year.",
+   "feat_r": 0.528574376369051,
+   "phone_errors": 7,
+   "ref_phones": 21,
+   "phone_errors_50": 5,
+   "orig": {
+    "hyp": "No. I. Lock. Over. The. Last. Year.",
+    "errors": 4,
+    "words": 8,
+    "wer": 0.5
+   },
+   "fixed": {
+    "hyp": "In my life over the last year.",
+    "errors": 4,
+    "words": 8,
+    "wer": 0.5
+   }
+  },
+  {
+   "gid": 8363,
+   "session": "t15_day195",
+   "index": 179,
+   "benchmark": null,
+   "text": "How many teams do you have?",
+   "feat_r": 0.49066572920528795,
+   "phone_errors": 2,
+   "ref_phones": 17,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "How many years do you have?",
+    "errors": 1,
+    "words": 6,
+    "wer": 0.16666666666666666
+   },
+   "fixed": {
+    "hyp": "How many years do you have?",
+    "errors": 1,
+    "words": 6,
+    "wer": 0.16666666666666666
+   }
+  },
+  {
+   "gid": 8364,
+   "session": "t15_day195",
+   "index": 180,
+   "benchmark": null,
+   "text": "Yes, I felt the same way.",
+   "feat_r": 0.5798673740243527,
+   "phone_errors": 10,
+   "ref_phones": 15,
+   "phone_errors_50": 6,
+   "orig": {
+    "hyp": "Yes, I will be some way.",
+    "errors": 3,
+    "words": 6,
+    "wer": 0.5
+   },
+   "fixed": {
+    "hyp": "Yes, I will be some way.",
+    "errors": 3,
+    "words": 6,
+    "wer": 0.5
+   }
+  },
+  {
+   "gid": 8365,
+   "session": "t15_day195",
+   "index": 181,
+   "benchmark": null,
+   "text": "Do you know how much would it cost?",
+   "feat_r": 0.5312278547288534,
+   "phone_errors": 9,
+   "ref_phones": 20,
+   "phone_errors_50": 7,
+   "orig": {
+    "hyp": "You. You. Know. How. Has. Won. It. Has.",
+    "errors": 4,
+    "words": 8,
+    "wer": 0.5
+   },
+   "fixed": {
+    "hyp": "You, you, know how harsh what it has.",
+    "errors": 4,
+    "words": 8,
+    "wer": 0.5
+   }
+  },
+  {
+   "gid": 8366,
+   "session": "t15_day195",
+   "index": 182,
+   "benchmark": null,
+   "text": "This is our family home.",
+   "feat_r": 0.5182471633587973,
+   "phone_errors": 4,
+   "ref_phones": 16,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "This is our family home.",
+    "errors": 0,
+    "words": 5,
+    "wer": 0.0
+   },
+   "fixed": {
+    "hyp": "This is how I calm.",
+    "errors": 3,
+    "words": 5,
+    "wer": 0.6
+   }
+  },
+  {
+   "gid": 8367,
+   "session": "t15_day195",
+   "index": 183,
+   "benchmark": null,
+   "text": "Do you need anything else?",
+   "feat_r": 0.4782905825763765,
+   "phone_errors": 8,
+   "ref_phones": 16,
+   "phone_errors_50": 5,
+   "orig": {
+    "hyp": "You. You. Me. Everything. Else.",
+    "errors": 3,
+    "words": 5,
+    "wer": 0.6
+   },
+   "fixed": {
+    "hyp": "You owe me everything else.",
+    "errors": 4,
+    "words": 5,
+    "wer": 0.8
+   }
+  },
+  {
+   "gid": 8368,
+   "session": "t15_day195",
+   "index": 184,
+   "benchmark": null,
+   "text": "I wanted to get more work done.",
+   "feat_r": 0.4510203285633967,
+   "phone_errors": 7,
+   "ref_phones": 21,
+   "phone_errors_50": 6,
+   "orig": {
+    "hyp": "I... wanted... to... get... more... of... this.",
+    "errors": 2,
+    "words": 7,
+    "wer": 0.2857142857142857
+   },
+   "fixed": {
+    "hyp": "I wanted to get more of that.",
+    "errors": 2,
+    "words": 7,
+    "wer": 0.2857142857142857
+   }
+  },
+  {
+   "gid": 8369,
+   "session": "t15_day195",
+   "index": 185,
+   "benchmark": null,
+   "text": "I might leave early.",
+   "feat_r": 0.41292270834720324,
+   "phone_errors": 2,
+   "ref_phones": 10,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "I. My. List. I.",
+    "errors": 3,
+    "words": 4,
+    "wer": 0.75
+   },
+   "fixed": {
+    "hyp": "Hi, my legs. Hi.",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 8370,
+   "session": "t15_day195",
+   "index": 186,
+   "benchmark": null,
+   "text": "There is a bug in my code.",
+   "feat_r": 0.5881775059830644,
+   "phone_errors": 4,
+   "ref_phones": 16,
+   "phone_errors_50": 4,
+   "orig": {
+    "hyp": "There is my power in my power.",
+    "errors": 3,
+    "words": 7,
+    "wer": 0.42857142857142855
+   },
+   "fixed": {
+    "hyp": "There is my power in my power.",
+    "errors": 3,
+    "words": 7,
+    "wer": 0.42857142857142855
+   }
+  },
+  {
+   "gid": 8371,
+   "session": "t15_day195",
+   "index": 187,
+   "benchmark": null,
+   "text": "Enjoy your day at the beach.",
+   "feat_r": 0.5053631259709878,
+   "phone_errors": 5,
+   "ref_phones": 16,
+   "phone_errors_50": 5,
+   "orig": {
+    "hyp": "You should have your day at the place.",
+    "errors": 4,
+    "words": 6,
+    "wer": 0.6666666666666666
+   },
+   "fixed": {
+    "hyp": "Is that your day at the west?",
+    "errors": 3,
+    "words": 6,
+    "wer": 0.5
+   }
+  },
+  {
+   "gid": 8372,
+   "session": "t15_day195",
+   "index": 188,
+   "benchmark": null,
+   "text": "She walks with a cane.",
+   "feat_r": 0.4987293071002396,
+   "phone_errors": 7,
+   "ref_phones": 13,
+   "phone_errors_50": 5,
+   "orig": {
+    "hyp": "A. W. S. A. M.",
+    "errors": 4,
+    "words": 5,
+    "wer": 0.8
+   },
+   "fixed": {
+    "hyp": "Hey, what's this? Hey, him.",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 8373,
+   "session": "t15_day195",
+   "index": 189,
+   "benchmark": null,
+   "text": "Have you seen the broom?",
+   "feat_r": 0.5376114125551702,
+   "phone_errors": 6,
+   "ref_phones": 14,
+   "phone_errors_50": 5,
+   "orig": {
+    "hyp": "Uhh... U... G... B... M...",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Ah, you, team, eight, nine.",
+    "errors": 4,
+    "words": 5,
+    "wer": 0.8
+   }
+  },
+  {
+   "gid": 8374,
+   "session": "t15_day195",
+   "index": 190,
+   "benchmark": null,
+   "text": "The dog would lick the bone.",
+   "feat_r": 0.5145055205902364,
+   "phone_errors": 9,
+   "ref_phones": 16,
+   "phone_errors_50": 5,
+   "orig": {
+    "hyp": "They are what life they are.",
+    "errors": 6,
+    "words": 6,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "They are what life they are.",
+    "errors": 6,
+    "words": 6,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 8375,
+   "session": "t15_day195",
+   "index": 191,
+   "benchmark": null,
+   "text": "It made me feel happy and it felt like my real voice.",
+   "feat_r": 0.4444834681707543,
+   "phone_errors": 16,
+   "ref_phones": 34,
+   "phone_errors_50": 13,
+   "orig": {
+    "hyp": "It. My. Me. Feel. I. Had. It. Fell. Like. My. Room. Was.",
+    "errors": 6,
+    "words": 12,
+    "wer": 0.5
+   },
+   "fixed": {
+    "hyp": "It made me feel happy, and it felt like my former voice.",
+    "errors": 1,
+    "words": 12,
+    "wer": 0.08333333333333333
+   }
+  },
+  {
+   "gid": 8376,
+   "session": "t15_day195",
+   "index": 192,
+   "benchmark": null,
+   "text": "Yes, it did as much as it could at this point.",
+   "feat_r": 0.4620272674911027,
+   "phone_errors": 15,
+   "ref_phones": 29,
+   "phone_errors_50": 13,
+   "orig": {
+    "hyp": "This is in as much as it could help this home.",
+    "errors": 5,
+    "words": 11,
+    "wer": 0.45454545454545453
+   },
+   "fixed": {
+    "hyp": "This isn't as much as it could have this point.",
+    "errors": 4,
+    "words": 11,
+    "wer": 0.36363636363636365
+   }
+  },
+  {
+   "gid": 8377,
+   "session": "t15_day195",
+   "index": 193,
+   "benchmark": null,
+   "text": "The first two are right.",
+   "feat_r": 0.5465335297645071,
+   "phone_errors": 2,
+   "ref_phones": 13,
+   "phone_errors_50": 1,
+   "orig": {
+    "hyp": "The first you are right.",
+    "errors": 1,
+    "words": 5,
+    "wer": 0.2
+   },
+   "fixed": {
+    "hyp": "V-verse, you are right.",
+    "errors": 3,
+    "words": 5,
+    "wer": 0.6
+   }
+  },
+  {
+   "gid": 8378,
+   "session": "t15_day195",
+   "index": 194,
+   "benchmark": null,
+   "text": "I want to thank you for all your hard work this month to make this happen.",
+   "feat_r": 0.4628927177032563,
+   "phone_errors": 14,
+   "ref_phones": 48,
+   "phone_errors_50": 10,
+   "orig": {
+    "hyp": "I want to thank you for all your honor for this one.",
+    "errors": 7,
+    "words": 16,
+    "wer": 0.4375
+   },
+   "fixed": {
+    "hyp": "I want to thank you for all your hard work this far tonight, this iron.",
+    "errors": 4,
+    "words": 16,
+    "wer": 0.25
+   }
+  },
+  {
+   "gid": 8379,
+   "session": "t15_day195",
+   "index": 195,
+   "benchmark": null,
+   "text": "Cooking is a good life skill.",
+   "feat_r": 0.45195266797850203,
+   "phone_errors": 6,
+   "ref_phones": 18,
+   "phone_errors_50": 7,
+   "orig": {
+    "hyp": "Uh-uh. Why is a good life chill?",
+    "errors": 4,
+    "words": 6,
+    "wer": 0.6666666666666666
+   },
+   "fixed": {
+    "hyp": "And money is a good life, chill.",
+    "errors": 3,
+    "words": 6,
+    "wer": 0.5
+   }
+  },
+  {
+   "gid": 8380,
+   "session": "t15_day195",
+   "index": 196,
+   "benchmark": null,
+   "text": "Since when do you play this game?",
+   "feat_r": 0.47552751623712997,
+   "phone_errors": 7,
+   "ref_phones": 20,
+   "phone_errors_50": 6,
+   "orig": {
+    "hyp": "Yes. One. You. You. I. Miss. Him.",
+    "errors": 6,
+    "words": 7,
+    "wer": 0.8571428571428571
+   },
+   "fixed": {
+    "hyp": "NASA, why did you play this time?",
+    "errors": 4,
+    "words": 7,
+    "wer": 0.5714285714285714
+   }
+  },
+  {
+   "gid": 8381,
+   "session": "t15_day195",
+   "index": 197,
+   "benchmark": null,
+   "text": "I used to enjoy my walks.",
+   "feat_r": 0.5587917414893399,
+   "phone_errors": 4,
+   "ref_phones": 17,
+   "phone_errors_50": 4,
+   "orig": {
+    "hyp": "I just do enjoy my wars.",
+    "errors": 3,
+    "words": 6,
+    "wer": 0.5
+   },
+   "fixed": {
+    "hyp": "I do enjoy my wasp.",
+    "errors": 3,
+    "words": 6,
+    "wer": 0.5
+   }
+  },
+  {
+   "gid": 8382,
+   "session": "t15_day195",
+   "index": 198,
+   "benchmark": null,
+   "text": "I will write the paper now.",
+   "feat_r": 0.5667666025528938,
+   "phone_errors": 2,
+   "ref_phones": 15,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "I knew I'd be better now.",
+    "errors": 4,
+    "words": 6,
+    "wer": 0.6666666666666666
+   },
+   "fixed": {
+    "hyp": "I knew right. Me. Better. Now.",
+    "errors": 4,
+    "words": 6,
+    "wer": 0.6666666666666666
+   }
+  },
+  {
+   "gid": 8383,
+   "session": "t15_day195",
+   "index": 199,
+   "benchmark": null,
+   "text": "It will not happen for a few hours.",
+   "feat_r": 0.4827933716134004,
+   "phone_errors": 7,
+   "ref_phones": 23,
+   "phone_errors_50": 4,
+   "orig": {
+    "hyp": "It will not happen for a few hours.",
+    "errors": 0,
+    "words": 8,
+    "wer": 0.0
+   },
+   "fixed": {
+    "hyp": "It will not happen for a few hours.",
+    "errors": 0,
+    "words": 8,
+    "wer": 0.0
+   }
+  },
+  {
+   "gid": 8384,
+   "session": "t15_day195",
+   "index": 200,
+   "benchmark": null,
+   "text": "I love my house very much.",
+   "feat_r": 0.49054934899356945,
+   "phone_errors": 4,
+   "ref_phones": 16,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "I love my ass very much.",
+    "errors": 1,
+    "words": 6,
+    "wer": 0.16666666666666666
+   },
+   "fixed": {
+    "hyp": "I love my ass very much.",
+    "errors": 1,
+    "words": 6,
+    "wer": 0.16666666666666666
+   }
+  },
+  {
+   "gid": 8385,
+   "session": "t15_day195",
+   "index": 201,
+   "benchmark": null,
+   "text": "I can't help you with your work.",
+   "feat_r": 0.5920166823962024,
+   "phone_errors": 7,
+   "ref_phones": 20,
+   "phone_errors_50": 6,
+   "orig": {
+    "hyp": "I. May. Hell. You. May. Your. Her.",
+    "errors": 4,
+    "words": 7,
+    "wer": 0.5714285714285714
+   },
+   "fixed": {
+    "hyp": "I-N-L-U-R-U-R",
+    "errors": 6,
+    "words": 7,
+    "wer": 0.8571428571428571
+   }
+  },
+  {
+   "gid": 8386,
+   "session": "t15_day195",
+   "index": 202,
+   "benchmark": null,
+   "text": "That is a great name for a baby.",
+   "feat_r": 0.599716278412038,
+   "phone_errors": 7,
+   "ref_phones": 21,
+   "phone_errors_50": 5,
+   "orig": {
+    "hyp": "That is A-N-N-4-A-A.",
+    "errors": 4,
+    "words": 8,
+    "wer": 0.5
+   },
+   "fixed": {
+    "hyp": "That is A-V-9-4-A-M-E.",
+    "errors": 5,
+    "words": 8,
+    "wer": 0.625
+   }
+  },
+  {
+   "gid": 8387,
+   "session": "t15_day195",
+   "index": 203,
+   "benchmark": null,
+   "text": "It is not the same.",
+   "feat_r": 0.4967739658502217,
+   "phone_errors": 2,
+   "ref_phones": 12,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "It was my new song.",
+    "errors": 4,
+    "words": 5,
+    "wer": 0.8
+   },
+   "fixed": {
+    "hyp": "It has not been done.",
+    "errors": 3,
+    "words": 5,
+    "wer": 0.6
+   }
+  },
+  {
+   "gid": 8388,
+   "session": "t15_day195",
+   "index": 204,
+   "benchmark": null,
+   "text": "I don't know what to say.",
+   "feat_r": 0.3651077872166969,
+   "phone_errors": 1,
+   "ref_phones": 14,
+   "phone_errors_50": 1,
+   "orig": {
+    "hyp": "I knew what to say.",
+    "errors": 2,
+    "words": 6,
+    "wer": 0.3333333333333333
+   },
+   "fixed": {
+    "hyp": "I knew what to say.",
+    "errors": 2,
+    "words": 6,
+    "wer": 0.3333333333333333
+   }
+  },
+  {
+   "gid": 8389,
+   "session": "t15_day195",
+   "index": 205,
+   "benchmark": null,
+   "text": "Let's go home now.",
+   "feat_r": 0.4222376449449879,
+   "phone_errors": 4,
+   "ref_phones": 11,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "Last. New. Home. Now.",
+    "errors": 2,
+    "words": 4,
+    "wer": 0.5
+   },
+   "fixed": {
+    "hyp": "Let's do home now.",
+    "errors": 1,
+    "words": 4,
+    "wer": 0.25
+   }
+  },
+  {
+   "gid": 8390,
+   "session": "t15_day195",
+   "index": 206,
+   "benchmark": null,
+   "text": "Long time no see.",
+   "feat_r": 0.4869274177238873,
+   "phone_errors": 5,
+   "ref_phones": 10,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "One. I. Knew. She.",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "What? How? New? See?",
+    "errors": 3,
+    "words": 4,
+    "wer": 0.75
+   }
+  },
+  {
+   "gid": 8391,
+   "session": "t15_day195",
+   "index": 207,
+   "benchmark": null,
+   "text": "We tried to move it a little.",
+   "feat_r": 0.5209008394907755,
+   "phone_errors": 8,
+   "ref_phones": 19,
+   "phone_errors_50": 8,
+   "orig": {
+    "hyp": "We try to move if I win.",
+    "errors": 4,
+    "words": 7,
+    "wer": 0.5714285714285714
+   },
+   "fixed": {
+    "hyp": "We try to move it. Hey, Lou.",
+    "errors": 3,
+    "words": 7,
+    "wer": 0.42857142857142855
+   }
+  },
+  {
+   "gid": 8392,
+   "session": "t15_day195",
+   "index": 208,
+   "benchmark": null,
+   "text": "I am taking half a day off.",
+   "feat_r": 0.46073014851662136,
+   "phone_errors": 3,
+   "ref_phones": 16,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "I am the king of fighting art.",
+    "errors": 5,
+    "words": 7,
+    "wer": 0.7142857142857143
+   },
+   "fixed": {
+    "hyp": "I am taking half my day off.",
+    "errors": 1,
+    "words": 7,
+    "wer": 0.14285714285714285
+   }
+  },
+  {
+   "gid": 8393,
+   "session": "t15_day195",
+   "index": 209,
+   "benchmark": null,
+   "text": "Believe me, it will cost you more.",
+   "feat_r": 0.501194491029763,
+   "phone_errors": 5,
+   "ref_phones": 21,
+   "phone_errors_50": 5,
+   "orig": {
+    "hyp": "Me. It. Will. Not. You. More.",
+    "errors": 2,
+    "words": 7,
+    "wer": 0.2857142857142857
+   },
+   "fixed": {
+    "hyp": "Leave me it where there's you more.",
+    "errors": 3,
+    "words": 7,
+    "wer": 0.42857142857142855
+   }
+  },
+  {
+   "gid": 8394,
+   "session": "t15_day195",
+   "index": 210,
+   "benchmark": null,
+   "text": "The jury went in early.",
+   "feat_r": 0.38549543043309564,
+   "phone_errors": 9,
+   "ref_phones": 15,
+   "phone_errors_50": 8,
+   "orig": {
+    "hyp": "They... ne'er... what... thought... are they?",
+    "errors": 6,
+    "words": 5,
+    "wer": 1.2
+   },
+   "fixed": {
+    "hyp": "Hey, Mayor, what are we?",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 8395,
+   "session": "t15_day195",
+   "index": 211,
+   "benchmark": null,
+   "text": "You must be paid for the job.",
+   "feat_r": 0.548992961040165,
+   "phone_errors": 6,
+   "ref_phones": 19,
+   "phone_errors_50": 4,
+   "orig": {
+    "hyp": "You, must, be, then, for, the, done.",
+    "errors": 2,
+    "words": 7,
+    "wer": 0.2857142857142857
+   },
+   "fixed": {
+    "hyp": "You must be there for me, Don.",
+    "errors": 3,
+    "words": 7,
+    "wer": 0.42857142857142855
+   }
+  },
+  {
+   "gid": 8396,
+   "session": "t15_day195",
+   "index": 212,
+   "benchmark": null,
+   "text": "I have read this book a while ago.",
+   "feat_r": 0.5101775289362092,
+   "phone_errors": 2,
+   "ref_phones": 20,
+   "phone_errors_50": 1,
+   "orig": {
+    "hyp": "I. Have. Would. Miss. Those. I. Will. Now.",
+    "errors": 6,
+    "words": 8,
+    "wer": 0.75
+   },
+   "fixed": {
+    "hyp": "I have read this book. I will go.",
+    "errors": 3,
+    "words": 8,
+    "wer": 0.375
+   }
+  },
+  {
+   "gid": 8397,
+   "session": "t15_day195",
+   "index": 213,
+   "benchmark": null,
+   "text": "This name means a lot.",
+   "feat_r": 0.42515515458460806,
+   "phone_errors": 8,
+   "ref_phones": 14,
+   "phone_errors_50": 4,
+   "orig": {
+    "hyp": "This. None. Most. I. Lie.",
+    "errors": 4,
+    "words": 5,
+    "wer": 0.8
+   },
+   "fixed": {
+    "hyp": "This, none, most, I love.",
+    "errors": 4,
+    "words": 5,
+    "wer": 0.8
+   }
+  },
+  {
+   "gid": 8398,
+   "session": "t15_day195",
+   "index": 214,
+   "benchmark": null,
+   "text": "Keep trying hard till you get it.",
+   "feat_r": 0.5079956265892412,
+   "phone_errors": 12,
+   "ref_phones": 22,
+   "phone_errors_50": 8,
+   "orig": {
+    "hyp": "In. My. Our. Hell. You. Need. It.",
+    "errors": 5,
+    "words": 7,
+    "wer": 0.7142857142857143
+   },
+   "fixed": {
+    "hyp": "in my heart till you need it",
+    "errors": 4,
+    "words": 7,
+    "wer": 0.5714285714285714
+   }
+  },
+  {
+   "gid": 8399,
+   "session": "t15_day195",
+   "index": 215,
+   "benchmark": null,
+   "text": "Gone are the days of phone calls.",
+   "feat_r": 0.4959658734794895,
+   "phone_errors": 8,
+   "ref_phones": 19,
+   "phone_errors_50": 8,
+   "orig": {
+    "hyp": "None are the latest of phone calls.",
+    "errors": 2,
+    "words": 7,
+    "wer": 0.2857142857142857
+   },
+   "fixed": {
+    "hyp": "are the latest of full cause.",
+    "errors": 4,
+    "words": 7,
+    "wer": 0.5714285714285714
+   }
+  },
+  {
+   "gid": 8400,
+   "session": "t15_day195",
+   "index": 216,
+   "benchmark": null,
+   "text": "Do you own a house and a car?",
+   "feat_r": 0.5239836966825705,
+   "phone_errors": 10,
+   "ref_phones": 17,
+   "phone_errors_50": 8,
+   "orig": {
+    "hyp": "U. U. R. A. S. S. A. O.",
+    "errors": 6,
+    "words": 8,
+    "wer": 0.75
+   },
+   "fixed": {
+    "hyp": "U U R A S S A F",
+    "errors": 6,
+    "words": 8,
+    "wer": 0.75
+   }
+  },
+  {
+   "gid": 8401,
+   "session": "t15_day195",
+   "index": 217,
+   "benchmark": "random",
+   "text": "Everything got very quiet.",
+   "feat_r": 0.47654704015261934,
+   "phone_errors": 3,
+   "ref_phones": 19,
+   "phone_errors_50": 4,
+   "orig": {
+    "hyp": "Everything. Not. Victory. Life.",
+    "errors": 3,
+    "words": 4,
+    "wer": 0.75
+   },
+   "fixed": {
+    "hyp": "I've been living, not very quiet.",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 8402,
+   "session": "t15_day195",
+   "index": 218,
+   "benchmark": null,
+   "text": "I enjoyed working on this case.",
+   "feat_r": 0.4802709121715907,
+   "phone_errors": 13,
+   "ref_phones": 19,
+   "phone_errors_50": 12,
+   "orig": {
+    "hyp": "I am your dad. What on this is?",
+    "errors": 5,
+    "words": 6,
+    "wer": 0.8333333333333334
+   },
+   "fixed": {
+    "hyp": "I, and I, and I, work on this list.",
+    "errors": 6,
+    "words": 6,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 8403,
+   "session": "t15_day195",
+   "index": 219,
+   "benchmark": null,
+   "text": "Can you point me to the drug store?",
+   "feat_r": 0.5410655242609724,
+   "phone_errors": 11,
+   "ref_phones": 23,
+   "phone_errors_50": 9,
+   "orig": {
+    "hyp": "Then, you, or me, you, you, you're...",
+    "errors": 6,
+    "words": 8,
+    "wer": 0.75
+   },
+   "fixed": {
+    "hyp": "Then you owe me to your brother.",
+    "errors": 5,
+    "words": 8,
+    "wer": 0.625
+   }
+  },
+  {
+   "gid": 8404,
+   "session": "t15_day195",
+   "index": 220,
+   "benchmark": null,
+   "text": "Read everything you can.",
+   "feat_r": 0.514100658168284,
+   "phone_errors": 5,
+   "ref_phones": 15,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "Hey. Hey. Hey. You. That.",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Hey, everything, you, then.",
+    "errors": 2,
+    "words": 4,
+    "wer": 0.5
+   }
+  },
+  {
+   "gid": 8405,
+   "session": "t15_day195",
+   "index": 221,
+   "benchmark": null,
+   "text": "They wanted to change the name.",
+   "feat_r": 0.5009233136804727,
+   "phone_errors": 5,
+   "ref_phones": 19,
+   "phone_errors_50": 4,
+   "orig": {
+    "hyp": "They want to change like mom.",
+    "errors": 3,
+    "words": 6,
+    "wer": 0.5
+   },
+   "fixed": {
+    "hyp": "They want you just like them",
+    "errors": 5,
+    "words": 6,
+    "wer": 0.8333333333333334
+   }
+  },
+  {
+   "gid": 8406,
+   "session": "t15_day195",
+   "index": 222,
+   "benchmark": "random",
+   "text": "Would you like to watch an old movie?",
+   "feat_r": 0.5638075834802179,
+   "phone_errors": 4,
+   "ref_phones": 22,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "Would you let you watch an whole movie?",
+    "errors": 3,
+    "words": 8,
+    "wer": 0.375
+   },
+   "fixed": {
+    "hyp": "Would you like to watch an old movie?",
+    "errors": 0,
+    "words": 8,
+    "wer": 0.0
+   }
+  },
+  {
+   "gid": 8407,
+   "session": "t15_day195",
+   "index": 223,
+   "benchmark": null,
+   "text": "She was very kind to me.",
+   "feat_r": 0.5338861280175313,
+   "phone_errors": 8,
+   "ref_phones": 17,
+   "phone_errors_50": 8,
+   "orig": {
+    "hyp": "You... was... you... me...",
+    "errors": 4,
+    "words": 6,
+    "wer": 0.6666666666666666
+   },
+   "fixed": {
+    "hyp": "He was mad at you, me",
+    "errors": 4,
+    "words": 6,
+    "wer": 0.6666666666666666
+   }
+  },
+  {
+   "gid": 8408,
+   "session": "t15_day195",
+   "index": 224,
+   "benchmark": null,
+   "text": "Can you come to get me, please?",
+   "feat_r": 0.4070398490866725,
+   "phone_errors": 4,
+   "ref_phones": 19,
+   "phone_errors_50": 4,
+   "orig": {
+    "hyp": "Yeah, you. Yeah, you. Yeah, yeah, please.",
+    "errors": 5,
+    "words": 7,
+    "wer": 0.7142857142857143
+   },
+   "fixed": {
+    "hyp": "Yeah, you got you yeah, yeah, please",
+    "errors": 5,
+    "words": 7,
+    "wer": 0.7142857142857143
+   }
+  },
+  {
+   "gid": 8409,
+   "session": "t15_day195",
+   "index": 225,
+   "benchmark": null,
+   "text": "My family will be here soon.",
+   "feat_r": 0.5366737965165345,
+   "phone_errors": 1,
+   "ref_phones": 19,
+   "phone_errors_50": 0,
+   "orig": {
+    "hyp": "My family will be here soon.",
+    "errors": 0,
+    "words": 6,
+    "wer": 0.0
+   },
+   "fixed": {
+    "hyp": "My family will be here soon.",
+    "errors": 0,
+    "words": 6,
+    "wer": 0.0
+   }
+  },
+  {
+   "gid": 8410,
+   "session": "t15_day195",
+   "index": 226,
+   "benchmark": null,
+   "text": "My friend will help me make the choice.",
+   "feat_r": 0.5089087749483792,
+   "phone_errors": 9,
+   "ref_phones": 24,
+   "phone_errors_50": 9,
+   "orig": {
+    "hyp": "My one will of me may be just.",
+    "errors": 5,
+    "words": 8,
+    "wer": 0.625
+   },
+   "fixed": {
+    "hyp": "My word will help me make the choice.",
+    "errors": 1,
+    "words": 8,
+    "wer": 0.125
+   }
+  },
+  {
+   "gid": 8411,
+   "session": "t15_day195",
+   "index": 227,
+   "benchmark": null,
+   "text": "I saw two people in the room.",
+   "feat_r": 0.4953595416906051,
+   "phone_errors": 2,
+   "ref_phones": 17,
+   "phone_errors_50": 1,
+   "orig": {
+    "hyp": "I so too able in the room.",
+    "errors": 3,
+    "words": 7,
+    "wer": 0.42857142857142855
+   },
+   "fixed": {
+    "hyp": "I, so, to, able, and, they, run.",
+    "errors": 6,
+    "words": 7,
+    "wer": 0.8571428571428571
+   }
+  },
+  {
+   "gid": 8412,
+   "session": "t15_day195",
+   "index": 228,
+   "benchmark": "random",
+   "text": "Anything can be used in this case.",
+   "feat_r": 0.4041568496260264,
+   "phone_errors": 16,
+   "ref_phones": 23,
+   "phone_errors_50": 11,
+   "orig": {
+    "hyp": "that we have had this past.",
+    "errors": 6,
+    "words": 7,
+    "wer": 0.8571428571428571
+   },
+   "fixed": {
+    "hyp": "There, that, me, her, and this, as...",
+    "errors": 6,
+    "words": 7,
+    "wer": 0.8571428571428571
+   }
+  },
+  {
+   "gid": 8413,
+   "session": "t15_day195",
+   "index": 229,
+   "benchmark": null,
+   "text": "We have found it.",
+   "feat_r": 0.49354106306395906,
+   "phone_errors": 6,
+   "ref_phones": 11,
+   "phone_errors_50": 4,
+   "orig": {
+    "hyp": "We. Have. Thought. It.",
+    "errors": 1,
+    "words": 4,
+    "wer": 0.25
+   },
+   "fixed": {
+    "hyp": "We have fought it.",
+    "errors": 1,
+    "words": 4,
+    "wer": 0.25
+   }
+  },
+  {
+   "gid": 8414,
+   "session": "t15_day195",
+   "index": 230,
+   "benchmark": null,
+   "text": "I hope everything is as it should be.",
+   "feat_r": 0.501724391722419,
+   "phone_errors": 4,
+   "ref_phones": 22,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "I... am... is... as... it... should... be.",
+    "errors": 2,
+    "words": 8,
+    "wer": 0.25
+   },
+   "fixed": {
+    "hyp": "I hope everything is as it should be.",
+    "errors": 0,
+    "words": 8,
+    "wer": 0.0
+   }
+  },
+  {
+   "gid": 8415,
+   "session": "t15_day195",
+   "index": 231,
+   "benchmark": null,
+   "text": "Give me a call should you need anything.",
+   "feat_r": 0.45200840354436417,
+   "phone_errors": 7,
+   "ref_phones": 23,
+   "phone_errors_50": 6,
+   "orig": {
+    "hyp": "If my eyes fall, should you, me, understand me?",
+    "errors": 7,
+    "words": 8,
+    "wer": 0.875
+   },
+   "fixed": {
+    "hyp": "If my eye fall, should you meet our enemy?",
+    "errors": 7,
+    "words": 8,
+    "wer": 0.875
+   }
+  },
+  {
+   "gid": 8416,
+   "session": "t15_day195",
+   "index": 232,
+   "benchmark": null,
+   "text": "I will live at my best friend's house.",
+   "feat_r": 0.42542520471573064,
+   "phone_errors": 8,
+   "ref_phones": 24,
+   "phone_errors_50": 5,
+   "orig": {
+    "hyp": "I. Will. Love. It. My. Best. Friends. Ask.",
+    "errors": 4,
+    "words": 8,
+    "wer": 0.5
+   },
+   "fixed": {
+    "hyp": "I will love if my best friends ask.",
+    "errors": 4,
+    "words": 8,
+    "wer": 0.5
+   }
+  },
+  {
+   "gid": 8417,
+   "session": "t15_day195",
+   "index": 233,
+   "benchmark": null,
+   "text": "I will try to make it look nice.",
+   "feat_r": 0.4790633814498869,
+   "phone_errors": 9,
+   "ref_phones": 20,
+   "phone_errors_50": 6,
+   "orig": {
+    "hyp": "I will show you me a look at us.",
+    "errors": 6,
+    "words": 8,
+    "wer": 0.75
+   },
+   "fixed": {
+    "hyp": "I will tell you to make it look nice.",
+    "errors": 2,
+    "words": 8,
+    "wer": 0.25
+   }
+  },
+  {
+   "gid": 8418,
+   "session": "t15_day195",
+   "index": 234,
+   "benchmark": "video",
+   "text": "Please, let's go.",
+   "feat_r": 0.4761371056416562,
+   "phone_errors": 1,
+   "ref_phones": 10,
+   "phone_errors_50": 1,
+   "orig": {
+    "hyp": "He's... last... now...",
+    "errors": 3,
+    "words": 3,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Please, let's go.",
+    "errors": 0,
+    "words": 3,
+    "wer": 0.0
+   }
+  },
+  {
+   "gid": 8419,
+   "session": "t15_day195",
+   "index": 235,
+   "benchmark": "video",
+   "text": "You have changed.",
+   "feat_r": 0.5671002260511616,
+   "phone_errors": 4,
+   "ref_phones": 10,
+   "phone_errors_50": 4,
+   "orig": {
+    "hyp": "You. Have. Me.",
+    "errors": 1,
+    "words": 3,
+    "wer": 0.3333333333333333
+   },
+   "fixed": {
+    "hyp": "You have known.",
+    "errors": 1,
+    "words": 3,
+    "wer": 0.3333333333333333
+   }
+  },
+  {
+   "gid": 8420,
+   "session": "t15_day195",
+   "index": 236,
+   "benchmark": "video",
+   "text": "Why do you think this is right?",
+   "feat_r": 0.5007184141204677,
+   "phone_errors": 6,
+   "ref_phones": 18,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "Why... You... You... Faith... This... Is... Right...",
+    "errors": 2,
+    "words": 7,
+    "wer": 0.2857142857142857
+   },
+   "fixed": {
+    "hyp": "Why you you think this is right?",
+    "errors": 1,
+    "words": 7,
+    "wer": 0.14285714285714285
+   }
+  },
+  {
+   "gid": 8421,
+   "session": "t15_day195",
+   "index": 237,
+   "benchmark": "video",
+   "text": "Nothing is wrong so far.",
+   "feat_r": 0.49827310084222926,
+   "phone_errors": 4,
+   "ref_phones": 15,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "Nothing is all too far.",
+    "errors": 2,
+    "words": 5,
+    "wer": 0.4
+   },
+   "fixed": {
+    "hyp": "9 is up too far.",
+    "errors": 3,
+    "words": 5,
+    "wer": 0.6
+   }
+  },
+  {
+   "gid": 8422,
+   "session": "t15_day195",
+   "index": 238,
+   "benchmark": "video",
+   "text": "Let's keep going.",
+   "feat_r": 0.3705912654405682,
+   "phone_errors": 10,
+   "ref_phones": 11,
+   "phone_errors_50": 5,
+   "orig": {
+    "hyp": "Last day going.",
+    "errors": 2,
+    "words": 3,
+    "wer": 0.6666666666666666
+   },
+   "fixed": {
+    "hyp": "Let's get going.",
+    "errors": 1,
+    "words": 3,
+    "wer": 0.3333333333333333
+   }
+  },
+  {
+   "gid": 8423,
+   "session": "t15_day195",
+   "index": 239,
+   "benchmark": "video",
+   "text": "I would like to go home now.",
+   "feat_r": 0.5035726659641789,
+   "phone_errors": 1,
+   "ref_phones": 16,
+   "phone_errors_50": 0,
+   "orig": {
+    "hyp": "I would like you now on now.",
+    "errors": 3,
+    "words": 7,
+    "wer": 0.42857142857142855
+   },
+   "fixed": {
+    "hyp": "I would like to help on now.",
+    "errors": 2,
+    "words": 7,
+    "wer": 0.2857142857142857
+   }
+  },
+  {
+   "gid": 8424,
+   "session": "t15_day195",
+   "index": 240,
+   "benchmark": "video",
+   "text": "It is very clear to me.",
+   "feat_r": 0.5195656602354208,
+   "phone_errors": 4,
+   "ref_phones": 16,
+   "phone_errors_50": 5,
+   "orig": {
+    "hyp": "It is very fair to me.",
+    "errors": 1,
+    "words": 6,
+    "wer": 0.16666666666666666
+   },
+   "fixed": {
+    "hyp": "It is right here to me.",
+    "errors": 2,
+    "words": 6,
+    "wer": 0.3333333333333333
+   }
+  },
+  {
+   "gid": 8425,
+   "session": "t15_day195",
+   "index": 241,
+   "benchmark": "video",
+   "text": "I had many days off.",
+   "feat_r": 0.40975443811537227,
+   "phone_errors": 2,
+   "ref_phones": 13,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "I had made this path.",
+    "errors": 3,
+    "words": 5,
+    "wer": 0.6
+   },
+   "fixed": {
+    "hyp": "I have made this path.",
+    "errors": 4,
+    "words": 5,
+    "wer": 0.8
+   }
+  },
+  {
+   "gid": 8426,
+   "session": "t15_day195",
+   "index": 242,
+   "benchmark": "video",
+   "text": "I was looking at it.",
+   "feat_r": 0.5657597583525132,
+   "phone_errors": 2,
+   "ref_phones": 13,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "I was lying at it.",
+    "errors": 1,
+    "words": 5,
+    "wer": 0.2
+   },
+   "fixed": {
+    "hyp": "I was looking at it.",
+    "errors": 0,
+    "words": 5,
+    "wer": 0.0
+   }
+  },
+  {
+   "gid": 8427,
+   "session": "t15_day195",
+   "index": 243,
+   "benchmark": "video",
+   "text": "Can you give me a call?",
+   "feat_r": 0.44689255744130546,
+   "phone_errors": 6,
+   "ref_phones": 14,
+   "phone_errors_50": 6,
+   "orig": {
+    "hyp": "Not you.",
+    "errors": 5,
+    "words": 6,
+    "wer": 0.8333333333333334
+   },
+   "fixed": {
+    "hyp": "Not U-F-F-I-O.",
+    "errors": 6,
+    "words": 6,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 8440,
+   "session": "t15_day195",
+   "index": 256,
+   "benchmark": null,
+   "text": "I am sure people will like your book.",
+   "feat_r": 0.5063346737954539,
+   "phone_errors": 4,
+   "ref_phones": 23,
+   "phone_errors_50": 4,
+   "orig": {
+    "hyp": "I. Am. You. Ever. Will. Like. Your. Book.",
+    "errors": 2,
+    "words": 8,
+    "wer": 0.25
+   },
+   "fixed": {
+    "hyp": "I am true. Pebble will light your book.",
+    "errors": 3,
+    "words": 8,
+    "wer": 0.375
+   }
+  },
+  {
+   "gid": 8441,
+   "session": "t15_day195",
+   "index": 257,
+   "benchmark": "random",
+   "text": "This is more than what we wanted.",
+   "feat_r": 0.4939417916563431,
+   "phone_errors": 10,
+   "ref_phones": 22,
+   "phone_errors_50": 8,
+   "orig": {
+    "hyp": "This. Is. I. That. What. We. Are.",
+    "errors": 3,
+    "words": 7,
+    "wer": 0.42857142857142855
+   },
+   "fixed": {
+    "hyp": "This is like that what we are doing.",
+    "errors": 4,
+    "words": 7,
+    "wer": 0.5714285714285714
+   }
+  },
+  {
+   "gid": 8442,
+   "session": "t15_day195",
+   "index": 258,
+   "benchmark": null,
+   "text": "Tell kids to stay at home.",
+   "feat_r": 0.4656587978045913,
+   "phone_errors": 6,
+   "ref_phones": 17,
+   "phone_errors_50": 7,
+   "orig": {
+    "hyp": "Well, this human thing has its own.",
+    "errors": 7,
+    "words": 6,
+    "wer": 1.1666666666666667
+   },
+   "fixed": {
+    "hyp": "Will this you say at home?",
+    "errors": 4,
+    "words": 6,
+    "wer": 0.6666666666666666
+   }
+  },
+  {
+   "gid": 8443,
+   "session": "t15_day195",
+   "index": 259,
+   "benchmark": null,
+   "text": "How many times did you go there?",
+   "feat_r": 0.47827180702722777,
+   "phone_errors": 9,
+   "ref_phones": 20,
+   "phone_errors_50": 9,
+   "orig": {
+    "hyp": "How many has it you know there?",
+    "errors": 3,
+    "words": 7,
+    "wer": 0.42857142857142855
+   },
+   "fixed": {
+    "hyp": "How. Many. Has. Did. You. Know. Their.",
+    "errors": 3,
+    "words": 7,
+    "wer": 0.42857142857142855
+   }
+  },
+  {
+   "gid": 8444,
+   "session": "t15_day195",
+   "index": 260,
+   "benchmark": null,
+   "text": "Try looking past it.",
+   "feat_r": 0.46037860725046925,
+   "phone_errors": 3,
+   "ref_phones": 14,
+   "phone_errors_50": 4,
+   "orig": {
+    "hyp": "My lovingness is...",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Right, looking, that's it.",
+    "errors": 2,
+    "words": 4,
+    "wer": 0.5
+   }
+  },
+  {
+   "gid": 8445,
+   "session": "t15_day195",
+   "index": 261,
+   "benchmark": null,
+   "text": "She didn't mean anything by it.",
+   "feat_r": 0.44976520203167053,
+   "phone_errors": 12,
+   "ref_phones": 21,
+   "phone_errors_50": 8,
+   "orig": {
+    "hyp": "You. You. Me. I am. I am.",
+    "errors": 7,
+    "words": 6,
+    "wer": 1.1666666666666667
+   },
+   "fixed": {
+    "hyp": "Yes, yes, yes, yes, yes, yes, yes.",
+    "errors": 7,
+    "words": 6,
+    "wer": 1.1666666666666667
+   }
+  },
+  {
+   "gid": 8446,
+   "session": "t15_day195",
+   "index": 262,
+   "benchmark": null,
+   "text": "Pick your favorite game to play.",
+   "feat_r": 0.4333776960988966,
+   "phone_errors": 8,
+   "ref_phones": 20,
+   "phone_errors_50": 7,
+   "orig": {
+    "hyp": "You. You. You. I.",
+    "errors": 6,
+    "words": 6,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Me, you, him, him, you, I.",
+    "errors": 6,
+    "words": 6,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 8447,
+   "session": "t15_day195",
+   "index": 263,
+   "benchmark": "random",
+   "text": "I walk for two miles every day.",
+   "feat_r": 0.455694396188432,
+   "phone_errors": 6,
+   "ref_phones": 19,
+   "phone_errors_50": 5,
+   "orig": {
+    "hyp": "I... love... for... you... must... every... day.",
+    "errors": 3,
+    "words": 7,
+    "wer": 0.42857142857142855
+   },
+   "fixed": {
+    "hyp": "I love for you my every day",
+    "errors": 3,
+    "words": 7,
+    "wer": 0.42857142857142855
+   }
+  },
+  {
+   "gid": 8448,
+   "session": "t15_day195",
+   "index": 264,
+   "benchmark": null,
+   "text": "You should make up your mind.",
+   "feat_r": 0.5371541121667469,
+   "phone_errors": 2,
+   "ref_phones": 17,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "You. You. Me. Of. Your. I.",
+    "errors": 4,
+    "words": 6,
+    "wer": 0.6666666666666666
+   },
+   "fixed": {
+    "hyp": "You heard that of your eye.",
+    "errors": 4,
+    "words": 6,
+    "wer": 0.6666666666666666
+   }
+  },
+  {
+   "gid": 8449,
+   "session": "t15_day195",
+   "index": 265,
+   "benchmark": null,
+   "text": "Since when do you write on paper?",
+   "feat_r": 0.4185121075144368,
+   "phone_errors": 9,
+   "ref_phones": 20,
+   "phone_errors_50": 4,
+   "orig": {
+    "hyp": "Yes. Why. Do. You. Right. On. Ever.",
+    "errors": 4,
+    "words": 7,
+    "wer": 0.5714285714285714
+   },
+   "fixed": {
+    "hyp": "Yes, why didn't you write on ever?",
+    "errors": 4,
+    "words": 7,
+    "wer": 0.5714285714285714
+   }
+  },
+  {
+   "gid": 8450,
+   "session": "t15_day195",
+   "index": 266,
+   "benchmark": null,
+   "text": "I don't want any part of this.",
+   "feat_r": 0.44512209259604096,
+   "phone_errors": 9,
+   "ref_phones": 21,
+   "phone_errors_50": 5,
+   "orig": {
+    "hyp": "I... am... warm... and the... heart... of... this.",
+    "errors": 5,
+    "words": 7,
+    "wer": 0.7142857142857143
+   },
+   "fixed": {
+    "hyp": "I love working part of this.",
+    "errors": 3,
+    "words": 7,
+    "wer": 0.42857142857142855
+   }
+  },
+  {
+   "gid": 8451,
+   "session": "t15_day195",
+   "index": 267,
+   "benchmark": null,
+   "text": "Thank you, that would be great.",
+   "feat_r": 0.5171611652103525,
+   "phone_errors": 8,
+   "ref_phones": 18,
+   "phone_errors_50": 7,
+   "orig": {
+    "hyp": "They, you, that, were, thee, pray.",
+    "errors": 4,
+    "words": 6,
+    "wer": 0.6666666666666666
+   },
+   "fixed": {
+    "hyp": "Hey, you never eat it.",
+    "errors": 5,
+    "words": 6,
+    "wer": 0.8333333333333334
+   }
+  },
+  {
+   "gid": 8452,
+   "session": "t15_day195",
+   "index": 268,
+   "benchmark": null,
+   "text": "They changed their mind.",
+   "feat_r": 0.5068916509385222,
+   "phone_errors": 6,
+   "ref_phones": 14,
+   "phone_errors_50": 6,
+   "orig": {
+    "hyp": "They. Have. Their. One.",
+    "errors": 2,
+    "words": 4,
+    "wer": 0.5
+   },
+   "fixed": {
+    "hyp": "They had their mind.",
+    "errors": 1,
+    "words": 4,
+    "wer": 0.25
+   }
+  },
+  {
+   "gid": 8453,
+   "session": "t15_day195",
+   "index": 269,
+   "benchmark": null,
+   "text": "Join me for a walk.",
+   "feat_r": 0.4852951418739824,
+   "phone_errors": 3,
+   "ref_phones": 12,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "You. Me. For. A. Work.",
+    "errors": 2,
+    "words": 5,
+    "wer": 0.4
+   },
+   "fixed": {
+    "hyp": "You. Me. For. A. Work.",
+    "errors": 2,
+    "words": 5,
+    "wer": 0.4
+   }
+  },
+  {
+   "gid": 8454,
+   "session": "t15_day195",
+   "index": 270,
+   "benchmark": null,
+   "text": "We are doing everything we can.",
+   "feat_r": 0.4694037240133868,
+   "phone_errors": 2,
+   "ref_phones": 20,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "We are learning everything we had.",
+    "errors": 2,
+    "words": 6,
+    "wer": 0.3333333333333333
+   },
+   "fixed": {
+    "hyp": "We are young, are young, we die.",
+    "errors": 4,
+    "words": 6,
+    "wer": 0.6666666666666666
+   }
+  },
+  {
+   "gid": 8455,
+   "session": "t15_day195",
+   "index": 271,
+   "benchmark": null,
+   "text": "Nice to see you again.",
+   "feat_r": 0.4808487956253146,
+   "phone_errors": 7,
+   "ref_phones": 13,
+   "phone_errors_50": 6,
+   "orig": {
+    "hyp": "Yes. U. G. U.",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Not you, T.U.",
+    "errors": 4,
+    "words": 5,
+    "wer": 0.8
+   }
+  },
+  {
+   "gid": 8456,
+   "session": "t15_day195",
+   "index": 272,
+   "benchmark": null,
+   "text": "This is called life.",
+   "feat_r": 0.5138055253330684,
+   "phone_errors": 3,
+   "ref_phones": 12,
+   "phone_errors_50": 4,
+   "orig": {
+    "hyp": "This. Is. Home. Line.",
+    "errors": 2,
+    "words": 4,
+    "wer": 0.5
+   },
+   "fixed": {
+    "hyp": "This is all fine.",
+    "errors": 2,
+    "words": 4,
+    "wer": 0.5
+   }
+  },
+  {
+   "gid": 8457,
+   "session": "t15_day195",
+   "index": 273,
+   "benchmark": null,
+   "text": "There is no space for me to do work.",
+   "feat_r": 0.5807831336699192,
+   "phone_errors": 3,
+   "ref_phones": 23,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "There is no time for me to do work.",
+    "errors": 1,
+    "words": 9,
+    "wer": 0.1111111111111111
+   },
+   "fixed": {
+    "hyp": "There is no size for me to you work",
+    "errors": 2,
+    "words": 9,
+    "wer": 0.2222222222222222
+   }
+  },
+  {
+   "gid": 8458,
+   "session": "t15_day195",
+   "index": 274,
+   "benchmark": null,
+   "text": "You should make a move now.",
+   "feat_r": 0.5071125416991222,
+   "phone_errors": 2,
+   "ref_phones": 14,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "You. You. I. I. Love. Now.",
+    "errors": 4,
+    "words": 6,
+    "wer": 0.6666666666666666
+   },
+   "fixed": {
+    "hyp": "You should write that book now.",
+    "errors": 3,
+    "words": 6,
+    "wer": 0.5
+   }
+  },
+  {
+   "gid": 8459,
+   "session": "t15_day195",
+   "index": 275,
+   "benchmark": null,
+   "text": "It was a bad choice.",
+   "feat_r": 0.5636402273066333,
+   "phone_errors": 0,
+   "ref_phones": 12,
+   "phone_errors_50": 0,
+   "orig": {
+    "hyp": "It was a bad day.",
+    "errors": 1,
+    "words": 5,
+    "wer": 0.2
+   },
+   "fixed": {
+    "hyp": "It was a bad choice.",
+    "errors": 0,
+    "words": 5,
+    "wer": 0.0
+   }
+  },
+  {
+   "gid": 8460,
+   "session": "t15_day195",
+   "index": 276,
+   "benchmark": null,
+   "text": "I am not so sure right now.",
+   "feat_r": 0.47763902592934304,
+   "phone_errors": 2,
+   "ref_phones": 16,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "I am not you sure right now",
+    "errors": 1,
+    "words": 7,
+    "wer": 0.14285714285714285
+   },
+   "fixed": {
+    "hyp": "I am not you, sure, right now.",
+    "errors": 1,
+    "words": 7,
+    "wer": 0.14285714285714285
+   }
+  },
+  {
+   "gid": 8461,
+   "session": "t15_day195",
+   "index": 277,
+   "benchmark": null,
+   "text": "The trouble with this plan.",
+   "feat_r": 0.44393003901506384,
+   "phone_errors": 3,
+   "ref_phones": 18,
+   "phone_errors_50": 4,
+   "orig": {
+    "hyp": "Make trouble with this line.",
+    "errors": 2,
+    "words": 5,
+    "wer": 0.4
+   },
+   "fixed": {
+    "hyp": "May trouble with this time.",
+    "errors": 2,
+    "words": 5,
+    "wer": 0.4
+   }
+  },
+  {
+   "gid": 8462,
+   "session": "t15_day195",
+   "index": 278,
+   "benchmark": null,
+   "text": "We love your new house.",
+   "feat_r": 0.5418427617778666,
+   "phone_errors": 3,
+   "ref_phones": 13,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "We love you. Knew us.",
+    "errors": 3,
+    "words": 5,
+    "wer": 0.6
+   },
+   "fixed": {
+    "hyp": "We love you, you, us.",
+    "errors": 3,
+    "words": 5,
+    "wer": 0.6
+   }
+  },
+  {
+   "gid": 8463,
+   "session": "t15_day195",
+   "index": 279,
+   "benchmark": null,
+   "text": "I think about that quite often.",
+   "feat_r": 0.5418450595943638,
+   "phone_errors": 3,
+   "ref_phones": 20,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "I think about that. What are...",
+    "errors": 2,
+    "words": 6,
+    "wer": 0.3333333333333333
+   },
+   "fixed": {
+    "hyp": "I think about that right over.",
+    "errors": 2,
+    "words": 6,
+    "wer": 0.3333333333333333
+   }
+  },
+  {
+   "gid": 8464,
+   "session": "t15_day195",
+   "index": 280,
+   "benchmark": null,
+   "text": "I wish she could hear you now.",
+   "feat_r": 0.5321192431443466,
+   "phone_errors": 9,
+   "ref_phones": 16,
+   "phone_errors_50": 5,
+   "orig": {
+    "hyp": "I. Was. You. Good. Here. You. Now.",
+    "errors": 4,
+    "words": 7,
+    "wer": 0.5714285714285714
+   },
+   "fixed": {
+    "hyp": "I want you to hear you now.",
+    "errors": 3,
+    "words": 7,
+    "wer": 0.42857142857142855
+   }
+  },
+  {
+   "gid": 8465,
+   "session": "t15_day195",
+   "index": 281,
+   "benchmark": null,
+   "text": "I believe in people.",
+   "feat_r": 0.5934505541878432,
+   "phone_errors": 2,
+   "ref_phones": 13,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "I am evil.",
+    "errors": 3,
+    "words": 4,
+    "wer": 0.75
+   },
+   "fixed": {
+    "hyp": "I live in people.",
+    "errors": 1,
+    "words": 4,
+    "wer": 0.25
+   }
+  },
+  {
+   "gid": 8466,
+   "session": "t15_day195",
+   "index": 282,
+   "benchmark": null,
+   "text": "I know my friends are there for me.",
+   "feat_r": 0.5254040174943444,
+   "phone_errors": 2,
+   "ref_phones": 21,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "I knew my parents are there for me.",
+    "errors": 2,
+    "words": 8,
+    "wer": 0.25
+   },
+   "fixed": {
+    "hyp": "I know my words are there for me.",
+    "errors": 1,
+    "words": 8,
+    "wer": 0.125
+   }
+  },
+  {
+   "gid": 8467,
+   "session": "t15_day195",
+   "index": 283,
+   "benchmark": null,
+   "text": "You were the first to help me.",
+   "feat_r": 0.518970733668755,
+   "phone_errors": 2,
+   "ref_phones": 18,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "You were the first to help me.",
+    "errors": 0,
+    "words": 7,
+    "wer": 0.0
+   },
+   "fixed": {
+    "hyp": "You were the first to help me.",
+    "errors": 0,
+    "words": 7,
+    "wer": 0.0
+   }
+  },
+  {
+   "gid": 8468,
+   "session": "t15_day195",
+   "index": 284,
+   "benchmark": null,
+   "text": "Good job, well done.",
+   "feat_r": 0.4049568703179521,
+   "phone_errors": 4,
+   "ref_phones": 12,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "Hmmm... Yeah... Well... Hmm...",
+    "errors": 3,
+    "words": 4,
+    "wer": 0.75
+   },
+   "fixed": {
+    "hyp": "No, no, no.",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 8469,
+   "session": "t15_day195",
+   "index": 285,
+   "benchmark": null,
+   "text": "I could say the same for you.",
+   "feat_r": 0.5080660806519437,
+   "phone_errors": 4,
+   "ref_phones": 16,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "I... V... They... V... Some... For... You...",
+    "errors": 4,
+    "words": 7,
+    "wer": 0.5714285714285714
+   },
+   "fixed": {
+    "hyp": "I could play with some for you.",
+    "errors": 3,
+    "words": 7,
+    "wer": 0.42857142857142855
+   }
+  },
+  {
+   "gid": 8470,
+   "session": "t15_day195",
+   "index": 286,
+   "benchmark": null,
+   "text": "Watch out for the cars.",
+   "feat_r": 0.3601229388909339,
+   "phone_errors": 7,
+   "ref_phones": 14,
+   "phone_errors_50": 5,
+   "orig": {
+    "hyp": "Why, why, nor, me, us?",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "What if I mark the house?",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 8471,
+   "session": "t15_day195",
+   "index": 287,
+   "benchmark": null,
+   "text": "Your hard work will pay off.",
+   "feat_r": 0.46608998452794986,
+   "phone_errors": 8,
+   "ref_phones": 17,
+   "phone_errors_50": 7,
+   "orig": {
+    "hyp": "You are or will may act.",
+    "errors": 5,
+    "words": 6,
+    "wer": 0.8333333333333334
+   },
+   "fixed": {
+    "hyp": "You, are, or, will, may have.",
+    "errors": 5,
+    "words": 6,
+    "wer": 0.8333333333333334
+   }
+  },
+  {
+   "gid": 8472,
+   "session": "t15_day195",
+   "index": 288,
+   "benchmark": null,
+   "text": "I love that little baby.",
+   "feat_r": 0.5324590487109967,
+   "phone_errors": 5,
+   "ref_phones": 16,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "I love that little baby.",
+    "errors": 0,
+    "words": 5,
+    "wer": 0.0
+   },
+   "fixed": {
+    "hyp": "I love that little baby.",
+    "errors": 0,
+    "words": 5,
+    "wer": 0.0
+   }
+  },
+  {
+   "gid": 8473,
+   "session": "t15_day195",
+   "index": 289,
+   "benchmark": null,
+   "text": "People should learn to enjoy life.",
+   "feat_r": 0.4771260251468081,
+   "phone_errors": 10,
+   "ref_phones": 20,
+   "phone_errors_50": 10,
+   "orig": {
+    "hyp": "No. Good. One. Two. Three. One. Last.",
+    "errors": 7,
+    "words": 6,
+    "wer": 1.1666666666666667
+   },
+   "fixed": {
+    "hyp": "No, should I do your math?",
+    "errors": 5,
+    "words": 6,
+    "wer": 0.8333333333333334
+   }
+  },
+  {
+   "gid": 8474,
+   "session": "t15_day195",
+   "index": 290,
+   "benchmark": null,
+   "text": "Take care of our kids.",
+   "feat_r": 0.43743157037410346,
+   "phone_errors": 5,
+   "ref_phones": 14,
+   "phone_errors_50": 6,
+   "orig": {
+    "hyp": "The you of power is...",
+    "errors": 4,
+    "words": 5,
+    "wer": 0.8
+   },
+   "fixed": {
+    "hyp": "The U of R is...",
+    "errors": 4,
+    "words": 5,
+    "wer": 0.8
+   }
+  },
+  {
+   "gid": 8475,
+   "session": "t15_day195",
+   "index": 291,
+   "benchmark": null,
+   "text": "I was walking down the street.",
+   "feat_r": 0.3827462072922429,
+   "phone_errors": 6,
+   "ref_phones": 19,
+   "phone_errors_50": 6,
+   "orig": {
+    "hyp": "I was willing to be served. you",
+    "errors": 5,
+    "words": 6,
+    "wer": 0.8333333333333334
+   },
+   "fixed": {
+    "hyp": "I must blame them, sir.",
+    "errors": 5,
+    "words": 6,
+    "wer": 0.8333333333333334
+   }
+  },
+  {
+   "gid": 8476,
+   "session": "t15_day195",
+   "index": 292,
+   "benchmark": null,
+   "text": "I had some time to think some more.",
+   "feat_r": 0.5340012734817824,
+   "phone_errors": 4,
+   "ref_phones": 22,
+   "phone_errors_50": 4,
+   "orig": {
+    "hyp": "I had some time to face some more.",
+    "errors": 1,
+    "words": 8,
+    "wer": 0.125
+   },
+   "fixed": {
+    "hyp": "I had some time to think some more.",
+    "errors": 0,
+    "words": 8,
+    "wer": 0.0
+   }
+  },
+  {
+   "gid": 8477,
+   "session": "t15_day195",
+   "index": 293,
+   "benchmark": null,
+   "text": "They won't care what we think.",
+   "feat_r": 0.5096611197719253,
+   "phone_errors": 1,
+   "ref_phones": 18,
+   "phone_errors_50": 0,
+   "orig": {
+    "hyp": "They... What... Hair... What... Me... They...",
+    "errors": 4,
+    "words": 6,
+    "wer": 0.6666666666666666
+   },
+   "fixed": {
+    "hyp": "Hey, what's there? What do you think?",
+    "errors": 5,
+    "words": 6,
+    "wer": 0.8333333333333334
+   }
+  },
+  {
+   "gid": 8478,
+   "session": "t15_day195",
+   "index": 294,
+   "benchmark": null,
+   "text": "Do you want to work on it now?",
+   "feat_r": 0.5573667607408345,
+   "phone_errors": 6,
+   "ref_phones": 19,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "You, you, want to work on this now.",
+    "errors": 2,
+    "words": 8,
+    "wer": 0.25
+   },
+   "fixed": {
+    "hyp": "you you what to work on it now",
+    "errors": 2,
+    "words": 8,
+    "wer": 0.25
+   }
+  },
+  {
+   "gid": 8479,
+   "session": "t15_day195",
+   "index": 295,
+   "benchmark": null,
+   "text": "Make sure you save your work.",
+   "feat_r": 0.57887237742946,
+   "phone_errors": 2,
+   "ref_phones": 17,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "My. Sure. You. I've. Your. War.",
+    "errors": 3,
+    "words": 6,
+    "wer": 0.5
+   },
+   "fixed": {
+    "hyp": "May sure you have your work.",
+    "errors": 2,
+    "words": 6,
+    "wer": 0.3333333333333333
+   }
+  },
+  {
+   "gid": 8480,
+   "session": "t15_day195",
+   "index": 296,
+   "benchmark": null,
+   "text": "Get everyone in my office.",
+   "feat_r": 0.5246274927055371,
+   "phone_errors": 9,
+   "ref_phones": 18,
+   "phone_errors_50": 9,
+   "orig": {
+    "hyp": "That, everyone, is, my, ours.",
+    "errors": 3,
+    "words": 5,
+    "wer": 0.6
+   },
+   "fixed": {
+    "hyp": "That, everyone, is, my, ours.",
+    "errors": 3,
+    "words": 5,
+    "wer": 0.6
+   }
+  },
+  {
+   "gid": 8481,
+   "session": "t15_day195",
+   "index": 297,
+   "benchmark": null,
+   "text": "Look what I found.",
+   "feat_r": 0.3891860227102453,
+   "phone_errors": 6,
+   "ref_phones": 11,
+   "phone_errors_50": 5,
+   "orig": {
+    "hyp": "Mmm... What... I... had...",
+    "errors": 2,
+    "words": 4,
+    "wer": 0.5
+   },
+   "fixed": {
+    "hyp": "Mm, what are you doing?",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 8482,
+   "session": "t15_day195",
+   "index": 298,
+   "benchmark": null,
+   "text": "I did not get the last part of the talk.",
+   "feat_r": 0.5079027691566333,
+   "phone_errors": 14,
+   "ref_phones": 27,
+   "phone_errors_50": 11,
+   "orig": {
+    "hyp": "I... you... not... me... you... last... part... of... you... town.",
+    "errors": 5,
+    "words": 10,
+    "wer": 0.5
+   },
+   "fixed": {
+    "hyp": "I did not need you last part of new time.",
+    "errors": 4,
+    "words": 10,
+    "wer": 0.4
+   }
+  },
+  {
+   "gid": 8483,
+   "session": "t15_day195",
+   "index": 299,
+   "benchmark": null,
+   "text": "I will work on this piece first.",
+   "feat_r": 0.4514101076731655,
+   "phone_errors": 4,
+   "ref_phones": 19,
+   "phone_errors_50": 4,
+   "orig": {
+    "hyp": "I will work on this face first.",
+    "errors": 1,
+    "words": 7,
+    "wer": 0.14285714285714285
+   },
+   "fixed": {
+    "hyp": "I will work on this piece first.",
+    "errors": 0,
+    "words": 7,
+    "wer": 0.0
+   }
+  },
+  {
+   "gid": 8484,
+   "session": "t15_day195",
+   "index": 300,
+   "benchmark": "random",
+   "text": "The line goes on for a mile.",
+   "feat_r": 0.439758113544454,
+   "phone_errors": 7,
+   "ref_phones": 17,
+   "phone_errors_50": 7,
+   "orig": {
+    "hyp": "The longness of our AI.",
+    "errors": 6,
+    "words": 7,
+    "wer": 0.8571428571428571
+   },
+   "fixed": {
+    "hyp": "They want this. I-R-A-I.",
+    "errors": 6,
+    "words": 7,
+    "wer": 0.8571428571428571
+   }
+  },
+  {
+   "gid": 8485,
+   "session": "t15_day195",
+   "index": 301,
+   "benchmark": "random",
+   "text": "I could not see the light.",
+   "feat_r": 0.5741566320208774,
+   "phone_errors": 5,
+   "ref_phones": 14,
+   "phone_errors_50": 4,
+   "orig": {
+    "hyp": "I will not see very light.",
+    "errors": 2,
+    "words": 6,
+    "wer": 0.3333333333333333
+   },
+   "fixed": {
+    "hyp": "I will not see their life.",
+    "errors": 3,
+    "words": 6,
+    "wer": 0.5
+   }
+  },
+  {
+   "gid": 8486,
+   "session": "t15_day195",
+   "index": 302,
+   "benchmark": null,
+   "text": "I enjoy summer the most.",
+   "feat_r": 0.5173991715436683,
+   "phone_errors": 7,
+   "ref_phones": 15,
+   "phone_errors_50": 4,
+   "orig": {
+    "hyp": "I am you. Someone you must.",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "I enjoy summer, you must.",
+    "errors": 2,
+    "words": 5,
+    "wer": 0.4
+   }
+  },
+  {
+   "gid": 8487,
+   "session": "t15_day195",
+   "index": 303,
+   "benchmark": null,
+   "text": "I like the color blue.",
+   "feat_r": 0.4833654202644178,
+   "phone_errors": 6,
+   "ref_phones": 13,
+   "phone_errors_50": 4,
+   "orig": {
+    "hyp": "I... would... make... her... them.",
+    "errors": 4,
+    "words": 5,
+    "wer": 0.8
+   },
+   "fixed": {
+    "hyp": "I. Wait. Me. Are. Them.",
+    "errors": 4,
+    "words": 5,
+    "wer": 0.8
+   }
+  },
+  {
+   "gid": 8488,
+   "session": "t15_day195",
+   "index": 304,
+   "benchmark": null,
+   "text": "I have not had a day off in more than three weeks.",
+   "feat_r": 0.5395622097353309,
+   "phone_errors": 3,
+   "ref_phones": 30,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "I have not had a day or in more than three weeks.",
+    "errors": 1,
+    "words": 12,
+    "wer": 0.08333333333333333
+   },
+   "fixed": {
+    "hyp": "I have not had a day of it more than three weeks.",
+    "errors": 2,
+    "words": 12,
+    "wer": 0.16666666666666666
+   }
+  }
+ ],
+ "wall_time_s": 479.81661438941956
+}

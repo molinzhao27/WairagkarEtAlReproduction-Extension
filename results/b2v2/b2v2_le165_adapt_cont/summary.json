@@ -1,0 +1,56 @@
+{
+ "run_name": "b2v2_le165_adapt_cont",
+ "config": "configs/experiments/b2v2_le165_adapt_cont.yaml",
+ "decision": "D-075",
+ "code_version": {
+  "source": "sync",
+  "commit": "2a1b73fd67a00a98daa3587e1626b73d8459c99a",
+  "dirty": false,
+  "diff_sha256": null,
+  "pushed_at": "2026-10-24T14:46:24Z"
+ },
+ "created": "2026-10-24T15:16:16",
+ "steps": 2000,
+ "n_train": 142,
+ "n_val": 16,
+ "n_test": 147,
+ "adapt": {
+  "init": "data/checkpoints/b2v2_le165/final.pt",
+  "session": "t15_day195",
+  "train_trials_from": "results/sanity_train_day195_from165_ep15/data.json",
+  "train_key": "train_trials",
+  "test_key": "test_trials",
+  "n_validation": 16,
+  "loss": "cont",
+  "training": {
+   "steps": 2000,
+   "lr": 0.001,
+   "min_lr": 1e-05,
+   "warmup": 0.1,
+   "augment_from": 1.0,
+   "val_every": 100,
+   "checkpoint_every": 500
+  }
+ },
+ "loss": "cont",
+ "best_val": 0.02297645714133978,
+ "final": {
+  "loss": 0.05448003988713026,
+  "cont": 0.05448003988713026,
+  "ctc": 0.2558893370628357,
+  "speech": 0.4102328810095787,
+  "ctc_on": 1.0,
+  "step": 2000,
+  "lr": 1.0000753927922594e-05,
+  "s": 29.3736629486084,
+  "val": {
+   "cont": 0.02315232716500759,
+   "ctc": 0.5520938634872437
+  }
+ },
+ "n_params": 14909629,
+ "n_trainable": 196992,
+ "wall_time_s": 29.45366334915161,
+ "device": "cuda",
+ "torch": "2.5.1+cu124"
+}
