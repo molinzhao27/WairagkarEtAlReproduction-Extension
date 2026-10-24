@@ -1,0 +1,25 @@
+# D-083: text-only (CTC) adaptation of b2v2_all on whole listening trials of blocks [6]; tested on block 15.
+#   PC: ~/wvx/envs/wvx-f5/bin/python -I scripts/train_b2v2.py --config configs/experiments/b2v2_iso_lst_k15.yaml
+base_experiment: configs/experiments/b2v2_iso_base.yaml
+
+run_name: b2v2_iso_lst_k15
+
+b2v2:
+  adapt:
+    init: data/checkpoints/b2v2_all/final.pt
+    session: listening
+    train_blocks: [6]
+    full_trial: true
+    n_validation: 8
+    loss: ctc
+    training:
+      steps: 1000
+      batch_size: 8
+      lr: 1.0e-3
+      min_lr: 1.0e-5
+      warmup: 0.1
+      augment_from: 1.0
+      val_every: 50
+      checkpoint_every: 500
+      ctx: 128
+      hop: 64
