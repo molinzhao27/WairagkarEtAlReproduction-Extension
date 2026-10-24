@@ -134,3 +134,43 @@ def decode_live(model: B2V2, x: np.ndarray, window_bins: int, pool: int, input_i
     c, lg = np.concatenate(conts), np.concatenate(logs)
     lead = T - len(c)
     return np.concatenate([np.repeat(c[:1], lead, 0), c]), np.concatenate([np.repeat(lg[:1], lead, 0), lg])
+
+
+@torch.no_grad()
+def decode_chunked(model: B2V2, x: np.ndarray, pool: int, ctx: int, hop: int, input_id: int = 0,
+                   device: Optional[torch.device] = None) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """Causal long-context decoding (a cheaper alternative to ``decode_live`` with a long window): for each of the
+    ``pool`` phases, the trial's tokens (bins [p + pool*k, p + pool*(k+1))) in windows of ``ctx`` tokens every ``hop``;
+    the first window keeps all its outputs, later ones their last ``hop`` (each output then sees >= ctx - hop tokens,
+    except at the trial start). Every output is the frame of its token's last bin. Returns continuous (T, 20), phoneme
+    logits (T, 41) and the phase-0 logits per 50 ms token (n_tok, 41); the first ``pool - 1`` bins repeat the first
+    output."""
+    from wvx.b2v2_data import pool_tokens
+
+    device = device or next(model.parameters()).device
+    model.eval()
+    T = x.shape[0]
+    cont = np.full((T, int(model.cfg["n_targets"])), np.nan, np.float32)
+    logit = np.full((T, int(model.cfg["n_phonemes"])), np.nan, np.float32)
+    phase0 = None
+    for p in range(pool):
+        n_tok = (T - p) // pool
+        if n_tok <= 0:
+            continue
+        tok = pool_tokens(x[p: p + pool * n_tok], pool)
+        c_out = np.zeros((n_tok, cont.shape[1]), np.float32)
+        l_out = np.zeros((n_tok, logit.shape[1]), np.float32)
+        starts = [0] + list(range(hop, max(1, n_tok - ctx + hop), hop))
+        for s in starts:
+            seg = tok[s: s + ctx]
+            c, lg = model(torch.as_tensor(seg[None], device=device), input_id)
+            keep = 0 if s == 0 else ctx - hop
+            c_out[s + keep: s + len(seg)] = c[0, keep:].float().cpu().numpy()
+            l_out[s + keep: s + len(seg)] = lg[0, keep:].float().cpu().numpy()
+        frames = p + pool * np.arange(n_tok) + pool - 1
+        cont[frames], logit[frames] = c_out, l_out
+        if p == 0:
+            phase0 = l_out
+    first = int(np.argmax(~np.isnan(cont[:, 0])))
+    cont[:first], logit[:first] = cont[first], logit[first]
+    return cont, logit, phase0

@@ -1,0 +1,39 @@
+{
+ "run_name": "b2v2_all",
+ "config": "configs/experiments/b2v2_all.yaml",
+ "decision": "D-075",
+ "code_version": {
+  "source": "sync",
+  "commit": "c484f68b7b2b851ac959c7d5cf94423d5d22d04e",
+  "dirty": false,
+  "diff_sha256": null,
+  "pushed_at": "2026-10-24T06:31:12Z"
+ },
+ "created": "2026-10-24T14:36:00",
+ "steps": 25000,
+ "n_train": 8332,
+ "n_val": 30,
+ "n_test": 127,
+ "adapt": null,
+ "loss": "both",
+ "best_val": 0.02387647144496441,
+ "final": {
+  "loss": 0.11478494219481945,
+  "cont": 0.08303740613162518,
+  "ctc": 0.31747535198926924,
+  "speech": 0.4001682025194168,
+  "ctc_on": 0.9871875,
+  "step": 25000,
+  "lr": 1.0000004825139904e-05,
+  "s": 733.3768978118896,
+  "val": {
+   "cont": 0.025016379542648792,
+   "ctc": 0.33617427200078964
+  }
+ },
+ "n_params": 14712637,
+ "n_trainable": 14712637,
+ "wall_time_s": 733.5833308696747,
+ "device": "cuda",
+ "torch": "2.5.1+cu124"
+}

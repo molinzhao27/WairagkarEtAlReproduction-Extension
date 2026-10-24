@@ -69,6 +69,9 @@ def main(argv=None) -> int:
                 if t["label"] is not None:
                     e, n = ph.phoneme_error(t["label"], ph.ctc_greedy(best))
                     extra.update(phone_errors=e, ref_phones=n)
+                    if f"g{gid}_best50" in z.files:              # one 50 ms stream, as trained (chunked decodes)
+                        e50, _ = ph.phoneme_error(t["label"], ph.ctc_greedy(z[f"g{gid}_best50"]))
+                        extra.update(phone_errors_50=e50)
                 clips[gid] = (synthesis.decoder_output_to_waveform(cont, cfg), int(cfg["synthesis"]["sample_rate"]), extra)
     else:
         name = f"closed_loop_{args.closed_loop}"
@@ -118,6 +121,8 @@ def main(argv=None) -> int:
         pr = [r for r in rs if "ref_phones" in r]
         if pr:
             summary[k]["per"] = sum(r["phone_errors"] for r in pr) / max(1, sum(r["ref_phones"] for r in pr))
+            if all("phone_errors_50" in r for r in pr):
+                summary[k]["per_50ms"] = sum(r["phone_errors_50"] for r in pr) / max(1, sum(r["ref_phones"] for r in pr))
         fr = [r["feat_r"] for r in rs if "feat_r" in r and np.isfinite(r["feat_r"])]
         if fr:
             summary[k]["feat_r"] = float(np.mean(fr))
@@ -128,10 +133,11 @@ def main(argv=None) -> int:
     res.mkdir(parents=True, exist_ok=True)
     (res / f"scores_{name}.json").write_text(json.dumps(out, indent=1, default=float) + "\n")
     lines = [f"# `{run}` / `{name}` (D-075)", "", f"Speed-up factor {factor} (D-073 fixed).", "",
-             "| trials | n | WER | WER sped up | PER | feature r |", "|---|---|---|---|---|---|"]
+             "| trials | n | WER | WER sped up | PER (10 ms) | PER (50 ms) | feature r |", "|---|---|---|---|---|---|---|"]
     for k, v in summary.items():
         lines.append(f"| {k} | {v['n']} | {100 * v['wer_orig']:.1f}% | {100 * v['wer_fixed']:.1f}% | "
                      + (f"{100 * v['per']:.1f}%" if "per" in v else "–") + " | "
+                     + (f"{100 * v['per_50ms']:.1f}%" if "per_50ms" in v else "–") + " | "
                      + (f"{v['feat_r']:.3f}" if "feat_r" in v else "–") + " |")
     (res / f"scores_{name}.md").write_text("\n".join(lines) + "\n")
     log(f"done in {(time.time() - t0) / 60:.1f} min -> results/b2v2/{run}/scores_{name}.md")

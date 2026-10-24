@@ -76,3 +76,22 @@ def test_decode_live_matches_direct_windows():
         tok = torch.as_tensor(bd.pool_tokens(x[t + 1 - 5 * n: t + 1], 5))[None]
         assert np.allclose(m(tok)[0][0, -1].detach().numpy(), c[t], atol=1e-5)
     assert np.allclose(c[0], c[4])
+
+
+def test_decode_chunked_each_output_sees_its_window():
+    m = _model(2)
+    pool, ctx, hop = 5, 8, 4
+    x = np.random.default_rng(1).normal(size=(97, 12)).astype(np.float32)
+    c, lg, ph0 = bm.decode_chunked(m, x, pool, ctx, hop)
+    assert c.shape == (97, 3) and lg.shape == (97, 41) and not np.isnan(c).any()
+    for p in range(pool):
+        n_tok = (97 - p) // pool
+        tok = bd.pool_tokens(x[p: p + pool * n_tok], pool)
+        for k in range(n_tok):
+            if k < ctx:
+                s = 0
+            else:                                  # the window whose kept part (last hop) holds k
+                s = hop * ((k - ctx) // hop + 1)
+            want = m(torch.as_tensor(tok[s: k + 1])[None])[0][0, -1].detach().numpy()
+            assert np.allclose(c[p + pool * k + pool - 1], want, atol=1e-5), (p, k)
+    assert ph0.shape == (97 // pool, 41)

@@ -1,0 +1,2983 @@
+{
+ "run_name": "b2v2_all",
+ "name": "test",
+ "decision": "D-075",
+ "config": "configs/experiments/b2v2_all.yaml",
+ "code_version": {
+  "source": "sync",
+  "commit": "c484f68b7b2b851ac959c7d5cf94423d5d22d04e",
+  "dirty": false,
+  "diff_sha256": null,
+  "pushed_at": "2026-10-24T06:31:12Z"
+ },
+ "created": "2026-10-24T14:42:19",
+ "source": {
+  "run_name": "b2v2_all",
+  "checkpoint": "/home/molin/wvx/WairagkarEtAlReproduction-Extension/data/checkpoints/b2v2_all/final.pt",
+  "checkpoint_sha256": "f9c0b7fcd837ee2c1f26c1d0f7866aa76b552f463a47f008251a38877179bed2",
+  "input_id": 0,
+  "trials": "test",
+  "gids": [
+   4267,
+   4268,
+   4269,
+   4270,
+   4271,
+   4272,
+   4273,
+   4274,
+   4275,
+   4276,
+   4277,
+   4278,
+   4279,
+   4280,
+   4281,
+   6108,
+   6127,
+   6449,
+   6455,
+   6457,
+   6463,
+   6469,
+   6475,
+   6499,
+   6504,
+   6512,
+   6517,
+   6532,
+   6537,
+   6540,
+   6561,
+   6564,
+   6678,
+   6683,
+   6686,
+   6693,
+   6695,
+   6702,
+   6707,
+   6715,
+   6719,
+   6731,
+   6734,
+   6736,
+   6743,
+   6749,
+   6752,
+   6759,
+   6769,
+   6771,
+   6772,
+   6773,
+   6778,
+   6779,
+   6780,
+   6781,
+   6782,
+   6783,
+   6784,
+   6785,
+   6786,
+   6787,
+   6788,
+   6789,
+   6790,
+   6791,
+   7080,
+   7089,
+   7184,
+   7201,
+   7209,
+   7212,
+   7221,
+   7232,
+   7248,
+   7282,
+   7305,
+   7318,
+   7491,
+   7492,
+   7501,
+   7503,
+   7515,
+   7523,
+   7537,
+   7563,
+   7593,
+   7603,
+   7604,
+   7610,
+   7617,
+   7618,
+   7632,
+   7633,
+   7824,
+   7829,
+   7839,
+   7844,
+   7857,
+   7875,
+   7879,
+   7886,
+   7901,
+   7903,
+   8345,
+   8348,
+   8350,
+   8351,
+   8354,
+   8356,
+   8401,
+   8406,
+   8412,
+   8418,
+   8419,
+   8420,
+   8421,
+   8422,
+   8423,
+   8424,
+   8425,
+   8426,
+   8427,
+   8441,
+   8447,
+   8484,
+   8485
+  ],
+  "window_bins": 800,
+  "pool": 5,
+  "device": "cuda",
+  "code_version": {
+   "source": "sync",
+   "commit": "c484f68b7b2b851ac959c7d5cf94423d5d22d04e",
+   "dirty": false,
+   "diff_sha256": null,
+   "pushed_at": "2026-10-24T06:31:12Z"
+  },
+  "decision": "D-075",
+  "created": "2026-10-24T14:37:49"
+ },
+ "speed_factor": 3.25,
+ "summary": {
+  "all": {
+   "n": 127,
+   "wer_orig": 0.7474874371859297,
+   "wer_fixed": 0.7035175879396985,
+   "per": 0.5915619389587073,
+   "feat_r": 0.4283843396459965
+  },
+  "random": {
+   "n": 89,
+   "wer_orig": 0.7716262975778547,
+   "wer_fixed": 0.7387543252595156,
+   "per": 0.5871670702179177,
+   "feat_r": 0.42034357522142146
+  },
+  "video": {
+   "n": 38,
+   "wer_orig": 0.6834862385321101,
+   "wer_fixed": 0.6100917431192661,
+   "per": 0.6041666666666666,
+   "feat_r": 0.4472166563246064
+  }
+ },
+ "rows": [
+  {
+   "gid": 4267,
+   "session": "t15_day110",
+   "index": 11,
+   "benchmark": "video",
+   "text": "This is really very good.",
+   "feat_r": 0.5008478430705839,
+   "phone_errors": 9,
+   "ref_phones": 16,
+   "orig": {
+    "hyp": "This. Is. Really. Really.",
+    "errors": 2,
+    "words": 5,
+    "wer": 0.4
+   },
+   "fixed": {
+    "hyp": "This is really, really hurt.",
+    "errors": 2,
+    "words": 5,
+    "wer": 0.4
+   }
+  },
+  {
+   "gid": 4268,
+   "session": "t15_day110",
+   "index": 12,
+   "benchmark": "video",
+   "text": "I am good, how are you?",
+   "feat_r": 0.48383978263280786,
+   "phone_errors": 8,
+   "ref_phones": 12,
+   "orig": {
+    "hyp": "I. Am. Good. Good. All. More.",
+    "errors": 3,
+    "words": 6,
+    "wer": 0.5
+   },
+   "fixed": {
+    "hyp": "I am good. Good. Oh, you're...",
+    "errors": 3,
+    "words": 6,
+    "wer": 0.5
+   }
+  },
+  {
+   "gid": 4269,
+   "session": "t15_day110",
+   "index": 13,
+   "benchmark": "video",
+   "text": "Will you come with me?",
+   "feat_r": 0.42560486812271414,
+   "phone_errors": 10,
+   "ref_phones": 13,
+   "orig": {
+    "hyp": "Well... You...",
+    "errors": 4,
+    "words": 5,
+    "wer": 0.8
+   },
+   "fixed": {
+    "hyp": "No, you.",
+    "errors": 4,
+    "words": 5,
+    "wer": 0.8
+   }
+  },
+  {
+   "gid": 4270,
+   "session": "t15_day110",
+   "index": 14,
+   "benchmark": "video",
+   "text": "I can see her over there.",
+   "feat_r": 0.4794065908052357,
+   "phone_errors": 6,
+   "ref_phones": 14,
+   "orig": {
+    "hyp": "I. Am. C-C-D-U-R.",
+    "errors": 6,
+    "words": 6,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "I am C-C-2-R-R.",
+    "errors": 6,
+    "words": 6,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 4271,
+   "session": "t15_day110",
+   "index": 15,
+   "benchmark": "video",
+   "text": "How old are you?",
+   "feat_r": 0.42428749795487075,
+   "phone_errors": 4,
+   "ref_phones": 9,
+   "orig": {
+    "hyp": "Ow. Oh. Arrr.",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Ow! Oh! Ah! Arr!",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 4272,
+   "session": "t15_day110",
+   "index": 16,
+   "benchmark": "video",
+   "text": "I can see you from here.",
+   "feat_r": 0.5662746845276259,
+   "phone_errors": 8,
+   "ref_phones": 15,
+   "orig": {
+    "hyp": "I. Am. See. You.",
+    "errors": 3,
+    "words": 6,
+    "wer": 0.5
+   },
+   "fixed": {
+    "hyp": "I can see you.",
+    "errors": 2,
+    "words": 6,
+    "wer": 0.3333333333333333
+   }
+  },
+  {
+   "gid": 4273,
+   "session": "t15_day110",
+   "index": 17,
+   "benchmark": "video",
+   "text": "What did you say just now?",
+   "feat_r": 0.46976880204481547,
+   "phone_errors": 7,
+   "ref_phones": 16,
+   "orig": {
+    "hyp": "What. Did. You. Mm-hmm. Hey. Hah.",
+    "errors": 4,
+    "words": 6,
+    "wer": 0.6666666666666666
+   },
+   "fixed": {
+    "hyp": "What did you say?",
+    "errors": 2,
+    "words": 6,
+    "wer": 0.3333333333333333
+   }
+  },
+  {
+   "gid": 4274,
+   "session": "t15_day110",
+   "index": 18,
+   "benchmark": "video",
+   "text": "I know you like it.",
+   "feat_r": 0.491779949931238,
+   "phone_errors": 6,
+   "ref_phones": 10,
+   "orig": {
+    "hyp": "I... Know... You...",
+    "errors": 2,
+    "words": 5,
+    "wer": 0.4
+   },
+   "fixed": {
+    "hyp": "I know you.",
+    "errors": 2,
+    "words": 5,
+    "wer": 0.4
+   }
+  },
+  {
+   "gid": 4275,
+   "session": "t15_day110",
+   "index": 19,
+   "benchmark": "video",
+   "text": "Isn't this very good?",
+   "feat_r": 0.44926525264030753,
+   "phone_errors": 9,
+   "ref_phones": 15,
+   "orig": {
+    "hyp": "You... miss... me...",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "He's doing this.",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 4276,
+   "session": "t15_day110",
+   "index": 20,
+   "benchmark": "video",
+   "text": "I like to go to the city.",
+   "feat_r": 0.4728647863526193,
+   "phone_errors": 9,
+   "ref_phones": 16,
+   "orig": {
+    "hyp": "I love you.",
+    "errors": 6,
+    "words": 7,
+    "wer": 0.8571428571428571
+   },
+   "fixed": {
+    "hyp": "I... like... him... him... him... see...",
+    "errors": 5,
+    "words": 7,
+    "wer": 0.7142857142857143
+   }
+  },
+  {
+   "gid": 4277,
+   "session": "t15_day110",
+   "index": 21,
+   "benchmark": "video",
+   "text": "I love my house.",
+   "feat_r": 0.4382096976904889,
+   "phone_errors": 5,
+   "ref_phones": 9,
+   "orig": {
+    "hyp": "I. Love.",
+    "errors": 2,
+    "words": 4,
+    "wer": 0.5
+   },
+   "fixed": {
+    "hyp": "I. Love.",
+    "errors": 2,
+    "words": 4,
+    "wer": 0.5
+   }
+  },
+  {
+   "gid": 4278,
+   "session": "t15_day110",
+   "index": 22,
+   "benchmark": "video",
+   "text": "I think that's the right way.",
+   "feat_r": 0.5213212597995774,
+   "phone_errors": 22,
+   "ref_phones": 16,
+   "orig": {
+    "hyp": "I think that it's me. What? What?",
+    "errors": 5,
+    "words": 6,
+    "wer": 0.8333333333333334
+   },
+   "fixed": {
+    "hyp": "I think that is me.",
+    "errors": 4,
+    "words": 6,
+    "wer": 0.6666666666666666
+   }
+  },
+  {
+   "gid": 4279,
+   "session": "t15_day110",
+   "index": 23,
+   "benchmark": "video",
+   "text": "Please come here now.",
+   "feat_r": 0.46481257762573625,
+   "phone_errors": 4,
+   "ref_phones": 12,
+   "orig": {
+    "hyp": "Please. Come. Here. Here.",
+    "errors": 1,
+    "words": 4,
+    "wer": 0.25
+   },
+   "fixed": {
+    "hyp": "Please. Come. Here. Here.",
+    "errors": 1,
+    "words": 4,
+    "wer": 0.25
+   }
+  },
+  {
+   "gid": 4280,
+   "session": "t15_day110",
+   "index": 24,
+   "benchmark": "video",
+   "text": "I will be here all day.",
+   "feat_r": 0.13401949682020953,
+   "phone_errors": 10,
+   "ref_phones": 13,
+   "orig": {
+    "hyp": "I really am here.",
+    "errors": 4,
+    "words": 6,
+    "wer": 0.6666666666666666
+   },
+   "fixed": {
+    "hyp": "Ah, I, I, I, I, will be here.",
+    "errors": 6,
+    "words": 6,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 4281,
+   "session": "t15_day110",
+   "index": 25,
+   "benchmark": "video",
+   "text": "Did you like our work?",
+   "feat_r": 0.4601435645816734,
+   "phone_errors": 5,
+   "ref_phones": 13,
+   "orig": {
+    "hyp": "Yee. You. Le. Le.",
+    "errors": 4,
+    "words": 5,
+    "wer": 0.8
+   },
+   "fixed": {
+    "hyp": "If you like",
+    "errors": 3,
+    "words": 5,
+    "wer": 0.6
+   }
+  },
+  {
+   "gid": 6108,
+   "session": "t15_day172",
+   "index": 9,
+   "benchmark": "random",
+   "text": "I will try to do everything this week.",
+   "feat_r": 0.40192615453242875,
+   "phone_errors": 19,
+   "ref_phones": 24,
+   "orig": {
+    "hyp": "I will.",
+    "errors": 6,
+    "words": 8,
+    "wer": 0.75
+   },
+   "fixed": {
+    "hyp": "I will.",
+    "errors": 6,
+    "words": 8,
+    "wer": 0.75
+   }
+  },
+  {
+   "gid": 6127,
+   "session": "t15_day172",
+   "index": 28,
+   "benchmark": "random",
+   "text": "She will be gone for a few days.",
+   "feat_r": 0.4222144291075557,
+   "phone_errors": 12,
+   "ref_phones": 20,
+   "orig": {
+    "hyp": "She will be...",
+    "errors": 5,
+    "words": 8,
+    "wer": 0.625
+   },
+   "fixed": {
+    "hyp": "She. Will. Hee hee hee hee. Hey.",
+    "errors": 6,
+    "words": 8,
+    "wer": 0.75
+   }
+  },
+  {
+   "gid": 6449,
+   "session": "t15_day174",
+   "index": 57,
+   "benchmark": "random",
+   "text": "Are you coming with us now?",
+   "feat_r": 0.48032476825700865,
+   "phone_errors": 6,
+   "ref_phones": 16,
+   "orig": {
+    "hyp": "Are. You.",
+    "errors": 4,
+    "words": 6,
+    "wer": 0.6666666666666666
+   },
+   "fixed": {
+    "hyp": "Are you fine?",
+    "errors": 4,
+    "words": 6,
+    "wer": 0.6666666666666666
+   }
+  },
+  {
+   "gid": 6455,
+   "session": "t15_day174",
+   "index": 63,
+   "benchmark": "random",
+   "text": "I believe that people need to work hard on this.",
+   "feat_r": 0.3906044557301614,
+   "phone_errors": 25,
+   "ref_phones": 31,
+   "orig": {
+    "hyp": "I... Me... Father...",
+    "errors": 9,
+    "words": 10,
+    "wer": 0.9
+   },
+   "fixed": {
+    "hyp": "I need you to honor me.",
+    "errors": 8,
+    "words": 10,
+    "wer": 0.8
+   }
+  },
+  {
+   "gid": 6457,
+   "session": "t15_day174",
+   "index": 65,
+   "benchmark": "random",
+   "text": "I work close to your home.",
+   "feat_r": 0.3763514214095901,
+   "phone_errors": 8,
+   "ref_phones": 16,
+   "orig": {
+    "hyp": "I... were...",
+    "errors": 5,
+    "words": 6,
+    "wer": 0.8333333333333334
+   },
+   "fixed": {
+    "hyp": "I work.",
+    "errors": 4,
+    "words": 6,
+    "wer": 0.6666666666666666
+   }
+  },
+  {
+   "gid": 6463,
+   "session": "t15_day174",
+   "index": 71,
+   "benchmark": "random",
+   "text": "I wanted to read that book for a while.",
+   "feat_r": 0.3491913258381131,
+   "phone_errors": 17,
+   "ref_phones": 25,
+   "orig": {
+    "hyp": "I... Want... To move... Hey...",
+    "errors": 7,
+    "words": 9,
+    "wer": 0.7777777777777778
+   },
+   "fixed": {
+    "hyp": "I want to Hey",
+    "errors": 7,
+    "words": 9,
+    "wer": 0.7777777777777778
+   }
+  },
+  {
+   "gid": 6469,
+   "session": "t15_day174",
+   "index": 77,
+   "benchmark": "random",
+   "text": "Let's try doing this another way.",
+   "feat_r": 0.35197866587734633,
+   "phone_errors": 14,
+   "ref_phones": 21,
+   "orig": {
+    "hyp": "Last... time...",
+    "errors": 6,
+    "words": 6,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Let's try.",
+    "errors": 4,
+    "words": 6,
+    "wer": 0.6666666666666666
+   }
+  },
+  {
+   "gid": 6475,
+   "session": "t15_day174",
+   "index": 83,
+   "benchmark": "random",
+   "text": "My team will give you a call soon.",
+   "feat_r": 0.43460490615102787,
+   "phone_errors": 12,
+   "ref_phones": 20,
+   "orig": {
+    "hyp": "My... him... will...",
+    "errors": 6,
+    "words": 8,
+    "wer": 0.75
+   },
+   "fixed": {
+    "hyp": "Like you will.",
+    "errors": 7,
+    "words": 8,
+    "wer": 0.875
+   }
+  },
+  {
+   "gid": 6499,
+   "session": "t15_day174",
+   "index": 107,
+   "benchmark": "random",
+   "text": "When did you write this, it's really good.",
+   "feat_r": 0.3991646650656462,
+   "phone_errors": 14,
+   "ref_phones": 24,
+   "orig": {
+    "hyp": "One. Then. You. You.",
+    "errors": 7,
+    "words": 8,
+    "wer": 0.875
+   },
+   "fixed": {
+    "hyp": "when then you you",
+    "errors": 6,
+    "words": 8,
+    "wer": 0.75
+   }
+  },
+  {
+   "gid": 6504,
+   "session": "t15_day174",
+   "index": 112,
+   "benchmark": "random",
+   "text": "I have seen this somewhere before.",
+   "feat_r": 0.39963785811528996,
+   "phone_errors": 13,
+   "ref_phones": 21,
+   "orig": {
+    "hyp": "I have seen...",
+    "errors": 3,
+    "words": 6,
+    "wer": 0.5
+   },
+   "fixed": {
+    "hyp": "I have seen...",
+    "errors": 3,
+    "words": 6,
+    "wer": 0.5
+   }
+  },
+  {
+   "gid": 6512,
+   "session": "t15_day174",
+   "index": 120,
+   "benchmark": "random",
+   "text": "It seems quite important to you.",
+   "feat_r": 0.4112287458585131,
+   "phone_errors": 12,
+   "ref_phones": 23,
+   "orig": {
+    "hyp": "It... Seems...",
+    "errors": 4,
+    "words": 6,
+    "wer": 0.6666666666666666
+   },
+   "fixed": {
+    "hyp": "here since",
+    "errors": 6,
+    "words": 6,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 6517,
+   "session": "t15_day174",
+   "index": 125,
+   "benchmark": "random",
+   "text": "Do you want some company?",
+   "feat_r": 0.43288701218734793,
+   "phone_errors": 10,
+   "ref_phones": 18,
+   "orig": {
+    "hyp": "You. You.",
+    "errors": 4,
+    "words": 5,
+    "wer": 0.8
+   },
+   "fixed": {
+    "hyp": "You. You.",
+    "errors": 4,
+    "words": 5,
+    "wer": 0.8
+   }
+  },
+  {
+   "gid": 6532,
+   "session": "t15_day174",
+   "index": 140,
+   "benchmark": "random",
+   "text": "What is under this house?",
+   "feat_r": 0.5009991244676956,
+   "phone_errors": 6,
+   "ref_phones": 15,
+   "orig": {
+    "hyp": "What... is... under... a... s...",
+    "errors": 2,
+    "words": 5,
+    "wer": 0.4
+   },
+   "fixed": {
+    "hyp": "What is here?",
+    "errors": 3,
+    "words": 5,
+    "wer": 0.6
+   }
+  },
+  {
+   "gid": 6537,
+   "session": "t15_day174",
+   "index": 145,
+   "benchmark": "random",
+   "text": "I need more time to think about this.",
+   "feat_r": 0.39447478124198715,
+   "phone_errors": 16,
+   "ref_phones": 23,
+   "orig": {
+    "hyp": "I... Need... The...",
+    "errors": 6,
+    "words": 8,
+    "wer": 0.75
+   },
+   "fixed": {
+    "hyp": "I... need... me...",
+    "errors": 6,
+    "words": 8,
+    "wer": 0.75
+   }
+  },
+  {
+   "gid": 6540,
+   "session": "t15_day174",
+   "index": 148,
+   "benchmark": "random",
+   "text": "I don't mind it at all.",
+   "feat_r": 0.5430353512357361,
+   "phone_errors": 4,
+   "ref_phones": 15,
+   "orig": {
+    "hyp": "I... don't... mind... me...",
+    "errors": 3,
+    "words": 6,
+    "wer": 0.5
+   },
+   "fixed": {
+    "hyp": "I don't want to be here ever.",
+    "errors": 5,
+    "words": 6,
+    "wer": 0.8333333333333334
+   }
+  },
+  {
+   "gid": 6561,
+   "session": "t15_day174",
+   "index": 169,
+   "benchmark": "random",
+   "text": "It is very clear to me.",
+   "feat_r": 0.2836996364854722,
+   "phone_errors": 9,
+   "ref_phones": 16,
+   "orig": {
+    "hyp": "Mm-hmm",
+    "errors": 6,
+    "words": 6,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Hey, hey, hey.",
+    "errors": 6,
+    "words": 6,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 6564,
+   "session": "t15_day174",
+   "index": 172,
+   "benchmark": "random",
+   "text": "Did you find what you were looking for?",
+   "feat_r": 0.327174552020077,
+   "phone_errors": 14,
+   "ref_phones": 24,
+   "orig": {
+    "hyp": "Hey... You... Fine... Wha... Wha... You...",
+    "errors": 7,
+    "words": 8,
+    "wer": 0.875
+   },
+   "fixed": {
+    "hyp": "hey you fun what you",
+    "errors": 5,
+    "words": 8,
+    "wer": 0.625
+   }
+  },
+  {
+   "gid": 6678,
+   "session": "t15_day179",
+   "index": 55,
+   "benchmark": "random",
+   "text": "Please give me some space.",
+   "feat_r": 0.4703336745105946,
+   "phone_errors": 7,
+   "ref_phones": 16,
+   "orig": {
+    "hyp": "Please. Hear. Me.",
+    "errors": 3,
+    "words": 5,
+    "wer": 0.6
+   },
+   "fixed": {
+    "hyp": "Please, yeah, me, yeah.",
+    "errors": 3,
+    "words": 5,
+    "wer": 0.6
+   }
+  },
+  {
+   "gid": 6683,
+   "session": "t15_day179",
+   "index": 60,
+   "benchmark": "random",
+   "text": "I lived in Dallas for a while.",
+   "feat_r": 0.42478651801924155,
+   "phone_errors": 7,
+   "ref_phones": 19,
+   "orig": {
+    "hyp": "I. Love. In. For. A.",
+    "errors": 3,
+    "words": 7,
+    "wer": 0.42857142857142855
+   },
+   "fixed": {
+    "hyp": "I love insects for hay.",
+    "errors": 5,
+    "words": 7,
+    "wer": 0.7142857142857143
+   }
+  },
+  {
+   "gid": 6686,
+   "session": "t15_day179",
+   "index": 63,
+   "benchmark": "random",
+   "text": "It might take a long time.",
+   "feat_r": 0.4314430148677909,
+   "phone_errors": 10,
+   "ref_phones": 15,
+   "orig": {
+    "hyp": "Hey... My... Hey... Hey... Oh...",
+    "errors": 6,
+    "words": 6,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "is my favorite",
+    "errors": 6,
+    "words": 6,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 6693,
+   "session": "t15_day179",
+   "index": 70,
+   "benchmark": "random",
+   "text": "We have to deal with it, there is no other way.",
+   "feat_r": 0.4033459949236241,
+   "phone_errors": 15,
+   "ref_phones": 27,
+   "orig": {
+    "hyp": "We. Have.",
+    "errors": 9,
+    "words": 11,
+    "wer": 0.8181818181818182
+   },
+   "fixed": {
+    "hyp": "We have.",
+    "errors": 9,
+    "words": 11,
+    "wer": 0.8181818181818182
+   }
+  },
+  {
+   "gid": 6695,
+   "session": "t15_day179",
+   "index": 72,
+   "benchmark": "random",
+   "text": "I am not feeling very well right now.",
+   "feat_r": 0.33839249778932495,
+   "phone_errors": 17,
+   "ref_phones": 23,
+   "orig": {
+    "hyp": "I am... I am...",
+    "errors": 6,
+    "words": 8,
+    "wer": 0.75
+   },
+   "fixed": {
+    "hyp": "I-I-I-I-I-I-I-I-I-I-I",
+    "errors": 10,
+    "words": 8,
+    "wer": 1.25
+   }
+  },
+  {
+   "gid": 6702,
+   "session": "t15_day179",
+   "index": 79,
+   "benchmark": "random",
+   "text": "Would you like to watch a movie?",
+   "feat_r": 0.37414097761589965,
+   "phone_errors": 12,
+   "ref_phones": 18,
+   "orig": {
+    "hyp": "What? You? What?",
+    "errors": 6,
+    "words": 7,
+    "wer": 0.8571428571428571
+   },
+   "fixed": {
+    "hyp": "What you what?",
+    "errors": 6,
+    "words": 7,
+    "wer": 0.8571428571428571
+   }
+  },
+  {
+   "gid": 6707,
+   "session": "t15_day179",
+   "index": 84,
+   "benchmark": "random",
+   "text": "I need to go to the local drug store.",
+   "feat_r": 0.36783215633774224,
+   "phone_errors": 14,
+   "ref_phones": 25,
+   "orig": {
+    "hyp": "I... need... you...",
+    "errors": 7,
+    "words": 9,
+    "wer": 0.7777777777777778
+   },
+   "fixed": {
+    "hyp": "I need you to help me.",
+    "errors": 6,
+    "words": 9,
+    "wer": 0.6666666666666666
+   }
+  },
+  {
+   "gid": 6715,
+   "session": "t15_day179",
+   "index": 92,
+   "benchmark": "random",
+   "text": "There was a lot of confusion about it.",
+   "feat_r": 0.38896079081136314,
+   "phone_errors": 17,
+   "ref_phones": 27,
+   "orig": {
+    "hyp": "There was... was...",
+    "errors": 6,
+    "words": 8,
+    "wer": 0.75
+   },
+   "fixed": {
+    "hyp": "there was",
+    "errors": 6,
+    "words": 8,
+    "wer": 0.75
+   }
+  },
+  {
+   "gid": 6719,
+   "session": "t15_day179",
+   "index": 96,
+   "benchmark": "random",
+   "text": "No, the kids did not trouble me at all.",
+   "feat_r": 0.3357827691013077,
+   "phone_errors": 22,
+   "ref_phones": 26,
+   "orig": {
+    "hyp": "No. Yee.",
+    "errors": 8,
+    "words": 9,
+    "wer": 0.8888888888888888
+   },
+   "fixed": {
+    "hyp": "No.",
+    "errors": 8,
+    "words": 9,
+    "wer": 0.8888888888888888
+   }
+  },
+  {
+   "gid": 6731,
+   "session": "t15_day179",
+   "index": 108,
+   "benchmark": "random",
+   "text": "Could you check that paper again?",
+   "feat_r": 0.46846503981336574,
+   "phone_errors": 10,
+   "ref_phones": 19,
+   "orig": {
+    "hyp": "You.",
+    "errors": 5,
+    "words": 6,
+    "wer": 0.8333333333333334
+   },
+   "fixed": {
+    "hyp": "Ugh, you!",
+    "errors": 5,
+    "words": 6,
+    "wer": 0.8333333333333334
+   }
+  },
+  {
+   "gid": 6734,
+   "session": "t15_day179",
+   "index": 111,
+   "benchmark": "random",
+   "text": "Yes, you got it right.",
+   "feat_r": 0.4568699777445893,
+   "phone_errors": 5,
+   "ref_phones": 13,
+   "orig": {
+    "hyp": "Yes. You.",
+    "errors": 3,
+    "words": 5,
+    "wer": 0.6
+   },
+   "fixed": {
+    "hyp": "Yes, you.",
+    "errors": 3,
+    "words": 5,
+    "wer": 0.6
+   }
+  },
+  {
+   "gid": 6736,
+   "session": "t15_day179",
+   "index": 113,
+   "benchmark": "random",
+   "text": "I don't have time for this.",
+   "feat_r": 0.4338313768977315,
+   "phone_errors": 9,
+   "ref_phones": 17,
+   "orig": {
+    "hyp": "I... have... have...",
+    "errors": 4,
+    "words": 6,
+    "wer": 0.6666666666666666
+   },
+   "fixed": {
+    "hyp": "I have...",
+    "errors": 4,
+    "words": 6,
+    "wer": 0.6666666666666666
+   }
+  },
+  {
+   "gid": 6743,
+   "session": "t15_day179",
+   "index": 120,
+   "benchmark": "random",
+   "text": "Did you enjoy your time at our house?",
+   "feat_r": 0.4152576995841165,
+   "phone_errors": 15,
+   "ref_phones": 22,
+   "orig": {
+    "hyp": "Mmm... You!",
+    "errors": 7,
+    "words": 8,
+    "wer": 0.875
+   },
+   "fixed": {
+    "hyp": "You, you, you, you, you. Um, ah, ah, ah.",
+    "errors": 8,
+    "words": 8,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 6749,
+   "session": "t15_day179",
+   "index": 126,
+   "benchmark": "random",
+   "text": "People care about these kind of things.",
+   "feat_r": 0.37077391170874924,
+   "phone_errors": 15,
+   "ref_phones": 25,
+   "orig": {
+    "hyp": "Table. Here.",
+    "errors": 7,
+    "words": 7,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "people here",
+    "errors": 6,
+    "words": 7,
+    "wer": 0.8571428571428571
+   }
+  },
+  {
+   "gid": 6752,
+   "session": "t15_day179",
+   "index": 129,
+   "benchmark": "random",
+   "text": "To share is to care.",
+   "feat_r": 0.36118201351032897,
+   "phone_errors": 8,
+   "ref_phones": 12,
+   "orig": {
+    "hyp": "You. Shall. Is. Is.",
+    "errors": 4,
+    "words": 5,
+    "wer": 0.8
+   },
+   "fixed": {
+    "hyp": "you sure it is",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 6759,
+   "session": "t15_day179",
+   "index": 136,
+   "benchmark": "random",
+   "text": "We have to come forward.",
+   "feat_r": 0.5049448270721751,
+   "phone_errors": 11,
+   "ref_phones": 16,
+   "orig": {
+    "hyp": "We. Have.",
+    "errors": 3,
+    "words": 5,
+    "wer": 0.6
+   },
+   "fixed": {
+    "hyp": "We have...",
+    "errors": 3,
+    "words": 5,
+    "wer": 0.6
+   }
+  },
+  {
+   "gid": 6769,
+   "session": "t15_day179",
+   "index": 146,
+   "benchmark": "random",
+   "text": "I tried to play with your cat.",
+   "feat_r": 0.25416494771646747,
+   "phone_errors": 17,
+   "ref_phones": 19,
+   "orig": {
+    "hyp": "I...",
+    "errors": 6,
+    "words": 7,
+    "wer": 0.8571428571428571
+   },
+   "fixed": {
+    "hyp": "Hi.",
+    "errors": 7,
+    "words": 7,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 6771,
+   "session": "t15_day179",
+   "index": 148,
+   "benchmark": "random",
+   "text": "Where did you find this paper?",
+   "feat_r": 0.4244809450656465,
+   "phone_errors": 10,
+   "ref_phones": 19,
+   "orig": {
+    "hyp": "Where? Me? You, you, you, you.",
+    "errors": 4,
+    "words": 6,
+    "wer": 0.6666666666666666
+   },
+   "fixed": {
+    "hyp": "Where? Yay! You, you, you!",
+    "errors": 4,
+    "words": 6,
+    "wer": 0.6666666666666666
+   }
+  },
+  {
+   "gid": 6772,
+   "session": "t15_day179",
+   "index": 149,
+   "benchmark": "random",
+   "text": "What more do you need?",
+   "feat_r": 0.3668750066374075,
+   "phone_errors": 11,
+   "ref_phones": 13,
+   "orig": {
+    "hyp": "You",
+    "errors": 4,
+    "words": 5,
+    "wer": 0.8
+   },
+   "fixed": {
+    "hyp": "You.",
+    "errors": 4,
+    "words": 5,
+    "wer": 0.8
+   }
+  },
+  {
+   "gid": 6773,
+   "session": "t15_day179",
+   "index": 150,
+   "benchmark": "random",
+   "text": "How did you hear about us?",
+   "feat_r": 0.44082416275534564,
+   "phone_errors": 7,
+   "ref_phones": 16,
+   "orig": {
+    "hyp": "How... did... you...",
+    "errors": 3,
+    "words": 6,
+    "wer": 0.5
+   },
+   "fixed": {
+    "hyp": "Wow, you, you, you.",
+    "errors": 5,
+    "words": 6,
+    "wer": 0.8333333333333334
+   }
+  },
+  {
+   "gid": 6778,
+   "session": "t15_day179",
+   "index": 155,
+   "benchmark": "random",
+   "text": "You are all set to join us.",
+   "feat_r": 0.500043766111248,
+   "phone_errors": 10,
+   "ref_phones": 16,
+   "orig": {
+    "hyp": "You are all...",
+    "errors": 4,
+    "words": 7,
+    "wer": 0.5714285714285714
+   },
+   "fixed": {
+    "hyp": "You. Are. All.",
+    "errors": 4,
+    "words": 7,
+    "wer": 0.5714285714285714
+   }
+  },
+  {
+   "gid": 6779,
+   "session": "t15_day179",
+   "index": 156,
+   "benchmark": "video",
+   "text": "I will get there as soon as I can.",
+   "feat_r": 0.3734257405606883,
+   "phone_errors": 15,
+   "ref_phones": 21,
+   "orig": {
+    "hyp": "I... will...",
+    "errors": 7,
+    "words": 9,
+    "wer": 0.7777777777777778
+   },
+   "fixed": {
+    "hyp": "I. Will.",
+    "errors": 7,
+    "words": 9,
+    "wer": 0.7777777777777778
+   }
+  },
+  {
+   "gid": 6780,
+   "session": "t15_day179",
+   "index": 157,
+   "benchmark": "video",
+   "text": "I never want to go back there.",
+   "feat_r": 0.48051762713287893,
+   "phone_errors": 9,
+   "ref_phones": 19,
+   "orig": {
+    "hyp": "I... never... why... you...",
+    "errors": 5,
+    "words": 7,
+    "wer": 0.7142857142857143
+   },
+   "fixed": {
+    "hyp": "I. Never. Want. You.",
+    "errors": 4,
+    "words": 7,
+    "wer": 0.5714285714285714
+   }
+  },
+  {
+   "gid": 6781,
+   "session": "t15_day179",
+   "index": 158,
+   "benchmark": "video",
+   "text": "I would love to meet your family.",
+   "feat_r": 0.466106675411906,
+   "phone_errors": 15,
+   "ref_phones": 21,
+   "orig": {
+    "hyp": "I... would... love...",
+    "errors": 4,
+    "words": 7,
+    "wer": 0.5714285714285714
+   },
+   "fixed": {
+    "hyp": "I. Would. Love.",
+    "errors": 4,
+    "words": 7,
+    "wer": 0.5714285714285714
+   }
+  },
+  {
+   "gid": 6782,
+   "session": "t15_day179",
+   "index": 159,
+   "benchmark": "video",
+   "text": "What is the deal with you?",
+   "feat_r": 0.39516375731333575,
+   "phone_errors": 6,
+   "ref_phones": 15,
+   "orig": {
+    "hyp": "What... is... the...",
+    "errors": 3,
+    "words": 6,
+    "wer": 0.5
+   },
+   "fixed": {
+    "hyp": "What is he?",
+    "errors": 4,
+    "words": 6,
+    "wer": 0.6666666666666666
+   }
+  },
+  {
+   "gid": 6783,
+   "session": "t15_day179",
+   "index": 160,
+   "benchmark": "video",
+   "text": "Do you want to play a game with me?",
+   "feat_r": 0.42458832944727065,
+   "phone_errors": 16,
+   "ref_phones": 22,
+   "orig": {
+    "hyp": "You... You...",
+    "errors": 8,
+    "words": 9,
+    "wer": 0.8888888888888888
+   },
+   "fixed": {
+    "hyp": "You. You.",
+    "errors": 8,
+    "words": 9,
+    "wer": 0.8888888888888888
+   }
+  },
+  {
+   "gid": 6784,
+   "session": "t15_day179",
+   "index": 161,
+   "benchmark": "video",
+   "text": "Is anyone home?",
+   "feat_r": 0.49048051164425555,
+   "phone_errors": 6,
+   "ref_phones": 11,
+   "orig": {
+    "hyp": "Is... And you... Oh...",
+    "errors": 3,
+    "words": 3,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "is, ever, all.",
+    "errors": 2,
+    "words": 3,
+    "wer": 0.6666666666666666
+   }
+  },
+  {
+   "gid": 6785,
+   "session": "t15_day179",
+   "index": 162,
+   "benchmark": "video",
+   "text": "It looks like you have made your choice.",
+   "feat_r": 0.3550227637960542,
+   "phone_errors": 15,
+   "ref_phones": 23,
+   "orig": {
+    "hyp": "It's... Last... Light...",
+    "errors": 8,
+    "words": 8,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "It looks like",
+    "errors": 5,
+    "words": 8,
+    "wer": 0.625
+   }
+  },
+  {
+   "gid": 6786,
+   "session": "t15_day179",
+   "index": 163,
+   "benchmark": "video",
+   "text": "You should try to do the right thing.",
+   "feat_r": 0.47117650215741047,
+   "phone_errors": 10,
+   "ref_phones": 20,
+   "orig": {
+    "hyp": "You. Should. Die.",
+    "errors": 6,
+    "words": 8,
+    "wer": 0.75
+   },
+   "fixed": {
+    "hyp": "You should try.",
+    "errors": 5,
+    "words": 8,
+    "wer": 0.625
+   }
+  },
+  {
+   "gid": 6787,
+   "session": "t15_day179",
+   "index": 164,
+   "benchmark": "video",
+   "text": "I hope we get to see you again very soon.",
+   "feat_r": 0.46310074713521665,
+   "phone_errors": 17,
+   "ref_phones": 26,
+   "orig": {
+    "hyp": "I... Oh... We... See... You...",
+    "errors": 6,
+    "words": 10,
+    "wer": 0.6
+   },
+   "fixed": {
+    "hyp": "I hope we see you",
+    "errors": 5,
+    "words": 10,
+    "wer": 0.5
+   }
+  },
+  {
+   "gid": 6788,
+   "session": "t15_day179",
+   "index": 165,
+   "benchmark": "video",
+   "text": "Please show them your new work.",
+   "feat_r": 0.40591303615741986,
+   "phone_errors": 11,
+   "ref_phones": 17,
+   "orig": {
+    "hyp": "Please. Sure. Mmm. There. You're. Low.",
+    "errors": 5,
+    "words": 6,
+    "wer": 0.8333333333333334
+   },
+   "fixed": {
+    "hyp": "Please show them where you're going.",
+    "errors": 3,
+    "words": 6,
+    "wer": 0.5
+   }
+  },
+  {
+   "gid": 6789,
+   "session": "t15_day179",
+   "index": 166,
+   "benchmark": "video",
+   "text": "The day is not over yet.",
+   "feat_r": 0.47584428302184845,
+   "phone_errors": 8,
+   "ref_phones": 15,
+   "orig": {
+    "hyp": "V... Y... Is... M... H... B...",
+    "errors": 5,
+    "words": 6,
+    "wer": 0.8333333333333334
+   },
+   "fixed": {
+    "hyp": "The day is.",
+    "errors": 3,
+    "words": 6,
+    "wer": 0.5
+   }
+  },
+  {
+   "gid": 6790,
+   "session": "t15_day179",
+   "index": 167,
+   "benchmark": "video",
+   "text": "Please come in with me.",
+   "feat_r": 0.3884397633001956,
+   "phone_errors": 6,
+   "ref_phones": 14,
+   "orig": {
+    "hyp": "Please... Come... In...",
+    "errors": 2,
+    "words": 5,
+    "wer": 0.4
+   },
+   "fixed": {
+    "hyp": "Please come in",
+    "errors": 2,
+    "words": 5,
+    "wer": 0.4
+   }
+  },
+  {
+   "gid": 6791,
+   "session": "t15_day179",
+   "index": 168,
+   "benchmark": "video",
+   "text": "People should know this fact.",
+   "feat_r": 0.5267871223789763,
+   "phone_errors": 6,
+   "ref_phones": 17,
+   "orig": {
+    "hyp": "We all should know. Miss. Miss.",
+    "errors": 4,
+    "words": 5,
+    "wer": 0.8
+   },
+   "fixed": {
+    "hyp": "People should know who missed this.",
+    "errors": 3,
+    "words": 5,
+    "wer": 0.6
+   }
+  },
+  {
+   "gid": 7080,
+   "session": "t15_day181",
+   "index": 161,
+   "benchmark": "random",
+   "text": "Yes, I would love to go there with you.",
+   "feat_r": 0.43283308562577955,
+   "phone_errors": 15,
+   "ref_phones": 22,
+   "orig": {
+    "hyp": "Yes... I...",
+    "errors": 7,
+    "words": 9,
+    "wer": 0.7777777777777778
+   },
+   "fixed": {
+    "hyp": "Yes, I...",
+    "errors": 7,
+    "words": 9,
+    "wer": 0.7777777777777778
+   }
+  },
+  {
+   "gid": 7089,
+   "session": "t15_day181",
+   "index": 170,
+   "benchmark": "random",
+   "text": "You know you can tell me anything, right?",
+   "feat_r": 0.4085103333823691,
+   "phone_errors": 16,
+   "ref_phones": 23,
+   "orig": {
+    "hyp": "You. Know. You.",
+    "errors": 5,
+    "words": 8,
+    "wer": 0.625
+   },
+   "fixed": {
+    "hyp": "You know you",
+    "errors": 5,
+    "words": 8,
+    "wer": 0.625
+   }
+  },
+  {
+   "gid": 7184,
+   "session": "t15_day186",
+   "index": 62,
+   "benchmark": "random",
+   "text": "Have you seen my money?",
+   "feat_r": 0.538987005059696,
+   "phone_errors": 5,
+   "ref_phones": 14,
+   "orig": {
+    "hyp": "Have... You... See...",
+    "errors": 3,
+    "words": 5,
+    "wer": 0.6
+   },
+   "fixed": {
+    "hyp": "Have you seen it?",
+    "errors": 2,
+    "words": 5,
+    "wer": 0.4
+   }
+  },
+  {
+   "gid": 7201,
+   "session": "t15_day186",
+   "index": 79,
+   "benchmark": "random",
+   "text": "I am ready to go.",
+   "feat_r": 0.543432174043476,
+   "phone_errors": 6,
+   "ref_phones": 11,
+   "orig": {
+    "hyp": "I. Am. Way. Mmm. Doo-doo.",
+    "errors": 4,
+    "words": 5,
+    "wer": 0.8
+   },
+   "fixed": {
+    "hyp": "I am right.",
+    "errors": 3,
+    "words": 5,
+    "wer": 0.6
+   }
+  },
+  {
+   "gid": 7209,
+   "session": "t15_day186",
+   "index": 87,
+   "benchmark": "random",
+   "text": "It was a long time in the making.",
+   "feat_r": 0.44301775422445083,
+   "phone_errors": 13,
+   "ref_phones": 21,
+   "orig": {
+    "hyp": "It. Was. A-A-A-A-A-A-A-A-A-A-A-A-A-A-A-A-A-A.",
+    "errors": 17,
+    "words": 8,
+    "wer": 2.125
+   },
+   "fixed": {
+    "hyp": "It was a a a",
+    "errors": 5,
+    "words": 8,
+    "wer": 0.625
+   }
+  },
+  {
+   "gid": 7212,
+   "session": "t15_day186",
+   "index": 90,
+   "benchmark": "random",
+   "text": "Please hurry up, we don't have time.",
+   "feat_r": 0.3986388605070078,
+   "phone_errors": 16,
+   "ref_phones": 21,
+   "orig": {
+    "hyp": "Please. Argh.",
+    "errors": 6,
+    "words": 7,
+    "wer": 0.8571428571428571
+   },
+   "fixed": {
+    "hyp": "Please, hurry.",
+    "errors": 5,
+    "words": 7,
+    "wer": 0.7142857142857143
+   }
+  },
+  {
+   "gid": 7221,
+   "session": "t15_day186",
+   "index": 99,
+   "benchmark": "random",
+   "text": "It is a function of time.",
+   "feat_r": 0.4324536885157945,
+   "phone_errors": 11,
+   "ref_phones": 17,
+   "orig": {
+    "hyp": "It... is...",
+    "errors": 4,
+    "words": 6,
+    "wer": 0.6666666666666666
+   },
+   "fixed": {
+    "hyp": "It is a...",
+    "errors": 3,
+    "words": 6,
+    "wer": 0.5
+   }
+  },
+  {
+   "gid": 7232,
+   "session": "t15_day186",
+   "index": 110,
+   "benchmark": "random",
+   "text": "My cat is doing fine now.",
+   "feat_r": 0.4562384225460475,
+   "phone_errors": 8,
+   "ref_phones": 16,
+   "orig": {
+    "hyp": "My... head... is...",
+    "errors": 4,
+    "words": 6,
+    "wer": 0.6666666666666666
+   },
+   "fixed": {
+    "hyp": "My cat is...",
+    "errors": 3,
+    "words": 6,
+    "wer": 0.5
+   }
+  },
+  {
+   "gid": 7248,
+   "session": "t15_day186",
+   "index": 126,
+   "benchmark": "random",
+   "text": "I don't think there's anything wrong.",
+   "feat_r": 0.44739822122846834,
+   "phone_errors": 11,
+   "ref_phones": 22,
+   "orig": {
+    "hyp": "I... will... see... this... this...",
+    "errors": 5,
+    "words": 6,
+    "wer": 0.8333333333333334
+   },
+   "fixed": {
+    "hyp": "I will fix this.",
+    "errors": 5,
+    "words": 6,
+    "wer": 0.8333333333333334
+   }
+  },
+  {
+   "gid": 7282,
+   "session": "t15_day186",
+   "index": 160,
+   "benchmark": "random",
+   "text": "Do you believe it to be true?",
+   "feat_r": 0.3464450610958375,
+   "phone_errors": 10,
+   "ref_phones": 18,
+   "orig": {
+    "hyp": "You... You...",
+    "errors": 6,
+    "words": 7,
+    "wer": 0.8571428571428571
+   },
+   "fixed": {
+    "hyp": "Do you believe it's fair to be?",
+    "errors": 3,
+    "words": 7,
+    "wer": 0.42857142857142855
+   }
+  },
+  {
+   "gid": 7305,
+   "session": "t15_day186",
+   "index": 183,
+   "benchmark": "random",
+   "text": "Please focus on your work.",
+   "feat_r": 0.4142258991004061,
+   "phone_errors": 9,
+   "ref_phones": 17,
+   "orig": {
+    "hyp": "Please. How is. This. One. Ever.",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Please, please, please, under your...",
+    "errors": 4,
+    "words": 5,
+    "wer": 0.8
+   }
+  },
+  {
+   "gid": 7318,
+   "session": "t15_day186",
+   "index": 196,
+   "benchmark": "random",
+   "text": "How many weeks?",
+   "feat_r": 0.543138010456044,
+   "phone_errors": 1,
+   "ref_phones": 10,
+   "orig": {
+    "hyp": "How... many... was...",
+    "errors": 1,
+    "words": 3,
+    "wer": 0.3333333333333333
+   },
+   "fixed": {
+    "hyp": "Oh, very, worse.",
+    "errors": 3,
+    "words": 3,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 7491,
+   "session": "t15_day188",
+   "index": 50,
+   "benchmark": "random",
+   "text": "I have not heard back from them.",
+   "feat_r": 0.37153053156084387,
+   "phone_errors": 12,
+   "ref_phones": 20,
+   "orig": {
+    "hyp": "I have not heard",
+    "errors": 3,
+    "words": 7,
+    "wer": 0.42857142857142855
+   },
+   "fixed": {
+    "hyp": "I have not...",
+    "errors": 4,
+    "words": 7,
+    "wer": 0.5714285714285714
+   }
+  },
+  {
+   "gid": 7492,
+   "session": "t15_day188",
+   "index": 51,
+   "benchmark": "random",
+   "text": "We used to write on the paper in the past.",
+   "feat_r": 0.2832702190438556,
+   "phone_errors": 18,
+   "ref_phones": 27,
+   "orig": {
+    "hyp": "We... Be... Be... Be... Be...",
+    "errors": 9,
+    "words": 10,
+    "wer": 0.9
+   },
+   "fixed": {
+    "hyp": "We.",
+    "errors": 9,
+    "words": 10,
+    "wer": 0.9
+   }
+  },
+  {
+   "gid": 7501,
+   "session": "t15_day188",
+   "index": 60,
+   "benchmark": "random",
+   "text": "Tell me what happened.",
+   "feat_r": 0.43656798746531117,
+   "phone_errors": 9,
+   "ref_phones": 14,
+   "orig": {
+    "hyp": "No. Me. Me.",
+    "errors": 3,
+    "words": 4,
+    "wer": 0.75
+   },
+   "fixed": {
+    "hyp": "No, me, me.",
+    "errors": 3,
+    "words": 4,
+    "wer": 0.75
+   }
+  },
+  {
+   "gid": 7503,
+   "session": "t15_day188",
+   "index": 62,
+   "benchmark": "random",
+   "text": "Are you also coming with us?",
+   "feat_r": 0.48192418363728057,
+   "phone_errors": 11,
+   "ref_phones": 18,
+   "orig": {
+    "hyp": "...are... ...you.",
+    "errors": 4,
+    "words": 6,
+    "wer": 0.6666666666666666
+   },
+   "fixed": {
+    "hyp": "Are you?",
+    "errors": 4,
+    "words": 6,
+    "wer": 0.6666666666666666
+   }
+  },
+  {
+   "gid": 7515,
+   "session": "t15_day188",
+   "index": 74,
+   "benchmark": "random",
+   "text": "We will ask people what they want.",
+   "feat_r": 0.40995379794659137,
+   "phone_errors": 14,
+   "ref_phones": 22,
+   "orig": {
+    "hyp": "We will ask.",
+    "errors": 4,
+    "words": 7,
+    "wer": 0.5714285714285714
+   },
+   "fixed": {
+    "hyp": "We will ask.",
+    "errors": 4,
+    "words": 7,
+    "wer": 0.5714285714285714
+   }
+  },
+  {
+   "gid": 7523,
+   "session": "t15_day188",
+   "index": 82,
+   "benchmark": "random",
+   "text": "I'm okay with it if you are.",
+   "feat_r": 0.3999299494775217,
+   "phone_errors": 8,
+   "ref_phones": 16,
+   "orig": {
+    "hyp": "I'm okay.",
+    "errors": 5,
+    "words": 7,
+    "wer": 0.7142857142857143
+   },
+   "fixed": {
+    "hyp": "I'm okay.",
+    "errors": 5,
+    "words": 7,
+    "wer": 0.7142857142857143
+   }
+  },
+  {
+   "gid": 7537,
+   "session": "t15_day188",
+   "index": 96,
+   "benchmark": "random",
+   "text": "We saw many huts there.",
+   "feat_r": 0.5113589525945803,
+   "phone_errors": 13,
+   "ref_phones": 15,
+   "orig": {
+    "hyp": "We. Saw. Married.",
+    "errors": 3,
+    "words": 5,
+    "wer": 0.6
+   },
+   "fixed": {
+    "hyp": "We... saw... mari-i-i-it...",
+    "errors": 4,
+    "words": 5,
+    "wer": 0.8
+   }
+  },
+  {
+   "gid": 7563,
+   "session": "t15_day188",
+   "index": 122,
+   "benchmark": "random",
+   "text": "Do what you think is best.",
+   "feat_r": 0.5056282359472465,
+   "phone_errors": 8,
+   "ref_phones": 17,
+   "orig": {
+    "hyp": "You... Why... You... He... He... Is...",
+    "errors": 5,
+    "words": 6,
+    "wer": 0.8333333333333334
+   },
+   "fixed": {
+    "hyp": "you what you is",
+    "errors": 3,
+    "words": 6,
+    "wer": 0.5
+   }
+  },
+  {
+   "gid": 7593,
+   "session": "t15_day188",
+   "index": 152,
+   "benchmark": "random",
+   "text": "I will check with you in two days.",
+   "feat_r": 0.3884854983704421,
+   "phone_errors": 16,
+   "ref_phones": 19,
+   "orig": {
+    "hyp": "I... will... stay... with... you...",
+    "errors": 4,
+    "words": 8,
+    "wer": 0.5
+   },
+   "fixed": {
+    "hyp": "I will change myself to you.",
+    "errors": 6,
+    "words": 8,
+    "wer": 0.75
+   }
+  },
+  {
+   "gid": 7603,
+   "session": "t15_day188",
+   "index": 162,
+   "benchmark": "random",
+   "text": "They gave away everything.",
+   "feat_r": 0.3255684256152005,
+   "phone_errors": 7,
+   "ref_phones": 15,
+   "orig": {
+    "hyp": "Hey... Yeah... Oi...",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Hey, yeah away",
+    "errors": 3,
+    "words": 4,
+    "wer": 0.75
+   }
+  },
+  {
+   "gid": 7604,
+   "session": "t15_day188",
+   "index": 163,
+   "benchmark": "random",
+   "text": "Thank them for me, please.",
+   "feat_r": 0.42659238701047997,
+   "phone_errors": 6,
+   "ref_phones": 16,
+   "orig": {
+    "hyp": "hmm... hmm... four... hmm...",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Hey, hey, for Hey",
+    "errors": 4,
+    "words": 5,
+    "wer": 0.8
+   }
+  },
+  {
+   "gid": 7610,
+   "session": "t15_day188",
+   "index": 169,
+   "benchmark": "random",
+   "text": "I feel I should not be here.",
+   "feat_r": 0.4142522360225865,
+   "phone_errors": 8,
+   "ref_phones": 16,
+   "orig": {
+    "hyp": "I... feel... I... do... not... me.",
+    "errors": 3,
+    "words": 7,
+    "wer": 0.42857142857142855
+   },
+   "fixed": {
+    "hyp": "I... feel... I... d... d... d...",
+    "errors": 4,
+    "words": 7,
+    "wer": 0.5714285714285714
+   }
+  },
+  {
+   "gid": 7617,
+   "session": "t15_day188",
+   "index": 176,
+   "benchmark": "random",
+   "text": "I am working from home.",
+   "feat_r": 0.47209949692228975,
+   "phone_errors": 3,
+   "ref_phones": 15,
+   "orig": {
+    "hyp": "I am warring.",
+    "errors": 3,
+    "words": 5,
+    "wer": 0.6
+   },
+   "fixed": {
+    "hyp": "I am working in a home.",
+    "errors": 2,
+    "words": 5,
+    "wer": 0.4
+   }
+  },
+  {
+   "gid": 7618,
+   "session": "t15_day188",
+   "index": 177,
+   "benchmark": "random",
+   "text": "We should cook more food.",
+   "feat_r": 0.535410294524076,
+   "phone_errors": 5,
+   "ref_phones": 14,
+   "orig": {
+    "hyp": "We... Should... Uh...",
+    "errors": 3,
+    "words": 5,
+    "wer": 0.6
+   },
+   "fixed": {
+    "hyp": "We should",
+    "errors": 3,
+    "words": 5,
+    "wer": 0.6
+   }
+  },
+  {
+   "gid": 7632,
+   "session": "t15_day188",
+   "index": 191,
+   "benchmark": "random",
+   "text": "Please vote for me.",
+   "feat_r": 0.518203789326009,
+   "phone_errors": 0,
+   "ref_phones": 12,
+   "orig": {
+    "hyp": "Please. Hold. For. Me.",
+    "errors": 1,
+    "words": 4,
+    "wer": 0.25
+   },
+   "fixed": {
+    "hyp": "Please, vote for me.",
+    "errors": 0,
+    "words": 4,
+    "wer": 0.0
+   }
+  },
+  {
+   "gid": 7633,
+   "session": "t15_day188",
+   "index": 192,
+   "benchmark": "random",
+   "text": "Let's go, team.",
+   "feat_r": 0.48801005033064937,
+   "phone_errors": 1,
+   "ref_phones": 9,
+   "orig": {
+    "hyp": "Less. You. Heem.",
+    "errors": 3,
+    "words": 3,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "What's new here?",
+    "errors": 3,
+    "words": 3,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 7824,
+   "session": "t15_day193",
+   "index": 72,
+   "benchmark": "random",
+   "text": "The same thing happened that day.",
+   "feat_r": 0.37814177136673177,
+   "phone_errors": 14,
+   "ref_phones": 19,
+   "orig": {
+    "hyp": "The... Sun...",
+    "errors": 5,
+    "words": 6,
+    "wer": 0.8333333333333334
+   },
+   "fixed": {
+    "hyp": "The. Some. Thing.",
+    "errors": 4,
+    "words": 6,
+    "wer": 0.6666666666666666
+   }
+  },
+  {
+   "gid": 7829,
+   "session": "t15_day193",
+   "index": 77,
+   "benchmark": "random",
+   "text": "I don't know what you are thinking.",
+   "feat_r": 0.3707744998299741,
+   "phone_errors": 11,
+   "ref_phones": 20,
+   "orig": {
+    "hyp": "I... Knew...",
+    "errors": 6,
+    "words": 7,
+    "wer": 0.8571428571428571
+   },
+   "fixed": {
+    "hyp": "I knew.",
+    "errors": 6,
+    "words": 7,
+    "wer": 0.8571428571428571
+   }
+  },
+  {
+   "gid": 7839,
+   "session": "t15_day193",
+   "index": 87,
+   "benchmark": "random",
+   "text": "We will all miss you.",
+   "feat_r": 0.44397419774149266,
+   "phone_errors": 7,
+   "ref_phones": 12,
+   "orig": {
+    "hyp": "We... Now...",
+    "errors": 4,
+    "words": 5,
+    "wer": 0.8
+   },
+   "fixed": {
+    "hyp": "Me? Well...",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 7844,
+   "session": "t15_day193",
+   "index": 92,
+   "benchmark": "random",
+   "text": "We will start it next fall.",
+   "feat_r": 0.44987598083149827,
+   "phone_errors": 10,
+   "ref_phones": 20,
+   "orig": {
+    "hyp": "We will suffer.",
+    "errors": 4,
+    "words": 6,
+    "wer": 0.6666666666666666
+   },
+   "fixed": {
+    "hyp": "We. Feel. Sucker.",
+    "errors": 5,
+    "words": 6,
+    "wer": 0.8333333333333334
+   }
+  },
+  {
+   "gid": 7857,
+   "session": "t15_day193",
+   "index": 105,
+   "benchmark": "random",
+   "text": "He made a fist with his hand.",
+   "feat_r": 0.39288828301952694,
+   "phone_errors": 15,
+   "ref_phones": 20,
+   "orig": {
+    "hyp": "Yee...Mmm... I-I-I-I-I-I-I-I-I-I-I... S-S-S... S-S... S-S... S-S... S-S...",
+    "errors": 23,
+    "words": 7,
+    "wer": 3.2857142857142856
+   },
+   "fixed": {
+    "hyp": "Yee, meh, ay, ay, ay, ay, ay, ay, ay.",
+    "errors": 9,
+    "words": 7,
+    "wer": 1.2857142857142858
+   }
+  },
+  {
+   "gid": 7875,
+   "session": "t15_day193",
+   "index": 123,
+   "benchmark": "random",
+   "text": "This is not the place or time.",
+   "feat_r": 0.35346695710444653,
+   "phone_errors": 14,
+   "ref_phones": 19,
+   "orig": {
+    "hyp": "This... is...",
+    "errors": 5,
+    "words": 7,
+    "wer": 0.7142857142857143
+   },
+   "fixed": {
+    "hyp": "This is me.",
+    "errors": 5,
+    "words": 7,
+    "wer": 0.7142857142857143
+   }
+  },
+  {
+   "gid": 7879,
+   "session": "t15_day193",
+   "index": 127,
+   "benchmark": "random",
+   "text": "Please tell me the truth.",
+   "feat_r": 0.4703099745787653,
+   "phone_errors": 6,
+   "ref_phones": 15,
+   "orig": {
+    "hyp": "Please... Help... Me...",
+    "errors": 3,
+    "words": 5,
+    "wer": 0.6
+   },
+   "fixed": {
+    "hyp": "Please, help me.",
+    "errors": 3,
+    "words": 5,
+    "wer": 0.6
+   }
+  },
+  {
+   "gid": 7886,
+   "session": "t15_day193",
+   "index": 134,
+   "benchmark": "random",
+   "text": "I hope we can work on this soon.",
+   "feat_r": 0.43020314583230973,
+   "phone_errors": 15,
+   "ref_phones": 20,
+   "orig": {
+    "hyp": "Hi. Oh.",
+    "errors": 8,
+    "words": 8,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Hi. Oh.",
+    "errors": 8,
+    "words": 8,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 7901,
+   "session": "t15_day193",
+   "index": 149,
+   "benchmark": "random",
+   "text": "This is my house, not yours.",
+   "feat_r": 0.4441221768052242,
+   "phone_errors": 7,
+   "ref_phones": 17,
+   "orig": {
+    "hyp": "This is my arm.",
+    "errors": 3,
+    "words": 6,
+    "wer": 0.5
+   },
+   "fixed": {
+    "hyp": "This is my...",
+    "errors": 3,
+    "words": 6,
+    "wer": 0.5
+   }
+  },
+  {
+   "gid": 7903,
+   "session": "t15_day193",
+   "index": 151,
+   "benchmark": "random",
+   "text": "What should we do now?",
+   "feat_r": 0.3746193316370836,
+   "phone_errors": 6,
+   "ref_phones": 12,
+   "orig": {
+    "hyp": "What. Shoo. Me.",
+    "errors": 4,
+    "words": 5,
+    "wer": 0.8
+   },
+   "fixed": {
+    "hyp": "What you need?",
+    "errors": 4,
+    "words": 5,
+    "wer": 0.8
+   }
+  },
+  {
+   "gid": 8345,
+   "session": "t15_day195",
+   "index": 161,
+   "benchmark": "random",
+   "text": "I know it is hard to come by.",
+   "feat_r": 0.39095653519192186,
+   "phone_errors": 10,
+   "ref_phones": 18,
+   "orig": {
+    "hyp": "I... know... it... is... us...",
+    "errors": 4,
+    "words": 8,
+    "wer": 0.5
+   },
+   "fixed": {
+    "hyp": "I know it is.",
+    "errors": 4,
+    "words": 8,
+    "wer": 0.5
+   }
+  },
+  {
+   "gid": 8348,
+   "session": "t15_day195",
+   "index": 164,
+   "benchmark": "random",
+   "text": "I didn't know this was true.",
+   "feat_r": 0.460223644141481,
+   "phone_errors": 6,
+   "ref_phones": 18,
+   "orig": {
+    "hyp": "I didn't know this. This. This.",
+    "errors": 2,
+    "words": 6,
+    "wer": 0.3333333333333333
+   },
+   "fixed": {
+    "hyp": "I didn't know this.",
+    "errors": 2,
+    "words": 6,
+    "wer": 0.3333333333333333
+   }
+  },
+  {
+   "gid": 8350,
+   "session": "t15_day195",
+   "index": 166,
+   "benchmark": "random",
+   "text": "I don't think it is any less time.",
+   "feat_r": 0.39797368833480395,
+   "phone_errors": 9,
+   "ref_phones": 22,
+   "orig": {
+    "hyp": "I don't think it is",
+    "errors": 3,
+    "words": 8,
+    "wer": 0.375
+   },
+   "fixed": {
+    "hyp": "I don't think it is",
+    "errors": 3,
+    "words": 8,
+    "wer": 0.375
+   }
+  },
+  {
+   "gid": 8351,
+   "session": "t15_day195",
+   "index": 167,
+   "benchmark": "random",
+   "text": "The whole house will change.",
+   "feat_r": 0.5051971562371229,
+   "phone_errors": 8,
+   "ref_phones": 15,
+   "orig": {
+    "hyp": "They... all... are... also...",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "They all are awesome.",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 8354,
+   "session": "t15_day195",
+   "index": 170,
+   "benchmark": "random",
+   "text": "Have they seen the paper?",
+   "feat_r": 0.44578147085117986,
+   "phone_errors": 7,
+   "ref_phones": 14,
+   "orig": {
+    "hyp": "Have they seen me?",
+    "errors": 2,
+    "words": 5,
+    "wer": 0.4
+   },
+   "fixed": {
+    "hyp": "Happy Tuesday!",
+    "errors": 5,
+    "words": 5,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 8356,
+   "session": "t15_day195",
+   "index": 172,
+   "benchmark": "random",
+   "text": "I like this kind of food very much.",
+   "feat_r": 0.37754345907360165,
+   "phone_errors": 13,
+   "ref_phones": 23,
+   "orig": {
+    "hyp": "I like this part.",
+    "errors": 5,
+    "words": 8,
+    "wer": 0.625
+   },
+   "fixed": {
+    "hyp": "I like this part.",
+    "errors": 5,
+    "words": 8,
+    "wer": 0.625
+   }
+  },
+  {
+   "gid": 8401,
+   "session": "t15_day195",
+   "index": 217,
+   "benchmark": "random",
+   "text": "Everything got very quiet.",
+   "feat_r": 0.4062520605814416,
+   "phone_errors": 27,
+   "ref_phones": 19,
+   "orig": {
+    "hyp": "Mmmmm Mmmmm Mmmmm",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Mm-hmm, yeah.",
+    "errors": 4,
+    "words": 4,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 8406,
+   "session": "t15_day195",
+   "index": 222,
+   "benchmark": "random",
+   "text": "Would you like to watch an old movie?",
+   "feat_r": 0.3882240266815981,
+   "phone_errors": 10,
+   "ref_phones": 22,
+   "orig": {
+    "hyp": "Would you like to just end?",
+    "errors": 4,
+    "words": 8,
+    "wer": 0.5
+   },
+   "fixed": {
+    "hyp": "Would you like to?",
+    "errors": 4,
+    "words": 8,
+    "wer": 0.5
+   }
+  },
+  {
+   "gid": 8412,
+   "session": "t15_day195",
+   "index": 228,
+   "benchmark": "random",
+   "text": "Anything can be used in this case.",
+   "feat_r": 0.4240096200895801,
+   "phone_errors": 10,
+   "ref_phones": 23,
+   "orig": {
+    "hyp": "Mmm... Mmm... Mmm... Mmm...",
+    "errors": 7,
+    "words": 7,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "he he he he he he...",
+    "errors": 7,
+    "words": 7,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 8418,
+   "session": "t15_day195",
+   "index": 234,
+   "benchmark": "video",
+   "text": "Please, let's go.",
+   "feat_r": 0.4562434120728184,
+   "phone_errors": 4,
+   "ref_phones": 10,
+   "orig": {
+    "hyp": "Please... last... hour...",
+    "errors": 2,
+    "words": 3,
+    "wer": 0.6666666666666666
+   },
+   "fixed": {
+    "hyp": "Please, let's go.",
+    "errors": 0,
+    "words": 3,
+    "wer": 0.0
+   }
+  },
+  {
+   "gid": 8419,
+   "session": "t15_day195",
+   "index": 235,
+   "benchmark": "video",
+   "text": "You have changed.",
+   "feat_r": 0.5576187122948825,
+   "phone_errors": 1,
+   "ref_phones": 10,
+   "orig": {
+    "hyp": "You have tried.",
+    "errors": 1,
+    "words": 3,
+    "wer": 0.3333333333333333
+   },
+   "fixed": {
+    "hyp": "You have done it.",
+    "errors": 2,
+    "words": 3,
+    "wer": 0.6666666666666666
+   }
+  },
+  {
+   "gid": 8420,
+   "session": "t15_day195",
+   "index": 236,
+   "benchmark": "video",
+   "text": "Why do you think this is right?",
+   "feat_r": 0.4178276460104122,
+   "phone_errors": 32,
+   "ref_phones": 18,
+   "orig": {
+    "hyp": "Why do you miss them?",
+    "errors": 4,
+    "words": 7,
+    "wer": 0.5714285714285714
+   },
+   "fixed": {
+    "hyp": "My you you",
+    "errors": 6,
+    "words": 7,
+    "wer": 0.8571428571428571
+   }
+  },
+  {
+   "gid": 8421,
+   "session": "t15_day195",
+   "index": 237,
+   "benchmark": "video",
+   "text": "Nothing is wrong so far.",
+   "feat_r": 0.4107715735555799,
+   "phone_errors": 6,
+   "ref_phones": 15,
+   "orig": {
+    "hyp": "Nine... is... one... So... so...",
+    "errors": 3,
+    "words": 5,
+    "wer": 0.6
+   },
+   "fixed": {
+    "hyp": "9 is 1, so, so.",
+    "errors": 3,
+    "words": 5,
+    "wer": 0.6
+   }
+  },
+  {
+   "gid": 8422,
+   "session": "t15_day195",
+   "index": 238,
+   "benchmark": "video",
+   "text": "Let's keep going.",
+   "feat_r": 0.4154483036006374,
+   "phone_errors": 5,
+   "ref_phones": 11,
+   "orig": {
+    "hyp": "Lass... Mmm... Mmm...",
+    "errors": 3,
+    "words": 3,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Last. Then. Done.",
+    "errors": 3,
+    "words": 3,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 8423,
+   "session": "t15_day195",
+   "index": 239,
+   "benchmark": "video",
+   "text": "I would like to go home now.",
+   "feat_r": 0.3763483064158577,
+   "phone_errors": 9,
+   "ref_phones": 16,
+   "orig": {
+    "hyp": "I would like you to come home.",
+    "errors": 3,
+    "words": 7,
+    "wer": 0.42857142857142855
+   },
+   "fixed": {
+    "hyp": "I would like you to go home.",
+    "errors": 2,
+    "words": 7,
+    "wer": 0.2857142857142857
+   }
+  },
+  {
+   "gid": 8424,
+   "session": "t15_day195",
+   "index": 240,
+   "benchmark": "video",
+   "text": "It is very clear to me.",
+   "feat_r": 0.46576551098187213,
+   "phone_errors": 9,
+   "ref_phones": 16,
+   "orig": {
+    "hyp": "It... is... very... clear.",
+    "errors": 2,
+    "words": 6,
+    "wer": 0.3333333333333333
+   },
+   "fixed": {
+    "hyp": "It is very clear.",
+    "errors": 2,
+    "words": 6,
+    "wer": 0.3333333333333333
+   }
+  },
+  {
+   "gid": 8425,
+   "session": "t15_day195",
+   "index": 241,
+   "benchmark": "video",
+   "text": "I had many days off.",
+   "feat_r": 0.48075642013395437,
+   "phone_errors": 9,
+   "ref_phones": 13,
+   "orig": {
+    "hyp": "I... have... married...",
+    "errors": 4,
+    "words": 5,
+    "wer": 0.8
+   },
+   "fixed": {
+    "hyp": "I have married this",
+    "errors": 4,
+    "words": 5,
+    "wer": 0.8
+   }
+  },
+  {
+   "gid": 8426,
+   "session": "t15_day195",
+   "index": 242,
+   "benchmark": "video",
+   "text": "I was looking at it.",
+   "feat_r": 0.4773010818641804,
+   "phone_errors": 2,
+   "ref_phones": 13,
+   "orig": {
+    "hyp": "I was lying.",
+    "errors": 3,
+    "words": 5,
+    "wer": 0.6
+   },
+   "fixed": {
+    "hyp": "I was lying in it.",
+    "errors": 2,
+    "words": 5,
+    "wer": 0.4
+   }
+  },
+  {
+   "gid": 8427,
+   "session": "t15_day195",
+   "index": 243,
+   "benchmark": "video",
+   "text": "Can you give me a call?",
+   "feat_r": 0.43713845934688617,
+   "phone_errors": 9,
+   "ref_phones": 14,
+   "orig": {
+    "hyp": "I... You... Yeah... Me... Me... Or...",
+    "errors": 4,
+    "words": 6,
+    "wer": 0.6666666666666666
+   },
+   "fixed": {
+    "hyp": "That you, yeah, me, me, or...",
+    "errors": 4,
+    "words": 6,
+    "wer": 0.6666666666666666
+   }
+  },
+  {
+   "gid": 8441,
+   "session": "t15_day195",
+   "index": 257,
+   "benchmark": "random",
+   "text": "This is more than what we wanted.",
+   "feat_r": 0.3908255223951751,
+   "phone_errors": 14,
+   "ref_phones": 22,
+   "orig": {
+    "hyp": "This... is... more... or... more... nah...",
+    "errors": 4,
+    "words": 7,
+    "wer": 0.5714285714285714
+   },
+   "fixed": {
+    "hyp": "This. Is. More. More. More. More. More.",
+    "errors": 4,
+    "words": 7,
+    "wer": 0.5714285714285714
+   }
+  },
+  {
+   "gid": 8447,
+   "session": "t15_day195",
+   "index": 263,
+   "benchmark": "random",
+   "text": "I walk for two miles every day.",
+   "feat_r": 0.38419794475932095,
+   "phone_errors": 14,
+   "ref_phones": 19,
+   "orig": {
+    "hyp": "I. Worn.",
+    "errors": 6,
+    "words": 7,
+    "wer": 0.8571428571428571
+   },
+   "fixed": {
+    "hyp": "I want a new test.",
+    "errors": 6,
+    "words": 7,
+    "wer": 0.8571428571428571
+   }
+  },
+  {
+   "gid": 8484,
+   "session": "t15_day195",
+   "index": 300,
+   "benchmark": "random",
+   "text": "The line goes on for a mile.",
+   "feat_r": 0.3820050691850764,
+   "phone_errors": 12,
+   "ref_phones": 17,
+   "orig": {
+    "hyp": "They lied. There's armor for A.",
+    "errors": 5,
+    "words": 7,
+    "wer": 0.7142857142857143
+   },
+   "fixed": {
+    "hyp": "May what first honor her pay.",
+    "errors": 7,
+    "words": 7,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 8485,
+   "session": "t15_day195",
+   "index": 301,
+   "benchmark": "random",
+   "text": "I could not see the light.",
+   "feat_r": 0.5426772046817583,
+   "phone_errors": 5,
+   "ref_phones": 14,
+   "orig": {
+    "hyp": "I will not see them.",
+    "errors": 3,
+    "words": 6,
+    "wer": 0.5
+   },
+   "fixed": {
+    "hyp": "I will not see it.",
+    "errors": 3,
+    "words": 6,
+    "wer": 0.5
+   }
+  }
+ ],
+ "wall_time_s": 268.3777906894684
+}

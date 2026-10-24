@@ -46,6 +46,11 @@ def main(argv=None) -> int:
     ap.add_argument("--trials", required=True)
     ap.add_argument("--name", default=None, help="output name (default: the --trials value, ':' -> '_')")
     ap.add_argument("--window-bins", type=int, default=None, help="override b2v2.decode.window_bins")
+    ap.add_argument("--mode", choices=["live", "chunked"], default="live",
+                    help="live = the paper's sliding window (primary); chunked = causal long context "
+                         "(wvx.b2v2_model.decode_chunked, a D-075 debugging check)")
+    ap.add_argument("--ctx", type=int, default=128, help="chunked: tokens per window")
+    ap.add_argument("--hop", type=int, default=64, help="chunked: kept outputs per window after the first")
     args = ap.parse_args(argv)
     cfg = load_experiment_config(args.config)
     import numpy as np
@@ -71,11 +76,17 @@ def main(argv=None) -> int:
     t0, out = time.time(), {}
     for g in gids:
         x, _ = data.trial_arrays(data.by_gid[g])
-        c, lg = bm.decode_live(model, x, window, pool, input_id=input_id, device=device)
+        if args.mode == "live":
+            c, lg = bm.decode_live(model, x, window, pool, input_id=input_id, device=device)
+        else:
+            c, lg, ph0 = bm.decode_chunked(model, x, pool, args.ctx, args.hop, input_id=input_id, device=device)
+            out[f"g{g}_best50"] = ph0.argmax(-1).astype(np.uint8)
         out[f"g{g}_cont"] = c.astype(np.float32)
         out[f"g{g}_best"] = lg.argmax(-1).astype(np.uint8)
     header = {"run_name": run, "checkpoint": str(ckpt), "checkpoint_sha256": hashlib.sha256(ckpt.read_bytes()).hexdigest(),
-              "input_id": input_id, "trials": args.trials, "gids": gids, "window_bins": window, "pool": pool,
+              "input_id": input_id, "trials": args.trials, "gids": gids, "mode": args.mode,
+              "window_bins": window if args.mode == "live" else None,
+              "chunked": {"ctx": args.ctx, "hop": args.hop} if args.mode == "chunked" else None, "pool": pool,
               "device": str(device), "code_version": code_version(), "decision": "D-075",
               "created": datetime.datetime.now().isoformat(timespec="seconds")}
     path = resolve_path("data/processed/b2v2_preds") / run / f"{name}.npz"
@@ -83,7 +94,7 @@ def main(argv=None) -> int:
     tmp = path.with_name(path.stem + ".partial.npz")
     np.savez_compressed(tmp, header=np.array(json.dumps(header)), **out)
     tmp.replace(path)
-    print(f"{len(gids)} trials decoded in {time.time() - t0:.0f} s ({device}, window {window} bins) -> {path}")
+    print(f"{len(gids)} trials decoded in {time.time() - t0:.0f} s ({device}, {args.mode}) -> {path}")
     return 0
 
 
