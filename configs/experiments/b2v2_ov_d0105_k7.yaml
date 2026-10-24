@@ -1,0 +1,25 @@
+# D-081: text-only (CTC) adaptation of b2v2_all on whole inner-speech trials of d0105 blocks [5, 6] (tested on block 7).
+#   PC: ~/wvx/envs/wvx-f5/bin/python -I scripts/train_b2v2.py --config configs/experiments/b2v2_ov_d0105_k7.yaml
+base_experiment: configs/experiments/b2v2_ov_base.yaml
+
+run_name: b2v2_ov_d0105_k7
+
+b2v2:
+  adapt:
+    init: data/checkpoints/b2v2_all/final.pt
+    session: d0105
+    train_blocks: [5, 6]
+    full_trial: true
+    n_validation: 7                  # 10% of the training trials: pick the best step by CTC
+    loss: ctc
+    training:
+      steps: 1000
+      batch_size: 8
+      lr: 1.0e-3
+      min_lr: 1.0e-5
+      warmup: 0.1
+      augment_from: 1.0
+      val_every: 50
+      checkpoint_every: 500
+      ctx: 128
+      hop: 64
