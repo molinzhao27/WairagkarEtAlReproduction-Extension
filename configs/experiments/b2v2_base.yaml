@@ -40,7 +40,9 @@ b2v2:
     pool: 5                          # [PAPER] 10 ms -> 50 ms tokens (mean of 5 bins)
     context_tokens: 128              # [PAPER] 6.4 s windows
     speech_feature: 0                # [OURS] speech mask: target c0 (energy) above the threshold
-    speech_threshold: null           # [OURS] set from meta.json's c0 inside vs outside words, before any training
+    speech_threshold: -0.95          # [OURS] set from the built data before any training (meta.json): target c0 is
+                                     # exactly -1.0 (the floor) on 99% of frames outside words; inside words its 1st
+                                     # percentile is -0.94, 5th -0.67 -> "speech" = c0 above the silence floor
 
   augmentation:                      # [PAPER] values; [OURS] applied to the 50 ms model input
     noise: 0.1

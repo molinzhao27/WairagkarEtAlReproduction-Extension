@@ -1,0 +1,10 @@
+# D-075 stage 3 base: train on the sessions up to day 165 only (as their day-165 decoder; 30 days before day 195),
+# minus 30 validation trials. Tested zero-shot and adapted on day 195 (the D-049 dev setting).
+#   PC: ~/wvx/envs/wvx-f5/bin/python -I scripts/train_b2v2.py --config configs/experiments/b2v2_le165.yaml
+base_experiment: configs/experiments/b2v2_base.yaml
+
+run_name: b2v2_le165
+
+b2v2:
+  split:
+    max_day: 165
