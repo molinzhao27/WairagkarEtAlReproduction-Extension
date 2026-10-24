@@ -1,0 +1,21 @@
+# D-078: post-processing of decoded voice (scripts/postproc_b2v2.py, PC CPU).
+base_experiment: configs/experiments/b2v2_kunz_base.yaml
+
+runtime:
+  threads: {intra_op: 4, inter_op: 1, omp: 4}
+
+b2v2:
+  postproc:
+    sets:
+      attempted_heldout:
+        runs: [b2v2_kunz_f03, b2v2_kunz_f06, b2v2_kunz_f11, b2v2_kunz_f13]
+        name: heldout
+      inner_learned:
+        runs: [b2v2_kunz_im03, b2v2_kunz_im06, b2v2_kunz_im11, b2v2_kunz_im13]
+        name: imagined
+    variants: [orig, denoise, pitch2, sharpen, all]
+    denoise: {n_fft: 512, hop: 128, quiet_fraction: 0.2, n_std: 1.5, reduction: 0.8, smooth_bins: 2, smooth_frames: 2}
+    pitch_semitones: 2.0
+    sharpen_alpha: 1.5                 # ~ target / output s.d. on the benchmark (0.20 / 0.13)
+    rule: {min_points: 3.0, alpha: 0.0125}
+    workers: 4
