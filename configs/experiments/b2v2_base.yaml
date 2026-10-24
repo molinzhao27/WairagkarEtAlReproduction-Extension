@@ -75,3 +75,7 @@ b2v2:
 
   decode:
     window_bins: 800                 # [PAPER] simulated live inference: 800 ms window, shifted by 10 ms
+
+  score:
+    speed_factor: 3.25               # D-073 fixed factor (their target audio / Alex, day195 training trials)
+    asr: {asr: {cpu_threads: 4, model: {allow_download: false}, per: {allow_download: false}}}   # the dev tests'
