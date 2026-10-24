@@ -1,0 +1,24 @@
+== paired_imagined
+  none      n=183/200 q 0.416 rank 21.37 (cues 45.8) top1 0.045 excess +0.0160 WER 0.99
+  gain      n=199/200 q 0.413 rank 21.24 (cues 49.8) top1 0.035 excess +0.0182 WER 1.24
+            vs none on 183 trials: Δq -0.001 (p 0.83); Δrank -0.04 (p 0.86); Δexcess +0.0023 (p 0.97); top1 6 gained / 8 lost
+  projector n=195/200 q 0.439 rank 22.49 (cues 48.8) top1 0.015 excess +0.0096 WER 1.09
+            vs none on 183 trials: Δq +0.022 (p 0.24); Δrank +1.07 (p 0.24); Δexcess -0.0066 (p 0.21); top1 1 gained / 7 lost
+  paired    n=198/200 q 0.386 rank 19.90 (cues 49.5) top1 0.040 excess +0.0227 WER 1.31
+            vs none on 183 trials: Δq -0.031 (p 0.22); Δrank -1.52 (p 0.2); Δexcess +0.0066 (p 0.28); top1 5 gained / 7 lost
+== eval_imagined
+  none      n= 48/50 q 0.455 rank 23.29 (cues 48.0) top1 0.080 excess +0.0231 WER 1.08
+  gain      n= 50/50 q 0.410 rank 21.10 (cues 50.0) top1 0.080 excess +0.0298 WER 1.77
+            vs none on 48 trials: Δq -0.033 (p 0.42); Δrank -1.60 (p 0.45); Δexcess +0.0033 (p 0.76); top1 3 gained / 3 lost
+  projector n= 50/50 q 0.442 rank 22.68 (cues 50.0) top1 0.060 excess +0.0229 WER 1.42
+            vs none on 48 trials: Δq +0.003 (p 0.85); Δrank +0.17 (p 0.84); Δexcess -0.0037 (p 0.8); top1 2 gained / 3 lost
+  paired    n= 50/50 q 0.415 rank 21.34 (cues 50.0) top1 0.100 excess +0.0289 WER 1.49
+            vs none on 48 trials: Δq -0.029 (p 0.34); Δrank -1.44 (p 0.35); Δexcess +0.0038 (p 0.69); top1 3 gained / 2 lost
+== heldout_attempted
+  none      n=200/200 q 0.114 rank  6.58 (cues 50.0) top1 0.315 excess +0.1132 WER 1.09
+  gain      n=200/200 q 0.114 rank  6.58 (cues 50.0) top1 0.315 excess +0.1132 WER 1.09
+            vs none on 200 trials: Δq +0.000 (p 1); Δrank +0.00 (p 1); Δexcess +0.0000 (p 1); top1 0 gained / 0 lost
+  projector n=200/200 q 0.114 rank  6.58 (cues 50.0) top1 0.315 excess +0.1132 WER 1.09
+            vs none on 200 trials: Δq +0.000 (p 1); Δrank +0.00 (p 1); Δexcess +0.0000 (p 1); top1 0 gained / 0 lost
+  paired    n=200/200 q 0.114 rank  6.58 (cues 50.0) top1 0.315 excess +0.1132 WER 1.09
+            vs none on 200 trials: Δq +0.000 (p 1); Δrank +0.00 (p 1); Δexcess +0.0000 (p 1); top1 0 gained / 0 lost

@@ -1,0 +1,3786 @@
+{
+  "fold": "fold_A13",
+  "created": "2026-10-24T01:39:58",
+  "config_file": "configs/experiments/kunz_inner_gain.yaml",
+  "code_version": {
+    "source": "sync",
+    "commit": "6c6d727fa189a89b13bd0dd205e9662000988d11",
+    "dirty": false,
+    "diff_sha256": null,
+    "pushed_at": "2026-10-23T23:16:22Z"
+  },
+  "config_sha256": "121e784662229d57dcc18d554456800a0e089e67b28c8a2672ff65a31ba58c00",
+  "git_commit": "6c6d727fa189a89b13bd0dd205e9662000988d11",
+  "seed": 42,
+  "design": {
+    "heldout_block": 13,
+    "paired_block": 12,
+    "train_blocks": [
+      3,
+      6,
+      11
+    ],
+    "n_train_pool_trials": 150,
+    "sets": {
+      "heldout_attempted_A13": {
+        "role": "heldout_attempted",
+        "condition": "attempted",
+        "block": 13,
+        "n": 50,
+        "n_cues_in_training": 0
+      },
+      "paired_imagined_I12": {
+        "role": "paired_imagined",
+        "condition": "imagined",
+        "block": 12,
+        "n": 50,
+        "n_cues_in_training": 0
+      },
+      "eval_imagined_E14": {
+        "role": "eval_imagined",
+        "condition": "imagined_eval",
+        "block": 14,
+        "n": 50,
+        "n_cues_in_training": 1
+      }
+    }
+  },
+  "reorder_channels": true,
+  "models": {
+    "zero_shot": {
+      "path": "data/raw/wairagkar/t15_neural_data/t15_day195/brain2voice_t15_day193.h5",
+      "sha256": "fd476519fb7f0a7880efb1cbcd328a4915cd1473a23a2eb8d4939d6f34ad006b",
+      "inputs": [
+        "real",
+        "shuffled_time"
+      ],
+      "predictions": {
+        "real": {
+          "path": "results/audio/kunz_inner_gain/fold_A13/predictions/zero_shot__real.npz",
+          "sha256": "ccf301f89b273c47becc4571a22211ee850d54e20aed5852cbf6f89da994d462",
+          "model_sha256": "fd476519fb7f0a7880efb1cbcd328a4915cd1473a23a2eb8d4939d6f34ad006b"
+        },
+        "shuffled_time": {
+          "path": "results/audio/kunz_inner_gain/fold_A13/predictions/zero_shot__shuffled_time.npz",
+          "sha256": "a50fcec3d2aa5463e4822df5bcffefedc6e96091c4339ac12b891fbac5c91aa7",
+          "model_sha256": "fd476519fb7f0a7880efb1cbcd328a4915cd1473a23a2eb8d4939d6f34ad006b"
+        }
+      }
+    }
+  },
+  "training": {},
+  "tts_reference": {
+    "voice": "F5 clone",
+    "corpus": "kunz_50words",
+    "audio": "LPCNet resynthesis of the cue's TTS features (same pipeline as decoder output)"
+  },
+  "target_reference": "held-out attempted only: LPCNet resynthesis of the aligned training target (decoder_target, smoothed + scaled, mapped back to LPCNet's range)",
+  "asr": "wvx.asr.evaluate_wav(wav: 'np.ndarray', sr: 'int', reference_text: 'str', cfg: 'ConfigLike' = None) -> 'dict' with cfg {'asr': {'cpu_threads': 4, 'model': {'allow_download': False}, 'per': {'allow_download': False}}}; versions {'faster-whisper': '1.2.1', 'ctranslate2': '4.8.3', 'tokenizers': '0.23.3', 'huggingface-hub': '2.2.0', 'g2p-en': '2.1.0', 'nltk': '3.10.3'}; effective settings {'model': 'small.en', 'compute_type': 'int8', 'cpu_threads': 4, 'seed': None, 'temperature': [0.0, 0.2, 0.4, 0.6, 0.8, 1.0], 'beam_size': 5, 'constrained_method': 'snap'}",
+  "asr_references": {
+    "tts": {
+      "n": 100,
+      "wer_pooled": 0.014423076923076924,
+      "wer_n_trials": 100,
+      "wer_constrained_pooled": 0.014423076923076924,
+      "wer_constrained_n_trials": 100,
+      "cer_pooled": 0.015769439912996192,
+      "cer_n_trials": 100,
+      "cer_constrained_pooled": 0.015769439912996192,
+      "cer_constrained_n_trials": 100,
+      "per_pooled": 0.015372168284789644,
+      "per_n_trials": 100,
+      "per_constrained_pooled": 0.015372168284789644,
+      "per_constrained_n_trials": 100,
+      "empty_transcript_fraction": 0.0
+    }
+  },
+  "caveats": [
+    "Targets were aligned with the day-193 decoder's own output on these attempted trials (D-020), so target-based scores (target_*, feat_corr_mean) of the zero-shot model are partly circular; the target-free mel_corr vs TTS is the primary metric.",
+    "mel_corr uses DTW, which raises the floor for unrelated speech (METRICS.md 2.5); compare with the nulls.",
+    "The single shuffled-trial partner is a lenient null and partly a sentence-length effect (few speech frames score higher against shorter references); the length-matched cue null is primary (experiment.summary.primary_null). Outputs with little speech (< ~40 frames) cannot be identified even for real attempted speech: see the min_speech_s sensitivity analysis.",
+    "leaky_imagined sets: their cues were trained on (attempted); not a clean generalization test."
+  ],
+  "results": {
+    "per_model": {
+      "zero_shot": {
+        "heldout_attempted_A13": {
+          "role": "heldout_attempted",
+          "n": 50,
+          "silent_outputs": {
+            "n_silent": 0,
+            "n": 50,
+            "fraction": 0.0
+          },
+          "mel_corr_vs_tts": {
+            "n": 50,
+            "n_nan": 0,
+            "mean": 0.6334282574451869,
+            "sd": 0.06701857616274087,
+            "median": 0.6388495314573752,
+            "q25": 0.5886514207984297,
+            "q75": 0.6735258312309901
+          },
+          "mel_corr_vs_tts_silent_as_zero": {
+            "n": 50,
+            "n_nan": 0,
+            "mean": 0.6334282574451869,
+            "sd": 0.06701857616274087,
+            "median": 0.6388495314573752,
+            "q25": 0.5886514207984297,
+            "q75": 0.6735258312309901
+          },
+          "null_shuffled_trial": {
+            "n": 50,
+            "n_nan": 0,
+            "mean": 0.5134613783971915,
+            "sd": 0.0832294154183057,
+            "median": 0.5127401725513955,
+            "q25": 0.45546204970645104,
+            "q75": 0.5709482125934038
+          },
+          "real_minus_shuffled_trial": {
+            "n": 50,
+            "n_nan": 0,
+            "mean": 0.11996687904799558,
+            "sd": 0.09203715433728656,
+            "median": 0.1313045977671,
+            "q25": 0.05123910925656658,
+            "q75": 0.18627220755590418,
+            "frac_a_gt_b": 0.9,
+            "wilcoxon_p": 4.9604764740251994e-11
+          },
+          "nulls": {
+            "lenmatched": {
+              "column": "null_lenmatched_mean",
+              "null": {
+                "n": 50,
+                "n_nan": 0,
+                "mean": 0.5250606316323173,
+                "sd": 0.03829964443619379,
+                "median": 0.525807969573514,
+                "q25": 0.5032152205194738,
+                "q75": 0.5504694436873558
+              },
+              "excess": {
+                "n": 50,
+                "n_nan": 0,
+                "mean": 0.10836762581286973,
+                "sd": 0.07521341277652248,
+                "median": 0.10618735630565634,
+                "q25": 0.06416615127781575,
+                "q75": 0.14563629662490465,
+                "frac_a_gt_b": 0.94,
+                "wilcoxon_p": 2.239985974483716e-12
+              }
+            },
+            "all": {
+              "column": "null_all_mean",
+              "null": {
+                "n": 50,
+                "n_nan": 0,
+                "mean": 0.509413930035382,
+                "sd": 0.029156381236622713,
+                "median": 0.5082990738687876,
+                "q25": 0.48808218887576216,
+                "q75": 0.5344910699850506
+              },
+              "excess": {
+                "n": 50,
+                "n_nan": 0,
+                "mean": 0.12401432740980493,
+                "sd": 0.06722513723611521,
+                "median": 0.12352847001136902,
+                "q25": 0.09052955436854071,
+                "q75": 0.15731327649908036,
+                "frac_a_gt_b": 0.96,
+                "wilcoxon_p": 9.769962616701378e-14
+              }
+            },
+            "shuffled_trial": {
+              "column": "shuffled_trial_tts_mel_corr",
+              "null": {
+                "n": 50,
+                "n_nan": 0,
+                "mean": 0.5134613783971915,
+                "sd": 0.0832294154183057,
+                "median": 0.5127401725513955,
+                "q25": 0.45546204970645104,
+                "q75": 0.5709482125934038
+              },
+              "excess": {
+                "n": 50,
+                "n_nan": 0,
+                "mean": 0.11996687904799558,
+                "sd": 0.09203715433728656,
+                "median": 0.1313045977671,
+                "q25": 0.05123910925656658,
+                "q75": 0.18627220755590418,
+                "frac_a_gt_b": 0.9,
+                "wilcoxon_p": 4.9604764740251994e-11
+              }
+            }
+          },
+          "identification": {
+            "n": 50,
+            "n_undefined": 0,
+            "top1_rate": 0.32,
+            "top1_chance": 0.02,
+            "median_rank": 3.0,
+            "median_n_cues": 50.0,
+            "mean_normalized_rank": 0.1073469387755102,
+            "uniform_rank_p": 7.046333861530924e-27
+          },
+          "speech_s": {
+            "n": 50,
+            "n_nan": 0,
+            "mean": 2.9046,
+            "sd": 0.8206125387632767,
+            "median": 2.6950000000000003,
+            "q25": 2.465,
+            "q75": 3.355
+          },
+          "early_speech_s": {
+            "n": 50,
+            "n_nan": 0,
+            "mean": 2.21,
+            "sd": 0.3898927115638509,
+            "median": 2.215,
+            "q25": 1.9575,
+            "q75": 2.5125
+          },
+          "peak_dbfs": {
+            "n": 50,
+            "n_nan": 0,
+            "mean": -1.6275545291676374,
+            "sd": 2.0384295575982945,
+            "median": -0.7432761375820416,
+            "q25": -2.6368420103266197,
+            "q75": -0.00026507636037961915
+          },
+          "sensitivity_min_speech": {
+            "analysis": "sensitivity analysis, not the primary test: only outputs with >= min_speech_s of decoded speech (selected on the output itself)",
+            "min_speech_s": 0.4,
+            "n_kept": 50,
+            "n": 50,
+            "nulls": {
+              "lenmatched": {
+                "n": 50,
+                "n_nan": 0,
+                "mean": 0.10836762581286973,
+                "sd": 0.07521341277652248,
+                "median": 0.10618735630565634,
+                "q25": 0.06416615127781575,
+                "q75": 0.14563629662490465,
+                "frac_a_gt_b": 0.94,
+                "wilcoxon_p": 2.239985974483716e-12
+              },
+              "all": {
+                "n": 50,
+                "n_nan": 0,
+                "mean": 0.12401432740980493,
+                "sd": 0.06722513723611521,
+                "median": 0.12352847001136902,
+                "q25": 0.09052955436854071,
+                "q75": 0.15731327649908036,
+                "frac_a_gt_b": 0.96,
+                "wilcoxon_p": 9.769962616701378e-14
+              },
+              "shuffled_trial": {
+                "n": 50,
+                "n_nan": 0,
+                "mean": 0.11996687904799558,
+                "sd": 0.09203715433728656,
+                "median": 0.1313045977671,
+                "q25": 0.05123910925656658,
+                "q75": 0.18627220755590418,
+                "frac_a_gt_b": 0.9,
+                "wilcoxon_p": 4.9604764740251994e-11
+              }
+            },
+            "identification": {
+              "n": 50,
+              "n_undefined": 0,
+              "top1_rate": 0.32,
+              "top1_chance": 0.02,
+              "median_rank": 3.0,
+              "median_n_cues": 50.0,
+              "mean_normalized_rank": 0.1073469387755102,
+              "uniform_rank_p": 7.046333861530924e-27
+            }
+          },
+          "silent_outputs_shuffled_time": {
+            "n_silent": 46,
+            "n": 50,
+            "fraction": 0.92
+          },
+          "null_shuffled_time": {
+            "n": 4,
+            "n_nan": 46,
+            "mean": 0.26050746661067303,
+            "sd": 0.06708706547685557,
+            "median": 0.2745236657556913,
+            "q25": 0.2279446051315334,
+            "q75": 0.30708652723483093
+          },
+          "null_shuffled_time_silent_as_zero": {
+            "n": 50,
+            "n_nan": 0,
+            "mean": 0.020840597328853842,
+            "sd": 0.07329588607373456,
+            "median": 0.0,
+            "q25": 0.0,
+            "q75": 0.0
+          },
+          "real_minus_shuffled_time": {
+            "n": 4,
+            "n_nan": 0,
+            "mean": 0.3447203545114065,
+            "sd": 0.04338851693562905,
+            "median": 0.32785151231685483,
+            "q25": 0.31729382285140756,
+            "q75": 0.3552780439768537,
+            "frac_a_gt_b": 1.0,
+            "wilcoxon_p": 0.125
+          },
+          "target_mel_corr": {
+            "n": 0,
+            "n_nan": 50
+          },
+          "target_mel_corr_framewise": {
+            "n": 0,
+            "n_nan": 50
+          },
+          "feat_corr_mean": {
+            "n": 0,
+            "n_nan": 50
+          },
+          "target_vs_tts_mel_corr": {
+            "n": 0,
+            "n_nan": 50
+          },
+          "null_shuffled_time_target_mel_corr": {
+            "n": 0,
+            "n_nan": 50
+          },
+          "null_shuffled_time_target_mel_corr_framewise": {
+            "n": 0,
+            "n_nan": 50
+          },
+          "null_shuffled_time_feat_corr_mean": {
+            "n": 0,
+            "n_nan": 50
+          },
+          "asr_real": {
+            "wer_pooled": 1.026431718061674,
+            "wer_n_trials": 50,
+            "wer_constrained_pooled": 0.9779735682819384,
+            "wer_constrained_n_trials": 50,
+            "cer_pooled": 0.745398773006135,
+            "cer_n_trials": 50,
+            "cer_constrained_pooled": 0.712678936605317,
+            "cer_constrained_n_trials": 50,
+            "per_pooled": 0.8375,
+            "per_n_trials": 50,
+            "per_constrained_pooled": 0.834375,
+            "per_constrained_n_trials": 50,
+            "empty_transcript_fraction": 0.0
+          },
+          "asr_null_shuffled_trial": {
+            "wer_pooled": 1.2951541850220265,
+            "wer_n_trials": 50,
+            "wer_constrained_pooled": 1.2687224669603525,
+            "wer_constrained_n_trials": 50,
+            "cer_pooled": 0.9498977505112475,
+            "cer_n_trials": 50,
+            "cer_constrained_pooled": 0.908997955010225,
+            "cer_constrained_n_trials": 50,
+            "per_pooled": 1.0796875,
+            "per_n_trials": 50,
+            "per_constrained_pooled": 1.046875,
+            "per_constrained_n_trials": 50,
+            "empty_transcript_fraction": 0.0
+          },
+          "asr_null_shuffled_time": {
+            "wer_pooled": 0.9955947136563876,
+            "wer_n_trials": 50,
+            "wer_constrained_pooled": 0.9955947136563876,
+            "wer_constrained_n_trials": 50,
+            "cer_pooled": 0.9887525562372188,
+            "cer_n_trials": 50,
+            "cer_constrained_pooled": 0.9887525562372188,
+            "cer_constrained_n_trials": 50,
+            "per_pooled": 0.990625,
+            "per_n_trials": 50,
+            "per_constrained_pooled": 0.990625,
+            "per_constrained_n_trials": 50,
+            "empty_transcript_fraction": 0.92
+          },
+          "all_metrics_real": {
+            "asr_audio_s": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 6.3002,
+              "sd": 1.75409316067492,
+              "median": 5.875,
+              "q25": 5.2250000000000005,
+              "q75": 6.835
+            },
+            "asr_avg_logprob": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": -0.7887083243264373,
+              "sd": 0.23189491100412102,
+              "median": -0.7429724790346928,
+              "q25": -0.9416562947359952,
+              "q75": -0.629330491917765
+            },
+            "asr_cer": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.7891748108101049,
+              "sd": 0.34723006781533233,
+              "median": 0.7386363636363636,
+              "q25": 0.5647321428571428,
+              "q75": 0.9446428571428571
+            },
+            "asr_cer_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.7573372395635554,
+              "sd": 0.32529063739427444,
+              "median": 0.770979020979021,
+              "q25": 0.5263888888888889,
+              "q75": 0.9352678571428572
+            },
+            "asr_char_errors": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 14.58,
+              "sd": 5.514692805106543,
+              "median": 14.5,
+              "q25": 11.25,
+              "q75": 17.0
+            },
+            "asr_char_errors_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 13.94,
+              "sd": 4.921464855765061,
+              "median": 14.5,
+              "q25": 11.0,
+              "q75": 17.0
+            },
+            "asr_hyp_words": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 5.58,
+              "sd": 2.2047259073478074,
+              "median": 5.0,
+              "q25": 5.0,
+              "q75": 6.0
+            },
+            "asr_max_compression_ratio": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.8902489220660056,
+              "sd": 0.33024110079135194,
+              "median": 0.7974358974358975,
+              "q25": 0.7167487684729064,
+              "q75": 0.925
+            },
+            "asr_max_temperature": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.172,
+              "sd": 0.3703500825887169,
+              "median": 0.0,
+              "q25": 0.0,
+              "q75": 0.0
+            },
+            "asr_n_segments": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1.0,
+              "sd": 0.0,
+              "median": 1.0,
+              "q25": 1.0,
+              "q75": 1.0
+            },
+            "asr_no_speech_prob": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.09515171956270933,
+              "sd": 0.07706537182415994,
+              "median": 0.06542669981718063,
+              "q25": 0.029894994106143713,
+              "q75": 0.16180726140737534
+            },
+            "asr_per": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.899366420129578,
+              "sd": 0.35385475622664275,
+              "median": 0.8605769230769231,
+              "q25": 0.7014705882352941,
+              "q75": 1.1111111111111112
+            },
+            "asr_per_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.9015254978939189,
+              "sd": 0.3848625535926316,
+              "median": 0.9230769230769231,
+              "q25": 0.6519607843137255,
+              "q75": 1.152777777777778
+            },
+            "asr_phone_errors": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 10.72,
+              "sd": 3.4936677411732053,
+              "median": 11.0,
+              "q25": 9.0,
+              "q75": 13.0
+            },
+            "asr_phone_errors_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 10.68,
+              "sd": 3.8302768056843184,
+              "median": 10.5,
+              "q25": 9.0,
+              "q75": 13.75
+            },
+            "asr_ref_chars": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 19.56,
+              "sd": 5.4815460354516325,
+              "median": 19.0,
+              "q25": 15.0,
+              "q75": 24.25
+            },
+            "asr_ref_oov_words": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.0,
+              "sd": 0.0,
+              "median": 0.0,
+              "q25": 0.0,
+              "q75": 0.0
+            },
+            "asr_ref_phones": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 12.8,
+              "sd": 4.150239727523986,
+              "median": 12.5,
+              "q25": 10.0,
+              "q75": 15.0
+            },
+            "asr_ref_words": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 4.54,
+              "sd": 1.2488361929151053,
+              "median": 4.0,
+              "q25": 4.0,
+              "q75": 5.0
+            },
+            "asr_s": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 13.976190405581146,
+              "sd": 25.30368258985147,
+              "median": 5.298773553222418,
+              "q25": 3.856399356853217,
+              "q75": 7.774134359089658
+            },
+            "asr_seed": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 2241631858.6,
+              "sd": 1313087198.1681035,
+              "median": 2318446428.5,
+              "q25": 1159215056.25,
+              "q75": 3398920626.75
+            },
+            "asr_speech_frames": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 290.46,
+              "sd": 82.06125387632767,
+              "median": 269.5,
+              "q25": 246.5,
+              "q75": 335.5
+            },
+            "asr_wer": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1.092452380952381,
+              "sd": 0.5583959648958084,
+              "median": 1.0,
+              "q25": 0.7232142857142857,
+              "q75": 1.3125
+            },
+            "asr_wer_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1.0422857142857143,
+              "sd": 0.5883603742853137,
+              "median": 1.0,
+              "q25": 0.6785714285714286,
+              "q75": 1.25
+            },
+            "asr_word_errors": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 4.66,
+              "sd": 2.18164888025885,
+              "median": 4.5,
+              "q25": 3.0,
+              "q75": 5.0
+            },
+            "asr_word_errors_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 4.44,
+              "sd": 2.3049193177255662,
+              "median": 4.0,
+              "q25": 3.0,
+              "q75": 5.0
+            },
+            "cue_tts_speech_s": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 3.5282,
+              "sd": 1.0920486084718508,
+              "median": 3.4299999999999997,
+              "q25": 2.55,
+              "q75": 4.3774999999999995
+            },
+            "early_speech_s": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 2.21,
+              "sd": 0.3898927115638509,
+              "median": 2.215,
+              "q25": 1.9575,
+              "q75": 2.5125
+            },
+            "est_speech_frames": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 290.46,
+              "sd": 82.06125387632767,
+              "median": 269.5,
+              "q25": 246.5,
+              "q75": 335.5
+            },
+            "est_speech_s": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 2.9046,
+              "sd": 0.8206125387632767,
+              "median": 2.6950000000000003,
+              "q25": 2.465,
+              "q75": 3.355
+            },
+            "n_bins": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 689.02,
+              "sd": 175.409316067492,
+              "median": 646.5,
+              "q25": 581.5,
+              "q75": 742.5
+            },
+            "n_cues": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 50.0,
+              "sd": 0.0,
+              "median": 50.0,
+              "q25": 50.0,
+              "q75": 50.0
+            },
+            "n_frames": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 630.02,
+              "sd": 175.409316067492,
+              "median": 587.5,
+              "q25": 522.5,
+              "q75": 683.5
+            },
+            "null_all_mean": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.509413930035382,
+              "sd": 0.029156381236622713,
+              "median": 0.5082990738687876,
+              "q25": 0.48808218887576216,
+              "q75": 0.5344910699850506
+            },
+            "null_lenmatched_mean": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.5250606316323173,
+              "sd": 0.03829964443619379,
+              "median": 0.525807969573514,
+              "q25": 0.5032152205194738,
+              "q75": 0.5504694436873558
+            },
+            "null_lenmatched_n": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 10.0,
+              "sd": 0.0,
+              "median": 10.0,
+              "q25": 10.0,
+              "q75": 10.0
+            },
+            "own_rank": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 6.26,
+              "sd": 8.925565208193502,
+              "median": 3.0,
+              "q25": 1.0,
+              "q75": 7.75
+            },
+            "peak_dbfs": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": -1.6275545291676374,
+              "sd": 2.0384295575982945,
+              "median": -0.7432761375820416,
+              "q25": -2.6368420103266197,
+              "q75": -0.00026507636037961915
+            },
+            "shuffled_trial_asr_cer": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1.0175925230571516,
+              "sd": 0.41762209263773287,
+              "median": 0.8571428571428571,
+              "q25": 0.7692307692307693,
+              "q75": 1.0615808823529411
+            },
+            "shuffled_trial_asr_cer_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.9692876676786121,
+              "sd": 0.37632927662958926,
+              "median": 0.8685714285714285,
+              "q25": 0.7423076923076923,
+              "q75": 1.0
+            },
+            "shuffled_trial_asr_char_errors": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 18.58,
+              "sd": 4.5628938186199335,
+              "median": 19.0,
+              "q25": 15.0,
+              "q75": 22.0
+            },
+            "shuffled_trial_asr_char_errors_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 17.78,
+              "sd": 4.306094399753893,
+              "median": 17.0,
+              "q25": 15.0,
+              "q75": 22.0
+            },
+            "shuffled_trial_asr_hyp_words": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 5.58,
+              "sd": 2.2047259073478074,
+              "median": 5.0,
+              "q25": 5.0,
+              "q75": 6.0
+            },
+            "shuffled_trial_asr_per": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1.173183458096771,
+              "sd": 0.4548558218270585,
+              "median": 0.9736842105263157,
+              "q25": 0.9058441558441559,
+              "q75": 1.2307692307692308
+            },
+            "shuffled_trial_asr_per_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1.1391965055927904,
+              "sd": 0.4325449234774494,
+              "median": 0.9772727272727273,
+              "q25": 0.8947368421052632,
+              "q75": 1.2230769230769232
+            },
+            "shuffled_trial_asr_phone_errors": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 13.82,
+              "sd": 3.160276402274888,
+              "median": 14.0,
+              "q25": 11.25,
+              "q75": 16.0
+            },
+            "shuffled_trial_asr_phone_errors_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 13.4,
+              "sd": 2.9346626548820196,
+              "median": 13.0,
+              "q25": 11.0,
+              "q75": 15.75
+            },
+            "shuffled_trial_asr_ref_chars": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 19.56,
+              "sd": 5.4815460354516325,
+              "median": 19.0,
+              "q25": 15.0,
+              "q75": 24.25
+            },
+            "shuffled_trial_asr_ref_oov_words": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.0,
+              "sd": 0.0,
+              "median": 0.0,
+              "q25": 0.0,
+              "q75": 0.0
+            },
+            "shuffled_trial_asr_ref_phones": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 12.8,
+              "sd": 4.150239727523986,
+              "median": 12.5,
+              "q25": 10.0,
+              "q75": 15.0
+            },
+            "shuffled_trial_asr_ref_words": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 4.54,
+              "sd": 1.2488361929151053,
+              "median": 4.0,
+              "q25": 4.0,
+              "q75": 5.0
+            },
+            "shuffled_trial_asr_wer": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1.3903333333333334,
+              "sd": 0.6710830755808597,
+              "median": 1.25,
+              "q25": 1.0,
+              "q75": 1.5
+            },
+            "shuffled_trial_asr_wer_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1.3606666666666667,
+              "sd": 0.6622965609859963,
+              "median": 1.225,
+              "q25": 1.0,
+              "q75": 1.5
+            },
+            "shuffled_trial_asr_word_errors": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 5.88,
+              "sd": 1.8696283598837582,
+              "median": 6.0,
+              "q25": 5.0,
+              "q75": 7.0
+            },
+            "shuffled_trial_asr_word_errors_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 5.76,
+              "sd": 1.8578020808010125,
+              "median": 5.0,
+              "q25": 5.0,
+              "q75": 6.0
+            },
+            "shuffled_trial_partner": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 174.5,
+              "sd": 14.577379737113251,
+              "median": 174.5,
+              "q25": 162.25,
+              "q75": 186.75
+            },
+            "shuffled_trial_tts_est_speech_fraction": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.4638873290650776,
+              "sd": 0.07220463230002337,
+              "median": 0.4584182881964452,
+              "q25": 0.41477264427922467,
+              "q75": 0.5007545271629779
+            },
+            "shuffled_trial_tts_mcd": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 7.930811213307367,
+              "sd": 0.7903949608819223,
+              "median": 7.987101646629572,
+              "q25": 7.401334864273464,
+              "q75": 8.390230296425543
+            },
+            "shuffled_trial_tts_mel_corr": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.5134613783971915,
+              "sd": 0.0832294154183057,
+              "median": 0.5127401725513955,
+              "q25": 0.45546204970645104,
+              "q75": 0.5709482125934038
+            },
+            "shuffled_trial_tts_ref_speech_fraction": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.7378928030840701,
+              "sd": 0.0671789776433448,
+              "median": 0.742633251480572,
+              "q25": 0.7030121485430078,
+              "q75": 0.7950034370166695
+            },
+            "tts_est_speech_fraction": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.4638873290650776,
+              "sd": 0.07220463230002337,
+              "median": 0.4584182881964452,
+              "q25": 0.41477264427922467,
+              "q75": 0.5007545271629779
+            },
+            "tts_mcd": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 7.02493942566843,
+              "sd": 0.5941772657772673,
+              "median": 7.025598395898749,
+              "q25": 6.676325490073064,
+              "q75": 7.310044874953553
+            },
+            "tts_mel_corr": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.6334282574451869,
+              "sd": 0.06701857616274087,
+              "median": 0.6388495314573752,
+              "q25": 0.5886514207984297,
+              "q75": 0.6735258312309901
+            },
+            "tts_ref_speech_fraction": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.7378928030840703,
+              "sd": 0.06717897764334478,
+              "median": 0.742633251480572,
+              "q25": 0.7030121485430078,
+              "q75": 0.7950034370166695
+            }
+          },
+          "all_metrics_shuffled_time": {
+            "asr_audio_s": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 6.3002,
+              "sd": 1.75409316067492,
+              "median": 5.875,
+              "q25": 5.2250000000000005,
+              "q75": 6.835
+            },
+            "asr_avg_logprob": {
+              "n": 4,
+              "n_nan": 46,
+              "mean": -0.6415349245071411,
+              "sd": 0.06502096307883366,
+              "median": -0.6145687103271484,
+              "q25": -0.6547709703445435,
+              "q75": -0.6013326644897461
+            },
+            "asr_cer": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.990695238095238,
+              "sd": 0.032270894253910276,
+              "median": 1.0,
+              "q25": 1.0,
+              "q75": 1.0
+            },
+            "asr_cer_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.990695238095238,
+              "sd": 0.032270894253910276,
+              "median": 1.0,
+              "q25": 1.0,
+              "q75": 1.0
+            },
+            "asr_char_errors": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 19.34,
+              "sd": 5.351368316341425,
+              "median": 18.5,
+              "q25": 15.0,
+              "q75": 22.0
+            },
+            "asr_char_errors_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 19.34,
+              "sd": 5.351368316341425,
+              "median": 18.5,
+              "q25": 15.0,
+              "q75": 22.0
+            },
+            "asr_hyp_words": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.08,
+              "sd": 0.27404751561786966,
+              "median": 0.0,
+              "q25": 0.0,
+              "q75": 0.0
+            },
+            "asr_max_compression_ratio": {
+              "n": 4,
+              "n_nan": 46,
+              "mean": 0.2727272727272727,
+              "sd": 0.0,
+              "median": 0.2727272727272727,
+              "q25": 0.2727272727272727,
+              "q75": 0.2727272727272727
+            },
+            "asr_max_temperature": {
+              "n": 4,
+              "n_nan": 46,
+              "mean": 0.0,
+              "sd": 0.0,
+              "median": 0.0,
+              "q25": 0.0,
+              "q75": 0.0
+            },
+            "asr_n_segments": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.08,
+              "sd": 0.27404751561786966,
+              "median": 0.0,
+              "q25": 0.0,
+              "q75": 0.0
+            },
+            "asr_no_speech_prob": {
+              "n": 4,
+              "n_nan": 46,
+              "mean": 0.873478040099144,
+              "sd": 0.034377506347664503,
+              "median": 0.8588162362575531,
+              "q25": 0.8539959490299225,
+              "q75": 0.8782983273267746
+            },
+            "asr_per": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.9928751289989681,
+              "sd": 0.028628782184321806,
+              "median": 1.0,
+              "q25": 1.0,
+              "q75": 1.0
+            },
+            "asr_per_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.9928751289989681,
+              "sd": 0.028628782184321806,
+              "median": 1.0,
+              "q25": 1.0,
+              "q75": 1.0
+            },
+            "asr_phone_errors": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 12.68,
+              "sd": 4.052915302468039,
+              "median": 12.5,
+              "q25": 10.0,
+              "q75": 15.0
+            },
+            "asr_phone_errors_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 12.68,
+              "sd": 4.052915302468039,
+              "median": 12.5,
+              "q25": 10.0,
+              "q75": 15.0
+            },
+            "asr_ref_chars": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 19.56,
+              "sd": 5.4815460354516325,
+              "median": 19.0,
+              "q25": 15.0,
+              "q75": 24.25
+            },
+            "asr_ref_oov_words": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.0,
+              "sd": 0.0,
+              "median": 0.0,
+              "q25": 0.0,
+              "q75": 0.0
+            },
+            "asr_ref_phones": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 12.8,
+              "sd": 4.150239727523986,
+              "median": 12.5,
+              "q25": 10.0,
+              "q75": 15.0
+            },
+            "asr_ref_words": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 4.54,
+              "sd": 1.2488361929151053,
+              "median": 4.0,
+              "q25": 4.0,
+              "q75": 5.0
+            },
+            "asr_s": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.23547085732221604,
+              "sd": 0.7970376982717409,
+              "median": 0.018572895787656307,
+              "q25": 0.01203644264023751,
+              "q75": 0.02568364783655852
+            },
+            "asr_seed": {
+              "n": 4,
+              "n_nan": 46,
+              "mean": 2622120517.75,
+              "sd": 1859216807.0063925,
+              "median": 3098384562.0,
+              "q25": 1673056930.75,
+              "q75": 4047448149.0
+            },
+            "asr_speech_frames": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.36,
+              "sd": 1.241460627565739,
+              "median": 0.0,
+              "q25": 0.0,
+              "q75": 0.0
+            },
+            "asr_wer": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.9971428571428572,
+              "sd": 0.020203050891044225,
+              "median": 1.0,
+              "q25": 1.0,
+              "q75": 1.0
+            },
+            "asr_wer_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.9971428571428572,
+              "sd": 0.020203050891044225,
+              "median": 1.0,
+              "q25": 1.0,
+              "q75": 1.0
+            },
+            "asr_word_errors": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 4.52,
+              "sd": 1.2162169516453005,
+              "median": 4.0,
+              "q25": 4.0,
+              "q75": 5.0
+            },
+            "asr_word_errors_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 4.52,
+              "sd": 1.2162169516453005,
+              "median": 4.0,
+              "q25": 4.0,
+              "q75": 5.0
+            },
+            "early_speech_s": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.0026,
+              "sd": 0.01046081122229875,
+              "median": 0.0,
+              "q25": 0.0,
+              "q75": 0.0
+            },
+            "est_speech_frames": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.36,
+              "sd": 1.241460627565739,
+              "median": 0.0,
+              "q25": 0.0,
+              "q75": 0.0
+            },
+            "est_speech_s": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.0036000000000000003,
+              "sd": 0.01241460627565739,
+              "median": 0.0,
+              "q25": 0.0,
+              "q75": 0.0
+            },
+            "n_bins": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 689.02,
+              "sd": 175.409316067492,
+              "median": 646.5,
+              "q25": 581.5,
+              "q75": 742.5
+            },
+            "n_frames": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 630.02,
+              "sd": 175.409316067492,
+              "median": 587.5,
+              "q25": 522.5,
+              "q75": 683.5
+            },
+            "peak_dbfs": {
+              "n": 4,
+              "n_nan": 46,
+              "mean": -50.48832307903977,
+              "sd": 6.97467288527668,
+              "median": -48.87885069665341,
+              "q25": -52.78324880759483,
+              "q75": -46.583924968098344
+            },
+            "tts_est_speech_fraction": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.0005776519025983557,
+              "sd": 0.002019568823800384,
+              "median": 0.0,
+              "q25": 0.0,
+              "q75": 0.0
+            },
+            "tts_mcd": {
+              "n": 4,
+              "n_nan": 46,
+              "mean": 9.315854599531082,
+              "sd": 0.5602095176588806,
+              "median": 9.424041030321,
+              "q25": 8.997565607616233,
+              "q75": 9.742330022235851
+            },
+            "tts_mel_corr": {
+              "n": 4,
+              "n_nan": 46,
+              "mean": 0.26050746661067303,
+              "sd": 0.06708706547685557,
+              "median": 0.2745236657556913,
+              "q25": 0.2279446051315334,
+              "q75": 0.30708652723483093
+            },
+            "tts_ref_speech_fraction": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.7378928030840703,
+              "sd": 0.06717897764334478,
+              "median": 0.742633251480572,
+              "q25": 0.7030121485430078,
+              "q75": 0.7950034370166695
+            }
+          }
+        },
+        "paired_imagined_I12": {
+          "role": "paired_imagined",
+          "n": 50,
+          "silent_outputs": {
+            "n_silent": 0,
+            "n": 50,
+            "fraction": 0.0
+          },
+          "mel_corr_vs_tts": {
+            "n": 50,
+            "n_nan": 0,
+            "mean": 0.5267351603826961,
+            "sd": 0.09745636906519797,
+            "median": 0.5294729260348496,
+            "q25": 0.49320388226977707,
+            "q75": 0.5704182543908536
+          },
+          "mel_corr_vs_tts_silent_as_zero": {
+            "n": 50,
+            "n_nan": 0,
+            "mean": 0.5267351603826961,
+            "sd": 0.09745636906519797,
+            "median": 0.5294729260348496,
+            "q25": 0.49320388226977707,
+            "q75": 0.5704182543908536
+          },
+          "null_shuffled_trial": {
+            "n": 50,
+            "n_nan": 0,
+            "mean": 0.51228022961366,
+            "sd": 0.09753557764462674,
+            "median": 0.5375245402477505,
+            "q25": 0.4492736671106804,
+            "q75": 0.5730839737439404
+          },
+          "real_minus_shuffled_trial": {
+            "n": 50,
+            "n_nan": 0,
+            "mean": 0.01445493076903606,
+            "sd": 0.09525359344759975,
+            "median": 0.006992149020473792,
+            "q25": -0.04807480756214913,
+            "q75": 0.08641959333387488,
+            "frac_a_gt_b": 0.54,
+            "wilcoxon_p": 0.3230277659528582
+          },
+          "nulls": {
+            "lenmatched": {
+              "column": "null_lenmatched_mean",
+              "null": {
+                "n": 50,
+                "n_nan": 0,
+                "mean": 0.5243637415387473,
+                "sd": 0.06691574872667705,
+                "median": 0.5420586394285545,
+                "q25": 0.4837576287008213,
+                "q75": 0.5725638717382959
+              },
+              "excess": {
+                "n": 50,
+                "n_nan": 0,
+                "mean": 0.0023714188439488493,
+                "sd": 0.06784864451294013,
+                "median": 0.0023061870673165563,
+                "q25": -0.04244686919757269,
+                "q75": 0.04143059122067046,
+                "frac_a_gt_b": 0.54,
+                "wilcoxon_p": 0.81837027658068
+              }
+            },
+            "all": {
+              "column": "null_all_mean",
+              "null": {
+                "n": 50,
+                "n_nan": 0,
+                "mean": 0.5127227967857632,
+                "sd": 0.0643053954359761,
+                "median": 0.533621401783427,
+                "q25": 0.49659794034497107,
+                "q75": 0.5535234834720406
+              },
+              "excess": {
+                "n": 50,
+                "n_nan": 0,
+                "mean": 0.014012363596932913,
+                "sd": 0.07271704169495442,
+                "median": 0.01650779776208028,
+                "q25": -0.03560053813028266,
+                "q75": 0.06333214682513164,
+                "frac_a_gt_b": 0.54,
+                "wilcoxon_p": 0.15430250303892734
+              }
+            },
+            "shuffled_trial": {
+              "column": "shuffled_trial_tts_mel_corr",
+              "null": {
+                "n": 50,
+                "n_nan": 0,
+                "mean": 0.51228022961366,
+                "sd": 0.09753557764462674,
+                "median": 0.5375245402477505,
+                "q25": 0.4492736671106804,
+                "q75": 0.5730839737439404
+              },
+              "excess": {
+                "n": 50,
+                "n_nan": 0,
+                "mean": 0.01445493076903606,
+                "sd": 0.09525359344759975,
+                "median": 0.006992149020473792,
+                "q25": -0.04807480756214913,
+                "q75": 0.08641959333387488,
+                "frac_a_gt_b": 0.54,
+                "wilcoxon_p": 0.3230277659528582
+              }
+            }
+          },
+          "identification": {
+            "n": 50,
+            "n_undefined": 0,
+            "top1_rate": 0.0,
+            "top1_chance": 0.02,
+            "median_rank": 23.0,
+            "median_n_cues": 50.0,
+            "mean_normalized_rank": 0.4632653061224489,
+            "uniform_rank_p": 0.3815035729224811
+          },
+          "speech_s": {
+            "n": 50,
+            "n_nan": 0,
+            "mean": 1.5688,
+            "sd": 0.6570547767057453,
+            "median": 1.525,
+            "q25": 1.0025,
+            "q75": 1.98
+          },
+          "early_speech_s": {
+            "n": 50,
+            "n_nan": 0,
+            "mean": 0.8058,
+            "sd": 0.4978447016277019,
+            "median": 0.765,
+            "q25": 0.4325,
+            "q75": 1.15
+          },
+          "peak_dbfs": {
+            "n": 50,
+            "n_nan": 0,
+            "mean": -5.83271256417424,
+            "sd": 5.432505072602096,
+            "median": -4.959762052867369,
+            "q25": -8.510554766693275,
+            "q75": -1.7847379276926372
+          },
+          "sensitivity_min_speech": {
+            "analysis": "sensitivity analysis, not the primary test: only outputs with >= min_speech_s of decoded speech (selected on the output itself)",
+            "min_speech_s": 0.4,
+            "n_kept": 49,
+            "n": 50,
+            "nulls": {
+              "lenmatched": {
+                "n": 49,
+                "n_nan": 0,
+                "mean": 0.0009921543554525123,
+                "sd": 0.0678398361573844,
+                "median": 0.001979178514524893,
+                "q25": -0.04455910448107192,
+                "q75": 0.03333827670966927,
+                "frac_a_gt_b": 0.5306122448979592,
+                "wilcoxon_p": 0.9685506468532239
+              },
+              "all": {
+                "n": 49,
+                "n_nan": 0,
+                "mean": 0.01192766998900934,
+                "sd": 0.07194515681305935,
+                "median": 0.015851113312074117,
+                "q25": -0.0364856108907996,
+                "q75": 0.060278441568065055,
+                "frac_a_gt_b": 0.5306122448979592,
+                "wilcoxon_p": 0.21578718136627728
+              },
+              "shuffled_trial": {
+                "n": 49,
+                "n_nan": 0,
+                "mean": 0.011158786285714218,
+                "sd": 0.09331520435406508,
+                "median": 0.0031083683604914425,
+                "q25": -0.048850471587531086,
+                "q75": 0.0767527781787864,
+                "frac_a_gt_b": 0.5306122448979592,
+                "wilcoxon_p": 0.4353330401961557
+              }
+            },
+            "identification": {
+              "n": 49,
+              "n_undefined": 0,
+              "top1_rate": 0.0,
+              "top1_chance": 0.02,
+              "median_rank": 23.0,
+              "median_n_cues": 50.0,
+              "mean_normalized_rank": 0.4698042482299042,
+              "uniform_rank_p": 0.47712123662273215
+            }
+          },
+          "silent_outputs_shuffled_time": {
+            "n_silent": 50,
+            "n": 50,
+            "fraction": 1.0
+          },
+          "null_shuffled_time": {
+            "n": 0,
+            "n_nan": 50
+          },
+          "null_shuffled_time_silent_as_zero": {
+            "n": 50,
+            "n_nan": 0,
+            "mean": 0.0,
+            "sd": 0.0,
+            "median": 0.0,
+            "q25": 0.0,
+            "q75": 0.0
+          },
+          "real_minus_shuffled_time": {
+            "n": 0,
+            "n_nan": 0,
+            "frac_a_gt_b": null,
+            "wilcoxon_p": null
+          },
+          "asr_real": {
+            "wer_pooled": 1.0572687224669604,
+            "wer_n_trials": 50,
+            "wer_constrained_pooled": 1.0440528634361232,
+            "wer_constrained_n_trials": 50,
+            "cer_pooled": 0.8824130879345603,
+            "cer_n_trials": 50,
+            "cer_constrained_pooled": 0.8660531697341514,
+            "cer_constrained_n_trials": 50,
+            "per_pooled": 0.953125,
+            "per_n_trials": 50,
+            "per_constrained_pooled": 0.9421875,
+            "per_constrained_n_trials": 50,
+            "empty_transcript_fraction": 0.12
+          },
+          "asr_null_shuffled_trial": {
+            "wer_pooled": 1.052863436123348,
+            "wer_n_trials": 50,
+            "wer_constrained_pooled": 1.0308370044052864,
+            "wer_constrained_n_trials": 50,
+            "cer_pooled": 0.8742331288343558,
+            "cer_n_trials": 50,
+            "cer_constrained_pooled": 0.8568507157464212,
+            "cer_constrained_n_trials": 50,
+            "per_pooled": 0.959375,
+            "per_n_trials": 50,
+            "per_constrained_pooled": 0.9640625,
+            "per_constrained_n_trials": 50,
+            "empty_transcript_fraction": 0.12
+          },
+          "asr_null_shuffled_time": {
+            "wer_pooled": 1.0,
+            "wer_n_trials": 50,
+            "wer_constrained_pooled": 1.0,
+            "wer_constrained_n_trials": 50,
+            "cer_pooled": 1.0,
+            "cer_n_trials": 50,
+            "cer_constrained_pooled": 1.0,
+            "cer_constrained_n_trials": 50,
+            "per_pooled": 1.0,
+            "per_n_trials": 50,
+            "per_constrained_pooled": 1.0,
+            "per_constrained_n_trials": 50,
+            "empty_transcript_fraction": 1.0
+          },
+          "all_metrics_real": {
+            "asr_audio_s": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 9.811399999999999,
+              "sd": 2.503002287050412,
+              "median": 9.504999999999999,
+              "q25": 7.96,
+              "q75": 10.9775
+            },
+            "asr_avg_logprob": {
+              "n": 44,
+              "n_nan": 6,
+              "mean": -1.0268463830550316,
+              "sd": 0.2533110091896534,
+              "median": -1.007235310971737,
+              "q25": -1.1635802789738303,
+              "q75": -0.8754651625951131
+            },
+            "asr_cer": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.8835480947959276,
+              "sd": 0.1936004000684265,
+              "median": 0.8571428571428571,
+              "q25": 0.7866541353383458,
+              "q75": 0.9352678571428572
+            },
+            "asr_cer_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.8650753210612343,
+              "sd": 0.14887019649310881,
+              "median": 0.8480769230769231,
+              "q25": 0.7857142857142857,
+              "q75": 0.9364583333333334
+            },
+            "asr_char_errors": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 17.26,
+              "sd": 5.816268528174807,
+              "median": 16.0,
+              "q25": 13.0,
+              "q75": 21.75
+            },
+            "asr_char_errors_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 16.94,
+              "sd": 5.560098369413173,
+              "median": 16.0,
+              "q25": 13.0,
+              "q75": 20.75
+            },
+            "asr_hyp_words": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 2.68,
+              "sd": 2.014640293006194,
+              "median": 2.0,
+              "q25": 1.0,
+              "q75": 4.0
+            },
+            "asr_max_compression_ratio": {
+              "n": 44,
+              "n_nan": 6,
+              "mean": 0.7352884355361543,
+              "sd": 0.2969632730070023,
+              "median": 0.6858552631578947,
+              "q25": 0.5220588235294118,
+              "q75": 0.8946428571428572
+            },
+            "asr_max_temperature": {
+              "n": 44,
+              "n_nan": 6,
+              "mean": 0.5545454545454546,
+              "sd": 0.46827468854545906,
+              "median": 0.8,
+              "q25": 0.0,
+              "q75": 1.0
+            },
+            "asr_n_segments": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.88,
+              "sd": 0.32826072265931594,
+              "median": 1.0,
+              "q25": 1.0,
+              "q75": 1.0
+            },
+            "asr_no_speech_prob": {
+              "n": 44,
+              "n_nan": 6,
+              "mean": 0.33084965260191396,
+              "sd": 0.15669986403368177,
+              "median": 0.30983811616897583,
+              "q25": 0.21107296645641327,
+              "q75": 0.4462372735142708
+            },
+            "asr_per": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.9665899758995734,
+              "sd": 0.20230501463989004,
+              "median": 0.9372549019607843,
+              "q25": 0.8839869281045751,
+              "q75": 1.0
+            },
+            "asr_per_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.9431531892600005,
+              "sd": 0.14381332390283566,
+              "median": 0.9333333333333333,
+              "q25": 0.8768382352941176,
+              "q75": 1.0
+            },
+            "asr_phone_errors": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 12.2,
+              "sd": 3.9948947011741605,
+              "median": 12.0,
+              "q25": 9.0,
+              "q75": 15.0
+            },
+            "asr_phone_errors_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 12.06,
+              "sd": 4.244612431527471,
+              "median": 11.5,
+              "q25": 9.0,
+              "q75": 15.0
+            },
+            "asr_ref_chars": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 19.56,
+              "sd": 5.4815460354516325,
+              "median": 19.0,
+              "q25": 15.0,
+              "q75": 24.25
+            },
+            "asr_ref_oov_words": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.0,
+              "sd": 0.0,
+              "median": 0.0,
+              "q25": 0.0,
+              "q75": 0.0
+            },
+            "asr_ref_phones": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 12.8,
+              "sd": 4.150239727523986,
+              "median": 12.5,
+              "q25": 10.0,
+              "q75": 15.0
+            },
+            "asr_ref_words": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 4.54,
+              "sd": 1.2488361929151053,
+              "median": 4.0,
+              "q25": 4.0,
+              "q75": 5.0
+            },
+            "asr_s": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 19.36135401904583,
+              "sd": 20.74560891450377,
+              "median": 11.56331420247443,
+              "q25": 5.984204654232599,
+              "q75": 24.151279207901098
+            },
+            "asr_seed": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 2180858335.9,
+              "sd": 1323259398.7010903,
+              "median": 1883452174.0,
+              "q25": 1061434061.0,
+              "q75": 3496037681.75
+            },
+            "asr_speech_frames": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 156.88,
+              "sd": 65.70547767057452,
+              "median": 152.5,
+              "q25": 100.25,
+              "q75": 198.0
+            },
+            "asr_wer": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1.071,
+              "sd": 0.25109307522570956,
+              "median": 1.0,
+              "q25": 1.0,
+              "q75": 1.0
+            },
+            "asr_wer_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1.0553333333333332,
+              "sd": 0.2682867454381185,
+              "median": 1.0,
+              "q25": 1.0,
+              "q75": 1.0
+            },
+            "asr_word_errors": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 4.8,
+              "sd": 1.442786419766011,
+              "median": 5.0,
+              "q25": 4.0,
+              "q75": 6.0
+            },
+            "asr_word_errors_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 4.74,
+              "sd": 1.509290953949393,
+              "median": 5.0,
+              "q25": 4.0,
+              "q75": 6.0
+            },
+            "cue_tts_speech_s": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 3.5282,
+              "sd": 1.0920486084718508,
+              "median": 3.4299999999999997,
+              "q25": 2.55,
+              "q75": 4.3774999999999995
+            },
+            "early_speech_s": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.8058,
+              "sd": 0.4978447016277019,
+              "median": 0.765,
+              "q25": 0.4325,
+              "q75": 1.15
+            },
+            "est_speech_frames": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 156.88,
+              "sd": 65.70547767057452,
+              "median": 152.5,
+              "q25": 100.25,
+              "q75": 198.0
+            },
+            "est_speech_s": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1.5688,
+              "sd": 0.6570547767057453,
+              "median": 1.525,
+              "q25": 1.0025,
+              "q75": 1.98
+            },
+            "n_bins": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1040.14,
+              "sd": 250.3002287050412,
+              "median": 1009.5,
+              "q25": 855.0,
+              "q75": 1156.75
+            },
+            "n_cues": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 50.0,
+              "sd": 0.0,
+              "median": 50.0,
+              "q25": 50.0,
+              "q75": 50.0
+            },
+            "n_frames": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 981.14,
+              "sd": 250.3002287050412,
+              "median": 950.5,
+              "q25": 796.0,
+              "q75": 1097.75
+            },
+            "null_all_mean": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.5127227967857632,
+              "sd": 0.0643053954359761,
+              "median": 0.533621401783427,
+              "q25": 0.49659794034497107,
+              "q75": 0.5535234834720406
+            },
+            "null_lenmatched_mean": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.5243637415387473,
+              "sd": 0.06691574872667705,
+              "median": 0.5420586394285545,
+              "q25": 0.4837576287008213,
+              "q75": 0.5725638717382959
+            },
+            "null_lenmatched_n": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 10.0,
+              "sd": 0.0,
+              "median": 10.0,
+              "q25": 10.0,
+              "q75": 10.0
+            },
+            "own_rank": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 23.7,
+              "sd": 14.445181387096614,
+              "median": 23.0,
+              "q25": 10.0,
+              "q75": 35.0
+            },
+            "peak_dbfs": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": -5.83271256417424,
+              "sd": 5.432505072602096,
+              "median": -4.959762052867369,
+              "q25": -8.510554766693275,
+              "q75": -1.7847379276926372
+            },
+            "shuffled_trial_asr_cer": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.8748775553393974,
+              "sd": 0.14948312212929407,
+              "median": 0.8666666666666667,
+              "q25": 0.7786458333333334,
+              "q75": 0.9523809523809523
+            },
+            "shuffled_trial_asr_cer_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.855414282403756,
+              "sd": 0.1590549443208096,
+              "median": 0.8410526315789473,
+              "q25": 0.773989898989899,
+              "q75": 0.9184981684981686
+            },
+            "shuffled_trial_asr_char_errors": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 17.1,
+              "sd": 5.3308880448700835,
+              "median": 16.0,
+              "q25": 13.0,
+              "q75": 22.0
+            },
+            "shuffled_trial_asr_char_errors_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 16.76,
+              "sd": 5.370212628329477,
+              "median": 16.5,
+              "q25": 13.0,
+              "q75": 21.0
+            },
+            "shuffled_trial_asr_hyp_words": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 2.68,
+              "sd": 2.014640293006194,
+              "median": 2.0,
+              "q25": 1.0,
+              "q75": 4.0
+            },
+            "shuffled_trial_asr_per": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.9614664307141088,
+              "sd": 0.10703519927110865,
+              "median": 0.9442724458204335,
+              "q25": 0.9,
+              "q75": 1.0
+            },
+            "shuffled_trial_asr_per_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.967017302614826,
+              "sd": 0.23323863043677065,
+              "median": 1.0,
+              "q25": 0.8960526315789474,
+              "q75": 1.0
+            },
+            "shuffled_trial_asr_phone_errors": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 12.28,
+              "sd": 4.000204076426754,
+              "median": 12.0,
+              "q25": 9.0,
+              "q75": 15.0
+            },
+            "shuffled_trial_asr_phone_errors_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 12.34,
+              "sd": 4.429078312005507,
+              "median": 12.0,
+              "q25": 9.0,
+              "q75": 15.75
+            },
+            "shuffled_trial_asr_ref_chars": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 19.56,
+              "sd": 5.4815460354516325,
+              "median": 19.0,
+              "q25": 15.0,
+              "q75": 24.25
+            },
+            "shuffled_trial_asr_ref_oov_words": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.0,
+              "sd": 0.0,
+              "median": 0.0,
+              "q25": 0.0,
+              "q75": 0.0
+            },
+            "shuffled_trial_asr_ref_phones": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 12.8,
+              "sd": 4.150239727523986,
+              "median": 12.5,
+              "q25": 10.0,
+              "q75": 15.0
+            },
+            "shuffled_trial_asr_ref_words": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 4.54,
+              "sd": 1.248836192915105,
+              "median": 4.0,
+              "q25": 4.0,
+              "q75": 5.0
+            },
+            "shuffled_trial_asr_wer": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1.063,
+              "sd": 0.23793542255436123,
+              "median": 1.0,
+              "q25": 1.0,
+              "q75": 1.0
+            },
+            "shuffled_trial_asr_wer_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1.0356666666666667,
+              "sd": 0.2599060095243049,
+              "median": 1.0,
+              "q25": 1.0,
+              "q75": 1.0
+            },
+            "shuffled_trial_asr_word_errors": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 4.78,
+              "sd": 1.432708295929248,
+              "median": 4.5,
+              "q25": 4.0,
+              "q75": 6.0
+            },
+            "shuffled_trial_asr_word_errors_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 4.68,
+              "sd": 1.517785712604963,
+              "median": 4.0,
+              "q25": 4.0,
+              "q75": 6.0
+            },
+            "shuffled_trial_partner": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 174.5,
+              "sd": 14.577379737113251,
+              "median": 174.5,
+              "q25": 162.25,
+              "q75": 186.75
+            },
+            "shuffled_trial_tts_est_speech_fraction": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.1656369592809261,
+              "sd": 0.07273091493183913,
+              "median": 0.15100068878618336,
+              "q25": 0.11047418631914267,
+              "q75": 0.2143551795617294
+            },
+            "shuffled_trial_tts_mcd": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 7.945348793899797,
+              "sd": 0.7680300443877581,
+              "median": 7.799149356791672,
+              "q25": 7.380090811277446,
+              "q75": 8.488110947884815
+            },
+            "shuffled_trial_tts_mel_corr": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.51228022961366,
+              "sd": 0.09753557764462674,
+              "median": 0.5375245402477505,
+              "q25": 0.4492736671106804,
+              "q75": 0.5730839737439404
+            },
+            "shuffled_trial_tts_ref_speech_fraction": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.7378928030840701,
+              "sd": 0.0671789776433448,
+              "median": 0.742633251480572,
+              "q25": 0.7030121485430078,
+              "q75": 0.7950034370166695
+            },
+            "tts_est_speech_fraction": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.1656369592809261,
+              "sd": 0.07273091493183913,
+              "median": 0.15100068878618336,
+              "q25": 0.11047418631914267,
+              "q75": 0.2143551795617294
+            },
+            "tts_mcd": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 7.806777316416525,
+              "sd": 0.6840998638995613,
+              "median": 7.841222882793362,
+              "q25": 7.34055756557197,
+              "q75": 8.193256862939874
+            },
+            "tts_mel_corr": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.5267351603826961,
+              "sd": 0.09745636906519797,
+              "median": 0.5294729260348496,
+              "q25": 0.49320388226977707,
+              "q75": 0.5704182543908536
+            },
+            "tts_ref_speech_fraction": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.7378928030840703,
+              "sd": 0.06717897764334478,
+              "median": 0.742633251480572,
+              "q25": 0.7030121485430078,
+              "q75": 0.7950034370166695
+            }
+          },
+          "all_metrics_shuffled_time": {
+            "asr_audio_s": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 9.811399999999999,
+              "sd": 2.503002287050412,
+              "median": 9.504999999999999,
+              "q25": 7.96,
+              "q75": 10.9775
+            },
+            "asr_avg_logprob": {
+              "n": 0,
+              "n_nan": 50
+            },
+            "asr_cer": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1.0,
+              "sd": 0.0,
+              "median": 1.0,
+              "q25": 1.0,
+              "q75": 1.0
+            },
+            "asr_cer_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1.0,
+              "sd": 0.0,
+              "median": 1.0,
+              "q25": 1.0,
+              "q75": 1.0
+            },
+            "asr_char_errors": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 19.56,
+              "sd": 5.4815460354516325,
+              "median": 19.0,
+              "q25": 15.0,
+              "q75": 24.25
+            },
+            "asr_char_errors_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 19.56,
+              "sd": 5.4815460354516325,
+              "median": 19.0,
+              "q25": 15.0,
+              "q75": 24.25
+            },
+            "asr_hyp_words": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.0,
+              "sd": 0.0,
+              "median": 0.0,
+              "q25": 0.0,
+              "q75": 0.0
+            },
+            "asr_max_compression_ratio": {
+              "n": 0,
+              "n_nan": 50
+            },
+            "asr_max_temperature": {
+              "n": 0,
+              "n_nan": 50
+            },
+            "asr_n_segments": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.0,
+              "sd": 0.0,
+              "median": 0.0,
+              "q25": 0.0,
+              "q75": 0.0
+            },
+            "asr_no_speech_prob": {
+              "n": 0,
+              "n_nan": 50
+            },
+            "asr_per": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1.0,
+              "sd": 0.0,
+              "median": 1.0,
+              "q25": 1.0,
+              "q75": 1.0
+            },
+            "asr_per_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1.0,
+              "sd": 0.0,
+              "median": 1.0,
+              "q25": 1.0,
+              "q75": 1.0
+            },
+            "asr_phone_errors": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 12.8,
+              "sd": 4.150239727523986,
+              "median": 12.5,
+              "q25": 10.0,
+              "q75": 15.0
+            },
+            "asr_phone_errors_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 12.8,
+              "sd": 4.150239727523986,
+              "median": 12.5,
+              "q25": 10.0,
+              "q75": 15.0
+            },
+            "asr_ref_chars": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 19.56,
+              "sd": 5.4815460354516325,
+              "median": 19.0,
+              "q25": 15.0,
+              "q75": 24.25
+            },
+            "asr_ref_oov_words": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.0,
+              "sd": 0.0,
+              "median": 0.0,
+              "q25": 0.0,
+              "q75": 0.0
+            },
+            "asr_ref_phones": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 12.8,
+              "sd": 4.150239727523986,
+              "median": 12.5,
+              "q25": 10.0,
+              "q75": 15.0
+            },
+            "asr_ref_words": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 4.54,
+              "sd": 1.2488361929151053,
+              "median": 4.0,
+              "q25": 4.0,
+              "q75": 5.0
+            },
+            "asr_s": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.0257448844704777,
+              "sd": 0.00802827505863859,
+              "median": 0.026266561122611165,
+              "q25": 0.020266141975298524,
+              "q75": 0.03152627102099359
+            },
+            "asr_seed": {
+              "n": 0,
+              "n_nan": 50
+            },
+            "asr_speech_frames": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.0,
+              "sd": 0.0,
+              "median": 0.0,
+              "q25": 0.0,
+              "q75": 0.0
+            },
+            "asr_wer": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1.0,
+              "sd": 0.0,
+              "median": 1.0,
+              "q25": 1.0,
+              "q75": 1.0
+            },
+            "asr_wer_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1.0,
+              "sd": 0.0,
+              "median": 1.0,
+              "q25": 1.0,
+              "q75": 1.0
+            },
+            "asr_word_errors": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 4.54,
+              "sd": 1.2488361929151053,
+              "median": 4.0,
+              "q25": 4.0,
+              "q75": 5.0
+            },
+            "asr_word_errors_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 4.54,
+              "sd": 1.2488361929151053,
+              "median": 4.0,
+              "q25": 4.0,
+              "q75": 5.0
+            },
+            "early_speech_s": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.0,
+              "sd": 0.0,
+              "median": 0.0,
+              "q25": 0.0,
+              "q75": 0.0
+            },
+            "est_speech_frames": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.0,
+              "sd": 0.0,
+              "median": 0.0,
+              "q25": 0.0,
+              "q75": 0.0
+            },
+            "est_speech_s": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.0,
+              "sd": 0.0,
+              "median": 0.0,
+              "q25": 0.0,
+              "q75": 0.0
+            },
+            "n_bins": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1040.14,
+              "sd": 250.3002287050412,
+              "median": 1009.5,
+              "q25": 855.0,
+              "q75": 1156.75
+            },
+            "n_frames": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 981.14,
+              "sd": 250.3002287050412,
+              "median": 950.5,
+              "q25": 796.0,
+              "q75": 1097.75
+            },
+            "peak_dbfs": {
+              "n": 0,
+              "n_nan": 50
+            },
+            "tts_est_speech_fraction": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.0,
+              "sd": 0.0,
+              "median": 0.0,
+              "q25": 0.0,
+              "q75": 0.0
+            },
+            "tts_mcd": {
+              "n": 0,
+              "n_nan": 50
+            },
+            "tts_mel_corr": {
+              "n": 0,
+              "n_nan": 50
+            },
+            "tts_ref_speech_fraction": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.7378928030840703,
+              "sd": 0.06717897764334478,
+              "median": 0.742633251480572,
+              "q25": 0.7030121485430078,
+              "q75": 0.7950034370166695
+            }
+          }
+        },
+        "eval_imagined_E14": {
+          "role": "eval_imagined",
+          "n": 50,
+          "silent_outputs": {
+            "n_silent": 0,
+            "n": 50,
+            "fraction": 0.0
+          },
+          "mel_corr_vs_tts": {
+            "n": 50,
+            "n_nan": 0,
+            "mean": 0.5245696534823342,
+            "sd": 0.09507205257658684,
+            "median": 0.5234515748636768,
+            "q25": 0.4634502224740047,
+            "q75": 0.5971973989660699
+          },
+          "mel_corr_vs_tts_silent_as_zero": {
+            "n": 50,
+            "n_nan": 0,
+            "mean": 0.5245696534823342,
+            "sd": 0.09507205257658684,
+            "median": 0.5234515748636768,
+            "q25": 0.4634502224740047,
+            "q75": 0.5971973989660699
+          },
+          "null_shuffled_trial": {
+            "n": 50,
+            "n_nan": 0,
+            "mean": 0.49767601777029086,
+            "sd": 0.09215048204986263,
+            "median": 0.48890543001792464,
+            "q25": 0.42784372332859266,
+            "q75": 0.5623303749826267
+          },
+          "real_minus_shuffled_trial": {
+            "n": 50,
+            "n_nan": 0,
+            "mean": 0.026893635712043458,
+            "sd": 0.1216679914532044,
+            "median": 0.028178769470328713,
+            "q25": -0.05770164396531577,
+            "q75": 0.10821628596695207,
+            "frac_a_gt_b": 0.66,
+            "wilcoxon_p": 0.09130577606126522
+          },
+          "nulls": {
+            "lenmatched": {
+              "column": "null_lenmatched_mean",
+              "null": {
+                "n": 50,
+                "n_nan": 0,
+                "mean": 0.4947586208711462,
+                "sd": 0.044308686996271,
+                "median": 0.4927587211582808,
+                "q25": 0.4626441491593215,
+                "q75": 0.5173532948975581
+              },
+              "excess": {
+                "n": 50,
+                "n_nan": 0,
+                "mean": 0.029811032611188067,
+                "sd": 0.08925715176322005,
+                "median": 0.023247875095427528,
+                "q25": -0.0436029690549527,
+                "q75": 0.10343278887943733,
+                "frac_a_gt_b": 0.62,
+                "wilcoxon_p": 0.031261656763490464
+              }
+            },
+            "all": {
+              "column": "null_all_mean",
+              "null": {
+                "n": 50,
+                "n_nan": 0,
+                "mean": 0.4959947826934872,
+                "sd": 0.032928965653236254,
+                "median": 0.49911998531027135,
+                "q25": 0.4758959909003324,
+                "q75": 0.5196966811944203
+              },
+              "excess": {
+                "n": 50,
+                "n_nan": 0,
+                "mean": 0.028574870788847143,
+                "sd": 0.088995317166709,
+                "median": 0.027253562727181463,
+                "q25": -0.03542930270390156,
+                "q75": 0.07762531072935343,
+                "frac_a_gt_b": 0.58,
+                "wilcoxon_p": 0.033687793845592395
+              }
+            },
+            "shuffled_trial": {
+              "column": "shuffled_trial_tts_mel_corr",
+              "null": {
+                "n": 50,
+                "n_nan": 0,
+                "mean": 0.49767601777029086,
+                "sd": 0.09215048204986263,
+                "median": 0.48890543001792464,
+                "q25": 0.42784372332859266,
+                "q75": 0.5623303749826267
+              },
+              "excess": {
+                "n": 50,
+                "n_nan": 0,
+                "mean": 0.026893635712043458,
+                "sd": 0.1216679914532044,
+                "median": 0.028178769470328713,
+                "q25": -0.05770164396531577,
+                "q75": 0.10821628596695207,
+                "frac_a_gt_b": 0.66,
+                "wilcoxon_p": 0.09130577606126522
+              }
+            }
+          },
+          "identification": {
+            "n": 50,
+            "n_undefined": 0,
+            "top1_rate": 0.08,
+            "top1_chance": 0.02,
+            "median_rank": 19.5,
+            "median_n_cues": 50.0,
+            "mean_normalized_rank": 0.41020408163265304,
+            "uniform_rank_p": 0.031188723127382842
+          },
+          "speech_s": {
+            "n": 50,
+            "n_nan": 0,
+            "mean": 2.5152,
+            "sd": 0.6615264969163738,
+            "median": 2.41,
+            "q25": 2.0675,
+            "q75": 3.01
+          },
+          "early_speech_s": {
+            "n": 50,
+            "n_nan": 0,
+            "mean": 1.368,
+            "sd": 0.5781179880986799,
+            "median": 1.375,
+            "q25": 1.0625,
+            "q75": 1.7650000000000001
+          },
+          "peak_dbfs": {
+            "n": 50,
+            "n_nan": 0,
+            "mean": -1.5512673193154587,
+            "sd": 2.4721861236734046,
+            "median": -0.00026507636037961915,
+            "q25": -2.3898140272835993,
+            "q75": -0.00026507636037961915
+          },
+          "sensitivity_min_speech": {
+            "analysis": "sensitivity analysis, not the primary test: only outputs with >= min_speech_s of decoded speech (selected on the output itself)",
+            "min_speech_s": 0.4,
+            "n_kept": 50,
+            "n": 50,
+            "nulls": {
+              "lenmatched": {
+                "n": 50,
+                "n_nan": 0,
+                "mean": 0.029811032611188067,
+                "sd": 0.08925715176322005,
+                "median": 0.023247875095427528,
+                "q25": -0.0436029690549527,
+                "q75": 0.10343278887943733,
+                "frac_a_gt_b": 0.62,
+                "wilcoxon_p": 0.031261656763490464
+              },
+              "all": {
+                "n": 50,
+                "n_nan": 0,
+                "mean": 0.028574870788847143,
+                "sd": 0.088995317166709,
+                "median": 0.027253562727181463,
+                "q25": -0.03542930270390156,
+                "q75": 0.07762531072935343,
+                "frac_a_gt_b": 0.58,
+                "wilcoxon_p": 0.033687793845592395
+              },
+              "shuffled_trial": {
+                "n": 50,
+                "n_nan": 0,
+                "mean": 0.026893635712043458,
+                "sd": 0.1216679914532044,
+                "median": 0.028178769470328713,
+                "q25": -0.05770164396531577,
+                "q75": 0.10821628596695207,
+                "frac_a_gt_b": 0.66,
+                "wilcoxon_p": 0.09130577606126522
+              }
+            },
+            "identification": {
+              "n": 50,
+              "n_undefined": 0,
+              "top1_rate": 0.08,
+              "top1_chance": 0.02,
+              "median_rank": 19.5,
+              "median_n_cues": 50.0,
+              "mean_normalized_rank": 0.41020408163265304,
+              "uniform_rank_p": 0.031188723127382842
+            }
+          },
+          "silent_outputs_shuffled_time": {
+            "n_silent": 46,
+            "n": 50,
+            "fraction": 0.92
+          },
+          "null_shuffled_time": {
+            "n": 4,
+            "n_nan": 46,
+            "mean": 0.24979514938647457,
+            "sd": 0.023802532966059987,
+            "median": 0.25223574755863293,
+            "q25": 0.24216701275535255,
+            "q75": 0.2598638841897549
+          },
+          "null_shuffled_time_silent_as_zero": {
+            "n": 50,
+            "n_nan": 0,
+            "mean": 0.019983611950917964,
+            "sd": 0.06870862926296785,
+            "median": 0.0,
+            "q25": 0.0,
+            "q75": 0.0
+          },
+          "real_minus_shuffled_time": {
+            "n": 4,
+            "n_nan": 0,
+            "mean": 0.26505276086785706,
+            "sd": 0.04357601320862824,
+            "median": 0.2658718290668639,
+            "q25": 0.24319301422410905,
+            "q75": 0.287731575710612,
+            "frac_a_gt_b": 1.0,
+            "wilcoxon_p": 0.125
+          },
+          "mel_corr_vs_tts_novel_cues_only": {
+            "n": 49,
+            "n_nan": 0,
+            "mean": 0.523959144721701,
+            "sd": 0.09595820461224415,
+            "median": 0.5215257437463742,
+            "q25": 0.4631757710743264,
+            "q75": 0.5976469817651118
+          },
+          "asr_real": {
+            "wer_pooled": 1.6719576719576719,
+            "wer_n_trials": 50,
+            "wer_constrained_pooled": 1.6243386243386244,
+            "wer_constrained_n_trials": 50,
+            "cer_pooled": 1.248548199767712,
+            "cer_n_trials": 50,
+            "cer_constrained_pooled": 1.146341463414634,
+            "cer_constrained_n_trials": 50,
+            "per_pooled": 1.2684563758389262,
+            "per_n_trials": 50,
+            "per_constrained_pooled": 1.2164429530201342,
+            "per_constrained_n_trials": 50,
+            "empty_transcript_fraction": 0.02
+          },
+          "asr_null_shuffled_trial": {
+            "wer_pooled": 1.6984126984126984,
+            "wer_n_trials": 50,
+            "wer_constrained_pooled": 1.6455026455026456,
+            "wer_constrained_n_trials": 50,
+            "cer_pooled": 1.3170731707317074,
+            "cer_n_trials": 50,
+            "cer_constrained_pooled": 1.2125435540069687,
+            "cer_constrained_n_trials": 50,
+            "per_pooled": 1.3338926174496644,
+            "per_n_trials": 50,
+            "per_constrained_pooled": 1.2902684563758389,
+            "per_constrained_n_trials": 50,
+            "empty_transcript_fraction": 0.02
+          },
+          "asr_null_shuffled_time": {
+            "wer_pooled": 1.0,
+            "wer_n_trials": 50,
+            "wer_constrained_pooled": 1.0,
+            "wer_constrained_n_trials": 50,
+            "cer_pooled": 0.9930313588850174,
+            "cer_n_trials": 50,
+            "cer_constrained_pooled": 0.9930313588850174,
+            "cer_constrained_n_trials": 50,
+            "per_pooled": 1.0,
+            "per_n_trials": 50,
+            "per_constrained_pooled": 1.0,
+            "per_constrained_n_trials": 50,
+            "empty_transcript_fraction": 0.92
+          },
+          "all_metrics_real": {
+            "asr_audio_s": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 10.519400000000001,
+              "sd": 6.549283621830992,
+              "median": 8.559999999999999,
+              "q25": 7.6,
+              "q75": 10.86
+            },
+            "asr_avg_logprob": {
+              "n": 49,
+              "n_nan": 1,
+              "mean": -0.9888357565498074,
+              "sd": 0.22376913917448674,
+              "median": -0.9550871632315896,
+              "q25": -1.1205346034123347,
+              "q75": -0.8394861698150635
+            },
+            "asr_cer": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1.5090792032929463,
+              "sd": 1.4869382423192528,
+              "median": 1.0555555555555556,
+              "q25": 0.835,
+              "q75": 1.591304347826087
+            },
+            "asr_cer_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1.3885517607656854,
+              "sd": 1.406202994295554,
+              "median": 1.0227272727272727,
+              "q25": 0.8,
+              "q75": 1.4243697478991597
+            },
+            "asr_char_errors": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 21.5,
+              "sd": 9.785974970458946,
+              "median": 20.0,
+              "q25": 15.0,
+              "q75": 25.75
+            },
+            "asr_char_errors_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 19.74,
+              "sd": 8.831321809217417,
+              "median": 19.0,
+              "q25": 14.0,
+              "q75": 23.75
+            },
+            "asr_hyp_words": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 6.48,
+              "sd": 3.0118134749953,
+              "median": 6.0,
+              "q25": 4.0,
+              "q75": 8.75
+            },
+            "asr_max_compression_ratio": {
+              "n": 49,
+              "n_nan": 1,
+              "mean": 1.0689240185033053,
+              "sd": 0.4085903045934483,
+              "median": 1.0,
+              "q25": 0.8064516129032258,
+              "q75": 1.1081081081081081
+            },
+            "asr_max_temperature": {
+              "n": 49,
+              "n_nan": 1,
+              "mean": 0.4448979591836735,
+              "sd": 0.4886466107567734,
+              "median": 0.2,
+              "q25": 0.0,
+              "q75": 1.0
+            },
+            "asr_n_segments": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1.0,
+              "sd": 0.20203050891044214,
+              "median": 1.0,
+              "q25": 1.0,
+              "q75": 1.0
+            },
+            "asr_no_speech_prob": {
+              "n": 49,
+              "n_nan": 1,
+              "mean": 0.2876393538234489,
+              "sd": 0.13654261328740788,
+              "median": 0.3099769651889801,
+              "q25": 0.21036913990974426,
+              "q75": 0.39212778210639954
+            },
+            "asr_per": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1.4367652388890781,
+              "sd": 1.0149206260419867,
+              "median": 1.0916666666666668,
+              "q25": 0.9464285714285714,
+              "q75": 1.5708333333333333
+            },
+            "asr_per_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1.3953701702494272,
+              "sd": 1.0193629765895653,
+              "median": 1.0679824561403508,
+              "q25": 0.9041666666666667,
+              "q75": 1.5
+            },
+            "asr_phone_errors": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 15.12,
+              "sd": 6.54541434743377,
+              "median": 14.5,
+              "q25": 11.0,
+              "q75": 18.75
+            },
+            "asr_phone_errors_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 14.5,
+              "sd": 5.810792211260782,
+              "median": 14.0,
+              "q25": 11.0,
+              "q75": 17.0
+            },
+            "asr_ref_chars": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 17.22,
+              "sd": 5.704598932404612,
+              "median": 17.0,
+              "q25": 14.0,
+              "q75": 21.0
+            },
+            "asr_ref_oov_words": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.0,
+              "sd": 0.0,
+              "median": 0.0,
+              "q25": 0.0,
+              "q75": 0.0
+            },
+            "asr_ref_phones": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 11.92,
+              "sd": 4.4116728281749475,
+              "median": 12.0,
+              "q25": 9.0,
+              "q75": 15.0
+            },
+            "asr_ref_words": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 3.78,
+              "sd": 0.8640200300021394,
+              "median": 4.0,
+              "q25": 3.0,
+              "q75": 4.0
+            },
+            "asr_s": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 18.338900109296663,
+              "sd": 20.29405684226319,
+              "median": 8.364964689593762,
+              "q25": 4.968905918300152,
+              "q75": 23.952752015437
+            },
+            "asr_seed": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 2315055163.68,
+              "sd": 1203579874.0571933,
+              "median": 2417961440.5,
+              "q25": 1485097038.5,
+              "q75": 3482776186.75
+            },
+            "asr_speech_frames": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 251.52,
+              "sd": 66.15264969163736,
+              "median": 241.0,
+              "q25": 206.75,
+              "q75": 301.0
+            },
+            "asr_wer": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1.7743333333333333,
+              "sd": 0.9488040568642166,
+              "median": 1.5,
+              "q25": 1.0416666666666667,
+              "q75": 2.0
+            },
+            "asr_wer_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1.729666666666667,
+              "sd": 0.94742334662622,
+              "median": 1.5,
+              "q25": 1.0416666666666667,
+              "q75": 2.0
+            },
+            "asr_word_errors": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 6.32,
+              "sd": 2.7880210229641023,
+              "median": 6.0,
+              "q25": 4.0,
+              "q75": 8.0
+            },
+            "asr_word_errors_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 6.14,
+              "sd": 2.7330927387059787,
+              "median": 6.0,
+              "q25": 4.0,
+              "q75": 8.0
+            },
+            "cue_tts_speech_s": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 3.124600000000001,
+              "sd": 1.0657951137483208,
+              "median": 3.135,
+              "q25": 2.3475,
+              "q75": 3.8325
+            },
+            "early_speech_s": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1.368,
+              "sd": 0.5781179880986799,
+              "median": 1.375,
+              "q25": 1.0625,
+              "q75": 1.7650000000000001
+            },
+            "est_speech_frames": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 251.52,
+              "sd": 66.15264969163736,
+              "median": 241.0,
+              "q25": 206.75,
+              "q75": 301.0
+            },
+            "est_speech_s": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 2.5152,
+              "sd": 0.6615264969163738,
+              "median": 2.41,
+              "q25": 2.0675,
+              "q75": 3.01
+            },
+            "n_bins": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1110.94,
+              "sd": 654.9283621830991,
+              "median": 915.0,
+              "q25": 819.0,
+              "q75": 1145.0
+            },
+            "n_cues": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 50.0,
+              "sd": 0.0,
+              "median": 50.0,
+              "q25": 50.0,
+              "q75": 50.0
+            },
+            "n_frames": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1051.94,
+              "sd": 654.9283621830991,
+              "median": 856.0,
+              "q25": 760.0,
+              "q75": 1086.0
+            },
+            "null_all_mean": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.4959947826934872,
+              "sd": 0.032928965653236254,
+              "median": 0.49911998531027135,
+              "q25": 0.4758959909003324,
+              "q75": 0.5196966811944203
+            },
+            "null_lenmatched_mean": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.4947586208711462,
+              "sd": 0.044308686996271,
+              "median": 0.4927587211582808,
+              "q25": 0.4626441491593215,
+              "q75": 0.5173532948975581
+            },
+            "null_lenmatched_n": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 10.0,
+              "sd": 0.0,
+              "median": 10.0,
+              "q25": 10.0,
+              "q75": 10.0
+            },
+            "own_rank": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 21.1,
+              "sd": 15.12566409403945,
+              "median": 19.5,
+              "q25": 8.0,
+              "q75": 34.75
+            },
+            "peak_dbfs": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": -1.5512673193154587,
+              "sd": 2.4721861236734046,
+              "median": -0.00026507636037961915,
+              "q25": -2.3898140272835993,
+              "q75": -0.00026507636037961915
+            },
+            "shuffled_trial_asr_cer": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1.6056288950344098,
+              "sd": 1.3964498448776608,
+              "median": 1.2,
+              "q25": 0.8917224080267558,
+              "q75": 1.6391402714932126
+            },
+            "shuffled_trial_asr_cer_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1.4326886819832259,
+              "sd": 1.0905749500978268,
+              "median": 1.1464285714285714,
+              "q25": 0.8666666666666667,
+              "q75": 1.4438502673796791
+            },
+            "shuffled_trial_asr_char_errors": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 22.68,
+              "sd": 8.999863944549839,
+              "median": 19.5,
+              "q25": 17.0,
+              "q75": 27.0
+            },
+            "shuffled_trial_asr_char_errors_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 20.88,
+              "sd": 7.924748112909408,
+              "median": 18.5,
+              "q25": 16.0,
+              "q75": 23.75
+            },
+            "shuffled_trial_asr_hyp_words": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 6.48,
+              "sd": 3.0118134749953,
+              "median": 6.0,
+              "q25": 4.0,
+              "q75": 8.75
+            },
+            "shuffled_trial_asr_per": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1.5258840946635064,
+              "sd": 0.9314561249790815,
+              "median": 1.1180555555555556,
+              "q25": 1.0,
+              "q75": 1.7666666666666666
+            },
+            "shuffled_trial_asr_per_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1.475295165189128,
+              "sd": 0.8805383412172293,
+              "median": 1.1666666666666667,
+              "q25": 1.0,
+              "q75": 1.61875
+            },
+            "shuffled_trial_asr_phone_errors": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 15.9,
+              "sd": 5.99744843705238,
+              "median": 14.5,
+              "q25": 12.0,
+              "q75": 18.0
+            },
+            "shuffled_trial_asr_phone_errors_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 15.38,
+              "sd": 5.397996604939538,
+              "median": 14.0,
+              "q25": 12.0,
+              "q75": 18.0
+            },
+            "shuffled_trial_asr_ref_chars": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 17.22,
+              "sd": 5.704598932404611,
+              "median": 17.0,
+              "q25": 14.0,
+              "q75": 21.0
+            },
+            "shuffled_trial_asr_ref_oov_words": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.0,
+              "sd": 0.0,
+              "median": 0.0,
+              "q25": 0.0,
+              "q75": 0.0
+            },
+            "shuffled_trial_asr_ref_phones": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 11.92,
+              "sd": 4.4116728281749475,
+              "median": 12.0,
+              "q25": 9.0,
+              "q75": 15.0
+            },
+            "shuffled_trial_asr_ref_words": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 3.78,
+              "sd": 0.8640200300021394,
+              "median": 4.0,
+              "q25": 3.0,
+              "q75": 4.0
+            },
+            "shuffled_trial_asr_wer": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1.8003333333333333,
+              "sd": 0.8475019314488457,
+              "median": 1.55,
+              "q25": 1.0,
+              "q75": 2.25
+            },
+            "shuffled_trial_asr_wer_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1.7269999999999999,
+              "sd": 0.8046484140882803,
+              "median": 1.5,
+              "q25": 1.0,
+              "q75": 2.1875
+            },
+            "shuffled_trial_asr_word_errors": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 6.42,
+              "sd": 2.595836540874401,
+              "median": 6.0,
+              "q25": 4.0,
+              "q75": 8.0
+            },
+            "shuffled_trial_asr_word_errors_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 6.22,
+              "sd": 2.5418135900436547,
+              "median": 6.0,
+              "q25": 4.0,
+              "q75": 8.0
+            },
+            "shuffled_trial_partner": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 24.5,
+              "sd": 14.577379737113251,
+              "median": 24.5,
+              "q25": 12.25,
+              "q75": 36.75
+            },
+            "shuffled_trial_tts_est_speech_fraction": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.2745344229936334,
+              "sd": 0.09081227744648158,
+              "median": 0.2703191402419091,
+              "q25": 0.21756237013896051,
+              "q75": 0.33491992663748094
+            },
+            "shuffled_trial_tts_mcd": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 8.235627520692995,
+              "sd": 0.7414875155304497,
+              "median": 8.195692553915805,
+              "q25": 7.751993018949713,
+              "q75": 8.791433113045631
+            },
+            "shuffled_trial_tts_mel_corr": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.49767601777029086,
+              "sd": 0.09215048204986263,
+              "median": 0.48890543001792464,
+              "q25": 0.42784372332859266,
+              "q75": 0.5623303749826267
+            },
+            "shuffled_trial_tts_ref_speech_fraction": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.7449590407239185,
+              "sd": 0.08199846876794521,
+              "median": 0.7660729928930399,
+              "q25": 0.7004476925548949,
+              "q75": 0.8012174656155757
+            },
+            "tts_est_speech_fraction": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.2745344229936334,
+              "sd": 0.09081227744648158,
+              "median": 0.2703191402419091,
+              "q25": 0.21756237013896051,
+              "q75": 0.33491992663748094
+            },
+            "tts_mcd": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 8.104712924919838,
+              "sd": 0.8607039817270261,
+              "median": 8.080403364657222,
+              "q25": 7.451704215633958,
+              "q75": 8.7048914546269
+            },
+            "tts_mel_corr": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.5245696534823342,
+              "sd": 0.09507205257658684,
+              "median": 0.5234515748636768,
+              "q25": 0.4634502224740047,
+              "q75": 0.5971973989660699
+            },
+            "tts_ref_speech_fraction": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.7449590407239186,
+              "sd": 0.08199846876794523,
+              "median": 0.7660729928930399,
+              "q25": 0.7004476925548949,
+              "q75": 0.8012174656155757
+            }
+          },
+          "all_metrics_shuffled_time": {
+            "asr_audio_s": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 10.519400000000001,
+              "sd": 6.549283621830992,
+              "median": 8.559999999999999,
+              "q25": 7.6,
+              "q75": 10.86
+            },
+            "asr_avg_logprob": {
+              "n": 4,
+              "n_nan": 46,
+              "mean": -0.5825302600860596,
+              "sd": 0.03094421612954965,
+              "median": -0.5768909454345703,
+              "q25": -0.5926132202148438,
+              "q75": -0.5668079853057861
+            },
+            "asr_cer": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.9940455262564797,
+              "sd": 0.02130897527081425,
+              "median": 1.0,
+              "q25": 1.0,
+              "q75": 1.0
+            },
+            "asr_cer_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.9940455262564797,
+              "sd": 0.02130897527081425,
+              "median": 1.0,
+              "q25": 1.0,
+              "q75": 1.0
+            },
+            "asr_char_errors": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 17.1,
+              "sd": 5.632449715347521,
+              "median": 17.0,
+              "q25": 14.0,
+              "q75": 21.0
+            },
+            "asr_char_errors_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 17.1,
+              "sd": 5.632449715347521,
+              "median": 17.0,
+              "q25": 14.0,
+              "q75": 21.0
+            },
+            "asr_hyp_words": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.08,
+              "sd": 0.2740475156178697,
+              "median": 0.0,
+              "q25": 0.0,
+              "q75": 0.0
+            },
+            "asr_max_compression_ratio": {
+              "n": 4,
+              "n_nan": 46,
+              "mean": 0.2727272727272727,
+              "sd": 0.0,
+              "median": 0.2727272727272727,
+              "q25": 0.2727272727272727,
+              "q75": 0.2727272727272727
+            },
+            "asr_max_temperature": {
+              "n": 4,
+              "n_nan": 46,
+              "mean": 0.0,
+              "sd": 0.0,
+              "median": 0.0,
+              "q25": 0.0,
+              "q75": 0.0
+            },
+            "asr_n_segments": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.08,
+              "sd": 0.2740475156178697,
+              "median": 0.0,
+              "q25": 0.0,
+              "q75": 0.0
+            },
+            "asr_no_speech_prob": {
+              "n": 4,
+              "n_nan": 46,
+              "mean": 0.89158995449543,
+              "sd": 0.008897242505138483,
+              "median": 0.8943205177783966,
+              "q25": 0.888807401061058,
+              "q75": 0.8971030712127686
+            },
+            "asr_per": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1.0,
+              "sd": 0.0,
+              "median": 1.0,
+              "q25": 1.0,
+              "q75": 1.0
+            },
+            "asr_per_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1.0,
+              "sd": 0.0,
+              "median": 1.0,
+              "q25": 1.0,
+              "q75": 1.0
+            },
+            "asr_phone_errors": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 11.92,
+              "sd": 4.4116728281749475,
+              "median": 12.0,
+              "q25": 9.0,
+              "q75": 15.0
+            },
+            "asr_phone_errors_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 11.92,
+              "sd": 4.4116728281749475,
+              "median": 12.0,
+              "q25": 9.0,
+              "q75": 15.0
+            },
+            "asr_ref_chars": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 17.22,
+              "sd": 5.704598932404612,
+              "median": 17.0,
+              "q25": 14.0,
+              "q75": 21.0
+            },
+            "asr_ref_oov_words": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.0,
+              "sd": 0.0,
+              "median": 0.0,
+              "q25": 0.0,
+              "q75": 0.0
+            },
+            "asr_ref_phones": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 11.92,
+              "sd": 4.4116728281749475,
+              "median": 12.0,
+              "q25": 9.0,
+              "q75": 15.0
+            },
+            "asr_ref_words": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 3.78,
+              "sd": 0.8640200300021394,
+              "median": 4.0,
+              "q25": 3.0,
+              "q75": 4.0
+            },
+            "asr_s": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.2145931040868163,
+              "sd": 0.6574932382811733,
+              "median": 0.024044553050771356,
+              "q25": 0.015198858454823494,
+              "q75": 0.034206533804535866
+            },
+            "asr_seed": {
+              "n": 4,
+              "n_nan": 46,
+              "mean": 1883190993.5,
+              "sd": 2025687991.312335,
+              "median": 1681889671.5,
+              "q25": 180290928.5,
+              "q75": 3384789736.5
+            },
+            "asr_speech_frames": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.4,
+              "sd": 1.3702375780893483,
+              "median": 0.0,
+              "q25": 0.0,
+              "q75": 0.0
+            },
+            "asr_wer": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1.0,
+              "sd": 0.0,
+              "median": 1.0,
+              "q25": 1.0,
+              "q75": 1.0
+            },
+            "asr_wer_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1.0,
+              "sd": 0.0,
+              "median": 1.0,
+              "q25": 1.0,
+              "q75": 1.0
+            },
+            "asr_word_errors": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 3.78,
+              "sd": 0.8640200300021394,
+              "median": 4.0,
+              "q25": 3.0,
+              "q75": 4.0
+            },
+            "asr_word_errors_constrained": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 3.78,
+              "sd": 0.8640200300021394,
+              "median": 4.0,
+              "q25": 3.0,
+              "q75": 4.0
+            },
+            "early_speech_s": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.002,
+              "sd": 0.00989743318610787,
+              "median": 0.0,
+              "q25": 0.0,
+              "q75": 0.0
+            },
+            "est_speech_frames": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.4,
+              "sd": 1.3702375780893483,
+              "median": 0.0,
+              "q25": 0.0,
+              "q75": 0.0
+            },
+            "est_speech_s": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.004,
+              "sd": 0.013702375780893485,
+              "median": 0.0,
+              "q25": 0.0,
+              "q75": 0.0
+            },
+            "n_bins": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1110.94,
+              "sd": 654.9283621830991,
+              "median": 915.0,
+              "q25": 819.0,
+              "q75": 1145.0
+            },
+            "n_frames": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 1051.94,
+              "sd": 654.9283621830991,
+              "median": 856.0,
+              "q25": 760.0,
+              "q75": 1086.0
+            },
+            "peak_dbfs": {
+              "n": 4,
+              "n_nan": 46,
+              "mean": -63.05778395884309,
+              "sd": 5.661145166712627,
+              "median": -64.58028267718956,
+              "q25": -66.28254811698606,
+              "q75": -61.35551851904658
+            },
+            "tts_est_speech_fraction": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.0004773523755621147,
+              "sd": 0.0017000879617368751,
+              "median": 0.0,
+              "q25": 0.0,
+              "q75": 0.0
+            },
+            "tts_mcd": {
+              "n": 4,
+              "n_nan": 46,
+              "mean": 9.954990537803864,
+              "sd": 1.3671337353563902,
+              "median": 10.20824977914684,
+              "q25": 9.219246077870917,
+              "q75": 10.943994239079789
+            },
+            "tts_mel_corr": {
+              "n": 4,
+              "n_nan": 46,
+              "mean": 0.24979514938647457,
+              "sd": 0.023802532966059987,
+              "median": 0.25223574755863293,
+              "q25": 0.24216701275535255,
+              "q75": 0.2598638841897549
+            },
+            "tts_ref_speech_fraction": {
+              "n": 50,
+              "n_nan": 0,
+              "mean": 0.7449590407239186,
+              "sd": 0.08199846876794523,
+              "median": 0.7660729928930399,
+              "q25": 0.7004476925548949,
+              "q75": 0.8012174656155757
+            }
+          }
+        },
+        "attempted_minus_paired_imagined_same_cue": {
+          "n": 50,
+          "n_nan": 0,
+          "mean": 0.10669309706249099,
+          "sd": 0.0968373854759425,
+          "median": 0.09837053239007121,
+          "q25": 0.042290280088054716,
+          "q75": 0.1587428681727426,
+          "frac_a_gt_b": 0.86,
+          "wilcoxon_p": 9.07522945681194e-11
+        },
+        "attempted_vs_paired_imagined": {
+          "primary_null": "lenmatched",
+          "excess_difference": {
+            "lenmatched": {
+              "n_a": 50,
+              "n_b": 50,
+              "mean_difference": 0.10599620696892087,
+              "mannwhitney_p": 7.615836717793372e-10
+            },
+            "all": {
+              "n_a": 50,
+              "n_b": 50,
+              "mean_difference": 0.11000196381287203,
+              "mannwhitney_p": 1.6903444393475338e-10
+            },
+            "shuffled_trial": {
+              "n_a": 50,
+              "n_b": 50,
+              "mean_difference": 0.10551194827895952,
+              "mannwhitney_p": 5.896623753821726e-07
+            }
+          },
+          "early_speech_s_same_cue": {
+            "n": 50,
+            "n_nan": 0,
+            "mean": 1.4042,
+            "sd": 0.6277530061534503,
+            "median": 1.4049999999999998,
+            "q25": 1.0550000000000002,
+            "q75": 1.8325,
+            "frac_a_gt_b": 0.98,
+            "wilcoxon_p": 9.6301008016436e-10
+          },
+          "sensitivity_min_speech": {
+            "analysis": "sensitivity analysis, not the primary test",
+            "min_speech_s": 0.4,
+            "n_attempted_kept": 50,
+            "n_imagined_kept": 49,
+            "excess_difference": {
+              "lenmatched": {
+                "n_a": 50,
+                "n_b": 49,
+                "mean_difference": 0.10737547145741722,
+                "mannwhitney_p": 6.008392001947049e-10
+              },
+              "all": {
+                "n_a": 50,
+                "n_b": 49,
+                "mean_difference": 0.1120866574207956,
+                "mannwhitney_p": 1.0254307605044376e-10
+              },
+              "shuffled_trial": {
+                "n_a": 50,
+                "n_b": 49,
+                "mean_difference": 0.10880809276228136,
+                "mannwhitney_p": 2.640826939381799e-07
+              }
+            }
+          }
+        }
+      }
+    },
+    "comparisons": {},
+    "settings": {
+      "primary_null": "lenmatched",
+      "min_speech_s": 0.4,
+      "length_matched_k": 10,
+      "early_window_s": 4.0,
+      "null_order": [
+        "lenmatched",
+        "all",
+        "shuffled_trial"
+      ]
+    }
+  },
+  "timing_s": {
+    "decode_zero_shot_s": 452.83254289627075,
+    "score_zero_shot_s": 1357.7792327404022
+  },
+  "outputs": {
+    "per_trial_csv": "results/kunz_inner_gain/fold_A13/per_trial.csv",
+    "audio": "results/audio/kunz_inner_gain/fold_A13",
+    "predictions": "results/audio/kunz_inner_gain/fold_A13/predictions",
+    "checkpoints": "data/checkpoints/kunz_inner_gain/fold_A13",
+    "score_matrices": {
+      "zero_shot": "results/kunz_inner_gain/fold_A13/score_matrix_zero_shot.csv"
+    }
+  },
+  "runtime": {
+    "device": "cpu",
+    "threads": {
+      "intra_op": 8,
+      "inter_op": 1,
+      "omp": 8
+    },
+    "env": {
+      "OMP_NUM_THREADS": "8",
+      "MKL_NUM_THREADS": "8",
+      "OPENBLAS_NUM_THREADS": "8",
+      "NUMBA_NUM_THREADS": "8",
+      "TF_NUM_INTRAOP_THREADS": "8",
+      "TF_NUM_INTEROP_THREADS": "1"
+    },
+    "tf_intra_op": 8,
+    "tf_inter_op": 1,
+    "CUDA_VISIBLE_DEVICES": "",
+    "nice": 19,
+    "devices": [
+      "/device:CPU:0"
+    ],
+    "python": "3.12.14",
+    "numpy": "2.5.4",
+    "tensorflow": "2.21.0",
+    "platform": "Linux-5.15.0-191-generic-x86_64-with-glibc2.39"
+  }
+}

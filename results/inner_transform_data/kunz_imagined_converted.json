@@ -1,0 +1,236 @@
+{
+ "name": "kunz_imagined_converted",
+ "created": "2026-10-23T23:21:38",
+ "code_version": {
+  "source": "sync",
+  "commit": "6c6d727fa189a89b13bd0dd205e9662000988d11",
+  "dirty": false,
+  "diff_sha256": null,
+  "pushed_at": "2026-10-23T23:16:22Z"
+ },
+ "settings": {
+  "name": "kunz_imagined_converted",
+  "out_dir": "data/processed/kunz_inner_conv",
+  "transforms": [
+   "gain",
+   "projector",
+   "paired"
+  ],
+  "pairs": {
+   "3": 4,
+   "6": 7,
+   "11": 9,
+   "13": 12
+  },
+  "n_components": 20,
+  "pool_bins": 5,
+  "shrink": 0.1,
+  "seed": 20261023,
+  "check_tol": 0.001,
+  "dtw": {
+   "metric": "cosine",
+   "step_sizes": [
+    [
+     1,
+     1
+    ],
+    [
+     0,
+     1
+    ],
+    [
+     1,
+     0
+    ]
+   ],
+   "weights_add": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "weights_mul": [
+    1.0,
+    1.0,
+    1.0
+   ],
+   "global_constraints": false,
+   "band_rad": 0.25
+  }
+ },
+ "folds": {
+  "A3/I4": {
+   "gain": {
+    "kind": "standardize"
+   },
+   "projector": {
+    "scale": 1.09180694569417,
+    "mean_diff_share_in_subspace": 0.9707366693585903
+   },
+   "paired": {
+    "n_pairs": 41297,
+    "canonical_r_top5": [
+     0.8383244384693731,
+     0.6934409617486069,
+     0.5623746942141251,
+     0.5136191937900195,
+     0.4615115043125925
+    ]
+   }
+  },
+  "A6/I7": {
+   "gain": {
+    "kind": "standardize"
+   },
+   "projector": {
+    "scale": 1.0620629858421031,
+    "mean_diff_share_in_subspace": 0.9760866992461312
+   },
+   "paired": {
+    "n_pairs": 39538,
+    "canonical_r_top5": [
+     0.8669437018368681,
+     0.7180180522196896,
+     0.5662830880757741,
+     0.5536525431743292,
+     0.4883028866042749
+    ]
+   }
+  },
+  "A11/I9": {
+   "gain": {
+    "kind": "standardize"
+   },
+   "projector": {
+    "scale": 1.1712223523786522,
+    "mean_diff_share_in_subspace": 0.9764133067277055
+   },
+   "paired": {
+    "n_pairs": 40573,
+    "canonical_r_top5": [
+     0.8615521253879684,
+     0.7062099228169109,
+     0.5301576941730924,
+     0.51860092191147,
+     0.4517125970307236
+    ]
+   }
+  },
+  "A13/I12": {
+   "gain": {
+    "kind": "standardize"
+   },
+   "projector": {
+    "scale": 1.1892625089286506,
+    "mean_diff_share_in_subspace": 0.9774663791412649
+   },
+   "paired": {
+    "n_pairs": 44393,
+    "canonical_r_top5": [
+     0.8401405344807835,
+     0.6797856104063685,
+     0.5144305140332999,
+     0.48609381804266083,
+     0.4491355577922113
+    ]
+   }
+  }
+ },
+ "eval": {
+  "gain": {
+   "kind": "standardize"
+  },
+  "projector": {
+   "scale": 1.129208681009217,
+   "mean_diff_share_in_subspace": 0.9743945860973008
+  },
+  "paired": {
+   "n_pairs": 55324,
+   "canonical_r_top5": [
+    0.845165779470348,
+    0.6960790290862194,
+    0.5405745321845731,
+    0.5185164125264253,
+    0.46450989330624304
+   ]
+  }
+ },
+ "checks": [
+  {
+   "fold": "A3",
+   "transform": "gain",
+   "max_abs_diff": 0.0
+  },
+  {
+   "fold": "A3",
+   "transform": "projector",
+   "max_abs_diff": 0.0
+  },
+  {
+   "fold": "A3",
+   "transform": "paired",
+   "max_abs_diff": 0.0
+  },
+  {
+   "fold": "A6",
+   "transform": "gain",
+   "max_abs_diff": 0.0
+  },
+  {
+   "fold": "A6",
+   "transform": "projector",
+   "max_abs_diff": 2.9103830456733704e-11
+  },
+  {
+   "fold": "A6",
+   "transform": "paired",
+   "max_abs_diff": 3.725290298461914e-09
+  },
+  {
+   "fold": "A11",
+   "transform": "gain",
+   "max_abs_diff": 0.0
+  },
+  {
+   "fold": "A11",
+   "transform": "projector",
+   "max_abs_diff": 0.0
+  },
+  {
+   "fold": "A11",
+   "transform": "paired",
+   "max_abs_diff": 0.0
+  },
+  {
+   "fold": "A13",
+   "transform": "gain",
+   "max_abs_diff": 0.0
+  },
+  {
+   "fold": "A13",
+   "transform": "projector",
+   "max_abs_diff": 0.0
+  },
+  {
+   "fold": "A13",
+   "transform": "paired",
+   "max_abs_diff": 0.0
+  },
+  {
+   "fold": "all",
+   "transform": "gain",
+   "max_abs_diff": 0.0
+  },
+  {
+   "fold": "all",
+   "transform": "projector",
+   "max_abs_diff": 0.0
+  },
+  {
+   "fold": "all",
+   "transform": "paired",
+   "max_abs_diff": 0.0
+  }
+ ],
+ "max_check_diff": 3.725290298461914e-09,
+ "wall_time_s": 191.1806342601776
+}
