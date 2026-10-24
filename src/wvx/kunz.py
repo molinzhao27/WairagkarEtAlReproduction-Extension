@@ -118,6 +118,35 @@ def load_condition(path, name: str, layer: int, adapter: dict) -> SessionData:
     return SessionData(name=name, layer=layer, trials=trials)
 
 
+def load_counting(path, name: str, adapter: dict) -> SessionData:
+    """A Kunz conjunctive-counting file (D-082) as a SessionData, preprocessed as ``load_condition``: one trial per
+    count, spanning the delay (silent counting) and go (the count said aloud) epochs; ``meta``: ``n`` (numTargets),
+    ``go_offset`` (row of the go cue), epochs."""
+    m = scipy.io.loadmat(path)
+    sp, tx = m["spikePow"].astype(np.float64), m["binnedTX"].astype(np.float64)
+    if int(np.asarray(m["binSize"]).squeeze()) != adapter["bin_ms"]:
+        raise ValueError(f"binSize {m['binSize']} != configured {adapter['bin_ms']} ms")
+    blocks = m["blockNum"].ravel().astype(int)
+    go, delay = m["goTrialEpochs"].astype(int), m["delayTrialEpochs"].astype(int)
+    n = np.asarray(m["numTargets"]).ravel().astype(int)
+    if adapter.get("clip_spikepow") is not None:
+        sp = np.minimum(sp, adapter["clip_spikepow"])
+    perm = _permutation(adapter.get("channel_permutation"), sp.shape[1])
+    norm = adapter["normalization"]
+    x = np.concatenate([_normalize(sp[:, perm], blocks, "spikepow", norm, adapter["bin_ms"]),
+                        _normalize(tx[:, perm], blocks, "threshcross", norm, adapter["bin_ms"])], axis=1)
+    trials = []
+    for i in range(go.shape[0]):
+        d0, g0, g1 = delay[i, 0] - 1, go[i, 0] - 1, go[i, 1]
+        if blocks[d0] != blocks[g1 - 1] or not d0 < g0 < g1:
+            raise ValueError(f"{name} trial {i}: epochs cross a block or are out of order")
+        trials.append(Trial(neural=x[d0:g1].astype(np.float32), text=str(int(n[i])), block=int(blocks[d0]),
+                            meta={"trial_index": i, "n": int(n[i]), "go_offset": int(g0 - d0),
+                                  "delay_bins": (int(delay[i, 0]), int(delay[i, 1])),
+                                  "go_bins": (int(go[i, 0]), int(go[i, 1]))}))
+    return SessionData(name=name, layer=0, trials=trials)
+
+
 def load_isolated(path, name: str, layer: int, adapter: dict) -> SessionData:
     """One Kunz isolated-verbal-behaviors file (D-079: single words; ``trialCues`` index ``cueList``) as a
     SessionData, preprocessed exactly as ``load_condition``. Each trial spans its delay AND go epochs (in the passive

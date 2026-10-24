@@ -1,0 +1,13 @@
+# D-082: the b2v2 decoder on Kunz conjunctive counting (T15 2024-12-15): silent counting (delay) and the count said
+# aloud (go). Decoded with the D-081 model adapted on that day's inner speech (b2v2_ov_d1215_all, best.pt) and with
+# b2v2_all zero-shot; both via --checkpoint and this config's data_dir (run name b2v2_count).
+#   host: scripts/build_b2v2_count.py; PC: decode_b2v2.py; CPU: count_analysis.py
+base_experiment: configs/experiments/b2v2_kunz_base.yaml
+
+run_name: b2v2_count
+
+b2v2:
+  data_dir: data/processed/b2v2_count
+  count:
+    adapter_config: configs/data/kunz.yaml          # D-023 preprocessing, release channel order
+    file: data/raw/kunz/conjunctiveCounting/t15.2024.12.15_conjunctive_counting.mat   # conjunctiveCounting.zip, SHA-256 verified
