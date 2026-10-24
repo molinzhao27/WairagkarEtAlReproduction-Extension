@@ -1,0 +1,25 @@
+# D-075 stage 3 (b: their real targets, continuous loss): the day-165 b2v2 decoder adapted to day195 on the D-049
+# training trials: a new input projection (initialized from the trained one), everything else frozen.
+#   PC: ~/wvx/envs/wvx-f5/bin/python -I scripts/train_b2v2.py --config configs/experiments/b2v2_le165_adapt_cont.yaml
+#   then decode_b2v2.py --checkpoint best --trials session:t15_day195:results/sanity_train_day195_from165_ep15/data.json:test_trials
+base_experiment: configs/experiments/b2v2_le165.yaml
+
+run_name: b2v2_le165_adapt_cont
+
+b2v2:
+  adapt:
+    init: data/checkpoints/b2v2_le165/final.pt
+    session: t15_day195
+    train_trials_from: results/sanity_train_day195_from165_ep15/data.json
+    train_key: train_trials
+    test_key: test_trials
+    n_validation: 16                 # of the 158, to pick the best step by this run's own loss
+    loss: cont
+    training:
+      steps: 2000
+      lr: 1.0e-3
+      min_lr: 1.0e-5
+      warmup: 0.1
+      augment_from: 1.0              # no augmentation
+      val_every: 100
+      checkpoint_every: 500
