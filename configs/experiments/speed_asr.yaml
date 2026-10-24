@@ -1,0 +1,18 @@
+# D-073 (pre-registered): speed-normalized ASR of the saved day195 dev-test audio (scripts/speed_asr.py; user idea).
+base_experiment: configs/experiments/voice_cost_day195.yaml   # session, data, ASR settings of the dev tests
+
+run_name: speed_asr
+
+speed_asr:
+  name: day195_dev_tests
+  split_from: results/voice_cost_day195/data.json
+  voice_config: configs/experiments/manual_alignment_alex.yaml   # Alex: the natural-rate reference voice
+  speech_metrics: {}                                            # the metrics' silence detector, default settings
+  max_factor: 4.0
+  runs:                                                         # zero-shot only once: byte-identical in every run
+    - {name: voice_cost_day195, models: [zero_shot, trained_theirs, trained_tts_oracle, trained_tts_auto]}
+    - {name: voice_conv_day195, models: [trained_conv_oracle, trained_conv_auto]}
+    - {name: splice_day195, models: [trained_splice_oracle, trained_splice_auto]}
+    - {name: knnvc_day195, models: [trained_tts_oracle, trained_tts_auto]}
+    - {name: f5clone_day195, models: [trained_tts_oracle, trained_tts_auto]}
+    - {name: splice_manual_day195, models: [trained_splice_manual]}
