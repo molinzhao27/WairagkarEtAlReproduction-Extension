@@ -1,0 +1,92 @@
+seed: 42
+paths:
+  data_root: data
+  raw_kunz: data/raw/kunz/sentenceData
+  raw_wairagkar: data/raw/wairagkar
+  processed: data/processed
+  checkpoints: data/checkpoints
+  results: results
+  figures: figures
+  brain_to_voice: third_party/brain_to_voice
+  lpcnet: third_party/LPCNet
+  training_sessions: data/processed/wairagkar_alex
+model:
+  n_features: 512
+  n_targets: 20
+  window_len: 60
+  step_size: 2
+  transformer_input_shape:
+  - 30
+  - 128
+  head_size: 128
+  n_heads: 4
+  n_transformer_blocks: 8
+  mlp_units:
+  - 1024
+  - 512
+  dropout: 0.5
+  n_session_layers: 17
+runtime:
+  device: gpu
+  deterministic_ops: true
+run_name: synth_transfer_le165
+training:
+  batch_size: 1024
+  epochs: 10
+  early_stopping_patience: 3
+  learning_rate: 0.0001
+  adam_beta_1: 0.9
+  adam_beta_2: 0.98
+  adam_epsilon: 1.0e-09
+  huber_delta: 1.35
+  n_augmentations: 0
+  augmentation_params:
+    sd_gaussian_noise: 1.2
+    sd_constant_offset: 0.6
+    offset_aug_factor_for_thresh: 0.67
+    sd_cumulative_noise: 0.02
+  validation:
+    n_trials: 50
+    fraction: null
+    pool:
+    - t15_day153
+    - t15_day165
+  monitor: val_loss
+  monitor_mode: min
+  reshuffle_each_epoch: false
+  resample_augmentations_each_epoch: false
+  drop_remainder: false
+  save_best_checkpoint: true
+  save_final_checkpoint: true
+  export_weights: best
+  export_layers:
+  - 16
+  overwrite: false
+  verbose: 2
+  init:
+    source: inference_h5
+    path: data/raw/wairagkar/t15_neural_data/t15_day172/brain2voice_t15_day165.h5
+    freeze_base: false
+  sessions:
+  - session: t15_day109
+    session_layer: 10
+  - session: t15_day110
+    session_layer: 10
+  - session: t15_day123
+    session_layer: 11
+  - session: t15_day132
+    session_layer: 12
+  - session: t15_day137
+    session_layer: 13
+  - session: t15_day139
+    session_layer: 13
+  - session: t15_day144
+    session_layer: 14
+  - session: t15_day146
+    session_layer: 14
+  - session: t15_day153
+    session_layer: 15
+  - session: t15_day165
+    session_layer: 16
+  held_out_sessions:
+  - session: t15_day195

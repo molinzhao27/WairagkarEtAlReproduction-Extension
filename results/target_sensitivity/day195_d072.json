@@ -1,0 +1,38 @@
+{
+ "name": "day195_d072",
+ "created": "2026-10-24T03:15:26",
+ "code_version": {
+  "source": "sync",
+  "commit": "5a630722dd850c85ebcea469ebf08f56c90fb3b3",
+  "dirty": false,
+  "diff_sha256": null,
+  "pushed_at": "2026-10-24T03:15:25Z"
+ },
+ "n_train": 158,
+ "variants": {
+  "mix_0.9": {
+   "kind": "mix",
+   "parameter": 0.31023975600646736,
+   "achieved_mean_r": 0.8999999999996254,
+   "goal_r": 0.9
+  },
+  "mix_0.7": {
+   "kind": "mix",
+   "parameter": 0.4588628766382499,
+   "achieved_mean_r": 0.7000000000001716,
+   "goal_r": 0.7
+  },
+  "mix_0.5": {
+   "kind": "mix",
+   "parameter": 0.5581883298204957,
+   "achieved_mean_r": 0.5000000000003394,
+   "goal_r": 0.5
+  },
+  "noise_0.5": {
+   "kind": "noise",
+   "parameter": 4.465012510308952,
+   "achieved_mean_r": 0.5000000000006909,
+   "goal_r": 0.5
+  }
+ }
+}

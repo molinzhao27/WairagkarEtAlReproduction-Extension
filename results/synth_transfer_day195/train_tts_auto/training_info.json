@@ -1,0 +1,82 @@
+{
+  "variant": "tts_auto",
+  "targets": "TTS syllables (forced) on the c0-dip syllables of the init decoder's own output (B/current), arm B",
+  "freeze_base": true,
+  "init": "data/checkpoints/synth_transfer_le165/inference_layer16.h5",
+  "n_train_trials": 143,
+  "n_validation_trials": 15,
+  "validation_trials": [
+    12,
+    14,
+    30,
+    64,
+    81,
+    95,
+    105,
+    112,
+    113,
+    114,
+    119,
+    127,
+    245,
+    247,
+    249
+  ],
+  "validation_types": {
+    "Training data (50-word vocab)": 12,
+    "Training data": 3
+  },
+  "excluded_too_short": [],
+  "epochs_configured": 15,
+  "epochs_run": 11,
+  "initial_validation": {
+    "loss": 0.011632011272013187,
+    "accuracy": 0.0
+  },
+  "history": {
+    "loss": [
+      0.008407152257859707,
+      0.007750592194497585,
+      0.00733987707644701,
+      0.007012567017227411,
+      0.00672577042132616,
+      0.00646929070353508,
+      0.006249423138797283,
+      0.0060454001650214195,
+      0.0058541507460176945,
+      0.005679102148860693,
+      0.00552261620759964
+    ],
+    "val_loss": [
+      0.011543843895196915,
+      0.011733533814549446,
+      0.011819657869637012,
+      0.011869825422763824,
+      0.011948293074965477,
+      0.012023248709738255,
+      0.012053041718900204,
+      0.01210374291986227,
+      0.012114336714148521,
+      0.012177446857094765,
+      0.012185746803879738
+    ],
+    "val_accuracy": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "loss_note": "loss = their train_step loss (Huber + 1.5 x Huber on features 4-9; dropout on; augmented data); val_loss = plain Huber, dropout off (Keras test_step); initial_validation = val_loss before training",
+  "export_weights": "final",
+  "wall_time_s": 1239.3901872634888,
+  "exported": "data/checkpoints/synth_transfer_day195/train_tts_auto/inference_layer00.h5",
+  "exported_sha256": "5982a10773abe2f938feb00a4e7da7b81ea8603b079acd47d959aaa2861d75b3"
+}
