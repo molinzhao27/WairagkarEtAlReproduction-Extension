@@ -116,3 +116,41 @@ def load_condition(path, name: str, layer: int, adapter: dict) -> SessionData:
             )
         )
     return SessionData(name=name, layer=layer, trials=trials)
+
+
+def load_isolated(path, name: str, layer: int, adapter: dict) -> SessionData:
+    """One Kunz isolated-verbal-behaviors file (D-079: single words; ``trialCues`` index ``cueList``) as a
+    SessionData, preprocessed exactly as ``load_condition``. Each trial spans its delay AND go epochs (in the passive
+    conditions the stimulus plays during the delay, the go epoch being the inter-trial interval); ``meta`` gives
+    ``go_offset`` (row of the go cue), ``delay_len`` and the cue. ``text`` is the word ("" for DO_NOTHING)."""
+    m = scipy.io.loadmat(path)
+    sp = m["spikePow"].astype(np.float64)
+    tx = m["binnedTX"].astype(np.float64)
+    if sp.shape != tx.shape:
+        raise ValueError(f"spikePow {sp.shape} and binnedTX {tx.shape} differ")
+    if int(np.asarray(m["binSize"]).squeeze()) != adapter["bin_ms"]:
+        raise ValueError(f"binSize {m['binSize']} != configured {adapter['bin_ms']} ms")
+    blocks = m["blockNum"].ravel().astype(int)
+    go = m["goTrialEpochs"].astype(int)
+    delay = m["delayTrialEpochs"].astype(int)
+    cue_list = _cellstr(m["cueList"])
+    cues = [cue_list[int(c) - 1] for c in np.asarray(m["trialCues"]).ravel()]
+    if adapter.get("clip_spikepow") is not None:
+        sp = np.minimum(sp, adapter["clip_spikepow"])
+    perm = _permutation(adapter.get("channel_permutation"), sp.shape[1])
+    norm = adapter["normalization"]
+    sp = _normalize(sp[:, perm], blocks, "spikepow", norm, adapter["bin_ms"])
+    tx = _normalize(tx[:, perm], blocks, "threshcross", norm, adapter["bin_ms"])
+    x = np.concatenate([sp, tx], axis=1).astype(np.float32)
+    trials = []
+    for i in range(go.shape[0]):
+        d0, g0, g1 = delay[i, 0] - 1, go[i, 0] - 1, go[i, 1]      # 1-based inclusive -> python slices
+        if not (blocks[d0] == blocks[g1 - 1]) or not d0 < g0 < g1:
+            raise ValueError(f"{name} trial {i}: epochs cross a block or are out of order")
+        cue = cues[i].split("-")[0]
+        trials.append(Trial(neural=x[d0:g1], text="" if cue == "DO_NOTHING" else cue, block=int(blocks[d0]),
+                            meta={"trial_index": i, "cue": cues[i], "go_offset": int(g0 - d0),
+                                  "delay_len": int(g0 - d0), "go_len": int(g1 - g0),
+                                  "delay_bins": (int(delay[i, 0]), int(delay[i, 1])),
+                                  "go_bins": (int(go[i, 0]), int(go[i, 1]))}))
+    return SessionData(name=name, layer=layer, trials=trials)
