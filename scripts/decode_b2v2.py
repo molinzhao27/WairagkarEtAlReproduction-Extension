@@ -56,6 +56,7 @@ def main(argv=None) -> int:
     ap.add_argument("--mode", choices=["live", "chunked"], default="live",
                     help="live = the paper's sliding window (primary); chunked = causal long context "
                          "(wvx.b2v2_model.decode_chunked, a D-075 debugging check)")
+    ap.add_argument("--data-dir", default=None, help="override b2v2.data_dir (e.g. projected Kunz data, D-077)")
     ap.add_argument("--ctx", type=int, default=128, help="chunked: tokens per window")
     ap.add_argument("--hop", type=int, default=64, help="chunked: kept outputs per window after the first")
     args = ap.parse_args(argv)
@@ -74,7 +75,7 @@ def main(argv=None) -> int:
     model = bm.B2V2(ck["model_cfg"]).to(device)
     model.load_state_dict(ck["state"])
     input_id = int(ck.get("input_id", 0))
-    data = bd.B2V2Data(resolve_path(b["data_dir"]))
+    data = bd.B2V2Data(resolve_path(args.data_dir or b["data_dir"]))
     gids = select(data, args.trials, resolve_path("results/b2v2") / run)
     window = int(args.window_bins or b["decode"]["window_bins"])
     pool = int(b["data"]["pool"])
@@ -94,6 +95,7 @@ def main(argv=None) -> int:
         out[f"g{g}_best"] = lg.argmax(-1).astype(np.uint8)
     header = {"run_name": run, "checkpoint": str(ckpt), "checkpoint_sha256": hashlib.sha256(ckpt.read_bytes()).hexdigest(),
               "input_id": input_id, "trials": args.trials, "gids": gids, "mode": args.mode,
+              "data_dir": str(resolve_path(args.data_dir or b["data_dir"])),
               "window_bins": window if args.mode == "live" else None,
               "chunked": {"ctx": args.ctx, "hop": args.hop} if args.mode == "chunked" else None, "pool": pool,
               "device": str(device), "code_version": code_version(), "decision": "D-075",

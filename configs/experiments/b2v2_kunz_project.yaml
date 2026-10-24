@@ -1,0 +1,22 @@
+# D-077: inner -> attempted transforms (wvx.inner_conversion, the D-067 settings) in front of the b2v2 decoder.
+#   PC: CUDA_VISIBLE_DEVICES= .venv/bin/python -I scripts/kunz_b2v2_project.py --config configs/experiments/b2v2_kunz_project.yaml
+base_experiment: configs/experiments/b2v2_kunz_base.yaml
+
+runtime:
+  threads: {intra_op: 12, inter_op: 2, omp: 12}
+
+b2v2:
+  project:
+    out_dir: data/processed/b2v2_kunz_proj
+    pairs: {3: 4, 6: 7, 11: 9, 13: 12}          # attempted block -> imagined block with the same sentences
+    transforms: [none, gain, projector, paired, paired_shuffled]
+    settings:                                    # as configs/experiments/inner_projector.yaml (D-067)
+      n_components: 20
+      pool_bins: 5
+      shrink: 0.1
+      seed: 20261023
+      dtw: {metric: cosine, step_sizes: [[1, 1], [0, 1], [1, 0]], weights_add: [0.0, 0.0, 0.0],
+            weights_mul: [1.0, 1.0, 1.0], global_constraints: false, band_rad: 0.25}
+    auc:
+      C: 1.0
+      max_frames: 20000                          # per class, for the logistic regression fits
