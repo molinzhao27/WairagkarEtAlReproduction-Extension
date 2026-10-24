@@ -1,0 +1,28 @@
+# D-072 (pre-registered): the D-049 dev setting trained on their REAL targets degraded in controlled ways
+# (scripts/degrade_targets.py): systematic voice-like mixing at r 0.9 / 0.7 / 0.5 and an unbiased noise control at 0.5.
+#   PC: .venv/bin/python -I scripts/degrade_targets.py --config configs/experiments/target_sens_day195.yaml
+#       .venv/bin/python -I scripts/sanity_train_day195.py --config configs/experiments/target_sens_day195.yaml --device gpu
+base_experiment: configs/experiments/voice_cost_day195.yaml
+
+run_name: target_sens_day195
+
+sanity:
+  name: target_sens_day195
+  target_variants: [mix_0.9, mix_0.7, mix_0.5, noise_0.5]
+  target_files:
+    mix_0.9: data/processed/target_sensitivity/day195_mix_0.9.npz
+    mix_0.7: data/processed/target_sensitivity/day195_mix_0.7.npz
+    mix_0.5: data/processed/target_sensitivity/day195_mix_0.5.npz
+    noise_0.5: data/processed/target_sensitivity/day195_noise_0.5.npz
+
+degrade_targets:
+  name: day195_d072
+  seed: 20261023
+  train_trials_from: results/voice_cost_day195/data.json       # the D-049 training trials (= sanity_train_day195_from165_ep15's)
+  out_dir: data/processed/target_sensitivity
+  noise_smooth_frames: 2.0
+  variants:
+    - {name: mix_0.9, kind: mix, r: 0.9, upper: 1.0}
+    - {name: mix_0.7, kind: mix, r: 0.7, upper: 1.0}
+    - {name: mix_0.5, kind: mix, r: 0.5, upper: 1.0}
+    - {name: noise_0.5, kind: noise, r: 0.5, upper: 20.0}
