@@ -1,0 +1,17 @@
+# Synthetic-voice decoder prep (user proposal 2026-10-23): their training sessions with Alex targets placed on their
+# true syllables (scripts/build_synthetic_sessions.py). D-059: never Aman.
+base_experiment: configs/experiments/voice_cost_day195.yaml   # data loading, channel reorder, model sizes
+
+run_name: synth_sessions
+
+runtime:
+  threads: {intra_op: 2, inter_op: 1, omp: 2}                 # per worker process
+
+synth_sessions:
+  name: alex_tts_oracle_le193
+  sessions_from: third_party/brain_to_voice/configs/training_data_args.yaml
+  max_day: 193
+  placement_config: configs/experiments/manual_alignment_alex.yaml
+  corpus: t15_sessions               # Alex TTS of every cue of the 36 sessions (make_tts.py generate)
+  out_dir: data/processed/wairagkar_alex
+  workers: 6
