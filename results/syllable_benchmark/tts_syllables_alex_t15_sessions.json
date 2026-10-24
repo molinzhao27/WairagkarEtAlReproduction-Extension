@@ -1,0 +1,8514 @@
+{
+ "created": "2026-10-24T04:14:49",
+ "voice": "Alex",
+ "corpus": "t15_sessions",
+ "settings": {
+  "syllabification": {
+   "rule": "maximal_onset",
+   "onset_source": "cmudict",
+   "min_onset_words": 1
+  },
+  "audio_lag_ms": 15.0,
+  "forced_alignment": {
+   "aligner": "montreal-forced-aligner",
+   "version": "3.4.3",
+   "acoustic_model": "english_us_arpa",
+   "acoustic_model_version": "3.0.0",
+   "acoustic_model_sha256": "d35ce271ded357d833d2f4b8d1041dc3748b9538567ba13f2c697f4e4126711b",
+   "dictionary": "english_us_arpa",
+   "dictionary_version": "3.0.0",
+   "dictionary_sha256": "e8c6c7b036ae2b7c78d2768b8dc6b1f9359175b842956d00b48c53c9c332e6b0",
+   "args": [
+    "--clean",
+    "--final_clean",
+    "--single_speaker",
+    "--output_format",
+    "json"
+   ],
+   "num_jobs": 8,
+   "word_tier": "words",
+   "phone_tier": "phones",
+   "silence_labels": [
+    "",
+    "sil",
+    "sp",
+    "<eps>"
+   ],
+   "unknown_label": "spn",
+   "syllables_file": "syllables.json"
+  }
+ },
+ "versions": {
+  "cmudict": "1.1.3"
+ },
+ "n_legal_onsets": 146,
+ "runtime": {
+  "threads": {
+   "intra_op": 8,
+   "inter_op": 2,
+   "omp": 8
+  },
+  "env": {
+   "OMP_NUM_THREADS": "8",
+   "MKL_NUM_THREADS": "8",
+   "OPENBLAS_NUM_THREADS": "8",
+   "NUMBA_NUM_THREADS": "8",
+   "TF_NUM_INTRAOP_THREADS": "8",
+   "TF_NUM_INTEROP_THREADS": "2"
+  },
+  "nice": 19,
+  "CUDA_VISIBLE_DEVICES": ""
+ },
+ "code_version": {
+  "source": "sync",
+  "commit": "5004d973a28af1b63909c3938c3f0c3915aae6d9",
+  "dirty": false,
+  "diff_sha256": null,
+  "pushed_at": "2026-10-24T04:04:13Z"
+ },
+ "config_sha256": "2571c83cc866a56043f46e0b2fb49c695e6b24cb942ca3ae010edbf182b0e10f",
+ "n_utterances": 7945,
+ "n_aligned": 7945,
+ "missing_alignments": [],
+ "unknown_words": [
+  "aerobics",
+  "alerts",
+  "ambiance",
+  "analytics",
+  "apps",
+  "arbitrage",
+  "assed",
+  "automakers",
+  "backpacking",
+  "bonsai",
+  "bottlenecks",
+  "budgeting",
+  "capone",
+  "checkpoints",
+  "cholesterol",
+  "closures",
+  "coleslaw",
+  "collage",
+  "degray",
+  "diesn't",
+  "download",
+  "enzo",
+  "excercise",
+  "extramarital",
+  "fransisco",
+  "freeloaders",
+  "goofing",
+  "grandkids",
+  "graphics",
+  "grassley",
+  "grassroots",
+  "groundwater",
+  "gypsy",
+  "handguns",
+  "hatchback",
+  "hobbyist",
+  "jeez",
+  "linux",
+  "obama",
+  "paramedic",
+  "particulates",
+  "pepsi",
+  "pesticides",
+  "piddles",
+  "playoff",
+  "playoffs",
+  "reboot",
+  "recyclables",
+  "recycle",
+  "recycling",
+  "restrooms",
+  "sexiest",
+  "shareware",
+  "situational",
+  "spam",
+  "stakeholders",
+  "sunroom",
+  "suspenseful",
+  "tastings",
+  "tollway",
+  "tv",
+  "tv's",
+  "wildfires"
+ ],
+ "words_without_vowel": [
+  "aerobics",
+  "alerts",
+  "ambiance",
+  "analytics",
+  "apps",
+  "arbitrage",
+  "assed",
+  "automakers",
+  "backpacking",
+  "bonsai",
+  "bottlenecks",
+  "budgeting",
+  "capone",
+  "checkpoints",
+  "cholesterol",
+  "closures",
+  "coleslaw",
+  "collage",
+  "degray",
+  "diesn't",
+  "download",
+  "enzo",
+  "excercise",
+  "extramarital",
+  "fransisco",
+  "freeloaders",
+  "goofing",
+  "grandkids",
+  "graphics",
+  "grassley",
+  "grassroots",
+  "groundwater",
+  "gypsy",
+  "handguns",
+  "hatchback",
+  "hobbyist",
+  "jeez",
+  "linux",
+  "obama",
+  "paramedic",
+  "particulates",
+  "pepsi",
+  "pesticides",
+  "piddles",
+  "playoff",
+  "playoffs",
+  "reboot",
+  "recyclables",
+  "recycle",
+  "recycling",
+  "restrooms",
+  "sexiest",
+  "shareware",
+  "situational",
+  "spam",
+  "stakeholders",
+  "sunroom",
+  "suspenseful",
+  "tastings",
+  "tollway",
+  "tv",
+  "tv's",
+  "wildfires"
+ ],
+ "count_agreement_with_cmudict": 0.9232221522970422,
+ "n_count_mismatches": 610,
+ "count_mismatches": [
+  {
+   "text": "Is my family very comfortable?",
+   "words": [
+    "is",
+    "my",
+    "family",
+    "very",
+    "comfortable"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "Is my family going up?",
+   "words": [
+    "is",
+    "my",
+    "family",
+    "going",
+    "up"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "Tell my family they are not comfortable.",
+   "words": [
+    "tell",
+    "my",
+    "family",
+    "they",
+    "are",
+    "not",
+    "comfortable"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 12
+  },
+  {
+   "text": "Is my family good?",
+   "words": [
+    "is",
+    "my",
+    "family",
+    "good"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 6
+  },
+  {
+   "text": "Tell my family goodbye.",
+   "words": [
+    "tell",
+    "my",
+    "family",
+    "goodbye"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "How tired is my family?",
+   "words": [
+    "how",
+    "tired",
+    "is",
+    "my",
+    "family"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "Tell my family they do not feel hungry.",
+   "words": [
+    "tell",
+    "my",
+    "family",
+    "they",
+    "do",
+    "not",
+    "feel",
+    "hungry"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "My family is not going outside.",
+   "words": [
+    "my",
+    "family",
+    "is",
+    "not",
+    "going",
+    "outside"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "I like how comfortable my family is.",
+   "words": [
+    "i",
+    "like",
+    "how",
+    "comfortable",
+    "my",
+    "family",
+    "is"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 12
+  },
+  {
+   "text": "My family is going.",
+   "words": [
+    "my",
+    "family",
+    "is",
+    "going"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "My family is right here.",
+   "words": [
+    "my",
+    "family",
+    "is",
+    "right",
+    "here"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "They do not like my family.",
+   "words": [
+    "they",
+    "do",
+    "not",
+    "like",
+    "my",
+    "family"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "You hope my family is here.",
+   "words": [
+    "you",
+    "hope",
+    "my",
+    "family",
+    "is",
+    "here"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "Where is my family going?",
+   "words": [
+    "where",
+    "is",
+    "my",
+    "family",
+    "going"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "Tell my family I do not feel comfortable.",
+   "words": [
+    "tell",
+    "my",
+    "family",
+    "i",
+    "do",
+    "not",
+    "feel",
+    "comfortable"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 13
+  },
+  {
+   "text": "They hope my family is closer.",
+   "words": [
+    "they",
+    "hope",
+    "my",
+    "family",
+    "is",
+    "closer"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "Tell my family they are thirsty.",
+   "words": [
+    "tell",
+    "my",
+    "family",
+    "they",
+    "are",
+    "thirsty"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "Please tell my family I need my computer.",
+   "words": [
+    "please",
+    "tell",
+    "my",
+    "family",
+    "i",
+    "need",
+    "my",
+    "computer"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 12
+  },
+  {
+   "text": "You have family.",
+   "words": [
+    "you",
+    "have",
+    "family"
+   ],
+   "n_syllables": 4,
+   "n_dictionary": 5
+  },
+  {
+   "text": "My family is going up.",
+   "words": [
+    "my",
+    "family",
+    "is",
+    "going",
+    "up"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "Tell my family they are not hungry.",
+   "words": [
+    "tell",
+    "my",
+    "family",
+    "they",
+    "are",
+    "not",
+    "hungry"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "Please tell my family I need my glasses.",
+   "words": [
+    "please",
+    "tell",
+    "my",
+    "family",
+    "i",
+    "need",
+    "my",
+    "glasses"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "I tell you my family is not hungry.",
+   "words": [
+    "i",
+    "tell",
+    "you",
+    "my",
+    "family",
+    "is",
+    "not",
+    "hungry"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "How thirsty is my family?",
+   "words": [
+    "how",
+    "thirsty",
+    "is",
+    "my",
+    "family"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "My family is going here.",
+   "words": [
+    "my",
+    "family",
+    "is",
+    "going",
+    "here"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "Tell my family hello.",
+   "words": [
+    "tell",
+    "my",
+    "family",
+    "hello"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "What do they tell my family?",
+   "words": [
+    "what",
+    "do",
+    "they",
+    "tell",
+    "my",
+    "family"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "My family is closer.",
+   "words": [
+    "my",
+    "family",
+    "is",
+    "closer"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "Tell my family I am not comfortable.",
+   "words": [
+    "tell",
+    "my",
+    "family",
+    "i",
+    "am",
+    "not",
+    "comfortable"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 12
+  },
+  {
+   "text": "Tell my family I am comfortable.",
+   "words": [
+    "tell",
+    "my",
+    "family",
+    "i",
+    "am",
+    "comfortable"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "Talk to our realtor.",
+   "words": [
+    "talk",
+    "to",
+    "our",
+    "realtor"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 7
+  },
+  {
+   "text": "This is like a cruelty joke.",
+   "words": [
+    "this",
+    "is",
+    "like",
+    "a",
+    "cruelty",
+    "joke"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 7
+  },
+  {
+   "text": "In a little different grade.",
+   "words": [
+    "in",
+    "a",
+    "little",
+    "different",
+    "grade"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "Tell my family I do not feel hungry.",
+   "words": [
+    "tell",
+    "my",
+    "family",
+    "i",
+    "do",
+    "not",
+    "feel",
+    "hungry"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "How our politicians voted each week in the paper.",
+   "words": [
+    "how",
+    "our",
+    "politicians",
+    "voted",
+    "each",
+    "week",
+    "in",
+    "the",
+    "paper"
+   ],
+   "n_syllables": 14,
+   "n_dictionary": 15
+  },
+  {
+   "text": "I like listening to that.",
+   "words": [
+    "i",
+    "like",
+    "listening",
+    "to",
+    "that"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "The coleslaw and potato salad.",
+   "words": [
+    "the",
+    "coleslaw",
+    "and",
+    "potato",
+    "salad"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 9
+  },
+  {
+   "text": "I personally feel it.",
+   "words": [
+    "i",
+    "personally",
+    "feel",
+    "it"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "Because we've been recycling for quite some time.",
+   "words": [
+    "because",
+    "we've",
+    "been",
+    "recycling",
+    "for",
+    "quite",
+    "some",
+    "time"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 12
+  },
+  {
+   "text": "Needs and wants aren't necessarily the same thing.",
+   "words": [
+    "needs",
+    "and",
+    "wants",
+    "aren't",
+    "necessarily",
+    "the",
+    "same",
+    "thing"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 13
+  },
+  {
+   "text": "And our city will pick up our recyclables.",
+   "words": [
+    "and",
+    "our",
+    "city",
+    "will",
+    "pick",
+    "up",
+    "our",
+    "recyclables"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 14
+  },
+  {
+   "text": "Family is not good.",
+   "words": [
+    "family",
+    "is",
+    "not",
+    "good"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 6
+  },
+  {
+   "text": "In San Antonio it was like every day.",
+   "words": [
+    "in",
+    "san",
+    "antonio",
+    "it",
+    "was",
+    "like",
+    "every",
+    "day"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 13
+  },
+  {
+   "text": "Her daughter actually was.",
+   "words": [
+    "her",
+    "daughter",
+    "actually",
+    "was"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "It will be like family around her.",
+   "words": [
+    "it",
+    "will",
+    "be",
+    "like",
+    "family",
+    "around",
+    "her"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "Pepsi cans and whatever.",
+   "words": [
+    "pepsi",
+    "cans",
+    "and",
+    "whatever"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 7
+  },
+  {
+   "text": "You hope my family is not here.",
+   "words": [
+    "you",
+    "hope",
+    "my",
+    "family",
+    "is",
+    "not",
+    "here"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "Places usually that I wouldn't be going.",
+   "words": [
+    "places",
+    "usually",
+    "that",
+    "i",
+    "wouldn't",
+    "be",
+    "going"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 13
+  },
+  {
+   "text": "Budgeting and some extra things.",
+   "words": [
+    "budgeting",
+    "and",
+    "some",
+    "extra",
+    "things"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 8
+  },
+  {
+   "text": "They do not have family.",
+   "words": [
+    "they",
+    "do",
+    "not",
+    "have",
+    "family"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "I think some people have just assed.",
+   "words": [
+    "i",
+    "think",
+    "some",
+    "people",
+    "have",
+    "just",
+    "assed"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "The grassroots were whacked for voicing out.",
+   "words": [
+    "the",
+    "grassroots",
+    "were",
+    "whacked",
+    "for",
+    "voicing",
+    "out"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 9
+  },
+  {
+   "text": "I guess it makes a difference.",
+   "words": [
+    "i",
+    "guess",
+    "it",
+    "makes",
+    "a",
+    "difference"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "There was no word on casualties.",
+   "words": [
+    "there",
+    "was",
+    "no",
+    "word",
+    "on",
+    "casualties"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "No immediate reports of casualties.",
+   "words": [
+    "no",
+    "immediate",
+    "reports",
+    "of",
+    "casualties"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 12
+  },
+  {
+   "text": "We've had our way of life.",
+   "words": [
+    "we've",
+    "had",
+    "our",
+    "way",
+    "of",
+    "life"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "Right in our own back door.",
+   "words": [
+    "right",
+    "in",
+    "our",
+    "own",
+    "back",
+    "door"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "We're a sit down together family.",
+   "words": [
+    "we're",
+    "a",
+    "sit",
+    "down",
+    "together",
+    "family"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "I know I want a big family area.",
+   "words": [
+    "i",
+    "know",
+    "i",
+    "want",
+    "a",
+    "big",
+    "family",
+    "area"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 12
+  },
+  {
+   "text": "So he's a fan of history.",
+   "words": [
+    "so",
+    "he's",
+    "a",
+    "fan",
+    "of",
+    "history"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "It's not a hatchback.",
+   "words": [
+    "it's",
+    "not",
+    "a",
+    "hatchback"
+   ],
+   "n_syllables": 3,
+   "n_dictionary": 5
+  },
+  {
+   "text": "I've used a substantial amount of shareware.",
+   "words": [
+    "i've",
+    "used",
+    "a",
+    "substantial",
+    "amount",
+    "of",
+    "shareware"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 11
+  },
+  {
+   "text": "His side of the family.",
+   "words": [
+    "his",
+    "side",
+    "of",
+    "the",
+    "family"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "I do graphics for their television stations.",
+   "words": [
+    "i",
+    "do",
+    "graphics",
+    "for",
+    "their",
+    "television",
+    "stations"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 12
+  },
+  {
+   "text": "We've remodeled all our units.",
+   "words": [
+    "we've",
+    "remodeled",
+    "all",
+    "our",
+    "units"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "An international population.",
+   "words": [
+    "an",
+    "international",
+    "population"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "TV's a surrogate parent.",
+   "words": [
+    "tv's",
+    "a",
+    "surrogate",
+    "parent"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 8
+  },
+  {
+   "text": "Our financial situations are dire.",
+   "words": [
+    "our",
+    "financial",
+    "situations",
+    "are",
+    "dire"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "But when I do, it usually brings me joy.",
+   "words": [
+    "but",
+    "when",
+    "i",
+    "do",
+    "it",
+    "usually",
+    "brings",
+    "me",
+    "joy"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 12
+  },
+  {
+   "text": "I don't see much tv mostly when I'm in school.",
+   "words": [
+    "i",
+    "don't",
+    "see",
+    "much",
+    "tv",
+    "mostly",
+    "when",
+    "i'm",
+    "in",
+    "school"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 12
+  },
+  {
+   "text": "She said that the closures would be permanent.",
+   "words": [
+    "she",
+    "said",
+    "that",
+    "the",
+    "closures",
+    "would",
+    "be",
+    "permanent"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 11
+  },
+  {
+   "text": "It's aking profits.",
+   "words": [
+    "it's",
+    "aking",
+    "profits"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": null
+  },
+  {
+   "text": "When our daughter was looking at colleges.",
+   "words": [
+    "when",
+    "our",
+    "daughter",
+    "was",
+    "looking",
+    "at",
+    "colleges"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 12
+  },
+  {
+   "text": "Is so careful about recycling.",
+   "words": [
+    "is",
+    "so",
+    "careful",
+    "about",
+    "recycling"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 10
+  },
+  {
+   "text": "It's not every week.",
+   "words": [
+    "it's",
+    "not",
+    "every",
+    "week"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 6
+  },
+  {
+   "text": "It's pretty different from yours.",
+   "words": [
+    "it's",
+    "pretty",
+    "different",
+    "from",
+    "yours"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "I love the water aerobics.",
+   "words": [
+    "i",
+    "love",
+    "the",
+    "water",
+    "aerobics"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 8
+  },
+  {
+   "text": "We don't actually have a budget.",
+   "words": [
+    "we",
+    "don't",
+    "actually",
+    "have",
+    "a",
+    "budget"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "Our military people need to know about.",
+   "words": [
+    "our",
+    "military",
+    "people",
+    "need",
+    "to",
+    "know",
+    "about"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 13
+  },
+  {
+   "text": "It's not unusual.",
+   "words": [
+    "it's",
+    "not",
+    "unusual"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 6
+  },
+  {
+   "text": "It's affecting the families you know.",
+   "words": [
+    "it's",
+    "affecting",
+    "the",
+    "families",
+    "you",
+    "know"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "I didn't used to but now I eat cereal every morning.",
+   "words": [
+    "i",
+    "didn't",
+    "used",
+    "to",
+    "but",
+    "now",
+    "i",
+    "eat",
+    "cereal",
+    "every",
+    "morning"
+   ],
+   "n_syllables": 16,
+   "n_dictionary": 17
+  },
+  {
+   "text": "There's no particulates in natural gas.",
+   "words": [
+    "there's",
+    "no",
+    "particulates",
+    "in",
+    "natural",
+    "gas"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 11
+  },
+  {
+   "text": "It's situational.",
+   "words": [
+    "it's",
+    "situational"
+   ],
+   "n_syllables": 1,
+   "n_dictionary": 6
+  },
+  {
+   "text": "Just our own design.",
+   "words": [
+    "just",
+    "our",
+    "own",
+    "design"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 6
+  },
+  {
+   "text": "Every major city has a theater.",
+   "words": [
+    "every",
+    "major",
+    "city",
+    "has",
+    "a",
+    "theater"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 12
+  },
+  {
+   "text": "That fertilizer pollutes the groundwater.",
+   "words": [
+    "that",
+    "fertilizer",
+    "pollutes",
+    "the",
+    "groundwater"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 11
+  },
+  {
+   "text": "Every time I do something.",
+   "words": [
+    "every",
+    "time",
+    "i",
+    "do",
+    "something"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "We did get the cable TV.",
+   "words": [
+    "we",
+    "did",
+    "get",
+    "the",
+    "cable",
+    "tv"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 8
+  },
+  {
+   "text": "Especially when it feels like there is no point.",
+   "words": [
+    "especially",
+    "when",
+    "it",
+    "feels",
+    "like",
+    "there",
+    "is",
+    "no",
+    "point"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 11
+  },
+  {
+   "text": "As a boy, his family traveled by horse and buggy.",
+   "words": [
+    "as",
+    "a",
+    "boy",
+    "his",
+    "family",
+    "traveled",
+    "by",
+    "horse",
+    "and",
+    "buggy"
+   ],
+   "n_syllables": 13,
+   "n_dictionary": 14
+  },
+  {
+   "text": "Usually, this time is a considerable investment.",
+   "words": [
+    "usually",
+    "this",
+    "time",
+    "is",
+    "a",
+    "considerable",
+    "investment"
+   ],
+   "n_syllables": 15,
+   "n_dictionary": 16
+  },
+  {
+   "text": "The victims' families and things.",
+   "words": [
+    "the",
+    "victims",
+    "families",
+    "and",
+    "things"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "It's been cloudy and dreary every day this week.",
+   "words": [
+    "it's",
+    "been",
+    "cloudy",
+    "and",
+    "dreary",
+    "every",
+    "day",
+    "this",
+    "week"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 13
+  },
+  {
+   "text": "The role in the family.",
+   "words": [
+    "the",
+    "role",
+    "in",
+    "the",
+    "family"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "Actually purchase the gun.",
+   "words": [
+    "actually",
+    "purchase",
+    "the",
+    "gun"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "Do you have recycling?",
+   "words": [
+    "do",
+    "you",
+    "have",
+    "recycling"
+   ],
+   "n_syllables": 3,
+   "n_dictionary": 7
+  },
+  {
+   "text": "What is an Android TV box and what can they do?",
+   "words": [
+    "what",
+    "is",
+    "an",
+    "android",
+    "tv",
+    "box",
+    "and",
+    "what",
+    "can",
+    "they",
+    "do"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 13
+  },
+  {
+   "text": "Analytics and visualization.",
+   "words": [
+    "analytics",
+    "and",
+    "visualization"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 10
+  },
+  {
+   "text": "The recycle ones are better to use.",
+   "words": [
+    "the",
+    "recycle",
+    "ones",
+    "are",
+    "better",
+    "to",
+    "use"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 10
+  },
+  {
+   "text": "Occasionally I'll see that one.",
+   "words": [
+    "occasionally",
+    "i'll",
+    "see",
+    "that",
+    "one"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "You enjoy every step you take.",
+   "words": [
+    "you",
+    "enjoy",
+    "every",
+    "step",
+    "you",
+    "take"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "There was a shooting on the tollway.",
+   "words": [
+    "there",
+    "was",
+    "a",
+    "shooting",
+    "on",
+    "the",
+    "tollway"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": null
+  },
+  {
+   "text": "And hey, that leads us to our next point.",
+   "words": [
+    "and",
+    "hey",
+    "that",
+    "leads",
+    "us",
+    "to",
+    "our",
+    "next",
+    "point"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "Especially when you get done.",
+   "words": [
+    "especially",
+    "when",
+    "you",
+    "get",
+    "done"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 7
+  },
+  {
+   "text": "Make vector versions of the bottlenecks.",
+   "words": [
+    "make",
+    "vector",
+    "versions",
+    "of",
+    "the",
+    "bottlenecks"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 10
+  },
+  {
+   "text": "Once every year or two.",
+   "words": [
+    "once",
+    "every",
+    "year",
+    "or",
+    "two"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "If there starts to be a lot of violence.",
+   "words": [
+    "if",
+    "there",
+    "starts",
+    "to",
+    "be",
+    "a",
+    "lot",
+    "of",
+    "violence"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "An American grocery store now.",
+   "words": [
+    "an",
+    "american",
+    "grocery",
+    "store",
+    "now"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "The government announced new measures to combat the wildfires.",
+   "words": [
+    "the",
+    "government",
+    "announced",
+    "new",
+    "measures",
+    "to",
+    "combat",
+    "the",
+    "wildfires"
+   ],
+   "n_syllables": 13,
+   "n_dictionary": 16
+  },
+  {
+   "text": "We bought everything in a grocery store.",
+   "words": [
+    "we",
+    "bought",
+    "everything",
+    "in",
+    "a",
+    "grocery",
+    "store"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "And each decision can lead to a different result.",
+   "words": [
+    "and",
+    "each",
+    "decision",
+    "can",
+    "lead",
+    "to",
+    "a",
+    "different",
+    "result"
+   ],
+   "n_syllables": 13,
+   "n_dictionary": 14
+  },
+  {
+   "text": "We spend so much time with our families.",
+   "words": [
+    "we",
+    "spend",
+    "so",
+    "much",
+    "time",
+    "with",
+    "our",
+    "families"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 11
+  },
+  {
+   "text": "They need exposure to every subject.",
+   "words": [
+    "they",
+    "need",
+    "exposure",
+    "to",
+    "every",
+    "subject"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "As far as just having handguns around.",
+   "words": [
+    "as",
+    "far",
+    "as",
+    "just",
+    "having",
+    "handguns",
+    "around"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 10
+  },
+  {
+   "text": "They're usually a pretty good bet.",
+   "words": [
+    "they're",
+    "usually",
+    "a",
+    "pretty",
+    "good",
+    "bet"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "I have stuck to water aerobics.",
+   "words": [
+    "i",
+    "have",
+    "stuck",
+    "to",
+    "water",
+    "aerobics"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 9
+  },
+  {
+   "text": "It looks pretty suspenseful.",
+   "words": [
+    "it",
+    "looks",
+    "pretty",
+    "suspenseful"
+   ],
+   "n_syllables": 4,
+   "n_dictionary": 7
+  },
+  {
+   "text": "Pay for paper to recycle.",
+   "words": [
+    "pay",
+    "for",
+    "paper",
+    "to",
+    "recycle"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 8
+  },
+  {
+   "text": "Put all your recyclables in that one.",
+   "words": [
+    "put",
+    "all",
+    "your",
+    "recyclables",
+    "in",
+    "that",
+    "one"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 10
+  },
+  {
+   "text": "We should see to our own lives.",
+   "words": [
+    "we",
+    "should",
+    "see",
+    "to",
+    "our",
+    "own",
+    "lives"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "I guess sixteen or seventeen with my family.",
+   "words": [
+    "i",
+    "guess",
+    "sixteen",
+    "or",
+    "seventeen",
+    "with",
+    "my",
+    "family"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 13
+  },
+  {
+   "text": "People going into different fields.",
+   "words": [
+    "people",
+    "going",
+    "into",
+    "different",
+    "fields"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "Well, he does not usually drink, he says.",
+   "words": [
+    "well",
+    "he",
+    "does",
+    "not",
+    "usually",
+    "drink",
+    "he",
+    "says"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "Motivate ourselves.",
+   "words": [
+    "motivate",
+    "ourselves"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 6
+  },
+  {
+   "text": "He's retired now.",
+   "words": [
+    "he's",
+    "retired",
+    "now"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 4
+  },
+  {
+   "text": "What you're describing is actually a conflict.",
+   "words": [
+    "what",
+    "you're",
+    "describing",
+    "is",
+    "actually",
+    "a",
+    "conflict"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 13
+  },
+  {
+   "text": "That aren't getting taught at home.",
+   "words": [
+    "that",
+    "aren't",
+    "getting",
+    "taught",
+    "at",
+    "home"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "What's the difference there?",
+   "words": [
+    "what's",
+    "the",
+    "difference",
+    "there"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 6
+  },
+  {
+   "text": "I think our next car.",
+   "words": [
+    "i",
+    "think",
+    "our",
+    "next",
+    "car"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 6
+  },
+  {
+   "text": "I am kind of a hobbyist.",
+   "words": [
+    "i",
+    "am",
+    "kind",
+    "of",
+    "a",
+    "hobbyist"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 8
+  },
+  {
+   "text": "Usually she uses her left hand.",
+   "words": [
+    "usually",
+    "she",
+    "uses",
+    "her",
+    "left",
+    "hand"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "Clear out our basement.",
+   "words": [
+    "clear",
+    "out",
+    "our",
+    "basement"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 6
+  },
+  {
+   "text": "Why are our prisons overcrowded?",
+   "words": [
+    "why",
+    "are",
+    "our",
+    "prisons",
+    "overcrowded"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "There were no casualties reported.",
+   "words": [
+    "there",
+    "were",
+    "no",
+    "casualties",
+    "reported"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "You actually hand quilted it yourself.",
+   "words": [
+    "you",
+    "actually",
+    "hand",
+    "quilted",
+    "it",
+    "yourself"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "Like a taste of something different.",
+   "words": [
+    "like",
+    "a",
+    "taste",
+    "of",
+    "something",
+    "different"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "But I guess people do that when they're desperate.",
+   "words": [
+    "but",
+    "i",
+    "guess",
+    "people",
+    "do",
+    "that",
+    "when",
+    "they're",
+    "desperate"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 11
+  },
+  {
+   "text": "It's kind of rainy actually.",
+   "words": [
+    "it's",
+    "kind",
+    "of",
+    "rainy",
+    "actually"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "Our church each year.",
+   "words": [
+    "our",
+    "church",
+    "each",
+    "year"
+   ],
+   "n_syllables": 4,
+   "n_dictionary": 5
+  },
+  {
+   "text": "A lot of those are really violent type movies.",
+   "words": [
+    "a",
+    "lot",
+    "of",
+    "those",
+    "are",
+    "really",
+    "violent",
+    "type",
+    "movies"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 13
+  },
+  {
+   "text": "He's just goofing off like he always has.",
+   "words": [
+    "he's",
+    "just",
+    "goofing",
+    "off",
+    "like",
+    "he",
+    "always",
+    "has"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 10
+  },
+  {
+   "text": "Jeez and you can't take the chances.",
+   "words": [
+    "jeez",
+    "and",
+    "you",
+    "can't",
+    "take",
+    "the",
+    "chances"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "But I've never actually even made it.",
+   "words": [
+    "but",
+    "i've",
+    "never",
+    "actually",
+    "even",
+    "made",
+    "it"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 12
+  },
+  {
+   "text": "You have a separate account for that.",
+   "words": [
+    "you",
+    "have",
+    "a",
+    "separate",
+    "account",
+    "for",
+    "that"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "A different turn.",
+   "words": [
+    "a",
+    "different",
+    "turn"
+   ],
+   "n_syllables": 4,
+   "n_dictionary": 5
+  },
+  {
+   "text": "It's a number of different things.",
+   "words": [
+    "it's",
+    "a",
+    "number",
+    "of",
+    "different",
+    "things"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "More stakeholders are joining the conversation.",
+   "words": [
+    "more",
+    "stakeholders",
+    "are",
+    "joining",
+    "the",
+    "conversation"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 12
+  },
+  {
+   "text": "Usually fall into one or two categories.",
+   "words": [
+    "usually",
+    "fall",
+    "into",
+    "one",
+    "or",
+    "two",
+    "categories"
+   ],
+   "n_syllables": 13,
+   "n_dictionary": 14
+  },
+  {
+   "text": "It's sort of unusual really.",
+   "words": [
+    "it's",
+    "sort",
+    "of",
+    "unusual",
+    "really"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "Aren't they playing Detroit?",
+   "words": [
+    "aren't",
+    "they",
+    "playing",
+    "detroit"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "There were no casualties.",
+   "words": [
+    "there",
+    "were",
+    "no",
+    "casualties"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "I favor dogs over cats actually.",
+   "words": [
+    "i",
+    "favor",
+    "dogs",
+    "over",
+    "cats",
+    "actually"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "Only Egos, Fears, and Illusion separate us.",
+   "words": [
+    "only",
+    "egos",
+    "fears",
+    "and",
+    "illusion",
+    "separate",
+    "us"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 13
+  },
+  {
+   "text": "You do have a separate area.",
+   "words": [
+    "you",
+    "do",
+    "have",
+    "a",
+    "separate",
+    "area"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "Usually, however, the motives are far simpler.",
+   "words": [
+    "usually",
+    "however",
+    "the",
+    "motives",
+    "are",
+    "far",
+    "simpler"
+   ],
+   "n_syllables": 13,
+   "n_dictionary": 15
+  },
+  {
+   "text": "I'm kind of semi retired.",
+   "words": [
+    "i'm",
+    "kind",
+    "of",
+    "semi",
+    "retired"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 7
+  },
+  {
+   "text": "I would personally be the last resort.",
+   "words": [
+    "i",
+    "would",
+    "personally",
+    "be",
+    "the",
+    "last",
+    "resort"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "Things are a little bit different there.",
+   "words": [
+    "things",
+    "are",
+    "a",
+    "little",
+    "bit",
+    "different",
+    "there"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "Al Capone had three brothers.",
+   "words": [
+    "al",
+    "capone",
+    "had",
+    "three",
+    "brothers"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 7
+  },
+  {
+   "text": "Don't let them see violence at home.",
+   "words": [
+    "don't",
+    "let",
+    "them",
+    "see",
+    "violence",
+    "at",
+    "home"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "Again, our choices are not made in a vacuum.",
+   "words": [
+    "again",
+    "our",
+    "choices",
+    "are",
+    "not",
+    "made",
+    "in",
+    "a",
+    "vacuum"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 13
+  },
+  {
+   "text": "Oranges for the royal family.",
+   "words": [
+    "oranges",
+    "for",
+    "the",
+    "royal",
+    "family"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "A lot of different comedies.",
+   "words": [
+    "a",
+    "lot",
+    "of",
+    "different",
+    "comedies"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "It's not unusual, he said.",
+   "words": [
+    "it's",
+    "not",
+    "unusual",
+    "he",
+    "said"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "He's someone different.",
+   "words": [
+    "he's",
+    "someone",
+    "different"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 6
+  },
+  {
+   "text": "Ambiance down there.",
+   "words": [
+    "ambiance",
+    "down",
+    "there"
+   ],
+   "n_syllables": 2,
+   "n_dictionary": 5
+  },
+  {
+   "text": "Obama immediately said he would veto the measure.",
+   "words": [
+    "obama",
+    "immediately",
+    "said",
+    "he",
+    "would",
+    "veto",
+    "the",
+    "measure"
+   ],
+   "n_syllables": 13,
+   "n_dictionary": 16
+  },
+  {
+   "text": "We like to go miniature golfing and to movies.",
+   "words": [
+    "we",
+    "like",
+    "to",
+    "go",
+    "miniature",
+    "golfing",
+    "and",
+    "to",
+    "movies"
+   ],
+   "n_syllables": 13,
+   "n_dictionary": 14
+  },
+  {
+   "text": "How big is the family you cook for?",
+   "words": [
+    "how",
+    "big",
+    "is",
+    "the",
+    "family",
+    "you",
+    "cook",
+    "for"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "He was rattling off his excuses.",
+   "words": [
+    "he",
+    "was",
+    "rattling",
+    "off",
+    "his",
+    "excuses"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 9
+  },
+  {
+   "text": "Was this his entire family?",
+   "words": [
+    "was",
+    "this",
+    "his",
+    "entire",
+    "family"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "Actually there's one thing left to say.",
+   "words": [
+    "actually",
+    "there's",
+    "one",
+    "thing",
+    "left",
+    "to",
+    "say"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "Then, add soil to the bottom of your bonsai pot.",
+   "words": [
+    "then",
+    "add",
+    "soil",
+    "to",
+    "the",
+    "bottom",
+    "of",
+    "your",
+    "bonsai",
+    "pot"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 12
+  },
+  {
+   "text": "He just piddles on this and that.",
+   "words": [
+    "he",
+    "just",
+    "piddles",
+    "on",
+    "this",
+    "and",
+    "that"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 8
+  },
+  {
+   "text": "My family's not very big.",
+   "words": [
+    "my",
+    "family's",
+    "not",
+    "very",
+    "big"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "Especially not in some of these big cities.",
+   "words": [
+    "especially",
+    "not",
+    "in",
+    "some",
+    "of",
+    "these",
+    "big",
+    "cities"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 11
+  },
+  {
+   "text": "The two have since taken some steps toward a rapprochement.",
+   "words": [
+    "the",
+    "two",
+    "have",
+    "since",
+    "taken",
+    "some",
+    "steps",
+    "toward",
+    "a",
+    "rapprochement"
+   ],
+   "n_syllables": 13,
+   "n_dictionary": 14
+  },
+  {
+   "text": "Less than half the trials.",
+   "words": [
+    "less",
+    "than",
+    "half",
+    "the",
+    "trials"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 6
+  },
+  {
+   "text": "Get breaking news alerts and special reports.",
+   "words": [
+    "get",
+    "breaking",
+    "news",
+    "alerts",
+    "and",
+    "special",
+    "reports"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 11
+  },
+  {
+   "text": "God will take care of us when it's our time.",
+   "words": [
+    "god",
+    "will",
+    "take",
+    "care",
+    "of",
+    "us",
+    "when",
+    "it's",
+    "our",
+    "time"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "Send a report that this bug log contains spam.",
+   "words": [
+    "send",
+    "a",
+    "report",
+    "that",
+    "this",
+    "bug",
+    "log",
+    "contains",
+    "spam"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "I usually walked my dog in the park near my home.",
+   "words": [
+    "i",
+    "usually",
+    "walked",
+    "my",
+    "dog",
+    "in",
+    "the",
+    "park",
+    "near",
+    "my",
+    "home"
+   ],
+   "n_syllables": 13,
+   "n_dictionary": 14
+  },
+  {
+   "text": "In our particular situation.",
+   "words": [
+    "in",
+    "our",
+    "particular",
+    "situation"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "They're just so suspenseful.",
+   "words": [
+    "they're",
+    "just",
+    "so",
+    "suspenseful"
+   ],
+   "n_syllables": 3,
+   "n_dictionary": 6
+  },
+  {
+   "text": "Please see our Privacy Notice for details of your data protection rights.",
+   "words": [
+    "please",
+    "see",
+    "our",
+    "privacy",
+    "notice",
+    "for",
+    "details",
+    "of",
+    "your",
+    "data",
+    "protection",
+    "rights"
+   ],
+   "n_syllables": 19,
+   "n_dictionary": 20
+  },
+  {
+   "text": "The classical thing that you see on TV.",
+   "words": [
+    "the",
+    "classical",
+    "thing",
+    "that",
+    "you",
+    "see",
+    "on",
+    "tv"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 11
+  },
+  {
+   "text": "It makes a big difference.",
+   "words": [
+    "it",
+    "makes",
+    "a",
+    "big",
+    "difference"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "I have my own policy on freeloaders.",
+   "words": [
+    "i",
+    "have",
+    "my",
+    "own",
+    "policy",
+    "on",
+    "freeloaders"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 11
+  },
+  {
+   "text": "Just all different colors.",
+   "words": [
+    "just",
+    "all",
+    "different",
+    "colors"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "They're usually wrong too.",
+   "words": [
+    "they're",
+    "usually",
+    "wrong",
+    "too"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "The civilian casualties would be staggering.",
+   "words": [
+    "the",
+    "civilian",
+    "casualties",
+    "would",
+    "be",
+    "staggering"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 13
+  },
+  {
+   "text": "Rub the chops liberally with the olive oil.",
+   "words": [
+    "rub",
+    "the",
+    "chops",
+    "liberally",
+    "with",
+    "the",
+    "olive",
+    "oil"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 12
+  },
+  {
+   "text": "He told us to get inside our car.",
+   "words": [
+    "he",
+    "told",
+    "us",
+    "to",
+    "get",
+    "inside",
+    "our",
+    "car"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "She is the only girl who comes to our school.",
+   "words": [
+    "she",
+    "is",
+    "the",
+    "only",
+    "girl",
+    "who",
+    "comes",
+    "to",
+    "our",
+    "school"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 12
+  },
+  {
+   "text": "The only thing left to do, is to hand over the controls to Enzo.",
+   "words": [
+    "the",
+    "only",
+    "thing",
+    "left",
+    "to",
+    "do",
+    "is",
+    "to",
+    "hand",
+    "over",
+    "the",
+    "controls",
+    "to",
+    "enzo"
+   ],
+   "n_syllables": 16,
+   "n_dictionary": 18
+  },
+  {
+   "text": "Grassley grew up on a family farm, where he still works.",
+   "words": [
+    "grassley",
+    "grew",
+    "up",
+    "on",
+    "a",
+    "family",
+    "farm",
+    "where",
+    "he",
+    "still",
+    "works"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 14
+  },
+  {
+   "text": "We go backpacking fifteen or twenty miles.",
+   "words": [
+    "we",
+    "go",
+    "backpacking",
+    "fifteen",
+    "or",
+    "twenty",
+    "miles"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 11
+  },
+  {
+   "text": "Closures and job losses.",
+   "words": [
+    "closures",
+    "and",
+    "job",
+    "losses"
+   ],
+   "n_syllables": 4,
+   "n_dictionary": 6
+  },
+  {
+   "text": "This is a very important case from our point of view, he added.",
+   "words": [
+    "this",
+    "is",
+    "a",
+    "very",
+    "important",
+    "case",
+    "from",
+    "our",
+    "point",
+    "of",
+    "view",
+    "he",
+    "added"
+   ],
+   "n_syllables": 17,
+   "n_dictionary": 18
+  },
+  {
+   "text": "That's what the different types are.",
+   "words": [
+    "that's",
+    "what",
+    "the",
+    "different",
+    "types",
+    "are"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "It's our first home.",
+   "words": [
+    "it's",
+    "our",
+    "first",
+    "home"
+   ],
+   "n_syllables": 4,
+   "n_dictionary": 5
+  },
+  {
+   "text": "We need to give closure to the families.",
+   "words": [
+    "we",
+    "need",
+    "to",
+    "give",
+    "closure",
+    "to",
+    "the",
+    "families"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "Some wine tastings up in the valley.",
+   "words": [
+    "some",
+    "wine",
+    "tastings",
+    "up",
+    "in",
+    "the",
+    "valley"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 9
+  },
+  {
+   "text": "They call it a low impact aerobics.",
+   "words": [
+    "they",
+    "call",
+    "it",
+    "a",
+    "low",
+    "impact",
+    "aerobics"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 10
+  },
+  {
+   "text": "Social arbitrage.",
+   "words": [
+    "social",
+    "arbitrage"
+   ],
+   "n_syllables": 2,
+   "n_dictionary": 5
+  },
+  {
+   "text": "For a different section.",
+   "words": [
+    "for",
+    "a",
+    "different",
+    "section"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "A good house for a very nice family.",
+   "words": [
+    "a",
+    "good",
+    "house",
+    "for",
+    "a",
+    "very",
+    "nice",
+    "family"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "We hope you enjoy our little project!",
+   "words": [
+    "we",
+    "hope",
+    "you",
+    "enjoy",
+    "our",
+    "little",
+    "project"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "I've actually been in line the whole time.",
+   "words": [
+    "i've",
+    "actually",
+    "been",
+    "in",
+    "line",
+    "the",
+    "whole",
+    "time"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "Our shepherd was almost thirteen years old.",
+   "words": [
+    "our",
+    "shepherd",
+    "was",
+    "almost",
+    "thirteen",
+    "years",
+    "old"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "Linux version.",
+   "words": [
+    "linux",
+    "version"
+   ],
+   "n_syllables": 2,
+   "n_dictionary": 4
+  },
+  {
+   "text": "In light of widespread school closures.",
+   "words": [
+    "in",
+    "light",
+    "of",
+    "widespread",
+    "school",
+    "closures"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 8
+  },
+  {
+   "text": "They classify most of them as professionals.",
+   "words": [
+    "they",
+    "classify",
+    "most",
+    "of",
+    "them",
+    "as",
+    "professionals"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 12
+  },
+  {
+   "text": "There's just not any push to recycle.",
+   "words": [
+    "there's",
+    "just",
+    "not",
+    "any",
+    "push",
+    "to",
+    "recycle"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 10
+  },
+  {
+   "text": "Our sleeping bags I guess.",
+   "words": [
+    "our",
+    "sleeping",
+    "bags",
+    "i",
+    "guess"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "Got to see Pike's Peak.",
+   "words": [
+    "got",
+    "to",
+    "see",
+    "pike's",
+    "peak"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": null
+  },
+  {
+   "text": "We will miss every once in a while.",
+   "words": [
+    "we",
+    "will",
+    "miss",
+    "every",
+    "once",
+    "in",
+    "a",
+    "while"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "I can really tell the difference.",
+   "words": [
+    "i",
+    "can",
+    "really",
+    "tell",
+    "the",
+    "difference"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "He had occasionally sent her mother money.",
+   "words": [
+    "he",
+    "had",
+    "occasionally",
+    "sent",
+    "her",
+    "mother",
+    "money"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 13
+  },
+  {
+   "text": "It is usually not hard to know who you are.",
+   "words": [
+    "it",
+    "is",
+    "usually",
+    "not",
+    "hard",
+    "to",
+    "know",
+    "who",
+    "you",
+    "are"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 13
+  },
+  {
+   "text": "I took my kids out and taught them how to go backpacking.",
+   "words": [
+    "i",
+    "took",
+    "my",
+    "kids",
+    "out",
+    "and",
+    "taught",
+    "them",
+    "how",
+    "to",
+    "go",
+    "backpacking"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 14
+  },
+  {
+   "text": "Every time something new came up.",
+   "words": [
+    "every",
+    "time",
+    "something",
+    "new",
+    "came",
+    "up"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "We camped at the DeGray State Park in Arkansas.",
+   "words": [
+    "we",
+    "camped",
+    "at",
+    "the",
+    "degray",
+    "state",
+    "park",
+    "in",
+    "arkansas"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 12
+  },
+  {
+   "text": "There was no immediate word on any casualties.",
+   "words": [
+    "there",
+    "was",
+    "no",
+    "immediate",
+    "word",
+    "on",
+    "any",
+    "casualties"
+   ],
+   "n_syllables": 14,
+   "n_dictionary": 15
+  },
+  {
+   "text": "Almost like a tingling.",
+   "words": [
+    "almost",
+    "like",
+    "a",
+    "tingling"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "So you enjoy gardening?",
+   "words": [
+    "so",
+    "you",
+    "enjoy",
+    "gardening"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "What we call a sunroom.",
+   "words": [
+    "what",
+    "we",
+    "call",
+    "a",
+    "sunroom"
+   ],
+   "n_syllables": 4,
+   "n_dictionary": 6
+  },
+  {
+   "text": "Three different times.",
+   "words": [
+    "three",
+    "different",
+    "times"
+   ],
+   "n_syllables": 4,
+   "n_dictionary": 5
+  },
+  {
+   "text": "This morning our paper was wet.",
+   "words": [
+    "this",
+    "morning",
+    "our",
+    "paper",
+    "was",
+    "wet"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "We're very far from our families.",
+   "words": [
+    "we're",
+    "very",
+    "far",
+    "from",
+    "our",
+    "families"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 10
+  },
+  {
+   "text": "Especially if you're in a lot of traffic.",
+   "words": [
+    "especially",
+    "if",
+    "you're",
+    "in",
+    "a",
+    "lot",
+    "of",
+    "traffic"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 11
+  },
+  {
+   "text": "Work in the national parks.",
+   "words": [
+    "work",
+    "in",
+    "the",
+    "national",
+    "parks"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "Actually they're from Canada.",
+   "words": [
+    "actually",
+    "they're",
+    "from",
+    "canada"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "Usually we get about one or two calls a day.",
+   "words": [
+    "usually",
+    "we",
+    "get",
+    "about",
+    "one",
+    "or",
+    "two",
+    "calls",
+    "a",
+    "day"
+   ],
+   "n_syllables": 13,
+   "n_dictionary": 14
+  },
+  {
+   "text": "The stable ponies do not let me close to them, usually.",
+   "words": [
+    "the",
+    "stable",
+    "ponies",
+    "do",
+    "not",
+    "let",
+    "me",
+    "close",
+    "to",
+    "them",
+    "usually"
+   ],
+   "n_syllables": 15,
+   "n_dictionary": 16
+  },
+  {
+   "text": "My teacher looked at it every week.",
+   "words": [
+    "my",
+    "teacher",
+    "looked",
+    "at",
+    "it",
+    "every",
+    "week"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "Out of an office every day.",
+   "words": [
+    "out",
+    "of",
+    "an",
+    "office",
+    "every",
+    "day"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "Fifty to a hundred miles every Sunday.",
+   "words": [
+    "fifty",
+    "to",
+    "a",
+    "hundred",
+    "miles",
+    "every",
+    "sunday"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 12
+  },
+  {
+   "text": "From our daily routine.",
+   "words": [
+    "from",
+    "our",
+    "daily",
+    "routine"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "To ask automakers for more jobs won't work.",
+   "words": [
+    "to",
+    "ask",
+    "automakers",
+    "for",
+    "more",
+    "jobs",
+    "won't",
+    "work"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 11
+  },
+  {
+   "text": "Are you recycling?",
+   "words": [
+    "are",
+    "you",
+    "recycling"
+   ],
+   "n_syllables": 2,
+   "n_dictionary": 6
+  },
+  {
+   "text": "There are no real recycling facilities.",
+   "words": [
+    "there",
+    "are",
+    "no",
+    "real",
+    "recycling",
+    "facilities"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 12
+  },
+  {
+   "text": "Now that the grandkids are here.",
+   "words": [
+    "now",
+    "that",
+    "the",
+    "grandkids",
+    "are",
+    "here"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 7
+  },
+  {
+   "text": "My family is in Kentucky.",
+   "words": [
+    "my",
+    "family",
+    "is",
+    "in",
+    "kentucky"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "Go and actually live in that country for a while.",
+   "words": [
+    "go",
+    "and",
+    "actually",
+    "live",
+    "in",
+    "that",
+    "country",
+    "for",
+    "a",
+    "while"
+   ],
+   "n_syllables": 13,
+   "n_dictionary": 14
+  },
+  {
+   "text": "Actually the Lions are pretty good.",
+   "words": [
+    "actually",
+    "the",
+    "lions",
+    "are",
+    "pretty",
+    "good"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "That's my favorite team.",
+   "words": [
+    "that's",
+    "my",
+    "favorite",
+    "team"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 6
+  },
+  {
+   "text": "You go to work every weekend.",
+   "words": [
+    "you",
+    "go",
+    "to",
+    "work",
+    "every",
+    "weekend"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "Not every game sets out to make a point.",
+   "words": [
+    "not",
+    "every",
+    "game",
+    "sets",
+    "out",
+    "to",
+    "make",
+    "a",
+    "point"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "How different the people there really are.",
+   "words": [
+    "how",
+    "different",
+    "the",
+    "people",
+    "there",
+    "really",
+    "are"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "Pesticides are poisonous.",
+   "words": [
+    "pesticides",
+    "are",
+    "poisonous"
+   ],
+   "n_syllables": 4,
+   "n_dictionary": 7
+  },
+  {
+   "text": "Please give me a paramedic.",
+   "words": [
+    "please",
+    "give",
+    "me",
+    "a",
+    "paramedic"
+   ],
+   "n_syllables": 4,
+   "n_dictionary": 8
+  },
+  {
+   "text": "That's what they use for gypsy moth.",
+   "words": [
+    "that's",
+    "what",
+    "they",
+    "use",
+    "for",
+    "gypsy",
+    "moth"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 8
+  },
+  {
+   "text": "Hire your franchise staff in advance",
+   "words": [
+    "hire",
+    "your",
+    "franchise",
+    "staff",
+    "in",
+    "advance"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "I enjoy gardening.",
+   "words": [
+    "i",
+    "enjoy",
+    "gardening"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 6
+  },
+  {
+   "text": "Avoid third party apps.",
+   "words": [
+    "avoid",
+    "third",
+    "party",
+    "apps"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 6
+  },
+  {
+   "text": "Aren't you planning to have children?",
+   "words": [
+    "aren't",
+    "you",
+    "planning",
+    "to",
+    "have",
+    "children"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "So who do you think is going to win the playoffs?",
+   "words": [
+    "so",
+    "who",
+    "do",
+    "you",
+    "think",
+    "is",
+    "going",
+    "to",
+    "win",
+    "the",
+    "playoffs"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 13
+  },
+  {
+   "text": "We're toward the bottom.",
+   "words": [
+    "we're",
+    "toward",
+    "the",
+    "bottom"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 6
+  },
+  {
+   "text": "Our baby's quilt.",
+   "words": [
+    "our",
+    "baby's",
+    "quilt"
+   ],
+   "n_syllables": 4,
+   "n_dictionary": 5
+  },
+  {
+   "text": "Despite that, Swann says it was unable to identify or contact the family.",
+   "words": [
+    "despite",
+    "that",
+    "swann",
+    "says",
+    "it",
+    "was",
+    "unable",
+    "to",
+    "identify",
+    "or",
+    "contact",
+    "the",
+    "family"
+   ],
+   "n_syllables": 21,
+   "n_dictionary": 22
+  },
+  {
+   "text": "As is now well known, Kennedy had numerous extramarital affairs.",
+   "words": [
+    "as",
+    "is",
+    "now",
+    "well",
+    "known",
+    "kennedy",
+    "had",
+    "numerous",
+    "extramarital",
+    "affairs"
+   ],
+   "n_syllables": 14,
+   "n_dictionary": 19
+  },
+  {
+   "text": "Then reboot the system.",
+   "words": [
+    "then",
+    "reboot",
+    "the",
+    "system"
+   ],
+   "n_syllables": 4,
+   "n_dictionary": 6
+  },
+  {
+   "text": "We want to support our local producers, support each other.",
+   "words": [
+    "we",
+    "want",
+    "to",
+    "support",
+    "our",
+    "local",
+    "producers",
+    "support",
+    "each",
+    "other"
+   ],
+   "n_syllables": 16,
+   "n_dictionary": 17
+  },
+  {
+   "text": "This was not an unusual request.",
+   "words": [
+    "this",
+    "was",
+    "not",
+    "an",
+    "unusual",
+    "request"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "He was voted the sexiest actor in movies.",
+   "words": [
+    "he",
+    "was",
+    "voted",
+    "the",
+    "sexiest",
+    "actor",
+    "in",
+    "movies"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 13
+  },
+  {
+   "text": "The nursing home that's just a mile from our house.",
+   "words": [
+    "the",
+    "nursing",
+    "home",
+    "that's",
+    "just",
+    "a",
+    "mile",
+    "from",
+    "our",
+    "house"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 12
+  },
+  {
+   "text": "You probably have a different sense than I have.",
+   "words": [
+    "you",
+    "probably",
+    "have",
+    "a",
+    "different",
+    "sense",
+    "than",
+    "i",
+    "have"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 13
+  },
+  {
+   "text": "The United States and Canada are so different.",
+   "words": [
+    "the",
+    "united",
+    "states",
+    "and",
+    "canada",
+    "are",
+    "so",
+    "different"
+   ],
+   "n_syllables": 13,
+   "n_dictionary": 14
+  },
+  {
+   "text": "Download on your computer, or television.",
+   "words": [
+    "download",
+    "on",
+    "your",
+    "computer",
+    "or",
+    "television"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 12
+  },
+  {
+   "text": "We have to go where there's restrooms.",
+   "words": [
+    "we",
+    "have",
+    "to",
+    "go",
+    "where",
+    "there's",
+    "restrooms"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 8
+  },
+  {
+   "text": "I usually put garlic powder in mine.",
+   "words": [
+    "i",
+    "usually",
+    "put",
+    "garlic",
+    "powder",
+    "in",
+    "mine"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 12
+  },
+  {
+   "text": "Smoky fires lack flame and heat.",
+   "words": [
+    "smoky",
+    "fires",
+    "lack",
+    "flame",
+    "and",
+    "heat"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "Three hour difference.",
+   "words": [
+    "three",
+    "hour",
+    "difference"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 6
+  },
+  {
+   "text": "It's all traditional cooking.",
+   "words": [
+    "it's",
+    "all",
+    "traditional",
+    "cooking"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "That is pretty unusual.",
+   "words": [
+    "that",
+    "is",
+    "pretty",
+    "unusual"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "Especially the ones that came out and said their piece.",
+   "words": [
+    "especially",
+    "the",
+    "ones",
+    "that",
+    "came",
+    "out",
+    "and",
+    "said",
+    "their",
+    "piece"
+   ],
+   "n_syllables": 13,
+   "n_dictionary": 12
+  },
+  {
+   "text": "She will make our work so much better.",
+   "words": [
+    "she",
+    "will",
+    "make",
+    "our",
+    "work",
+    "so",
+    "much",
+    "better"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "In this way, every decision you make must be carefully considered.",
+   "words": [
+    "in",
+    "this",
+    "way",
+    "every",
+    "decision",
+    "you",
+    "make",
+    "must",
+    "be",
+    "carefully",
+    "considered"
+   ],
+   "n_syllables": 18,
+   "n_dictionary": 19
+  },
+  {
+   "text": "Someone will let you in our house in the new city.",
+   "words": [
+    "someone",
+    "will",
+    "let",
+    "you",
+    "in",
+    "our",
+    "house",
+    "in",
+    "the",
+    "new",
+    "city"
+   ],
+   "n_syllables": 13,
+   "n_dictionary": 14
+  },
+  {
+   "text": "Your family is interesting though.",
+   "words": [
+    "your",
+    "family",
+    "is",
+    "interesting",
+    "though"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "Very suspenseful.",
+   "words": [
+    "very",
+    "suspenseful"
+   ],
+   "n_syllables": 2,
+   "n_dictionary": 5
+  },
+  {
+   "text": "Only few people can usually pay this through their job.",
+   "words": [
+    "only",
+    "few",
+    "people",
+    "can",
+    "usually",
+    "pay",
+    "this",
+    "through",
+    "their",
+    "job"
+   ],
+   "n_syllables": 14,
+   "n_dictionary": 15
+  },
+  {
+   "text": "After talking to my family I know what is the right thing to do.",
+   "words": [
+    "after",
+    "talking",
+    "to",
+    "my",
+    "family",
+    "i",
+    "know",
+    "what",
+    "is",
+    "the",
+    "right",
+    "thing",
+    "to",
+    "do"
+   ],
+   "n_syllables": 17,
+   "n_dictionary": 18
+  },
+  {
+   "text": "We usually order our tickets way in advance.",
+   "words": [
+    "we",
+    "usually",
+    "order",
+    "our",
+    "tickets",
+    "way",
+    "in",
+    "advance"
+   ],
+   "n_syllables": 13,
+   "n_dictionary": 15
+  },
+  {
+   "text": "Every other house.",
+   "words": [
+    "every",
+    "other",
+    "house"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 6
+  },
+  {
+   "text": "I think we've got to do more with recycling.",
+   "words": [
+    "i",
+    "think",
+    "we've",
+    "got",
+    "to",
+    "do",
+    "more",
+    "with",
+    "recycling"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 12
+  },
+  {
+   "text": "This makes me less sure about our decision.",
+   "words": [
+    "this",
+    "makes",
+    "me",
+    "less",
+    "sure",
+    "about",
+    "our",
+    "decision"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 12
+  },
+  {
+   "text": "What are you doing our here?",
+   "words": [
+    "what",
+    "are",
+    "you",
+    "doing",
+    "our",
+    "here"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "Voting will make a difference.",
+   "words": [
+    "voting",
+    "will",
+    "make",
+    "a",
+    "difference"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "Can you think of a good name for our house?",
+   "words": [
+    "can",
+    "you",
+    "think",
+    "of",
+    "a",
+    "good",
+    "name",
+    "for",
+    "our",
+    "house"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "It sure seems interesting that less is actually more.",
+   "words": [
+    "it",
+    "sure",
+    "seems",
+    "interesting",
+    "that",
+    "less",
+    "is",
+    "actually",
+    "more"
+   ],
+   "n_syllables": 13,
+   "n_dictionary": 14
+  },
+  {
+   "text": "Doing both together is different and could be more hard work.",
+   "words": [
+    "doing",
+    "both",
+    "together",
+    "is",
+    "different",
+    "and",
+    "could",
+    "be",
+    "more",
+    "hard",
+    "work"
+   ],
+   "n_syllables": 15,
+   "n_dictionary": 16
+  },
+  {
+   "text": "I just want to make sure I enjoy every moment.",
+   "words": [
+    "i",
+    "just",
+    "want",
+    "to",
+    "make",
+    "sure",
+    "i",
+    "enjoy",
+    "every",
+    "moment"
+   ],
+   "n_syllables": 13,
+   "n_dictionary": 14
+  },
+  {
+   "text": "you were saying that he diesn't like the excercise.",
+   "words": [
+    "you",
+    "were",
+    "saying",
+    "that",
+    "he",
+    "diesn't",
+    "like",
+    "the",
+    "excercise"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": null
+  },
+  {
+   "text": "I like to use it every work day.",
+   "words": [
+    "i",
+    "like",
+    "to",
+    "use",
+    "it",
+    "every",
+    "work",
+    "day"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "the best episode of tv i have seen this year",
+   "words": [
+    "the",
+    "best",
+    "episode",
+    "of",
+    "tv",
+    "i",
+    "have",
+    "seen",
+    "this",
+    "year"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 13
+  },
+  {
+   "text": "I am usually not this late to work.",
+   "words": [
+    "i",
+    "am",
+    "usually",
+    "not",
+    "this",
+    "late",
+    "to",
+    "work"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "My family will walk to our home.",
+   "words": [
+    "my",
+    "family",
+    "will",
+    "walk",
+    "to",
+    "our",
+    "home"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 10
+  },
+  {
+   "text": "Remember to exercise every day.",
+   "words": [
+    "remember",
+    "to",
+    "exercise",
+    "every",
+    "day"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "We should make a different choice.",
+   "words": [
+    "we",
+    "should",
+    "make",
+    "a",
+    "different",
+    "choice"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "is the computer thinking i am always saying different",
+   "words": [
+    "is",
+    "the",
+    "computer",
+    "thinking",
+    "i",
+    "am",
+    "always",
+    "saying",
+    "different"
+   ],
+   "n_syllables": 15,
+   "n_dictionary": 16
+  },
+  {
+   "text": "is getting the word clearly so i try a different approach",
+   "words": [
+    "is",
+    "getting",
+    "the",
+    "word",
+    "clearly",
+    "so",
+    "i",
+    "try",
+    "a",
+    "different",
+    "approach"
+   ],
+   "n_syllables": 15,
+   "n_dictionary": 16
+  },
+  {
+   "text": "have vegan everything here so if you want vegan food of any kind we probably have it",
+   "words": [
+    "have",
+    "vegan",
+    "everything",
+    "here",
+    "so",
+    "if",
+    "you",
+    "want",
+    "vegan",
+    "food",
+    "of",
+    "any",
+    "kind",
+    "we",
+    "probably",
+    "have",
+    "it"
+   ],
+   "n_syllables": 23,
+   "n_dictionary": 24
+  },
+  {
+   "text": "if you were at a restaurant you would see people order a coke and then the waiter would ask them what kind",
+   "words": [
+    "if",
+    "you",
+    "were",
+    "at",
+    "a",
+    "restaurant",
+    "you",
+    "would",
+    "see",
+    "people",
+    "order",
+    "a",
+    "coke",
+    "and",
+    "then",
+    "the",
+    "waiter",
+    "would",
+    "ask",
+    "them",
+    "what",
+    "kind"
+   ],
+   "n_syllables": 26,
+   "n_dictionary": 27
+  },
+  {
+   "text": "I really like what we do at our job.",
+   "words": [
+    "i",
+    "really",
+    "like",
+    "what",
+    "we",
+    "do",
+    "at",
+    "our",
+    "job"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "She usually does a very nice job with it.",
+   "words": [
+    "she",
+    "usually",
+    "does",
+    "a",
+    "very",
+    "nice",
+    "job",
+    "with",
+    "it"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 13
+  },
+  {
+   "text": "I actually find this quite interesting.",
+   "words": [
+    "i",
+    "actually",
+    "find",
+    "this",
+    "quite",
+    "interesting"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "This is our first choice for the job.",
+   "words": [
+    "this",
+    "is",
+    "our",
+    "first",
+    "choice",
+    "for",
+    "the",
+    "job"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "I feel great because I exercise every week.",
+   "words": [
+    "i",
+    "feel",
+    "great",
+    "because",
+    "i",
+    "exercise",
+    "every",
+    "week"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 13
+  },
+  {
+   "text": "I see them every time I walk to school.",
+   "words": [
+    "i",
+    "see",
+    "them",
+    "every",
+    "time",
+    "i",
+    "walk",
+    "to",
+    "school"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "Usually, I walk to school.",
+   "words": [
+    "usually",
+    "i",
+    "walk",
+    "to",
+    "school"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "I will talk to my family about this.",
+   "words": [
+    "i",
+    "will",
+    "talk",
+    "to",
+    "my",
+    "family",
+    "about",
+    "this"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "It's usually hard to take care of your house when you are away.",
+   "words": [
+    "it's",
+    "usually",
+    "hard",
+    "to",
+    "take",
+    "care",
+    "of",
+    "your",
+    "house",
+    "when",
+    "you",
+    "are",
+    "away"
+   ],
+   "n_syllables": 16,
+   "n_dictionary": 17
+  },
+  {
+   "text": "I read this with my family every week.",
+   "words": [
+    "i",
+    "read",
+    "this",
+    "with",
+    "my",
+    "family",
+    "every",
+    "week"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 12
+  },
+  {
+   "text": "We will let you stay at our home for few days.",
+   "words": [
+    "we",
+    "will",
+    "let",
+    "you",
+    "stay",
+    "at",
+    "our",
+    "home",
+    "for",
+    "few",
+    "days"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 12
+  },
+  {
+   "text": "Everything is usually better than it seems.",
+   "words": [
+    "everything",
+    "is",
+    "usually",
+    "better",
+    "than",
+    "it",
+    "seems"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 13
+  },
+  {
+   "text": "Especially for repeat offenders.",
+   "words": [
+    "especially",
+    "for",
+    "repeat",
+    "offenders"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 9
+  },
+  {
+   "text": "Usually, I like to talk to them first.",
+   "words": [
+    "usually",
+    "i",
+    "like",
+    "to",
+    "talk",
+    "to",
+    "them",
+    "first"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "I want to eat with my family.",
+   "words": [
+    "i",
+    "want",
+    "to",
+    "eat",
+    "with",
+    "my",
+    "family"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "What makes it interesting is that we are all different.",
+   "words": [
+    "what",
+    "makes",
+    "it",
+    "interesting",
+    "is",
+    "that",
+    "we",
+    "are",
+    "all",
+    "different"
+   ],
+   "n_syllables": 13,
+   "n_dictionary": 14
+  },
+  {
+   "text": "Water here looks different.",
+   "words": [
+    "water",
+    "here",
+    "looks",
+    "different"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "I will have to measure if this is different.",
+   "words": [
+    "i",
+    "will",
+    "have",
+    "to",
+    "measure",
+    "if",
+    "this",
+    "is",
+    "different"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 12
+  },
+  {
+   "text": "I usually love to eat there.",
+   "words": [
+    "i",
+    "usually",
+    "love",
+    "to",
+    "eat",
+    "there"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "He made our house look very pretty.",
+   "words": [
+    "he",
+    "made",
+    "our",
+    "house",
+    "look",
+    "very",
+    "pretty"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "I usually go home by this time.",
+   "words": [
+    "i",
+    "usually",
+    "go",
+    "home",
+    "by",
+    "this",
+    "time"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "First one is actually not that bad.",
+   "words": [
+    "first",
+    "one",
+    "is",
+    "actually",
+    "not",
+    "that",
+    "bad"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "This is our work.",
+   "words": [
+    "this",
+    "is",
+    "our",
+    "work"
+   ],
+   "n_syllables": 4,
+   "n_dictionary": 5
+  },
+  {
+   "text": "Our college is quite interesting.",
+   "words": [
+    "our",
+    "college",
+    "is",
+    "quite",
+    "interesting"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "I am talking to my family.",
+   "words": [
+    "i",
+    "am",
+    "talking",
+    "to",
+    "my",
+    "family"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "Our problems are not very big as their problem.",
+   "words": [
+    "our",
+    "problems",
+    "are",
+    "not",
+    "very",
+    "big",
+    "as",
+    "their",
+    "problem"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 13
+  },
+  {
+   "text": "They think that's a family activity.",
+   "words": [
+    "they",
+    "think",
+    "that's",
+    "a",
+    "family",
+    "activity"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "She will go around every time.",
+   "words": [
+    "she",
+    "will",
+    "go",
+    "around",
+    "every",
+    "time"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "Because it actually doesn't matter who shows up.",
+   "words": [
+    "because",
+    "it",
+    "actually",
+    "doesn't",
+    "matter",
+    "who",
+    "shows",
+    "up"
+   ],
+   "n_syllables": 13,
+   "n_dictionary": 14
+  },
+  {
+   "text": "More activity on our part.",
+   "words": [
+    "more",
+    "activity",
+    "on",
+    "our",
+    "part"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "They both cooperate together.",
+   "words": [
+    "they",
+    "both",
+    "cooperate",
+    "together"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "Come to see our new house.",
+   "words": [
+    "come",
+    "to",
+    "see",
+    "our",
+    "new",
+    "house"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "Our needs change over time.",
+   "words": [
+    "our",
+    "needs",
+    "change",
+    "over",
+    "time"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "We should use every last bit of it.",
+   "words": [
+    "we",
+    "should",
+    "use",
+    "every",
+    "last",
+    "bit",
+    "of",
+    "it"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "You should see our house.",
+   "words": [
+    "you",
+    "should",
+    "see",
+    "our",
+    "house"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 6
+  },
+  {
+   "text": "The bill was paid every third week.",
+   "words": [
+    "the",
+    "bill",
+    "was",
+    "paid",
+    "every",
+    "third",
+    "week"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "Let me tell you about our work.",
+   "words": [
+    "let",
+    "me",
+    "tell",
+    "you",
+    "about",
+    "our",
+    "work"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "Come to see our work.",
+   "words": [
+    "come",
+    "to",
+    "see",
+    "our",
+    "work"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 6
+  },
+  {
+   "text": "Did you like our work?",
+   "words": [
+    "did",
+    "you",
+    "like",
+    "our",
+    "work"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 6
+  },
+  {
+   "text": "I want to go there with my family.",
+   "words": [
+    "i",
+    "want",
+    "to",
+    "go",
+    "there",
+    "with",
+    "my",
+    "family"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "You should see our work.",
+   "words": [
+    "you",
+    "should",
+    "see",
+    "our",
+    "work"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 6
+  },
+  {
+   "text": "Please come to see our work.",
+   "words": [
+    "please",
+    "come",
+    "to",
+    "see",
+    "our",
+    "work"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "My family will come home now.",
+   "words": [
+    "my",
+    "family",
+    "will",
+    "come",
+    "home",
+    "now"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "That's just not our thing.",
+   "words": [
+    "that's",
+    "just",
+    "not",
+    "our",
+    "thing"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 6
+  },
+  {
+   "text": "We should go different way.",
+   "words": [
+    "we",
+    "should",
+    "go",
+    "different",
+    "way"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "I will stay with my family for a week.",
+   "words": [
+    "i",
+    "will",
+    "stay",
+    "with",
+    "my",
+    "family",
+    "for",
+    "a",
+    "week"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "My family is talking to me now.",
+   "words": [
+    "my",
+    "family",
+    "is",
+    "talking",
+    "to",
+    "me",
+    "now"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "Our problems will go away.",
+   "words": [
+    "our",
+    "problems",
+    "will",
+    "go",
+    "away"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "Usually, this takes five days.",
+   "words": [
+    "usually",
+    "this",
+    "takes",
+    "five",
+    "days"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "Especially if you are coming this weekend.",
+   "words": [
+    "especially",
+    "if",
+    "you",
+    "are",
+    "coming",
+    "this",
+    "weekend"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 11
+  },
+  {
+   "text": "What brings you to our home?",
+   "words": [
+    "what",
+    "brings",
+    "you",
+    "to",
+    "our",
+    "home"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "I was thinking what happened was very unusual.",
+   "words": [
+    "i",
+    "was",
+    "thinking",
+    "what",
+    "happened",
+    "was",
+    "very",
+    "unusual"
+   ],
+   "n_syllables": 13,
+   "n_dictionary": 14
+  },
+  {
+   "text": "Do you understand that recycling is important?",
+   "words": [
+    "do",
+    "you",
+    "understand",
+    "that",
+    "recycling",
+    "is",
+    "important"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 14
+  },
+  {
+   "text": "What difference does this make?",
+   "words": [
+    "what",
+    "difference",
+    "does",
+    "this",
+    "make"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "I have seen that he goes there every day.",
+   "words": [
+    "i",
+    "have",
+    "seen",
+    "that",
+    "he",
+    "goes",
+    "there",
+    "every",
+    "day"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "sports miss companies aren't television.",
+   "words": [
+    "sports",
+    "miss",
+    "companies",
+    "aren't",
+    "television"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "We use less oil to cook our food.",
+   "words": [
+    "we",
+    "use",
+    "less",
+    "oil",
+    "to",
+    "cook",
+    "our",
+    "food"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "How many casualties were there?",
+   "words": [
+    "how",
+    "many",
+    "casualties",
+    "were",
+    "there"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "This program will help our growing team.",
+   "words": [
+    "this",
+    "program",
+    "will",
+    "help",
+    "our",
+    "growing",
+    "team"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "Power will be off for an hour.",
+   "words": [
+    "power",
+    "will",
+    "be",
+    "off",
+    "for",
+    "an",
+    "hour"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "Crime and casualties will go up.",
+   "words": [
+    "crime",
+    "and",
+    "casualties",
+    "will",
+    "go",
+    "up"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "Yes, our power is out.",
+   "words": [
+    "yes",
+    "our",
+    "power",
+    "is",
+    "out"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "What difference will this separate education make?",
+   "words": [
+    "what",
+    "difference",
+    "will",
+    "this",
+    "separate",
+    "education",
+    "make"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 14
+  },
+  {
+   "text": "store somewhere unusual helps miss.",
+   "words": [
+    "store",
+    "somewhere",
+    "unusual",
+    "helps",
+    "miss"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "Our situation is not very different.",
+   "words": [
+    "our",
+    "situation",
+    "is",
+    "not",
+    "very",
+    "different"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 13
+  },
+  {
+   "text": "Please order our regular food for everyone.",
+   "words": [
+    "please",
+    "order",
+    "our",
+    "regular",
+    "food",
+    "for",
+    "everyone"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 13
+  },
+  {
+   "text": "I just wanted our usual food to eat.",
+   "words": [
+    "i",
+    "just",
+    "wanted",
+    "our",
+    "usual",
+    "food",
+    "to",
+    "eat"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 12
+  },
+  {
+   "text": "This was not in our visual field.",
+   "words": [
+    "this",
+    "was",
+    "not",
+    "in",
+    "our",
+    "visual",
+    "field"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "It is unusual for her to walk away.",
+   "words": [
+    "it",
+    "is",
+    "unusual",
+    "for",
+    "her",
+    "to",
+    "walk",
+    "away"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 12
+  },
+  {
+   "text": "Different choices between past and future.",
+   "words": [
+    "different",
+    "choices",
+    "between",
+    "past",
+    "and",
+    "future"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "agree casualties employees snow helps woman.",
+   "words": [
+    "agree",
+    "casualties",
+    "employees",
+    "snow",
+    "helps",
+    "woman"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 13
+  },
+  {
+   "text": "Every child needs good education.",
+   "words": [
+    "every",
+    "child",
+    "needs",
+    "good",
+    "education"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "I can't come because my family is here.",
+   "words": [
+    "i",
+    "can't",
+    "come",
+    "because",
+    "my",
+    "family",
+    "is",
+    "here"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "Families look forward to spending quality time here.",
+   "words": [
+    "families",
+    "look",
+    "forward",
+    "to",
+    "spending",
+    "quality",
+    "time",
+    "here"
+   ],
+   "n_syllables": 13,
+   "n_dictionary": 14
+  },
+  {
+   "text": "Five different ways.",
+   "words": [
+    "five",
+    "different",
+    "ways"
+   ],
+   "n_syllables": 4,
+   "n_dictionary": 5
+  },
+  {
+   "text": "Order our regular today.",
+   "words": [
+    "order",
+    "our",
+    "regular",
+    "today"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "thank anymore usual sound san fransisco.",
+   "words": [
+    "thank",
+    "anymore",
+    "usual",
+    "sound",
+    "san",
+    "fransisco"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": null
+  },
+  {
+   "text": "As usual our turn comes when we were about to leave.",
+   "words": [
+    "as",
+    "usual",
+    "our",
+    "turn",
+    "comes",
+    "when",
+    "we",
+    "were",
+    "about",
+    "to",
+    "leave"
+   ],
+   "n_syllables": 14,
+   "n_dictionary": 15
+  },
+  {
+   "text": "She said she especially wanted to talk to you.",
+   "words": [
+    "she",
+    "said",
+    "she",
+    "especially",
+    "wanted",
+    "to",
+    "talk",
+    "to",
+    "you"
+   ],
+   "n_syllables": 13,
+   "n_dictionary": 12
+  },
+  {
+   "text": "It depends on different places.",
+   "words": [
+    "it",
+    "depends",
+    "on",
+    "different",
+    "places"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "This is unusual for my local friends.",
+   "words": [
+    "this",
+    "is",
+    "unusual",
+    "for",
+    "my",
+    "local",
+    "friends"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "I love my family.",
+   "words": [
+    "i",
+    "love",
+    "my",
+    "family"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 6
+  },
+  {
+   "text": "Past the first playoff game.",
+   "words": [
+    "past",
+    "the",
+    "first",
+    "playoff",
+    "game"
+   ],
+   "n_syllables": 4,
+   "n_dictionary": 6
+  },
+  {
+   "text": "Mine was actually very funny.",
+   "words": [
+    "mine",
+    "was",
+    "actually",
+    "very",
+    "funny"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "American families are quite social.",
+   "words": [
+    "american",
+    "families",
+    "are",
+    "quite",
+    "social"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "Is cholesterol bad for you?",
+   "words": [
+    "is",
+    "cholesterol",
+    "bad",
+    "for",
+    "you"
+   ],
+   "n_syllables": 4,
+   "n_dictionary": 8
+  },
+  {
+   "text": "We are recycling the newspaper.",
+   "words": [
+    "we",
+    "are",
+    "recycling",
+    "the",
+    "newspaper"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 10
+  },
+  {
+   "text": "Stones with runes on them served as checkpoints.",
+   "words": [
+    "stones",
+    "with",
+    "runes",
+    "on",
+    "them",
+    "served",
+    "as",
+    "checkpoints"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 9
+  },
+  {
+   "text": "Our crime rate has increased.",
+   "words": [
+    "our",
+    "crime",
+    "rate",
+    "has",
+    "increased"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "I used to go there with my family.",
+   "words": [
+    "i",
+    "used",
+    "to",
+    "go",
+    "there",
+    "with",
+    "my",
+    "family"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "Just put your paper in the same place every day.",
+   "words": [
+    "just",
+    "put",
+    "your",
+    "paper",
+    "in",
+    "the",
+    "same",
+    "place",
+    "every",
+    "day"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 13
+  },
+  {
+   "text": "It made a big difference.",
+   "words": [
+    "it",
+    "made",
+    "a",
+    "big",
+    "difference"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "Are you an arts major in the collage?",
+   "words": [
+    "are",
+    "you",
+    "an",
+    "arts",
+    "major",
+    "in",
+    "the",
+    "collage"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 10
+  },
+  {
+   "text": "We sold our growing camping company.",
+   "words": [
+    "we",
+    "sold",
+    "our",
+    "growing",
+    "camping",
+    "company"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "Your case is different than usual.",
+   "words": [
+    "your",
+    "case",
+    "is",
+    "different",
+    "than",
+    "usual"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "Our daughter is the light of this family.",
+   "words": [
+    "our",
+    "daughter",
+    "is",
+    "the",
+    "light",
+    "of",
+    "this",
+    "family"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 12
+  },
+  {
+   "text": "These are two separate issues.",
+   "words": [
+    "these",
+    "are",
+    "two",
+    "separate",
+    "issues"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "It felt quite unusual.",
+   "words": [
+    "it",
+    "felt",
+    "quite",
+    "unusual"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "Every person here is looking at us.",
+   "words": [
+    "every",
+    "person",
+    "here",
+    "is",
+    "looking",
+    "at",
+    "us"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "Recycling law depends on your city.",
+   "words": [
+    "recycling",
+    "law",
+    "depends",
+    "on",
+    "your",
+    "city"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 11
+  },
+  {
+   "text": "My daughter will record her music for the family.",
+   "words": [
+    "my",
+    "daughter",
+    "will",
+    "record",
+    "her",
+    "music",
+    "for",
+    "the",
+    "family"
+   ],
+   "n_syllables": 13,
+   "n_dictionary": 14
+  },
+  {
+   "text": "My vision is quite different from your vision.",
+   "words": [
+    "my",
+    "vision",
+    "is",
+    "quite",
+    "different",
+    "from",
+    "your",
+    "vision"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 12
+  },
+  {
+   "text": "The joy of the weekend with family is something else.",
+   "words": [
+    "the",
+    "joy",
+    "of",
+    "the",
+    "weekend",
+    "with",
+    "family",
+    "is",
+    "something",
+    "else"
+   ],
+   "n_syllables": 13,
+   "n_dictionary": 14
+  },
+  {
+   "text": "Recycling more will certainly help.",
+   "words": [
+    "recycling",
+    "more",
+    "will",
+    "certainly",
+    "help"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 10
+  },
+  {
+   "text": "Our class was only half full today.",
+   "words": [
+    "our",
+    "class",
+    "was",
+    "only",
+    "half",
+    "full",
+    "today"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "Their computer team was especially large.",
+   "words": [
+    "their",
+    "computer",
+    "team",
+    "was",
+    "especially",
+    "large"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 10
+  },
+  {
+   "text": "It is unusual for my parents to team up with them.",
+   "words": [
+    "it",
+    "is",
+    "unusual",
+    "for",
+    "my",
+    "parents",
+    "to",
+    "team",
+    "up",
+    "with",
+    "them"
+   ],
+   "n_syllables": 14,
+   "n_dictionary": 15
+  },
+  {
+   "text": "Your social situation is not very different.",
+   "words": [
+    "your",
+    "social",
+    "situation",
+    "is",
+    "not",
+    "very",
+    "different"
+   ],
+   "n_syllables": 13,
+   "n_dictionary": 14
+  },
+  {
+   "text": "Our choices will make a difference for sure.",
+   "words": [
+    "our",
+    "choices",
+    "will",
+    "make",
+    "a",
+    "difference",
+    "for",
+    "sure"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 12
+  },
+  {
+   "text": "They will take up recycling from now on.",
+   "words": [
+    "they",
+    "will",
+    "take",
+    "up",
+    "recycling",
+    "from",
+    "now",
+    "on"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 11
+  },
+  {
+   "text": "We do everything we possibly can as a family.",
+   "words": [
+    "we",
+    "do",
+    "everything",
+    "we",
+    "possibly",
+    "can",
+    "as",
+    "a",
+    "family"
+   ],
+   "n_syllables": 14,
+   "n_dictionary": 15
+  },
+  {
+   "text": "Basically, this house is too large for my family.",
+   "words": [
+    "basically",
+    "this",
+    "house",
+    "is",
+    "too",
+    "large",
+    "for",
+    "my",
+    "family"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 13
+  },
+  {
+   "text": "My family and friends need my help.",
+   "words": [
+    "my",
+    "family",
+    "and",
+    "friends",
+    "need",
+    "my",
+    "help"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "Each of us should think about recycling.",
+   "words": [
+    "each",
+    "of",
+    "us",
+    "should",
+    "think",
+    "about",
+    "recycling"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 11
+  },
+  {
+   "text": "Let's check with each other every half hour.",
+   "words": [
+    "let's",
+    "check",
+    "with",
+    "each",
+    "other",
+    "every",
+    "half",
+    "hour"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 12
+  },
+  {
+   "text": "This is a great way to try different things.",
+   "words": [
+    "this",
+    "is",
+    "a",
+    "great",
+    "way",
+    "to",
+    "try",
+    "different",
+    "things"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "Burials usually happen during the morning.",
+   "words": [
+    "burials",
+    "usually",
+    "happen",
+    "during",
+    "the",
+    "morning"
+   ],
+   "n_syllables": 13,
+   "n_dictionary": 14
+  },
+  {
+   "text": "This is a good season for our business.",
+   "words": [
+    "this",
+    "is",
+    "a",
+    "good",
+    "season",
+    "for",
+    "our",
+    "business"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "Is this the place you usually visit?",
+   "words": [
+    "is",
+    "this",
+    "the",
+    "place",
+    "you",
+    "usually",
+    "visit"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "This is actually a very interesting point.",
+   "words": [
+    "this",
+    "is",
+    "actually",
+    "a",
+    "very",
+    "interesting",
+    "point"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 13
+  },
+  {
+   "text": "We are supposed to help our family.",
+   "words": [
+    "we",
+    "are",
+    "supposed",
+    "to",
+    "help",
+    "our",
+    "family"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 11
+  },
+  {
+   "text": "Being home with my family brings me joy.",
+   "words": [
+    "being",
+    "home",
+    "with",
+    "my",
+    "family",
+    "brings",
+    "me",
+    "joy"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "Social recycling program is going great.",
+   "words": [
+    "social",
+    "recycling",
+    "program",
+    "is",
+    "going",
+    "great"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 12
+  },
+  {
+   "text": "My team is like a family to me.",
+   "words": [
+    "my",
+    "team",
+    "is",
+    "like",
+    "a",
+    "family",
+    "to",
+    "me"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "I will be home with my family.",
+   "words": [
+    "i",
+    "will",
+    "be",
+    "home",
+    "with",
+    "my",
+    "family"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "I would love to see my family soon.",
+   "words": [
+    "i",
+    "would",
+    "love",
+    "to",
+    "see",
+    "my",
+    "family",
+    "soon"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "He made a collage for his art class.",
+   "words": [
+    "he",
+    "made",
+    "a",
+    "collage",
+    "for",
+    "his",
+    "art",
+    "class"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 9
+  },
+  {
+   "text": "This is unusual for the people in the north.",
+   "words": [
+    "this",
+    "is",
+    "unusual",
+    "for",
+    "the",
+    "people",
+    "in",
+    "the",
+    "north"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 13
+  },
+  {
+   "text": "Having to measure this every day is no fun.",
+   "words": [
+    "having",
+    "to",
+    "measure",
+    "this",
+    "every",
+    "day",
+    "is",
+    "no",
+    "fun"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 13
+  },
+  {
+   "text": "Our company will pay the sports team.",
+   "words": [
+    "our",
+    "company",
+    "will",
+    "pay",
+    "the",
+    "sports",
+    "team"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "Families need to spend quality time together.",
+   "words": [
+    "families",
+    "need",
+    "to",
+    "spend",
+    "quality",
+    "time",
+    "together"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 13
+  },
+  {
+   "text": "We want to sell our house in the city.",
+   "words": [
+    "we",
+    "want",
+    "to",
+    "sell",
+    "our",
+    "house",
+    "in",
+    "the",
+    "city"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "I believe this is not our problem.",
+   "words": [
+    "i",
+    "believe",
+    "this",
+    "is",
+    "not",
+    "our",
+    "problem"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "I am looking for a different job.",
+   "words": [
+    "i",
+    "am",
+    "looking",
+    "for",
+    "a",
+    "different",
+    "job"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "It all worked out quite well for our family.",
+   "words": [
+    "it",
+    "all",
+    "worked",
+    "out",
+    "quite",
+    "well",
+    "for",
+    "our",
+    "family"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 12
+  },
+  {
+   "text": "I feel that every country can try to be better.",
+   "words": [
+    "i",
+    "feel",
+    "that",
+    "every",
+    "country",
+    "can",
+    "try",
+    "to",
+    "be",
+    "better"
+   ],
+   "n_syllables": 13,
+   "n_dictionary": 14
+  },
+  {
+   "text": "This situation is not unusual.",
+   "words": [
+    "this",
+    "situation",
+    "is",
+    "not",
+    "unusual"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "I read to my kids every day.",
+   "words": [
+    "i",
+    "read",
+    "to",
+    "my",
+    "kids",
+    "every",
+    "day"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "They are recycling more lately.",
+   "words": [
+    "they",
+    "are",
+    "recycling",
+    "more",
+    "lately"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 9
+  },
+  {
+   "text": "Everything looks so different in the evening.",
+   "words": [
+    "everything",
+    "looks",
+    "so",
+    "different",
+    "in",
+    "the",
+    "evening"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 12
+  },
+  {
+   "text": "I cannot see the difference.",
+   "words": [
+    "i",
+    "cannot",
+    "see",
+    "the",
+    "difference"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "Check out our free versions!",
+   "words": [
+    "check",
+    "out",
+    "our",
+    "free",
+    "versions"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "Families like to visit this place together.",
+   "words": [
+    "families",
+    "like",
+    "to",
+    "visit",
+    "this",
+    "place",
+    "together"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 12
+  },
+  {
+   "text": "Why do you say that actually.",
+   "words": [
+    "why",
+    "do",
+    "you",
+    "say",
+    "that",
+    "actually"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "I am working on our company taxes now.",
+   "words": [
+    "i",
+    "am",
+    "working",
+    "on",
+    "our",
+    "company",
+    "taxes",
+    "now"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 13
+  },
+  {
+   "text": "Is your family from Dallas?",
+   "words": [
+    "is",
+    "your",
+    "family",
+    "from",
+    "dallas"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "What do you usually do in the morning?",
+   "words": [
+    "what",
+    "do",
+    "you",
+    "usually",
+    "do",
+    "in",
+    "the",
+    "morning"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 12
+  },
+  {
+   "text": "I understand the difference quite well.",
+   "words": [
+    "i",
+    "understand",
+    "the",
+    "difference",
+    "quite",
+    "well"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "This is a separate topic.",
+   "words": [
+    "this",
+    "is",
+    "a",
+    "separate",
+    "topic"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "My family is in the city right now.",
+   "words": [
+    "my",
+    "family",
+    "is",
+    "in",
+    "the",
+    "city",
+    "right",
+    "now"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "Education is very important to these families.",
+   "words": [
+    "education",
+    "is",
+    "very",
+    "important",
+    "to",
+    "these",
+    "families"
+   ],
+   "n_syllables": 14,
+   "n_dictionary": 15
+  },
+  {
+   "text": "What will happen to our business?",
+   "words": [
+    "what",
+    "will",
+    "happen",
+    "to",
+    "our",
+    "business"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "I hope we can see a cease fire in the Middle East as soon as possible.",
+   "words": [
+    "i",
+    "hope",
+    "we",
+    "can",
+    "see",
+    "a",
+    "cease",
+    "fire",
+    "in",
+    "the",
+    "middle",
+    "east",
+    "as",
+    "soon",
+    "as",
+    "possible"
+   ],
+   "n_syllables": 19,
+   "n_dictionary": 20
+  },
+  {
+   "text": "I spend a lot of time with my family.",
+   "words": [
+    "i",
+    "spend",
+    "a",
+    "lot",
+    "of",
+    "time",
+    "with",
+    "my",
+    "family"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "Our future looks great.",
+   "words": [
+    "our",
+    "future",
+    "looks",
+    "great"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 6
+  },
+  {
+   "text": "Her family is not that far.",
+   "words": [
+    "her",
+    "family",
+    "is",
+    "not",
+    "that",
+    "far"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "Where are you going with your family this year?",
+   "words": [
+    "where",
+    "are",
+    "you",
+    "going",
+    "with",
+    "your",
+    "family",
+    "this",
+    "year"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 12
+  },
+  {
+   "text": "I usually feel quite well in the morning.",
+   "words": [
+    "i",
+    "usually",
+    "feel",
+    "quite",
+    "well",
+    "in",
+    "the",
+    "morning"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 12
+  },
+  {
+   "text": "Vote for your favorite person.",
+   "words": [
+    "vote",
+    "for",
+    "your",
+    "favorite",
+    "person"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "Our yard looks very clean.",
+   "words": [
+    "our",
+    "yard",
+    "looks",
+    "very",
+    "clean"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "We have left all our stuff at home.",
+   "words": [
+    "we",
+    "have",
+    "left",
+    "all",
+    "our",
+    "stuff",
+    "at",
+    "home"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "I like to go for running every day.",
+   "words": [
+    "i",
+    "like",
+    "to",
+    "go",
+    "for",
+    "running",
+    "every",
+    "day"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "I cannot go without reading every day.",
+   "words": [
+    "i",
+    "cannot",
+    "go",
+    "without",
+    "reading",
+    "every",
+    "day"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 12
+  },
+  {
+   "text": "They kept books in a separate room.",
+   "words": [
+    "they",
+    "kept",
+    "books",
+    "in",
+    "a",
+    "separate",
+    "room"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "Only three families have all the power.",
+   "words": [
+    "only",
+    "three",
+    "families",
+    "have",
+    "all",
+    "the",
+    "power"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "This policy will certainly make some difference.",
+   "words": [
+    "this",
+    "policy",
+    "will",
+    "certainly",
+    "make",
+    "some",
+    "difference"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 13
+  },
+  {
+   "text": "This is an unusual situation for us.",
+   "words": [
+    "this",
+    "is",
+    "an",
+    "unusual",
+    "situation",
+    "for",
+    "us"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 13
+  },
+  {
+   "text": "It's our paper recycling day.",
+   "words": [
+    "it's",
+    "our",
+    "paper",
+    "recycling",
+    "day"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 10
+  },
+  {
+   "text": "It really depends on how much difference we can make.",
+   "words": [
+    "it",
+    "really",
+    "depends",
+    "on",
+    "how",
+    "much",
+    "difference",
+    "we",
+    "can",
+    "make"
+   ],
+   "n_syllables": 13,
+   "n_dictionary": 14
+  },
+  {
+   "text": "It was an unusual book to read.",
+   "words": [
+    "it",
+    "was",
+    "an",
+    "unusual",
+    "book",
+    "to",
+    "read"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "The law is different for the people with power.",
+   "words": [
+    "the",
+    "law",
+    "is",
+    "different",
+    "for",
+    "the",
+    "people",
+    "with",
+    "power"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 13
+  },
+  {
+   "text": "Our team is ready for the change.",
+   "words": [
+    "our",
+    "team",
+    "is",
+    "ready",
+    "for",
+    "the",
+    "change"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "Have you seen that funny TV show?",
+   "words": [
+    "have",
+    "you",
+    "seen",
+    "that",
+    "funny",
+    "tv",
+    "show"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 9
+  },
+  {
+   "text": "What makes you think our country will deal with it?",
+   "words": [
+    "what",
+    "makes",
+    "you",
+    "think",
+    "our",
+    "country",
+    "will",
+    "deal",
+    "with",
+    "it"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 12
+  },
+  {
+   "text": "That seems like an unusual choice.",
+   "words": [
+    "that",
+    "seems",
+    "like",
+    "an",
+    "unusual",
+    "choice"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "Our company is growing bigger.",
+   "words": [
+    "our",
+    "company",
+    "is",
+    "growing",
+    "bigger"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "My family will join me soon.",
+   "words": [
+    "my",
+    "family",
+    "will",
+    "join",
+    "me",
+    "soon"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "This is a family matter.",
+   "words": [
+    "this",
+    "is",
+    "a",
+    "family",
+    "matter"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "seventy watching joy teachers recycling.",
+   "words": [
+    "seventy",
+    "watching",
+    "joy",
+    "teachers",
+    "recycling"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 12
+  },
+  {
+   "text": "without past separate others supposed.",
+   "words": [
+    "without",
+    "past",
+    "separate",
+    "others",
+    "supposed"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "casualties business system illinois.",
+   "words": [
+    "casualties",
+    "business",
+    "system",
+    "illinois"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "unusual running minutes today father.",
+   "words": [
+    "unusual",
+    "running",
+    "minutes",
+    "today",
+    "father"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 12
+  },
+  {
+   "text": "We should make a family budget.",
+   "words": [
+    "we",
+    "should",
+    "make",
+    "a",
+    "family",
+    "budget"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "We were lucky there were very few casualties.",
+   "words": [
+    "we",
+    "were",
+    "lucky",
+    "there",
+    "were",
+    "very",
+    "few",
+    "casualties"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 13
+  },
+  {
+   "text": "Everything will be different next year.",
+   "words": [
+    "everything",
+    "will",
+    "be",
+    "different",
+    "next",
+    "year"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "I am especially feeling bad for her.",
+   "words": [
+    "i",
+    "am",
+    "especially",
+    "feeling",
+    "bad",
+    "for",
+    "her"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 10
+  },
+  {
+   "text": "This is important for our company.",
+   "words": [
+    "this",
+    "is",
+    "important",
+    "for",
+    "our",
+    "company"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "They run a local recycling program.",
+   "words": [
+    "they",
+    "run",
+    "a",
+    "local",
+    "recycling",
+    "program"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 11
+  },
+  {
+   "text": "I find this policy very unusual.",
+   "words": [
+    "i",
+    "find",
+    "this",
+    "policy",
+    "very",
+    "unusual"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 12
+  },
+  {
+   "text": "We have been thinking about our budget.",
+   "words": [
+    "we",
+    "have",
+    "been",
+    "thinking",
+    "about",
+    "our",
+    "budget"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "There are many crime shows on the TV.",
+   "words": [
+    "there",
+    "are",
+    "many",
+    "crime",
+    "shows",
+    "on",
+    "the",
+    "tv"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 10
+  },
+  {
+   "text": "We want to sell our house and look for a new one.",
+   "words": [
+    "we",
+    "want",
+    "to",
+    "sell",
+    "our",
+    "house",
+    "and",
+    "look",
+    "for",
+    "a",
+    "new",
+    "one"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 13
+  },
+  {
+   "text": "I am very close to my family.",
+   "words": [
+    "i",
+    "am",
+    "very",
+    "close",
+    "to",
+    "my",
+    "family"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "Actually I am reading a couple of different books.",
+   "words": [
+    "actually",
+    "i",
+    "am",
+    "reading",
+    "a",
+    "couple",
+    "of",
+    "different",
+    "books"
+   ],
+   "n_syllables": 14,
+   "n_dictionary": 16
+  },
+  {
+   "text": "The insurgents often exaggerate battlefield casualties.",
+   "words": [
+    "the",
+    "insurgents",
+    "often",
+    "exaggerate",
+    "battlefield",
+    "casualties"
+   ],
+   "n_syllables": 16,
+   "n_dictionary": 17
+  },
+  {
+   "text": "Now it's different because I live here.",
+   "words": [
+    "now",
+    "it's",
+    "different",
+    "because",
+    "i",
+    "live",
+    "here"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "Our kids might be in a great school.",
+   "words": [
+    "our",
+    "kids",
+    "might",
+    "be",
+    "in",
+    "a",
+    "great",
+    "school"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "There were many casualties in the past.",
+   "words": [
+    "there",
+    "were",
+    "many",
+    "casualties",
+    "in",
+    "the",
+    "past"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "I will pick up the recycling next week.",
+   "words": [
+    "i",
+    "will",
+    "pick",
+    "up",
+    "the",
+    "recycling",
+    "next",
+    "week"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 11
+  },
+  {
+   "text": "Their life is different now.",
+   "words": [
+    "their",
+    "life",
+    "is",
+    "different",
+    "now"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "I went camping with my family.",
+   "words": [
+    "i",
+    "went",
+    "camping",
+    "with",
+    "my",
+    "family"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "They moved to a different place last year.",
+   "words": [
+    "they",
+    "moved",
+    "to",
+    "a",
+    "different",
+    "place",
+    "last",
+    "year"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "I want to understand the difference.",
+   "words": [
+    "i",
+    "want",
+    "to",
+    "understand",
+    "the",
+    "difference"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "I loved being there with my family.",
+   "words": [
+    "i",
+    "loved",
+    "being",
+    "there",
+    "with",
+    "my",
+    "family"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "This is quite unusual for me.",
+   "words": [
+    "this",
+    "is",
+    "quite",
+    "unusual",
+    "for",
+    "me"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "We should start recycling paper.",
+   "words": [
+    "we",
+    "should",
+    "start",
+    "recycling",
+    "paper"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 9
+  },
+  {
+   "text": "I love to cook food for my family.",
+   "words": [
+    "i",
+    "love",
+    "to",
+    "cook",
+    "food",
+    "for",
+    "my",
+    "family"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "Did you enjoy your time at our house?",
+   "words": [
+    "did",
+    "you",
+    "enjoy",
+    "your",
+    "time",
+    "at",
+    "our",
+    "house"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "How was your stay at our house?",
+   "words": [
+    "how",
+    "was",
+    "your",
+    "stay",
+    "at",
+    "our",
+    "house"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "I would love to meet your family.",
+   "words": [
+    "i",
+    "would",
+    "love",
+    "to",
+    "meet",
+    "your",
+    "family"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "They usually bring their kids.",
+   "words": [
+    "they",
+    "usually",
+    "bring",
+    "their",
+    "kids"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "Our baby has started to walk.",
+   "words": [
+    "our",
+    "baby",
+    "has",
+    "started",
+    "to",
+    "walk"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "I listen to this music every day.",
+   "words": [
+    "i",
+    "listen",
+    "to",
+    "this",
+    "music",
+    "every",
+    "day"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "Each and every person here is talking about it.",
+   "words": [
+    "each",
+    "and",
+    "every",
+    "person",
+    "here",
+    "is",
+    "talking",
+    "about",
+    "it"
+   ],
+   "n_syllables": 13,
+   "n_dictionary": 14
+  },
+  {
+   "text": "Would you like to come to see our new house?",
+   "words": [
+    "would",
+    "you",
+    "like",
+    "to",
+    "come",
+    "to",
+    "see",
+    "our",
+    "new",
+    "house"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "Our team is all set for the game.",
+   "words": [
+    "our",
+    "team",
+    "is",
+    "all",
+    "set",
+    "for",
+    "the",
+    "game"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "Our team will not play this season.",
+   "words": [
+    "our",
+    "team",
+    "will",
+    "not",
+    "play",
+    "this",
+    "season"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "We sold our house in the country.",
+   "words": [
+    "we",
+    "sold",
+    "our",
+    "house",
+    "in",
+    "the",
+    "country"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "You should avoid watching TV late at night.",
+   "words": [
+    "you",
+    "should",
+    "avoid",
+    "watching",
+    "tv",
+    "late",
+    "at",
+    "night"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 11
+  },
+  {
+   "text": "This show was originally on TV.",
+   "words": [
+    "this",
+    "show",
+    "was",
+    "originally",
+    "on",
+    "tv"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 11
+  },
+  {
+   "text": "I usually try to help as many people as I can.",
+   "words": [
+    "i",
+    "usually",
+    "try",
+    "to",
+    "help",
+    "as",
+    "many",
+    "people",
+    "as",
+    "i",
+    "can"
+   ],
+   "n_syllables": 15,
+   "n_dictionary": 16
+  },
+  {
+   "text": "I miss my family and friends.",
+   "words": [
+    "i",
+    "miss",
+    "my",
+    "family",
+    "and",
+    "friends"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "I know what you have to deal with every day.",
+   "words": [
+    "i",
+    "know",
+    "what",
+    "you",
+    "have",
+    "to",
+    "deal",
+    "with",
+    "every",
+    "day"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 12
+  },
+  {
+   "text": "I enjoyed that day with my family and friends.",
+   "words": [
+    "i",
+    "enjoyed",
+    "that",
+    "day",
+    "with",
+    "my",
+    "family",
+    "and",
+    "friends"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 12
+  },
+  {
+   "text": "aren't mostly line looked.",
+   "words": [
+    "aren't",
+    "mostly",
+    "line",
+    "looked"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 6
+  },
+  {
+   "text": "There are different ways to think about this.",
+   "words": [
+    "there",
+    "are",
+    "different",
+    "ways",
+    "to",
+    "think",
+    "about",
+    "this"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "The family lives in another country.",
+   "words": [
+    "the",
+    "family",
+    "lives",
+    "in",
+    "another",
+    "country"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "Teachers play an important part in our society.",
+   "words": [
+    "teachers",
+    "play",
+    "an",
+    "important",
+    "part",
+    "in",
+    "our",
+    "society"
+   ],
+   "n_syllables": 14,
+   "n_dictionary": 15
+  },
+  {
+   "text": "I love to run every morning.",
+   "words": [
+    "i",
+    "love",
+    "to",
+    "run",
+    "every",
+    "morning"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "Don't break our trust.",
+   "words": [
+    "don't",
+    "break",
+    "our",
+    "trust"
+   ],
+   "n_syllables": 4,
+   "n_dictionary": 5
+  },
+  {
+   "text": "I miss my family when I'm away from home.",
+   "words": [
+    "i",
+    "miss",
+    "my",
+    "family",
+    "when",
+    "i'm",
+    "away",
+    "from",
+    "home"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 12
+  },
+  {
+   "text": "When will you start recycling your paper?",
+   "words": [
+    "when",
+    "will",
+    "you",
+    "start",
+    "recycling",
+    "your",
+    "paper"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 11
+  },
+  {
+   "text": "What's your favorite book?",
+   "words": [
+    "what's",
+    "your",
+    "favorite",
+    "book"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 6
+  },
+  {
+   "text": "This is unusual, even for them.",
+   "words": [
+    "this",
+    "is",
+    "unusual",
+    "even",
+    "for",
+    "them"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "Friends are the family we choose.",
+   "words": [
+    "friends",
+    "are",
+    "the",
+    "family",
+    "we",
+    "choose"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "Our baby has started to talk.",
+   "words": [
+    "our",
+    "baby",
+    "has",
+    "started",
+    "to",
+    "talk"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "I don't actually need this.",
+   "words": [
+    "i",
+    "don't",
+    "actually",
+    "need",
+    "this"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "I actually found it interesting.",
+   "words": [
+    "i",
+    "actually",
+    "found",
+    "it",
+    "interesting"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "That's enough TV for today.",
+   "words": [
+    "that's",
+    "enough",
+    "tv",
+    "for",
+    "today"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 8
+  },
+  {
+   "text": "What's our budget for the trip?",
+   "words": [
+    "what's",
+    "our",
+    "budget",
+    "for",
+    "the",
+    "trip"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "It was actually better than the week before.",
+   "words": [
+    "it",
+    "was",
+    "actually",
+    "better",
+    "than",
+    "the",
+    "week",
+    "before"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 13
+  },
+  {
+   "text": "No more than I do every Friday.",
+   "words": [
+    "no",
+    "more",
+    "than",
+    "i",
+    "do",
+    "every",
+    "friday"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "I will be home in an hour.",
+   "words": [
+    "i",
+    "will",
+    "be",
+    "home",
+    "in",
+    "an",
+    "hour"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "We grew more every year.",
+   "words": [
+    "we",
+    "grew",
+    "more",
+    "every",
+    "year"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "She is our head teacher.",
+   "words": [
+    "she",
+    "is",
+    "our",
+    "head",
+    "teacher"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "I work with a recycling company.",
+   "words": [
+    "i",
+    "work",
+    "with",
+    "a",
+    "recycling",
+    "company"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 11
+  },
+  {
+   "text": "I hope I can meet your family.",
+   "words": [
+    "i",
+    "hope",
+    "i",
+    "can",
+    "meet",
+    "your",
+    "family"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "My family is everything to me.",
+   "words": [
+    "my",
+    "family",
+    "is",
+    "everything",
+    "to",
+    "me"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "Name two favorite places.",
+   "words": [
+    "name",
+    "two",
+    "favorite",
+    "places"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "Have you seen anything unusual?",
+   "words": [
+    "have",
+    "you",
+    "seen",
+    "anything",
+    "unusual"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "I will do anything to help my family.",
+   "words": [
+    "i",
+    "will",
+    "do",
+    "anything",
+    "to",
+    "help",
+    "my",
+    "family"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 12
+  },
+  {
+   "text": "I read the news in our local paper.",
+   "words": [
+    "i",
+    "read",
+    "the",
+    "news",
+    "in",
+    "our",
+    "local",
+    "paper"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "Our family could benefit from this.",
+   "words": [
+    "our",
+    "family",
+    "could",
+    "benefit",
+    "from",
+    "this"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 11
+  },
+  {
+   "text": "I am watching sports on TV.",
+   "words": [
+    "i",
+    "am",
+    "watching",
+    "sports",
+    "on",
+    "tv"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 8
+  },
+  {
+   "text": "Let's make our choices now, shall we?",
+   "words": [
+    "let's",
+    "make",
+    "our",
+    "choices",
+    "now",
+    "shall",
+    "we"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "Every dollar is important.",
+   "words": [
+    "every",
+    "dollar",
+    "is",
+    "important"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "I have worked out the difference.",
+   "words": [
+    "i",
+    "have",
+    "worked",
+    "out",
+    "the",
+    "difference"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "Put the books in a separate bag.",
+   "words": [
+    "put",
+    "the",
+    "books",
+    "in",
+    "a",
+    "separate",
+    "bag"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "This is our future work.",
+   "words": [
+    "this",
+    "is",
+    "our",
+    "future",
+    "work"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "Families get together once a year.",
+   "words": [
+    "families",
+    "get",
+    "together",
+    "once",
+    "a",
+    "year"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "Let's stick to our plan.",
+   "words": [
+    "let's",
+    "stick",
+    "to",
+    "our",
+    "plan"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 6
+  },
+  {
+   "text": "There is nothing to watch on the TV.",
+   "words": [
+    "there",
+    "is",
+    "nothing",
+    "to",
+    "watch",
+    "on",
+    "the",
+    "tv"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 10
+  },
+  {
+   "text": "These are two of our best minds.",
+   "words": [
+    "these",
+    "are",
+    "two",
+    "of",
+    "our",
+    "best",
+    "minds"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "Our group work is done.",
+   "words": [
+    "our",
+    "group",
+    "work",
+    "is",
+    "done"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 6
+  },
+  {
+   "text": "It is not unusual for us.",
+   "words": [
+    "it",
+    "is",
+    "not",
+    "unusual",
+    "for",
+    "us"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "I like to eat with my family.",
+   "words": [
+    "i",
+    "like",
+    "to",
+    "eat",
+    "with",
+    "my",
+    "family"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "I try to catch the game every weekend that I can.",
+   "words": [
+    "i",
+    "try",
+    "to",
+    "catch",
+    "the",
+    "game",
+    "every",
+    "weekend",
+    "that",
+    "i",
+    "can"
+   ],
+   "n_syllables": 13,
+   "n_dictionary": 14
+  },
+  {
+   "text": "Families are separated.",
+   "words": [
+    "families",
+    "are",
+    "separated"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "Install the latest trial version on your device.",
+   "words": [
+    "install",
+    "the",
+    "latest",
+    "trial",
+    "version",
+    "on",
+    "your",
+    "device"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 13
+  },
+  {
+   "text": "She is the star employee of our company.",
+   "words": [
+    "she",
+    "is",
+    "the",
+    "star",
+    "employee",
+    "of",
+    "our",
+    "company"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 13
+  },
+  {
+   "text": "Most of my family was here.",
+   "words": [
+    "most",
+    "of",
+    "my",
+    "family",
+    "was",
+    "here"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "Tell my family I do not feel thirsty.",
+   "words": [
+    "tell",
+    "my",
+    "family",
+    "i",
+    "do",
+    "not",
+    "feel",
+    "thirsty"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "My family told me about you.",
+   "words": [
+    "my",
+    "family",
+    "told",
+    "me",
+    "about",
+    "you"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "Is my family coming closer?",
+   "words": [
+    "is",
+    "my",
+    "family",
+    "coming",
+    "closer"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "They like my family.",
+   "words": [
+    "they",
+    "like",
+    "my",
+    "family"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 6
+  },
+  {
+   "text": "Help my family, clean please.",
+   "words": [
+    "help",
+    "my",
+    "family",
+    "clean",
+    "please"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "My family is coming here.",
+   "words": [
+    "my",
+    "family",
+    "is",
+    "coming",
+    "here"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "Tell my family you feel thirsty.",
+   "words": [
+    "tell",
+    "my",
+    "family",
+    "you",
+    "feel",
+    "thirsty"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "My family is not going.",
+   "words": [
+    "my",
+    "family",
+    "is",
+    "not",
+    "going"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "I hope my family is here.",
+   "words": [
+    "i",
+    "hope",
+    "my",
+    "family",
+    "is",
+    "here"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "No, my family is not going.",
+   "words": [
+    "no",
+    "my",
+    "family",
+    "is",
+    "not",
+    "going"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "You need my family.",
+   "words": [
+    "you",
+    "need",
+    "my",
+    "family"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 6
+  },
+  {
+   "text": "They tell you my family is not comfortable.",
+   "words": [
+    "they",
+    "tell",
+    "you",
+    "my",
+    "family",
+    "is",
+    "not",
+    "comfortable"
+   ],
+   "n_syllables": 12,
+   "n_dictionary": 13
+  },
+  {
+   "text": "Is my family hungry?",
+   "words": [
+    "is",
+    "my",
+    "family",
+    "hungry"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "My family is coming.",
+   "words": [
+    "my",
+    "family",
+    "is",
+    "coming"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "Please tell my family I am good.",
+   "words": [
+    "please",
+    "tell",
+    "my",
+    "family",
+    "i",
+    "am",
+    "good"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "They need my family closer.",
+   "words": [
+    "they",
+    "need",
+    "my",
+    "family",
+    "closer"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "They have no tired family.",
+   "words": [
+    "they",
+    "have",
+    "no",
+    "tired",
+    "family"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "No, I am family.",
+   "words": [
+    "no",
+    "i",
+    "am",
+    "family"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 6
+  },
+  {
+   "text": "They hope my family is right here.",
+   "words": [
+    "they",
+    "hope",
+    "my",
+    "family",
+    "is",
+    "right",
+    "here"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "Are they my family?",
+   "words": [
+    "are",
+    "they",
+    "my",
+    "family"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 6
+  },
+  {
+   "text": "Bring my family here.",
+   "words": [
+    "bring",
+    "my",
+    "family",
+    "here"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 6
+  },
+  {
+   "text": "Tell my family they are comfortable.",
+   "words": [
+    "tell",
+    "my",
+    "family",
+    "they",
+    "are",
+    "comfortable"
+   ],
+   "n_syllables": 10,
+   "n_dictionary": 11
+  },
+  {
+   "text": "They tell you my family is hungry.",
+   "words": [
+    "they",
+    "tell",
+    "you",
+    "my",
+    "family",
+    "is",
+    "hungry"
+   ],
+   "n_syllables": 9,
+   "n_dictionary": 10
+  },
+  {
+   "text": "Family is no good.",
+   "words": [
+    "family",
+    "is",
+    "no",
+    "good"
+   ],
+   "n_syllables": 5,
+   "n_dictionary": 6
+  },
+  {
+   "text": "Is my family okay?",
+   "words": [
+    "is",
+    "my",
+    "family",
+    "okay"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "Is my family coming up?",
+   "words": [
+    "is",
+    "my",
+    "family",
+    "coming",
+    "up"
+   ],
+   "n_syllables": 7,
+   "n_dictionary": 8
+  },
+  {
+   "text": "Bring my tired family.",
+   "words": [
+    "bring",
+    "my",
+    "tired",
+    "family"
+   ],
+   "n_syllables": 6,
+   "n_dictionary": 7
+  },
+  {
+   "text": "Is my family comfortable?",
+   "words": [
+    "is",
+    "my",
+    "family",
+    "comfortable"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "I hope my family is not here.",
+   "words": [
+    "i",
+    "hope",
+    "my",
+    "family",
+    "is",
+    "not",
+    "here"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "I hope my family is hungry.",
+   "words": [
+    "i",
+    "hope",
+    "my",
+    "family",
+    "is",
+    "hungry"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "They tell you my family is comfortable.",
+   "words": [
+    "they",
+    "tell",
+    "you",
+    "my",
+    "family",
+    "is",
+    "comfortable"
+   ],
+   "n_syllables": 11,
+   "n_dictionary": 12
+  },
+  {
+   "text": "Tell my family I feel hungry.",
+   "words": [
+    "tell",
+    "my",
+    "family",
+    "i",
+    "feel",
+    "hungry"
+   ],
+   "n_syllables": 8,
+   "n_dictionary": 9
+  },
+  {
+   "text": "Family is here.",
+   "words": [
+    "family",
+    "is",
+    "here"
+   ],
+   "n_syllables": 4,
+   "n_dictionary": 5
+  }
+ ],
+ "syllables_per_utterance": {
+  "min": 1,
+  "median": 8.0,
+  "max": 47
+ },
+ "syllable_ms": {
+  "min": 10.0,
+  "median": 220.0,
+  "max": 670.0
+ }
+}

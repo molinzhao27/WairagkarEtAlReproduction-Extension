@@ -1,0 +1,62 @@
+{
+ "created": "2026-10-24T04:13:12",
+ "voice": "Alex",
+ "corpus": "t15_sessions",
+ "corpus_file": "data/processed/tts/alex/t15_sessions.npz",
+ "corpus_sha256": "f17db44ab965b528304fc466ad267fa6fefaabe1a459dff1010f4d66790797a5",
+ "tts_meta": {
+  "engine": "macos_say",
+  "macos": {
+   "productVersion": "27.0",
+   "buildVersion": "26A428"
+  },
+  "say": {
+   "rate_wpm": null,
+   "file_format": "WAVE",
+   "data_format": "LEI16",
+   "pad_ms": 200,
+   "word_pause_ms": null
+  },
+  "lpcnet_binary_sha256": "39729e2b52dcdb2420401c216ed8192e32da3b5191f60ae0b635e8d289891949",
+  "corpus_sha256": "0b3f997a35506ba17ec995413b5f732480bc2ce704514a6a8ccb4f69498ebe0c",
+  "created": "2026-10-23T21:02:28",
+  "frame_layout": "raw LPCNet frames (n, 36) from lpcnet_demo -features; first pad_ms and last pad_ms are digital silence"
+ },
+ "runtime": {
+  "threads": {
+   "intra_op": 12,
+   "inter_op": 2,
+   "omp": 12
+  },
+  "env": {
+   "OMP_NUM_THREADS": "12",
+   "MKL_NUM_THREADS": "12",
+   "OPENBLAS_NUM_THREADS": "12",
+   "NUMBA_NUM_THREADS": "12",
+   "TF_NUM_INTRAOP_THREADS": "12",
+   "TF_NUM_INTEROP_THREADS": "2"
+  },
+  "nice": 19,
+  "CUDA_VISIBLE_DEVICES": ""
+ },
+ "code_version": {
+  "source": "sync",
+  "commit": "5004d973a28af1b63909c3938c3f0c3915aae6d9",
+  "dirty": false,
+  "diff_sha256": null,
+  "pushed_at": "2026-10-24T04:04:13Z"
+ },
+ "config_sha256": "fc9a1f4403667999fdd32469e026fa2a2611ff9a6c3b7e8ecad73f5ed90d76a5",
+ "n_utterances": 7945,
+ "lag": {
+  "configured_ms": 15.0,
+  "median_ms": 16.0,
+  "mean_ms": 15.454373820012586,
+  "q25_ms": 13.0,
+  "q75_ms": 18.0,
+  "n": 7945,
+  "agrees": true,
+  "tolerance_ms": 3.0
+ },
+ "wall_time_s": 603.7814331054688
+}
