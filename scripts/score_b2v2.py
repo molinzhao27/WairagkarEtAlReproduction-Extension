@@ -81,8 +81,11 @@ def main(argv=None) -> int:
                 b["closed_loop_key"]])
             for t in want:
                 if t["session"] == sess:
-                    clips[t["gid"]] = (np.asarray(audio[t["index"]], np.float32).ravel(),
-                                       int(cfg["closed_loop"]["sample_rate"]), {})
+                    x = np.asarray(audio[t["index"]]).ravel()
+                    # stored in int16 units (as integers or as floats peaking far above 1): to full scale 1
+                    scaled = np.issubdtype(x.dtype, np.integer) or (x.size and np.abs(x).max() > 1.5)
+                    x = (x / 32768.0 if scaled else x).astype(np.float32)
+                    clips[t["gid"]] = (x, int(cfg["closed_loop"]["sample_rate"]), {"int16_scaled": bool(scaled)})
         header["gids"] = sorted(clips)
     log(f"{name}: {len(clips)} clips")
     adir = resolve_path("results/audio/b2v2") / run / name
