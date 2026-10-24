@@ -1,0 +1,21 @@
+# D-071 (descriptive): drift map of T15's neural features across sessions and Kunz (scripts/drift_map.py).
+base_experiment: configs/experiments/voice_cost_day195.yaml   # Wairagkar data loading
+
+run_name: drift_map
+
+runtime:
+  device: cpu
+  threads: {intra_op: 12, inter_op: 2, omp: 12}
+
+drift_map:
+  name: t15_day123_to_kunz
+  n_components: 10
+  pool_bins: 5
+  sessions: [t15_day123, t15_day132, t15_day137, t15_day139, t15_day144, t15_day146, t15_day153, t15_day165,
+             t15_day172, t15_day174, t15_day179, t15_day181, t15_day186, t15_day188, t15_day193, t15_day195]
+  references: [t15_day153, t15_day165, t15_day174, t15_day181, t15_day188, t15_day193]
+  kunz_processed: data/processed/kunz
+  kunz_session: t15.2024.03.03
+  kunz_conditions: [attempted, imagined]
+  kunz_day: 228                     # post-implant day of 2024.03.03: 216-240 (implant July 2023; exact day not public)
+  kunz_day_range: [216, 240]
