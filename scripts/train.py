@@ -26,7 +26,7 @@ from wvx import b2v  # noqa: E402  (must come before TensorFlow)
 
 b2v.use_keras2()
 
-from wvx.config import load_config  # noqa: E402
+from wvx.experiment_config import load_experiment_config  # noqa: E402
 from wvx.seeding import set_seed  # noqa: E402
 from wvx.session import SessionData  # noqa: E402
 
@@ -59,7 +59,7 @@ def main() -> int:
     ap.add_argument("--config", required=True, help="experiment YAML, merged over configs/default.yaml")
     args = ap.parse_args()
 
-    cfg = load_config(args.config)
+    cfg = load_experiment_config(args.config)  # resolves base_experiment, as every other script
     set_seed(cfg["seed"], cfg["runtime"].get("deterministic_ops", False))
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(name)s %(levelname)s %(message)s")
 
