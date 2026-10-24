@@ -23,12 +23,8 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from wvx import b2v  # noqa: E402  (must come before TensorFlow, as in scripts/train.py)
-
-b2v.use_keras2()
-
 from wvx.config import resolve_path  # noqa: E402
-from wvx.experiment_config import apply_thread_env, load_experiment_config  # noqa: E402
+from wvx.experiment_config import apply_tf_threads, apply_thread_env, load_experiment_config  # noqa: E402
 
 THEIRS = "data/raw/wairagkar/t15_neural_data/t15_day172/brain2voice_t15_day165.h5"
 
@@ -43,7 +39,11 @@ def main(argv=None) -> int:
     ap.add_argument("--theirs", default=THEIRS, help="their decoder to compare with (same day-165 layer)")
     args = ap.parse_args(argv)
     cfg = load_experiment_config(args.config)
-    apply_thread_env(cfg)
+    apply_thread_env(cfg)                    # before numpy / TensorFlow; then Keras 2 (as sanity_train_day195.py)
+    from wvx import b2v
+
+    b2v.use_keras2()
+    apply_tf_threads(cfg)
     import numpy as np
     import tensorflow as tf
     from scipy.stats import wilcoxon
