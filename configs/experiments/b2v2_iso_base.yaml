@@ -1,0 +1,15 @@
+# D-079: the b2v2 decoder on Kunz isolated verbal behaviors (T15 2024-04-07). Shared settings; zero-shot decodes use
+# this run name (b2v2_iso_z) with --checkpoint data/checkpoints/b2v2_all/final.pt.
+#   host: scripts/build_b2v2_iso.py (data); PC: decode_b2v2.py, train_b2v2.py (adaptations), identify_iso.py
+base_experiment: configs/experiments/b2v2_kunz_base.yaml
+
+run_name: b2v2_iso_z
+
+b2v2:
+  data_dir: data/processed/b2v2_iso
+  iso:
+    raw_dir: data/raw/kunz/verbalBehaviors/isolatedVerbalBehaviors
+    session: t15.2024.04.07
+    adapter_config: configs/data/kunz.yaml          # D-023 preprocessing, identity channel order (checked, D-079)
+    behaviors: [attempted, mouthed, imagined1stMotor, imagined1stAuditory, imaginedListening, listening, reading]
+    passive: [listening, reading]                   # window = delay + go (stimulus in the delay); others: go epoch
