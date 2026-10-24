@@ -7,7 +7,8 @@
 Trials and windows of ``data/processed/b2v2_iso`` (D-079), seven words (DO_NOTHING excluded). Features: the window in
 4 equal segments, the mean of every feature per segment (all arrays: 4 x 512; one array: 4 x 128 = its 64 spike-band
 power + 64 threshold-crossing channels). Shrinkage LDA (lsqr, Ledoit-Wolf), leave-one-block-out CV; null: labels
-permuted within each block (``--perms``), the CV redone, one-sided p. Writes results/b2v2/iso/classifiers.json / .md.
+permuted within each block (``--perms``), the CV redone, one-sided p. (LDA = sklearn's lsqr/auto
+shrinkage LDA solved by Cholesky, ``lda_predict``.) Writes results/b2v2/iso/classifiers.json / .md.
 """
 
 from __future__ import annotations
@@ -37,7 +38,8 @@ def main(argv=None) -> int:
     cfg = load_experiment_config(args.config)
     import numpy as np
     from joblib import Parallel, delayed
-    from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+    import scipy.linalg
+    from sklearn.discriminant_analysis import _class_cov
 
     from wvx import b2v2_data as bd
     from wvx.provenance import code_version
@@ -55,12 +57,23 @@ def main(argv=None) -> int:
             return np.arange(512)
         return np.r_[64 * arr_idx: 64 * (arr_idx + 1), 256 + 64 * arr_idx: 256 + 64 * (arr_idx + 1)]
 
+    def lda_predict(Xtr, ytr, Xte):
+        """sklearn's LinearDiscriminantAnalysis(solver="lsqr", shrinkage="auto"), with its least-squares step replaced
+        by a Cholesky solve (the shrunk covariance is positive definite, so the coefficients are the same; ~50x faster
+        at 2048 features; checked against sklearn in tests/test_iso_classifiers.py)."""
+        classes = np.unique(ytr)
+        priors = np.array([np.mean(ytr == c) for c in classes])
+        cov = _class_cov(Xtr, ytr, priors, shrinkage="auto")
+        means = np.stack([Xtr[ytr == c].mean(0) for c in classes])
+        coef = scipy.linalg.solve(cov, means.T, assume_a="pos").T
+        intercept = -0.5 * np.sum(means * coef, 1) + np.log(priors)
+        return classes[np.argmax(Xte @ coef.T + intercept, 1)]
+
     def cv_acc(X, y, blocks):
         correct = 0
         for b in np.unique(blocks):
             tr, te = blocks != b, blocks == b
-            clf = LinearDiscriminantAnalysis(solver="lsqr", shrinkage="auto").fit(X[tr], y[tr])
-            correct += int(np.sum(clf.predict(X[te]) == y[te]))
+            correct += int(np.sum(lda_predict(X[tr], y[tr], X[te]) == y[te]))
         return correct / len(y)
 
     def permute_within(y, blocks, rng):
