@@ -118,3 +118,19 @@ def test_ctc_log_likelihood_matches_torch():
         want = -torch.nn.functional.ctc_loss(logp[:, None], torch.tensor([label], dtype=torch.long),
                                               torch.tensor([T]), torch.tensor([len(label)]), reduction="sum")
         assert abs(ph.ctc_log_likelihood(logp.numpy(), label) - float(want)) < 1e-6
+
+
+def test_low_rank_input_starts_equal_trains_little_and_reloads():
+    m = _model(4)
+    k = m.add_input(0, rank=3)
+    x = torch.randn(2, 6, 12)
+    assert torch.allclose(m(x, 0)[0], m(x, k)[0], atol=1e-6)
+    names = {id(p) for p in m.trainable_input_parameters(k)}
+    assert len(names) == 3 and sum(p.numel() for p in m.trainable_input_parameters(k)) == 32 * 3 + 12 * 3 + 32
+    with torch.no_grad():
+        m.inputs[k].U.add_(torch.randn_like(m.inputs[k].U))
+    m2 = bm.B2V2(m.cfg)
+    m2.load_state_dict(m.state_dict())
+    assert torch.allclose(m2.eval()(x, k)[0], m(x, k)[0], atol=1e-6)
+    k2 = m.add_input(k)                                    # copying a low-rank input copies its effective weights
+    assert torch.allclose(m(x, k2)[0], m(x, k)[0], atol=1e-5)

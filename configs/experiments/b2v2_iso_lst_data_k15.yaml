@@ -1,0 +1,9 @@
+# D-085 arm `data`, fold k15: D-083's listening adaptation (train listening block 6, test block 15) with: + imagined-listening trials in training.
+#   PC: ~/wvx/envs/wvx-f5/bin/python -I scripts/train_b2v2.py --config configs/experiments/b2v2_iso_lst_data_k15.yaml
+base_experiment: configs/experiments/b2v2_iso_lst_k15.yaml
+
+run_name: b2v2_iso_lst_data_k15
+
+b2v2:
+  adapt:
+    extra: [{session: imaginedListening, blocks: [7, 8, 16]}]

@@ -1,0 +1,10 @@
+# D-085 arm `aug`, fold k6: D-083's listening adaptation (train listening block 15, test block 6) with: the paper's augmentations throughout.
+#   PC: ~/wvx/envs/wvx-f5/bin/python -I scripts/train_b2v2.py --config configs/experiments/b2v2_iso_lst_aug_k6.yaml
+base_experiment: configs/experiments/b2v2_iso_lst_k6.yaml
+
+run_name: b2v2_iso_lst_aug_k6
+
+b2v2:
+  adapt:
+    training:
+      augment_from: 0.0

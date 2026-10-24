@@ -47,9 +47,13 @@ def split_trials(data, cfg) -> dict:
     s, t = b.get("split") or {}, b["training"]
     rng = np.random.default_rng(int(t["seed"]))
     a = b.get("adapt")
+    extra = []
     if a and a.get("train_blocks") is not None:            # Kunz: whole blocks of one condition (D-076)
         blocks = set(int(k) for k in a["train_blocks"])
         pool = [x["gid"] for x in data.trials if x["session"] == a["session"] and x.get("block") in blocks]
+        for ex in a.get("extra") or []:                    # D-085: more training trials from other conditions,
+            eb = set(int(k) for k in ex["blocks"])         # never in validation (that stays the main condition)
+            extra += [x["gid"] for x in data.trials if x["session"] == ex["session"] and x.get("block") in eb]
         test = []
         n_val = int(a["n_validation"])
     elif a:
@@ -59,8 +63,6 @@ def split_trials(data, cfg) -> dict:
         test = [x["gid"] for x in data.trials if x["session"] == a["session"]
                 and x["index"] in set(int(i) for i in tr[a.get("test_key", "test_trials")])]
         n_val = int(a["n_validation"])
-    if a and a.get("full_trial"):
-        pool = [g for g in pool if data.by_gid[g]["label"] is not None]
     else:
         max_day = int(s.get("max_day") or 10 ** 6)
         drop = set(s.get("exclude_sessions") or [])
@@ -68,8 +70,11 @@ def split_trials(data, cfg) -> dict:
         pool = [x["gid"] for x in data.trials if x["day"] <= max_day and x["session"] not in drop
                 and x["gid"] not in set(test)]
         n_val = int(t["n_validation"])
+    if a and a.get("full_trial"):
+        pool = [g for g in pool if data.by_gid[g]["label"] is not None]
+        extra = [g for g in extra if data.by_gid[g]["label"] is not None]
     val = sorted(int(g) for g in rng.choice(pool, size=n_val, replace=False))
-    train = [g for g in pool if g not in set(val)]
+    train = [g for g in pool if g not in set(val)] + extra
     return {"train": train, "val": val, "test": test}
 
 
@@ -90,11 +95,15 @@ def adapt_full_trials(model, input_id, params, opt, data, split, b, t, run, ckpt
     rng = np.random.default_rng(int(t["seed"]) + 2)
     trials = [data.by_gid[g] for g in split["train"]]
     bf16 = bool(t["bf16"]) and device.type == "cuda"
+    aug_from = int(float(t["augment_from"]) * steps)            # D-085: the paper's augmentations on the 50 ms tokens
 
-    def trial_loss(tr, phase):
+    def trial_loss(tr, phase, augment=False):
         x, _ = data.trial_arrays(tr)
         n_tok = (x.shape[0] - phase) // pool
-        tok = torch.as_tensor(bd.pool_tokens(x[phase: phase + pool * n_tok], pool), device=device)
+        tk = bd.pool_tokens(x[phase: phase + pool * n_tok], pool)
+        if augment:
+            tk = bd.augment_batch(tk[None], np.ones((1, n_tok), bool), rng, b["augmentation"])[0]
+        tok = torch.as_tensor(tk, device=device)
         with torch.autocast(device.type, dtype=torch.bfloat16, enabled=bf16):
             _, lg = bm.chunked_forward(model, tok, ctx, hop, input_id)
         lp = F.log_softmax(lg.float(), -1)[:, None]
@@ -133,7 +142,7 @@ def adapt_full_trials(model, input_id, params, opt, data, split, b, t, run, ckpt
         for g in opt.param_groups:
             g["lr"] = bm.lr_at(step, t)
         pick = rng.integers(0, len(trials), B)
-        loss = sum(trial_loss(trials[i], int(rng.integers(0, pool))) for i in pick) / B
+        loss = sum(trial_loss(trials[i], int(rng.integers(0, pool)), augment=step >= aug_from) for i in pick) / B
         opt.zero_grad(set_to_none=True)
         loss.backward()
         torch.nn.utils.clip_grad_norm_(params, float(t["grad_clip"]))
@@ -198,10 +207,10 @@ def main(argv=None) -> int:
         init = torch.load(resolve_path(a["init"]), map_location=device)
         model = bm.B2V2(init["model_cfg"]).to(device)
         model.load_state_dict(init["state"])
-        input_id = model.add_input(0)
+        input_id = model.add_input(int(a.get("copy_from", 0)), a.get("rank"))
         for p in model.parameters():
             p.requires_grad_(False)
-        for p in model.inputs[input_id].parameters():
+        for p in model.trainable_input_parameters(input_id):
             p.requires_grad_(True)
     params = [p for p in model.parameters() if p.requires_grad]
     opt = torch.optim.AdamW(params, lr=float(t["lr"]), weight_decay=float(t["weight_decay"]))

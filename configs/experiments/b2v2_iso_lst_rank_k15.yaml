@@ -1,0 +1,9 @@
+# D-085 arm `rank`, fold k15: D-083's listening adaptation (train listening block 6, test block 15) with: a frozen copy + rank-16 trainable correction.
+#   PC: ~/wvx/envs/wvx-f5/bin/python -I scripts/train_b2v2.py --config configs/experiments/b2v2_iso_lst_rank_k15.yaml
+base_experiment: configs/experiments/b2v2_iso_lst_k15.yaml
+
+run_name: b2v2_iso_lst_rank_k15
+
+b2v2:
+  adapt:
+    rank: 16

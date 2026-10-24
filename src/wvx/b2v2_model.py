@@ -30,12 +30,37 @@ def _head(d: int, n_out: int) -> nn.Sequential:
     return nn.Sequential(nn.Linear(d, d), nn.ReLU(), nn.Linear(d, n_out))
 
 
+class LowRankLinear(nn.Module):
+    """A frozen base projection plus a trainable low-rank correction (D-085): y = base(x) + (x V) U^T. U starts at zero,
+    so the module starts equal to its base; the base's bias stays trainable."""
+
+    def __init__(self, in_features: int, out_features: int, rank: int):
+        super().__init__()
+        self.in_features, self.out_features, self.rank = in_features, out_features, rank
+        self.base = nn.Linear(in_features, out_features)
+        self.U = nn.Parameter(torch.zeros(out_features, rank))
+        self.V = nn.Parameter(torch.randn(in_features, rank) / math.sqrt(in_features))
+
+    def effective_weight(self) -> torch.Tensor:
+        return self.base.weight + self.U @ self.V.T
+
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        return self.base(x) + (x @ self.V) @ self.U.T
+
+
+def _weight(m: nn.Module) -> torch.Tensor:
+    return m.effective_weight() if isinstance(m, LowRankLinear) else m.weight
+
+
 class B2V2(nn.Module):
     def __init__(self, m: Mapping[str, Any]):
         super().__init__()
         d = int(m["d_model"])
         self.cfg = dict(m)
-        self.inputs = nn.ModuleList([nn.Linear(int(m["n_features"]), d) for _ in range(int(m.get("n_inputs", 1)))])
+        n_in = int(m.get("n_inputs", 1))
+        ranks = list(m.get("input_ranks") or [None] * n_in)
+        self.inputs = nn.ModuleList([nn.Linear(int(m["n_features"]), d) if r is None
+                                     else LowRankLinear(int(m["n_features"]), d, int(r)) for r in ranks])
         self.register_buffer("pe", sinusoid(int(m["max_tokens"]), d), persistent=False)
         layer = nn.TransformerEncoderLayer(d, int(m["n_heads"]), int(m["d_ffn"]), float(m["dropout"]),
                                            activation="gelu", batch_first=True, norm_first=True)
@@ -44,13 +69,26 @@ class B2V2(nn.Module):
         self.cont = _head(d, int(m["n_targets"]))
         self.phon = _head(d, int(m["n_phonemes"]))
 
-    def add_input(self, copy_from: int = 0) -> int:
-        """A new input projection (a new day), initialized as ``copy_from``; returns its index."""
-        new = nn.Linear(self.inputs[copy_from].in_features, self.inputs[copy_from].out_features)
-        new.load_state_dict(self.inputs[copy_from].state_dict())
-        self.inputs.append(new.to(self.inputs[copy_from].weight.device))
-        self.cfg["n_inputs"] = len(self.inputs)
+    def add_input(self, copy_from: int = 0, rank: Optional[int] = None) -> int:
+        """A new input projection (a new day), initialized as ``copy_from`` (its effective weights); full, or with
+        ``rank`` a frozen copy plus a trainable low-rank correction (``LowRankLinear``). Returns its index."""
+        src = self.inputs[copy_from]
+        W, b = _weight(src).detach().clone(), (src.base.bias if isinstance(src, LowRankLinear) else src.bias).detach().clone()
+        new = (nn.Linear(src.in_features, src.out_features) if rank is None
+               else LowRankLinear(src.in_features, src.out_features, int(rank)))
+        target = new if rank is None else new.base
+        with torch.no_grad():
+            target.weight.copy_(W)
+            target.bias.copy_(b)
+        self.inputs.append(new.to(W.device))
+        ranks = list(self.cfg.get("input_ranks") or [None] * (len(self.inputs) - 1)) + [rank]
+        self.cfg["n_inputs"], self.cfg["input_ranks"] = len(self.inputs), ranks
         return len(self.inputs) - 1
+
+    def trainable_input_parameters(self, input_id: int) -> list:
+        """The parameters an adaptation trains: the whole projection, or (low-rank) U, V and the bias."""
+        m = self.inputs[input_id]
+        return [m.U, m.V, m.base.bias] if isinstance(m, LowRankLinear) else list(m.parameters())
 
     def forward(self, x: torch.Tensor, input_id: int = 0) -> tuple[torch.Tensor, torch.Tensor]:
         """x (B, L, F) -> (continuous (B, L, 20), phoneme logits (B, L, 41)). Causal: position i sees 0..i only, so

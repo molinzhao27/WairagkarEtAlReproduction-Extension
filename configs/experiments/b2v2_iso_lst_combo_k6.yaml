@@ -1,0 +1,14 @@
+# D-085 arm `combo`, fold k6: D-083's listening adaptation (train listening block 15, test block 6) with: all four.
+#   PC: ~/wvx/envs/wvx-f5/bin/python -I scripts/train_b2v2.py --config configs/experiments/b2v2_iso_lst_combo_k6.yaml
+base_experiment: configs/experiments/b2v2_iso_lst_k6.yaml
+
+run_name: b2v2_iso_lst_combo_k6
+
+b2v2:
+  adapt:
+    extra: [{session: imaginedListening, blocks: [7, 8, 16]}]
+    rank: 16
+    init: data/checkpoints/b2v2_iso_aall/best.pt
+    copy_from: 1
+    training:
+      augment_from: 0.0
