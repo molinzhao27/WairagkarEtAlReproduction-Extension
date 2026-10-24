@@ -7,8 +7,8 @@ Host, project venv, CPU:
 For every session in ``sessions`` (their training list with its ``session_layer``): each trial's neural features
 (channel-reordered for their day <= 195 models, as every decode and training here) and, as the target, the voice's TTS
 of the cue placed on THEIR true syllables (``wvx.voice_conversion.oracle_targets``: forced TTS syllables, arm B,
-``wvx.targets.decoder_target``; the D-049 ``tts_oracle`` placement). A trial whose placement fails is dropped
-(counted). Writes ``out_dir``/<session>.npz (``wvx.session.SessionData``, scripts/train.py's input) and
+``wvx.targets.decoder_target``; the D-049 ``tts_oracle`` placement). A trial with missing or malformed true syllables, no
+TTS, or a failed placement is dropped (counted by reason). Writes ``out_dir``/<session>.npz (``wvx.session.SessionData``, scripts/train.py's input) and
 results/synth_sessions/<name>.json (per session: trials kept, target r vs their real targets).
 """
 
@@ -51,12 +51,23 @@ def build_one(args):
     table = sy.load_tts_syllables(cfg_p, voice, s["corpus"])
     sess = wairagkar_data.load_session(resolve_path(cfg["sanity"]["data_dir"]), name, layer, cfg)
     _, _, syl, _, _ = their_session(name, cfg, cfg_p)
-    ok = [bool(len(syl[i])) and tg.text_key(t.text) in table for i, t in enumerate(sess.trials)]
-    placed = vc.oracle_targets(sess.trials, syl, corpus, table, cfg_p, valid=ok)
-    trials, r, dropped = [], [], 0
-    for t, p in zip(sess.trials, placed):
+    from wvx.manual_alignment import wellformed
+
+    trials, r, dropped, reasons = [], [], 0, {"no_or_malformed_syllables": 0, "no_tts": 0, "placement_error": 0}
+    for i, t in enumerate(sess.trials):
+        if not (len(syl[i]) and wellformed(syl[i], t.neural.shape[0])):
+            reasons["no_or_malformed_syllables"] += 1
+            continue
+        if tg.text_key(t.text) not in table:
+            reasons["no_tts"] += 1
+            continue
+        try:
+            p = vc.oracle_targets([t], [syl[i]], corpus, table, cfg_p)[0]
+        except ValueError:
+            reasons["placement_error"] += 1
+            continue
         if p is None:
-            dropped += 1
+            reasons["placement_error"] += 1
             continue
         y = np.asarray(p[0], np.float32)
         r.append(kx.feature_scores(y, t.target)["feat_corr_mean"])
@@ -69,7 +80,8 @@ def build_one(args):
     path = resolve_path(s["out_dir"]) / f"{name}.npz"
     path.parent.mkdir(parents=True, exist_ok=True)
     out.save(path)
-    return name, {"layer": int(layer), "n_trials": len(trials), "dropped": dropped,
+    dropped = sum(reasons.values())
+    return name, {"layer": int(layer), "n_trials": len(trials), "dropped": dropped, "dropped_reasons": reasons,
                   "target_r_vs_theirs": float(np.nanmean(r)) if r else None}
 
 
