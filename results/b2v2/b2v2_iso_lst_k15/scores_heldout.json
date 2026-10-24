@@ -1,0 +1,1974 @@
+{
+ "run_name": "b2v2_iso_lst_k15",
+ "name": "heldout",
+ "decision": "D-075",
+ "config": "configs/experiments/b2v2_iso_lst_k15.yaml",
+ "code_version": {
+  "source": "sync",
+  "commit": "d17af043fcf0e08cb055c20fb0c9eca5810906d6",
+  "dirty": false,
+  "diff_sha256": null,
+  "pushed_at": "2026-10-24T21:35:30Z"
+ },
+ "created": "2026-10-24T21:47:06",
+ "source": {
+  "run_name": "b2v2_iso_lst_k15",
+  "checkpoint": "/home/molin/wvx/WairagkarEtAlReproduction-Extension/data/checkpoints/b2v2_iso_lst_k15/best.pt",
+  "checkpoint_sha256": "0da007762d401299e5daa94b66ab1858043cc6ad328bdfd6c6cbd9813f51e408",
+  "input_id": 1,
+  "trials": "sel:listening:15",
+  "gids": [
+   1120,
+   1121,
+   1122,
+   1123,
+   1124,
+   1125,
+   1126,
+   1127,
+   1128,
+   1129,
+   1130,
+   1131,
+   1132,
+   1133,
+   1134,
+   1135,
+   1136,
+   1137,
+   1138,
+   1139,
+   1140,
+   1141,
+   1142,
+   1143,
+   1144,
+   1145,
+   1146,
+   1147,
+   1148,
+   1149,
+   1150,
+   1151,
+   1152,
+   1153,
+   1154,
+   1155,
+   1156,
+   1157,
+   1158,
+   1159,
+   1160,
+   1161,
+   1162,
+   1163,
+   1164,
+   1165,
+   1166,
+   1167,
+   1168,
+   1169,
+   1170,
+   1171,
+   1172,
+   1173,
+   1174,
+   1175,
+   1176,
+   1177,
+   1178,
+   1179,
+   1180,
+   1181,
+   1182,
+   1183,
+   1184,
+   1185,
+   1186,
+   1187,
+   1188,
+   1189,
+   1190,
+   1191,
+   1192,
+   1193,
+   1194,
+   1195,
+   1196,
+   1197,
+   1198,
+   1199
+  ],
+  "mode": "chunked",
+  "data_dir": "/home/molin/wvx/WairagkarEtAlReproduction-Extension/data/processed/b2v2_iso",
+  "window_bins": null,
+  "chunked": {
+   "ctx": 128,
+   "hop": 64
+  },
+  "pool": 5,
+  "device": "cuda",
+  "code_version": {
+   "source": "sync",
+   "commit": "d17af043fcf0e08cb055c20fb0c9eca5810906d6",
+   "dirty": false,
+   "diff_sha256": null,
+   "pushed_at": "2026-10-24T21:35:30Z"
+  },
+  "decision": "D-075",
+  "created": "2026-10-24T21:37:06"
+ },
+ "speed_factor": 3.25,
+ "summary": {
+  "all": {
+   "n": 80,
+   "wer_orig": 1.2,
+   "wer_fixed": 1.1571428571428573,
+   "per": 1.1666666666666667,
+   "per_50ms": 0.8777777777777778
+  }
+ },
+ "rows": [
+  {
+   "gid": 1120,
+   "session": "listening",
+   "index": 80,
+   "benchmark": null,
+   "text": "ban",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "you",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1121,
+   "session": "listening",
+   "index": 81,
+   "benchmark": null,
+   "text": "kite",
+   "feat_r": NaN,
+   "phone_errors": 4,
+   "ref_phones": 3,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "Mmm...",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "No.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1122,
+   "session": "listening",
+   "index": 82,
+   "benchmark": null,
+   "text": "were",
+   "feat_r": NaN,
+   "phone_errors": 5,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "Hmmm...",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Hey.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1123,
+   "session": "listening",
+   "index": 83,
+   "benchmark": null,
+   "text": "day",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "Hey.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Hey.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1124,
+   "session": "listening",
+   "index": 84,
+   "benchmark": null,
+   "text": "day",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 2,
+   "phone_errors_50": 0,
+   "orig": {
+    "hyp": "Yay!",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Hey.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1125,
+   "session": "listening",
+   "index": 85,
+   "benchmark": null,
+   "text": "feel",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 3,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "Hmm.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Hm.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1126,
+   "session": "listening",
+   "index": 86,
+   "benchmark": null,
+   "text": "kite",
+   "feat_r": NaN,
+   "phone_errors": 5,
+   "ref_phones": 3,
+   "phone_errors_50": 1,
+   "orig": {
+    "hyp": "Mmm...",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Huh.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1127,
+   "session": "listening",
+   "index": 87,
+   "benchmark": null,
+   "text": "were",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "you",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1128,
+   "session": "listening",
+   "index": 88,
+   "benchmark": null,
+   "text": "feel",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1129,
+   "session": "listening",
+   "index": 89,
+   "benchmark": null,
+   "text": "though",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "Mmm.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "No.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1130,
+   "session": "listening",
+   "index": 90,
+   "benchmark": null,
+   "text": "though",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 2,
+   "phone_errors_50": 1,
+   "orig": {
+    "hyp": "Eww.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Mm.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1131,
+   "session": "listening",
+   "index": 91,
+   "benchmark": null,
+   "text": "feel",
+   "feat_r": NaN,
+   "phone_errors": 5,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "Hey.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Hey.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1132,
+   "session": "listening",
+   "index": 92,
+   "benchmark": null,
+   "text": "ban",
+   "feat_r": NaN,
+   "phone_errors": 4,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "Hmmm...",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Huh.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1133,
+   "session": "listening",
+   "index": 93,
+   "benchmark": null,
+   "text": "were",
+   "feat_r": NaN,
+   "phone_errors": 6,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "Why?",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "No.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1134,
+   "session": "listening",
+   "index": 94,
+   "benchmark": null,
+   "text": "were",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "Yeah.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Yeah.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1135,
+   "session": "listening",
+   "index": 95,
+   "benchmark": null,
+   "text": "were",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "Hmmm...",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Huh.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1136,
+   "session": "listening",
+   "index": 96,
+   "benchmark": null,
+   "text": "choice",
+   "feat_r": NaN,
+   "phone_errors": 1,
+   "ref_phones": 3,
+   "phone_errors_50": 0,
+   "orig": {
+    "hyp": "Whoosh.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "with",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1137,
+   "session": "listening",
+   "index": 97,
+   "benchmark": null,
+   "text": "feel",
+   "feat_r": NaN,
+   "phone_errors": 5,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "More...",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "More.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1138,
+   "session": "listening",
+   "index": 98,
+   "benchmark": null,
+   "text": "feel",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1139,
+   "session": "listening",
+   "index": 99,
+   "benchmark": null,
+   "text": "ban",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "you",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "you",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1140,
+   "session": "listening",
+   "index": 100,
+   "benchmark": null,
+   "text": "day",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 2,
+   "phone_errors_50": 1,
+   "orig": {
+    "hyp": "Hey.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Hey.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1141,
+   "session": "listening",
+   "index": 101,
+   "benchmark": null,
+   "text": "",
+   "feat_r": NaN,
+   "phone_errors": 0,
+   "ref_phones": 0,
+   "phone_errors_50": 0,
+   "orig": {
+    "hyp": "I'm sorry.",
+    "errors": 2,
+    "words": 0,
+    "wer": NaN
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 0,
+    "words": 0,
+    "wer": NaN
+   }
+  },
+  {
+   "gid": 1142,
+   "session": "listening",
+   "index": 102,
+   "benchmark": null,
+   "text": "",
+   "feat_r": NaN,
+   "phone_errors": 0,
+   "ref_phones": 0,
+   "phone_errors_50": 0,
+   "orig": {
+    "hyp": "",
+    "errors": 0,
+    "words": 0,
+    "wer": NaN
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 0,
+    "words": 0,
+    "wer": NaN
+   }
+  },
+  {
+   "gid": 1143,
+   "session": "listening",
+   "index": 103,
+   "benchmark": null,
+   "text": "",
+   "feat_r": NaN,
+   "phone_errors": 0,
+   "ref_phones": 0,
+   "phone_errors_50": 0,
+   "orig": {
+    "hyp": "you",
+    "errors": 1,
+    "words": 0,
+    "wer": NaN
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 0,
+    "words": 0,
+    "wer": NaN
+   }
+  },
+  {
+   "gid": 1144,
+   "session": "listening",
+   "index": 104,
+   "benchmark": null,
+   "text": "choice",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "you",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1145,
+   "session": "listening",
+   "index": 105,
+   "benchmark": null,
+   "text": "ban",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "you",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1146,
+   "session": "listening",
+   "index": 106,
+   "benchmark": null,
+   "text": "choice",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "Ah... nay...",
+    "errors": 2,
+    "words": 1,
+    "wer": 2.0
+   },
+   "fixed": {
+    "hyp": "Oh, hey.",
+    "errors": 2,
+    "words": 1,
+    "wer": 2.0
+   }
+  },
+  {
+   "gid": 1147,
+   "session": "listening",
+   "index": 107,
+   "benchmark": null,
+   "text": "though",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "Hey...",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Bye.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1148,
+   "session": "listening",
+   "index": 108,
+   "benchmark": null,
+   "text": "",
+   "feat_r": NaN,
+   "phone_errors": 1,
+   "ref_phones": 0,
+   "phone_errors_50": 1,
+   "orig": {
+    "hyp": "Hey.",
+    "errors": 1,
+    "words": 0,
+    "wer": NaN
+   },
+   "fixed": {
+    "hyp": "Hey.",
+    "errors": 1,
+    "words": 0,
+    "wer": NaN
+   }
+  },
+  {
+   "gid": 1149,
+   "session": "listening",
+   "index": 109,
+   "benchmark": null,
+   "text": "ban",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "you",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1150,
+   "session": "listening",
+   "index": 110,
+   "benchmark": null,
+   "text": "ban",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "All right.",
+    "errors": 2,
+    "words": 1,
+    "wer": 2.0
+   },
+   "fixed": {
+    "hyp": "Huh.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1151,
+   "session": "listening",
+   "index": 111,
+   "benchmark": null,
+   "text": "day",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 2,
+   "phone_errors_50": 1,
+   "orig": {
+    "hyp": "Why?",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Bye.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1152,
+   "session": "listening",
+   "index": 112,
+   "benchmark": null,
+   "text": "kite",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "What?",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Okay.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1153,
+   "session": "listening",
+   "index": 113,
+   "benchmark": null,
+   "text": "kite",
+   "feat_r": NaN,
+   "phone_errors": 8,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "Whoa.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "What?",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1154,
+   "session": "listening",
+   "index": 114,
+   "benchmark": null,
+   "text": "kite",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1155,
+   "session": "listening",
+   "index": 115,
+   "benchmark": null,
+   "text": "were",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "Yes, I am.",
+    "errors": 3,
+    "words": 1,
+    "wer": 3.0
+   },
+   "fixed": {
+    "hyp": "You see?",
+    "errors": 2,
+    "words": 1,
+    "wer": 2.0
+   }
+  },
+  {
+   "gid": 1156,
+   "session": "listening",
+   "index": 116,
+   "benchmark": null,
+   "text": "were",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Okay.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1157,
+   "session": "listening",
+   "index": 117,
+   "benchmark": null,
+   "text": "day",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "Mmm...",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Hey.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1158,
+   "session": "listening",
+   "index": 118,
+   "benchmark": null,
+   "text": "though",
+   "feat_r": NaN,
+   "phone_errors": 4,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "Hey...",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Hey.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1159,
+   "session": "listening",
+   "index": 119,
+   "benchmark": null,
+   "text": "day",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "you",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1160,
+   "session": "listening",
+   "index": 120,
+   "benchmark": null,
+   "text": "",
+   "feat_r": NaN,
+   "phone_errors": 0,
+   "ref_phones": 0,
+   "phone_errors_50": 0,
+   "orig": {
+    "hyp": "",
+    "errors": 0,
+    "words": 0,
+    "wer": NaN
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 0,
+    "words": 0,
+    "wer": NaN
+   }
+  },
+  {
+   "gid": 1161,
+   "session": "listening",
+   "index": 121,
+   "benchmark": null,
+   "text": "kite",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "you",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1162,
+   "session": "listening",
+   "index": 122,
+   "benchmark": null,
+   "text": "choice",
+   "feat_r": NaN,
+   "phone_errors": 0,
+   "ref_phones": 3,
+   "phone_errors_50": 0,
+   "orig": {
+    "hyp": "Yes, hmm.",
+    "errors": 2,
+    "words": 1,
+    "wer": 2.0
+   },
+   "fixed": {
+    "hyp": "Just...",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1163,
+   "session": "listening",
+   "index": 123,
+   "benchmark": null,
+   "text": "though",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "you",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1164,
+   "session": "listening",
+   "index": 124,
+   "benchmark": null,
+   "text": "though",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "you",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "you",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1165,
+   "session": "listening",
+   "index": 125,
+   "benchmark": null,
+   "text": "day",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1166,
+   "session": "listening",
+   "index": 126,
+   "benchmark": null,
+   "text": "feel",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "Arr.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "R.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1167,
+   "session": "listening",
+   "index": 127,
+   "benchmark": null,
+   "text": "were",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1168,
+   "session": "listening",
+   "index": 128,
+   "benchmark": null,
+   "text": "ban",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "Why?",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "What?",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1169,
+   "session": "listening",
+   "index": 129,
+   "benchmark": null,
+   "text": "feel",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "One.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "On.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1170,
+   "session": "listening",
+   "index": 130,
+   "benchmark": null,
+   "text": "day",
+   "feat_r": NaN,
+   "phone_errors": 1,
+   "ref_phones": 2,
+   "phone_errors_50": 1,
+   "orig": {
+    "hyp": "Oh...",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Oh.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1171,
+   "session": "listening",
+   "index": 131,
+   "benchmark": null,
+   "text": "choice",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "Oh",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Ugh.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1172,
+   "session": "listening",
+   "index": 132,
+   "benchmark": null,
+   "text": "kite",
+   "feat_r": NaN,
+   "phone_errors": 1,
+   "ref_phones": 3,
+   "phone_errors_50": 0,
+   "orig": {
+    "hyp": "Ugh.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Huh.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1173,
+   "session": "listening",
+   "index": 133,
+   "benchmark": null,
+   "text": "",
+   "feat_r": NaN,
+   "phone_errors": 0,
+   "ref_phones": 0,
+   "phone_errors_50": 0,
+   "orig": {
+    "hyp": "",
+    "errors": 0,
+    "words": 0,
+    "wer": NaN
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 0,
+    "words": 0,
+    "wer": NaN
+   }
+  },
+  {
+   "gid": 1174,
+   "session": "listening",
+   "index": 134,
+   "benchmark": null,
+   "text": "though",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "you",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "you",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1175,
+   "session": "listening",
+   "index": 135,
+   "benchmark": null,
+   "text": "ban",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "Mm-hmm.",
+    "errors": 2,
+    "words": 1,
+    "wer": 2.0
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1176,
+   "session": "listening",
+   "index": 136,
+   "benchmark": null,
+   "text": "day",
+   "feat_r": NaN,
+   "phone_errors": 0,
+   "ref_phones": 2,
+   "phone_errors_50": 0,
+   "orig": {
+    "hyp": "Hey.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Hey.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1177,
+   "session": "listening",
+   "index": 137,
+   "benchmark": null,
+   "text": "ban",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "And...",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Thank you.",
+    "errors": 2,
+    "words": 1,
+    "wer": 2.0
+   }
+  },
+  {
+   "gid": 1178,
+   "session": "listening",
+   "index": 138,
+   "benchmark": null,
+   "text": "",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 0,
+   "phone_errors_50": 0,
+   "orig": {
+    "hyp": "Hmm.",
+    "errors": 1,
+    "words": 0,
+    "wer": NaN
+   },
+   "fixed": {
+    "hyp": "Heh.",
+    "errors": 1,
+    "words": 0,
+    "wer": NaN
+   }
+  },
+  {
+   "gid": 1179,
+   "session": "listening",
+   "index": 139,
+   "benchmark": null,
+   "text": "choice",
+   "feat_r": NaN,
+   "phone_errors": 4,
+   "ref_phones": 3,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "What?",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "What?",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1180,
+   "session": "listening",
+   "index": 140,
+   "benchmark": null,
+   "text": "were",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1181,
+   "session": "listening",
+   "index": 141,
+   "benchmark": null,
+   "text": "",
+   "feat_r": NaN,
+   "phone_errors": 0,
+   "ref_phones": 0,
+   "phone_errors_50": 0,
+   "orig": {
+    "hyp": "",
+    "errors": 0,
+    "words": 0,
+    "wer": NaN
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 0,
+    "words": 0,
+    "wer": NaN
+   }
+  },
+  {
+   "gid": 1182,
+   "session": "listening",
+   "index": 142,
+   "benchmark": null,
+   "text": "",
+   "feat_r": NaN,
+   "phone_errors": 0,
+   "ref_phones": 0,
+   "phone_errors_50": 0,
+   "orig": {
+    "hyp": "",
+    "errors": 0,
+    "words": 0,
+    "wer": NaN
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 0,
+    "words": 0,
+    "wer": NaN
+   }
+  },
+  {
+   "gid": 1183,
+   "session": "listening",
+   "index": 143,
+   "benchmark": null,
+   "text": "choice",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "Yes.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Okay.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1184,
+   "session": "listening",
+   "index": 144,
+   "benchmark": null,
+   "text": "choice",
+   "feat_r": NaN,
+   "phone_errors": 0,
+   "ref_phones": 3,
+   "phone_errors_50": 1,
+   "orig": {
+    "hyp": "Ugh.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Huh.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1185,
+   "session": "listening",
+   "index": 145,
+   "benchmark": null,
+   "text": "ban",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "Oh.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Huh.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1186,
+   "session": "listening",
+   "index": 146,
+   "benchmark": null,
+   "text": "choice",
+   "feat_r": NaN,
+   "phone_errors": 5,
+   "ref_phones": 3,
+   "phone_errors_50": 4,
+   "orig": {
+    "hyp": "Darn.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Alright.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1187,
+   "session": "listening",
+   "index": 147,
+   "benchmark": null,
+   "text": "",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 0,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "ugh... ugh...",
+    "errors": 2,
+    "words": 0,
+    "wer": NaN
+   },
+   "fixed": {
+    "hyp": "hmm hmm",
+    "errors": 2,
+    "words": 0,
+    "wer": NaN
+   }
+  },
+  {
+   "gid": 1188,
+   "session": "listening",
+   "index": 148,
+   "benchmark": null,
+   "text": "choice",
+   "feat_r": NaN,
+   "phone_errors": 4,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "Alright.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Alright.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1189,
+   "session": "listening",
+   "index": 149,
+   "benchmark": null,
+   "text": "though",
+   "feat_r": NaN,
+   "phone_errors": 1,
+   "ref_phones": 2,
+   "phone_errors_50": 1,
+   "orig": {
+    "hyp": "Yee.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "me",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1190,
+   "session": "listening",
+   "index": 150,
+   "benchmark": null,
+   "text": "kite",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "Oh.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Huh.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1191,
+   "session": "listening",
+   "index": 151,
+   "benchmark": null,
+   "text": "kite",
+   "feat_r": NaN,
+   "phone_errors": 4,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "All right",
+    "errors": 2,
+    "words": 1,
+    "wer": 2.0
+   },
+   "fixed": {
+    "hyp": "All right.",
+    "errors": 2,
+    "words": 1,
+    "wer": 2.0
+   }
+  },
+  {
+   "gid": 1192,
+   "session": "listening",
+   "index": 152,
+   "benchmark": null,
+   "text": "feel",
+   "feat_r": NaN,
+   "phone_errors": 5,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "Horn.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "What?",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1193,
+   "session": "listening",
+   "index": 153,
+   "benchmark": null,
+   "text": "day",
+   "feat_r": NaN,
+   "phone_errors": 5,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "My...",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "I-",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1194,
+   "session": "listening",
+   "index": 154,
+   "benchmark": null,
+   "text": "feel",
+   "feat_r": NaN,
+   "phone_errors": 5,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "No.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Nope.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1195,
+   "session": "listening",
+   "index": 155,
+   "benchmark": null,
+   "text": "though",
+   "feat_r": NaN,
+   "phone_errors": 4,
+   "ref_phones": 2,
+   "phone_errors_50": 1,
+   "orig": {
+    "hyp": "Hmmm...",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Yeah.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1196,
+   "session": "listening",
+   "index": 156,
+   "benchmark": null,
+   "text": "feel",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "What?",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1197,
+   "session": "listening",
+   "index": 157,
+   "benchmark": null,
+   "text": "though",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "All right.",
+    "errors": 2,
+    "words": 1,
+    "wer": 2.0
+   }
+  },
+  {
+   "gid": 1198,
+   "session": "listening",
+   "index": 158,
+   "benchmark": null,
+   "text": "kite",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Thank you.",
+    "errors": 2,
+    "words": 1,
+    "wer": 2.0
+   }
+  },
+  {
+   "gid": 1199,
+   "session": "listening",
+   "index": 159,
+   "benchmark": null,
+   "text": "were",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "Okay.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Thank you.",
+    "errors": 2,
+    "words": 1,
+    "wer": 2.0
+   }
+  }
+ ],
+ "wall_time_s": 238.60638618469238
+}

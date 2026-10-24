@@ -1,0 +1,1974 @@
+{
+ "run_name": "b2v2_iso_rd_k13",
+ "name": "heldout",
+ "decision": "D-075",
+ "config": "configs/experiments/b2v2_iso_rd_k13.yaml",
+ "code_version": {
+  "source": "sync",
+  "commit": "d17af043fcf0e08cb055c20fb0c9eca5810906d6",
+  "dirty": false,
+  "diff_sha256": null,
+  "pushed_at": "2026-10-24T21:35:30Z"
+ },
+ "created": "2026-10-24T21:47:07",
+ "source": {
+  "run_name": "b2v2_iso_rd_k13",
+  "checkpoint": "/home/molin/wvx/WairagkarEtAlReproduction-Extension/data/checkpoints/b2v2_iso_rd_k13/best.pt",
+  "checkpoint_sha256": "93895da7232c4a076af6593d6f2878969d2fb30e43e1732cf4a8baba3e924cf5",
+  "input_id": 1,
+  "trials": "sel:reading:13",
+  "gids": [
+   1280,
+   1281,
+   1282,
+   1283,
+   1284,
+   1285,
+   1286,
+   1287,
+   1288,
+   1289,
+   1290,
+   1291,
+   1292,
+   1293,
+   1294,
+   1295,
+   1296,
+   1297,
+   1298,
+   1299,
+   1300,
+   1301,
+   1302,
+   1303,
+   1304,
+   1305,
+   1306,
+   1307,
+   1308,
+   1309,
+   1310,
+   1311,
+   1312,
+   1313,
+   1314,
+   1315,
+   1316,
+   1317,
+   1318,
+   1319,
+   1320,
+   1321,
+   1322,
+   1323,
+   1324,
+   1325,
+   1326,
+   1327,
+   1328,
+   1329,
+   1330,
+   1331,
+   1332,
+   1333,
+   1334,
+   1335,
+   1336,
+   1337,
+   1338,
+   1339,
+   1340,
+   1341,
+   1342,
+   1343,
+   1344,
+   1345,
+   1346,
+   1347,
+   1348,
+   1349,
+   1350,
+   1351,
+   1352,
+   1353,
+   1354,
+   1355,
+   1356,
+   1357,
+   1358,
+   1359
+  ],
+  "mode": "chunked",
+  "data_dir": "/home/molin/wvx/WairagkarEtAlReproduction-Extension/data/processed/b2v2_iso",
+  "window_bins": null,
+  "chunked": {
+   "ctx": 128,
+   "hop": 64
+  },
+  "pool": 5,
+  "device": "cuda",
+  "code_version": {
+   "source": "sync",
+   "commit": "d17af043fcf0e08cb055c20fb0c9eca5810906d6",
+   "dirty": false,
+   "diff_sha256": null,
+   "pushed_at": "2026-10-24T21:35:30Z"
+  },
+  "decision": "D-075",
+  "created": "2026-10-24T21:38:09"
+ },
+ "speed_factor": 3.25,
+ "summary": {
+  "all": {
+   "n": 80,
+   "wer_orig": 1.2714285714285714,
+   "wer_fixed": 1.3,
+   "per": 1.25,
+   "per_50ms": 1.0166666666666666
+  }
+ },
+ "rows": [
+  {
+   "gid": 1280,
+   "session": "reading",
+   "index": 80,
+   "benchmark": null,
+   "text": "kite",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "Okay.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Okay.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1281,
+   "session": "reading",
+   "index": 81,
+   "benchmark": null,
+   "text": "",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 0,
+   "phone_errors_50": 0,
+   "orig": {
+    "hyp": "Hey.",
+    "errors": 1,
+    "words": 0,
+    "wer": NaN
+   },
+   "fixed": {
+    "hyp": "Hey.",
+    "errors": 1,
+    "words": 0,
+    "wer": NaN
+   }
+  },
+  {
+   "gid": 1282,
+   "session": "reading",
+   "index": 82,
+   "benchmark": null,
+   "text": "kite",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "Hehe.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "in.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1283,
+   "session": "reading",
+   "index": 83,
+   "benchmark": null,
+   "text": "",
+   "feat_r": NaN,
+   "phone_errors": 0,
+   "ref_phones": 0,
+   "phone_errors_50": 0,
+   "orig": {
+    "hyp": "",
+    "errors": 0,
+    "words": 0,
+    "wer": NaN
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 0,
+    "words": 0,
+    "wer": NaN
+   }
+  },
+  {
+   "gid": 1284,
+   "session": "reading",
+   "index": 84,
+   "benchmark": null,
+   "text": "ban",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1285,
+   "session": "reading",
+   "index": 85,
+   "benchmark": null,
+   "text": "",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 0,
+   "phone_errors_50": 1,
+   "orig": {
+    "hyp": "Affirm.",
+    "errors": 1,
+    "words": 0,
+    "wer": NaN
+   },
+   "fixed": {
+    "hyp": "Oh.",
+    "errors": 1,
+    "words": 0,
+    "wer": NaN
+   }
+  },
+  {
+   "gid": 1286,
+   "session": "reading",
+   "index": 86,
+   "benchmark": null,
+   "text": "feel",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 3,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "Hmmm...",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Thank you.",
+    "errors": 2,
+    "words": 1,
+    "wer": 2.0
+   }
+  },
+  {
+   "gid": 1287,
+   "session": "reading",
+   "index": 87,
+   "benchmark": null,
+   "text": "day",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "In.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "him.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1288,
+   "session": "reading",
+   "index": 88,
+   "benchmark": null,
+   "text": "were",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "Hmm",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Hey.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1289,
+   "session": "reading",
+   "index": 89,
+   "benchmark": null,
+   "text": "though",
+   "feat_r": NaN,
+   "phone_errors": 1,
+   "ref_phones": 2,
+   "phone_errors_50": 1,
+   "orig": {
+    "hyp": "Yeah...",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "You know.",
+    "errors": 2,
+    "words": 1,
+    "wer": 2.0
+   }
+  },
+  {
+   "gid": 1290,
+   "session": "reading",
+   "index": 90,
+   "benchmark": null,
+   "text": "feel",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "Hey.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Hey.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1291,
+   "session": "reading",
+   "index": 91,
+   "benchmark": null,
+   "text": "feel",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "And...",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "And.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1292,
+   "session": "reading",
+   "index": 92,
+   "benchmark": null,
+   "text": "were",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "hmm hmm hmm hmm",
+    "errors": 4,
+    "words": 1,
+    "wer": 4.0
+   },
+   "fixed": {
+    "hyp": "Okay, all right.",
+    "errors": 3,
+    "words": 1,
+    "wer": 3.0
+   }
+  },
+  {
+   "gid": 1293,
+   "session": "reading",
+   "index": 93,
+   "benchmark": null,
+   "text": "were",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "Hmm",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Hm.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1294,
+   "session": "reading",
+   "index": 94,
+   "benchmark": null,
+   "text": "feel",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1295,
+   "session": "reading",
+   "index": 95,
+   "benchmark": null,
+   "text": "day",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "I... I...",
+    "errors": 2,
+    "words": 1,
+    "wer": 2.0
+   },
+   "fixed": {
+    "hyp": "Hey, hi.",
+    "errors": 2,
+    "words": 1,
+    "wer": 2.0
+   }
+  },
+  {
+   "gid": 1296,
+   "session": "reading",
+   "index": 96,
+   "benchmark": null,
+   "text": "day",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "Hmmm...",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Mm.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1297,
+   "session": "reading",
+   "index": 97,
+   "benchmark": null,
+   "text": "choice",
+   "feat_r": NaN,
+   "phone_errors": 5,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "Hey.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Hey.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1298,
+   "session": "reading",
+   "index": 98,
+   "benchmark": null,
+   "text": "choice",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "Oh...",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Oh.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1299,
+   "session": "reading",
+   "index": 99,
+   "benchmark": null,
+   "text": "feel",
+   "feat_r": NaN,
+   "phone_errors": 4,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "Hey.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Good night.",
+    "errors": 2,
+    "words": 1,
+    "wer": 2.0
+   }
+  },
+  {
+   "gid": 1300,
+   "session": "reading",
+   "index": 100,
+   "benchmark": null,
+   "text": "ban",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "Who?",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Who?",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1301,
+   "session": "reading",
+   "index": 101,
+   "benchmark": null,
+   "text": "feel",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "Whoa.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "for",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1302,
+   "session": "reading",
+   "index": 102,
+   "benchmark": null,
+   "text": "though",
+   "feat_r": NaN,
+   "phone_errors": 4,
+   "ref_phones": 2,
+   "phone_errors_50": 1,
+   "orig": {
+    "hyp": "Hey...",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Hm.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1303,
+   "session": "reading",
+   "index": 103,
+   "benchmark": null,
+   "text": "day",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 2,
+   "phone_errors_50": 1,
+   "orig": {
+    "hyp": "Yeah...",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Yeah.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1304,
+   "session": "reading",
+   "index": 104,
+   "benchmark": null,
+   "text": "were",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1305,
+   "session": "reading",
+   "index": 105,
+   "benchmark": null,
+   "text": "were",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1306,
+   "session": "reading",
+   "index": 106,
+   "benchmark": null,
+   "text": "choice",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1307,
+   "session": "reading",
+   "index": 107,
+   "benchmark": null,
+   "text": "were",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Thank you.",
+    "errors": 2,
+    "words": 1,
+    "wer": 2.0
+   }
+  },
+  {
+   "gid": 1308,
+   "session": "reading",
+   "index": 108,
+   "benchmark": null,
+   "text": "ban",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "Mmm... Mmm...",
+    "errors": 2,
+    "words": 1,
+    "wer": 2.0
+   },
+   "fixed": {
+    "hyp": "You.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1309,
+   "session": "reading",
+   "index": 109,
+   "benchmark": null,
+   "text": "day",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "Yeah.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Uh, it...",
+    "errors": 2,
+    "words": 1,
+    "wer": 2.0
+   }
+  },
+  {
+   "gid": 1310,
+   "session": "reading",
+   "index": 110,
+   "benchmark": null,
+   "text": "feel",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "Duh.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Hm.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1311,
+   "session": "reading",
+   "index": 111,
+   "benchmark": null,
+   "text": "ban",
+   "feat_r": NaN,
+   "phone_errors": 4,
+   "ref_phones": 3,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "I... am...",
+    "errors": 2,
+    "words": 1,
+    "wer": 2.0
+   },
+   "fixed": {
+    "hyp": "Hm.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1312,
+   "session": "reading",
+   "index": 112,
+   "benchmark": null,
+   "text": "choice",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "Hmmm...",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "and",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1313,
+   "session": "reading",
+   "index": 113,
+   "benchmark": null,
+   "text": "kite",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "Brrrr. Brrrr.",
+    "errors": 2,
+    "words": 1,
+    "wer": 2.0
+   },
+   "fixed": {
+    "hyp": "Mm-mm.",
+    "errors": 2,
+    "words": 1,
+    "wer": 2.0
+   }
+  },
+  {
+   "gid": 1314,
+   "session": "reading",
+   "index": 114,
+   "benchmark": null,
+   "text": "were",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "Hmm...",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Hmm.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1315,
+   "session": "reading",
+   "index": 115,
+   "benchmark": null,
+   "text": "kite",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "you",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1316,
+   "session": "reading",
+   "index": 116,
+   "benchmark": null,
+   "text": "day",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "you",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1317,
+   "session": "reading",
+   "index": 117,
+   "benchmark": null,
+   "text": "feel",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "Hmmm...",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "here.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1318,
+   "session": "reading",
+   "index": 118,
+   "benchmark": null,
+   "text": "",
+   "feat_r": NaN,
+   "phone_errors": 6,
+   "ref_phones": 0,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "Hmm...",
+    "errors": 1,
+    "words": 0,
+    "wer": NaN
+   },
+   "fixed": {
+    "hyp": "Hmm.",
+    "errors": 1,
+    "words": 0,
+    "wer": NaN
+   }
+  },
+  {
+   "gid": 1319,
+   "session": "reading",
+   "index": 119,
+   "benchmark": null,
+   "text": "day",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Thank you.",
+    "errors": 2,
+    "words": 1,
+    "wer": 2.0
+   }
+  },
+  {
+   "gid": 1320,
+   "session": "reading",
+   "index": 120,
+   "benchmark": null,
+   "text": "day",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1321,
+   "session": "reading",
+   "index": 121,
+   "benchmark": null,
+   "text": "ban",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "Hm.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1322,
+   "session": "reading",
+   "index": 122,
+   "benchmark": null,
+   "text": "feel",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "Heh.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "It.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1323,
+   "session": "reading",
+   "index": 123,
+   "benchmark": null,
+   "text": "though",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "Okay.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Okay.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1324,
+   "session": "reading",
+   "index": 124,
+   "benchmark": null,
+   "text": "though",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "You...",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "you",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1325,
+   "session": "reading",
+   "index": 125,
+   "benchmark": null,
+   "text": "",
+   "feat_r": NaN,
+   "phone_errors": 0,
+   "ref_phones": 0,
+   "phone_errors_50": 0,
+   "orig": {
+    "hyp": "",
+    "errors": 0,
+    "words": 0,
+    "wer": NaN
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 0,
+    "words": 0,
+    "wer": NaN
+   }
+  },
+  {
+   "gid": 1326,
+   "session": "reading",
+   "index": 126,
+   "benchmark": null,
+   "text": "day",
+   "feat_r": NaN,
+   "phone_errors": 4,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "hmm",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Thank you.",
+    "errors": 2,
+    "words": 1,
+    "wer": 2.0
+   }
+  },
+  {
+   "gid": 1327,
+   "session": "reading",
+   "index": 127,
+   "benchmark": null,
+   "text": "kite",
+   "feat_r": NaN,
+   "phone_errors": 4,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "Hmmm...",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Hm.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1328,
+   "session": "reading",
+   "index": 128,
+   "benchmark": null,
+   "text": "kite",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1329,
+   "session": "reading",
+   "index": 129,
+   "benchmark": null,
+   "text": "kite",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 3,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "Aaargh...",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "nah",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1330,
+   "session": "reading",
+   "index": 130,
+   "benchmark": null,
+   "text": "",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 0,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "Hmmm...",
+    "errors": 1,
+    "words": 0,
+    "wer": NaN
+   },
+   "fixed": {
+    "hyp": "me",
+    "errors": 1,
+    "words": 0,
+    "wer": NaN
+   }
+  },
+  {
+   "gid": 1331,
+   "session": "reading",
+   "index": 131,
+   "benchmark": null,
+   "text": "though",
+   "feat_r": NaN,
+   "phone_errors": 5,
+   "ref_phones": 2,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "No.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "No.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1332,
+   "session": "reading",
+   "index": 132,
+   "benchmark": null,
+   "text": "though",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "hmm",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Hmm.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1333,
+   "session": "reading",
+   "index": 133,
+   "benchmark": null,
+   "text": "choice",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "You.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Hmm.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1334,
+   "session": "reading",
+   "index": 134,
+   "benchmark": null,
+   "text": "were",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "Hmm.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Hmm.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1335,
+   "session": "reading",
+   "index": 135,
+   "benchmark": null,
+   "text": "kite",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "hmm",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Heh.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1336,
+   "session": "reading",
+   "index": 136,
+   "benchmark": null,
+   "text": "though",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1337,
+   "session": "reading",
+   "index": 137,
+   "benchmark": null,
+   "text": "though",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1338,
+   "session": "reading",
+   "index": 138,
+   "benchmark": null,
+   "text": "feel",
+   "feat_r": NaN,
+   "phone_errors": 4,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "Yeah. Yeah.",
+    "errors": 2,
+    "words": 1,
+    "wer": 2.0
+   },
+   "fixed": {
+    "hyp": "Yeah.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1339,
+   "session": "reading",
+   "index": 139,
+   "benchmark": null,
+   "text": "choice",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "you",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "You.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1340,
+   "session": "reading",
+   "index": 140,
+   "benchmark": null,
+   "text": "choice",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "you",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "you",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1341,
+   "session": "reading",
+   "index": 141,
+   "benchmark": null,
+   "text": "ban",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "Fine. Fine.",
+    "errors": 2,
+    "words": 1,
+    "wer": 2.0
+   },
+   "fixed": {
+    "hyp": "Hm, bye.",
+    "errors": 2,
+    "words": 1,
+    "wer": 2.0
+   }
+  },
+  {
+   "gid": 1342,
+   "session": "reading",
+   "index": 142,
+   "benchmark": null,
+   "text": "ban",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "Hmm.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Hm.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1343,
+   "session": "reading",
+   "index": 143,
+   "benchmark": null,
+   "text": "",
+   "feat_r": NaN,
+   "phone_errors": 5,
+   "ref_phones": 0,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "Hmm...",
+    "errors": 1,
+    "words": 0,
+    "wer": NaN
+   },
+   "fixed": {
+    "hyp": "Hm.",
+    "errors": 1,
+    "words": 0,
+    "wer": NaN
+   }
+  },
+  {
+   "gid": 1344,
+   "session": "reading",
+   "index": 144,
+   "benchmark": null,
+   "text": "",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 0,
+   "phone_errors_50": 1,
+   "orig": {
+    "hyp": "Hmmm...",
+    "errors": 1,
+    "words": 0,
+    "wer": NaN
+   },
+   "fixed": {
+    "hyp": "Hm.",
+    "errors": 1,
+    "words": 0,
+    "wer": NaN
+   }
+  },
+  {
+   "gid": 1345,
+   "session": "reading",
+   "index": 145,
+   "benchmark": null,
+   "text": "",
+   "feat_r": NaN,
+   "phone_errors": 1,
+   "ref_phones": 0,
+   "phone_errors_50": 0,
+   "orig": {
+    "hyp": "Hey.",
+    "errors": 1,
+    "words": 0,
+    "wer": NaN
+   },
+   "fixed": {
+    "hyp": "feet.",
+    "errors": 1,
+    "words": 0,
+    "wer": NaN
+   }
+  },
+  {
+   "gid": 1346,
+   "session": "reading",
+   "index": 146,
+   "benchmark": null,
+   "text": "were",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "Sure.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Thank you.",
+    "errors": 2,
+    "words": 1,
+    "wer": 2.0
+   }
+  },
+  {
+   "gid": 1347,
+   "session": "reading",
+   "index": 147,
+   "benchmark": null,
+   "text": "though",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "You... eh?",
+    "errors": 2,
+    "words": 1,
+    "wer": 2.0
+   },
+   "fixed": {
+    "hyp": "Yeah.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1348,
+   "session": "reading",
+   "index": 148,
+   "benchmark": null,
+   "text": "day",
+   "feat_r": NaN,
+   "phone_errors": 7,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "Hey.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Hey.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1349,
+   "session": "reading",
+   "index": 149,
+   "benchmark": null,
+   "text": "choice",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "You.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "you.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1350,
+   "session": "reading",
+   "index": 150,
+   "benchmark": null,
+   "text": "choice",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "The frame.",
+    "errors": 2,
+    "words": 1,
+    "wer": 2.0
+   },
+   "fixed": {
+    "hyp": "from.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1351,
+   "session": "reading",
+   "index": 151,
+   "benchmark": null,
+   "text": "ban",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "So...",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "soon.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1352,
+   "session": "reading",
+   "index": 152,
+   "benchmark": null,
+   "text": "though",
+   "feat_r": NaN,
+   "phone_errors": 6,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "Hmm...",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Hmm.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1353,
+   "session": "reading",
+   "index": 153,
+   "benchmark": null,
+   "text": "",
+   "feat_r": NaN,
+   "phone_errors": 0,
+   "ref_phones": 0,
+   "phone_errors_50": 0,
+   "orig": {
+    "hyp": "Uh...",
+    "errors": 1,
+    "words": 0,
+    "wer": NaN
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 0,
+    "words": 0,
+    "wer": NaN
+   }
+  },
+  {
+   "gid": 1354,
+   "session": "reading",
+   "index": 154,
+   "benchmark": null,
+   "text": "choice",
+   "feat_r": NaN,
+   "phone_errors": 5,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "Oh.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "FU-",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1355,
+   "session": "reading",
+   "index": 155,
+   "benchmark": null,
+   "text": "kite",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1356,
+   "session": "reading",
+   "index": 156,
+   "benchmark": null,
+   "text": "ban",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "Hmm.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Hm.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1357,
+   "session": "reading",
+   "index": 157,
+   "benchmark": null,
+   "text": "were",
+   "feat_r": NaN,
+   "phone_errors": 2,
+   "ref_phones": 2,
+   "phone_errors_50": 2,
+   "orig": {
+    "hyp": "hmm",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "All right.",
+    "errors": 2,
+    "words": 1,
+    "wer": 2.0
+   }
+  },
+  {
+   "gid": 1358,
+   "session": "reading",
+   "index": 158,
+   "benchmark": null,
+   "text": "ban",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "Hmmm...",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "Oh.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  },
+  {
+   "gid": 1359,
+   "session": "reading",
+   "index": 159,
+   "benchmark": null,
+   "text": "kite",
+   "feat_r": NaN,
+   "phone_errors": 3,
+   "ref_phones": 3,
+   "phone_errors_50": 3,
+   "orig": {
+    "hyp": "You.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   },
+   "fixed": {
+    "hyp": "you.",
+    "errors": 1,
+    "words": 1,
+    "wer": 1.0
+   }
+  }
+ ],
+ "wall_time_s": 240.16161799430847
+}
