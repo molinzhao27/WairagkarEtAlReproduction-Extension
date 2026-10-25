@@ -107,6 +107,7 @@ def main(argv=None) -> int:
             ph0 = np.log(np.mean([softmax(o[2]) for o in outs], 0) + 1e-12)
         else:
             c, lg, ph0 = bm.decode_chunked(model, x, pool, args.ctx, args.hop, input_id=input_id, device=device)
+        if args.mode == "chunked":
             out[f"g{g}_best50"] = ph0.argmax(-1).astype(np.uint8)
             lp = ph0 - ph0.max(-1, keepdims=True)
             out[f"g{g}_lp50"] = (lp - np.log(np.exp(lp).sum(-1, keepdims=True))).astype(np.float16)   # log-softmax
@@ -118,7 +119,8 @@ def main(argv=None) -> int:
               "data_dir": str(resolve_path(args.data_dir or b["data_dir"])),
               "window_bins": window if args.mode == "live" else None,
               "chunked": {"ctx": args.ctx, "hop": args.hop} if args.mode == "chunked" else None, "pool": pool,
-              "device": str(device), "code_version": code_version(), "decision": "D-075",
+              "device": str(device), "code_version": code_version(),
+              "decision": "D-089 (ensemble)" if len(paths) > 1 else "D-075",
               "created": datetime.datetime.now().isoformat(timespec="seconds")}
     path = resolve_path("data/processed/b2v2_preds") / run / f"{name}.npz"
     path.parent.mkdir(parents=True, exist_ok=True)
