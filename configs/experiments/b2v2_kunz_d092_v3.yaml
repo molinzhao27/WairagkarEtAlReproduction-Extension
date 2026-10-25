@@ -1,0 +1,36 @@
+# Same-hardware control (vast-3 baseline) for D-092 summary (PC CPU, gq): pooled inner speech trained in two stages (other days first, then March).
+#   PC: CUDA_VISIBLE_DEVICES= .venv/bin/python -I scripts/d086_summary.py --config configs/experiments/b2v2_kunz_d092_v3.yaml
+#       CUDA_VISIBLE_DEVICES= .venv/bin/python -I scripts/d086_acoustic.py --config configs/experiments/b2v2_kunz_d092_v3.yaml
+base_experiment: configs/experiments/b2v2_kunz_base.yaml
+
+run_name: b2v2_kunz_d092_v3
+
+b2v2:
+  d086:                              # read by d086_summary.py / d086_acoustic.py
+    decision: D-092
+    title: "(same-hardware control: baseline gan_read re-run on vast-3) D-092: pooled inner speech in two stages, other days first, then March (200 held-out March trials)"
+    out: results/b2v2/d092_v3
+    reference: [b2v2_kunz_f03:heldout, b2v2_kunz_f06:heldout, b2v2_kunz_f11:heldout, b2v2_kunz_f13:heldout]
+    baseline: gan_read_v3
+    secondary_vs: pool
+    primary: [stagedft, stagedfrozen]
+    rule: {kind: per, min_points: 3.0, alpha: 0.025}   # Bonferroni over the two primary arms
+    islands: {threshold: 0.0, smooth: 3, min_frames: 10, bridge: 8, cepstra: [1, 18]}
+    acoustic:
+      attempted: [b2v2_kunz_f03:heldout, b2v2_kunz_f06:heldout, b2v2_kunz_f11:heldout, b2v2_kunz_f13:heldout]
+      clean:
+        dir: data/processed/f5clone_work/f5_v1_day193/wav16k/kunz_50words
+        texts: data/processed/f5clone_work/f5_v1_day193/texts_kunz_50words.json
+        qc: data/processed/f5clone_work/f5_v1_day193/qc_kunz_50words_final.json
+      mel: {sr: 16000, n_fft: 512, hop: 160, n_mels: 80, fmax: 8000}
+      n_mfcc: 25
+      trim_db: 35
+      perms: 10000
+      seed: 20261024
+      workers: 14
+    arms:
+      gan_read_v3: {preds: [b2v2_kunz_d091_ganreadv3_k03:imagined, b2v2_kunz_d091_ganreadv3_k06:imagined, b2v2_kunz_d091_ganreadv3_k11:imagined, b2v2_kunz_d091_ganreadv3_k13:imagined], identify: d091_ganreadv3}
+      gan_read: {preds: [b2v2_kunz_d086_ganread_k03:imagined, b2v2_kunz_d086_ganread_k06:imagined, b2v2_kunz_d086_ganread_k11:imagined, b2v2_kunz_d086_ganread_k13:imagined], identify: d086_gan_read}
+      pool: {preds: [b2v2_kunz_d091_pool_k03:imagined, b2v2_kunz_d091_pool_k06:imagined, b2v2_kunz_d091_pool_k11:imagined, b2v2_kunz_d091_pool_k13:imagined], identify: d091_pool}
+      stagedft: {preds: [b2v2_kunz_d092_stagedft_k03:imagined, b2v2_kunz_d092_stagedft_k06:imagined, b2v2_kunz_d092_stagedft_k11:imagined, b2v2_kunz_d092_stagedft_k13:imagined], identify: d092_stagedft}
+      stagedfrozen: {preds: [b2v2_kunz_d092_stagedfrozen_k03:imagined, b2v2_kunz_d092_stagedfrozen_k06:imagined, b2v2_kunz_d092_stagedfrozen_k11:imagined, b2v2_kunz_d092_stagedfrozen_k13:imagined], identify: d092_stagedfrozen}

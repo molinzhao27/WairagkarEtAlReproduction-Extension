@@ -1,0 +1,6 @@
+# D-091 amendment: `gan_read` (D-086, seed 0) re-run unchanged on vast-3 (RTX 5090, torch 2.14), the same-hardware
+# control for D-091 / D-092 (the original ran on the PC's RTX 4070, torch 2.5.1).
+#   vast-3 (gq): /workspace/envs/wvx-torch/bin/python -I scripts/train_b2v2.py --config configs/experiments/b2v2_kunz_d091_ganreadv3_k11.yaml
+base_experiment: configs/experiments/b2v2_kunz_d086_ganread_k11.yaml
+
+run_name: b2v2_kunz_d091_ganreadv3_k11

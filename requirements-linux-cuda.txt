@@ -1,5 +1,6 @@
 # Verified on vast-3's RTX 5090 (sm_120, driver 595.99, 2026-10-25): check_env.py --require-gpu passes (TF sees the GPU;
-# GPU vs CPU outputs and gradients within 1e-6; LPCNet OK). The RTX PRO 6000 (vast-1) check is gq job vast1:15.
+# GPU vs CPU outputs and gradients within 1e-6; LPCNet OK). The RTX PRO 6000 (vast-1) check was cancelled unrun
+# (2026-10-25: no vast-1 GPU work planned; queue it through gq before any).
 #
 # Exact pip pins for the GPU-host project venv (<repo>/.venv), Linux x86_64, NVIDIA RTX PRO 6000 Blackwell
 # (sm_120), driver 595.58.03 / CUDA 13.2:
