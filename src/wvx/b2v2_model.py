@@ -48,6 +48,20 @@ class LowRankLinear(nn.Module):
         return self.base(x) + (x @ self.V) @ self.U.T
 
 
+class SharedAdapter(nn.Module):
+    """A residual low-rank map on the input embedding, shared across days (D-091: the learned "inner -> attempted"
+    correction applied after each day's own input projection): h + (h V) U^T. U starts at zero, so the adapter starts
+    as the identity."""
+
+    def __init__(self, d: int, rank: int):
+        super().__init__()
+        self.U = nn.Parameter(torch.zeros(d, rank))
+        self.V = nn.Parameter(torch.randn(d, rank) / math.sqrt(d))
+
+    def forward(self, h: torch.Tensor) -> torch.Tensor:
+        return h + (h @ self.V) @ self.U.T
+
+
 def _weight(m: nn.Module) -> torch.Tensor:
     return m.effective_weight() if isinstance(m, LowRankLinear) else m.weight
 
@@ -68,6 +82,13 @@ class B2V2(nn.Module):
                                              enable_nested_tensor=False)
         self.cont = _head(d, int(m["n_targets"]))
         self.phon = _head(d, int(m["n_phonemes"]))
+        self.adapters = nn.ModuleDict({k: SharedAdapter(d, int(r)) for k, r in (m.get("adapters") or {}).items()})
+
+    def add_adapter(self, name: str, rank: int) -> None:
+        """A new shared adapter (identity at start), recorded in ``cfg["adapters"]`` (D-091)."""
+        dev = next(self.parameters()).device
+        self.adapters[name] = SharedAdapter(int(self.cfg["d_model"]), int(rank)).to(dev)
+        self.cfg["adapters"] = dict(self.cfg.get("adapters") or {}, **{name: int(rank)})
 
     def add_input(self, copy_from: int = 0, rank: Optional[int] = None) -> int:
         """A new input projection (a new day), initialized as ``copy_from`` (its effective weights); full, or with
@@ -90,11 +111,15 @@ class B2V2(nn.Module):
         m = self.inputs[input_id]
         return [m.U, m.V, m.base.bias] if isinstance(m, LowRankLinear) else list(m.parameters())
 
-    def forward(self, x: torch.Tensor, input_id: int = 0, return_hidden: bool = False):
+    def forward(self, x: torch.Tensor, input_id: int = 0, return_hidden: bool = False, adapter: Optional[str] = None):
         """x (B, L, F) -> (continuous (B, L, 20), phoneme logits (B, L, 41)[, encoder output (B, L, d)]). Causal:
-        position i sees 0..i only, so right padding never reaches a real token."""
+        position i sees 0..i only, so right padding never reaches a real token. ``adapter``: a shared adapter applied
+        to the input embedding before the positions are added (D-091)."""
         L = x.shape[1]
-        h = self.inputs[input_id](x) + self.pe[:L]
+        h = self.inputs[input_id](x)
+        if adapter is not None:
+            h = self.adapters[adapter](h)
+        h = h + self.pe[:L]
         causal = torch.triu(torch.ones(L, L, dtype=torch.bool, device=x.device), 1)
         h = self.encoder(h, mask=causal, is_causal=True)
         return (self.cont(h), self.phon(h), h) if return_hidden else (self.cont(h), self.phon(h))
@@ -258,7 +283,7 @@ def decode_live(model: B2V2, x: np.ndarray, window_bins: int, pool: int, input_i
 
 
 def chunked_forward(model: B2V2, tok: torch.Tensor, ctx: int, hop: int, input_id: int = 0,
-                    return_hidden: bool = False):
+                    return_hidden: bool = False, adapter: Optional[str] = None):
     """One token sequence (n_tok, F) -> (continuous (n_tok, 20), phoneme logits (n_tok, 41)) by long-context chunks:
     windows of ``ctx`` tokens every ``hop``, run as one batch; the first window keeps all its outputs, later ones
     their last ``hop`` (each output then sees >= ctx - hop tokens, except at the start). Differentiable: text-only
@@ -267,14 +292,16 @@ def chunked_forward(model: B2V2, tok: torch.Tensor, ctx: int, hop: int, input_id
     n = tok.shape[0]
     starts = [0] + list(range(hop, max(1, n - ctx + hop), hop))
     segs = [tok[s: s + ctx] for s in starts]
-    outs = model(nn.utils.rnn.pad_sequence(segs, batch_first=True), input_id, return_hidden=return_hidden)
+    outs = model(nn.utils.rnn.pad_sequence(segs, batch_first=True), input_id, return_hidden=return_hidden,
+                 adapter=adapter)
     keep = [0 if s == 0 else ctx - hop for s in starts]
     return tuple(torch.cat([o[i, k: len(x)] for i, (k, x) in enumerate(zip(keep, segs))]) for o in outs)
 
 
 @torch.no_grad()
 def decode_chunked(model: B2V2, x: np.ndarray, pool: int, ctx: int, hop: int, input_id: int = 0,
-                   device: Optional[torch.device] = None) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+                   device: Optional[torch.device] = None, adapter: Optional[str] = None
+                   ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """Causal long-context decoding (a cheaper alternative to ``decode_live`` with a long window): for each of the
     ``pool`` phases, the trial's tokens (bins [p + pool*k, p + pool*(k+1))) through ``chunked_forward``. Every output
     is the frame of its token's last bin. Returns continuous (T, 20), phoneme logits (T, 41) and the phase-0 logits
@@ -292,7 +319,7 @@ def decode_chunked(model: B2V2, x: np.ndarray, pool: int, ctx: int, hop: int, in
         if n_tok <= 0:
             continue
         tok = torch.as_tensor(pool_tokens(x[p: p + pool * n_tok], pool), device=device)
-        c, lg = chunked_forward(model, tok, ctx, hop, input_id)
+        c, lg = chunked_forward(model, tok, ctx, hop, input_id, adapter=adapter)
         frames = p + pool * np.arange(n_tok) + pool - 1
         cont[frames], logit[frames] = c.float().cpu().numpy(), lg.float().cpu().numpy()
         if p == 0:

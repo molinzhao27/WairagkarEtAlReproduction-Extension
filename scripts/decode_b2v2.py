@@ -80,8 +80,8 @@ def main(argv=None) -> int:
         ck = torch.load(cp, map_location=device)
         m = bm.B2V2(ck["model_cfg"]).to(device)
         m.load_state_dict(ck["state"])
-        models.append((m, int(ck.get("input_id", 0))))
-    model, input_id = models[0]
+        models.append((m, int(ck.get("input_id", 0)), ck.get("decode_adapter")))   # D-091: a shared adapter
+    model, input_id, adapter = models[0]
     if args.ensemble and args.mode != "chunked":
         raise SystemExit("--ensemble needs --mode chunked")
 
@@ -103,12 +103,14 @@ def main(argv=None) -> int:
         if args.mode == "live":
             c, lg = bm.decode_live(model, x, window, pool, input_id=input_id, device=device)
         elif len(models) > 1:                                  # D-089: average the members
-            outs = [bm.decode_chunked(m, x, pool, args.ctx, args.hop, input_id=i, device=device) for m, i in models]
+            outs = [bm.decode_chunked(m, x, pool, args.ctx, args.hop, input_id=i, device=device, adapter=a)
+                    for m, i, a in models]
             c = np.mean([o[0] for o in outs], 0)
             lg = log_mean_prob([o[1] for o in outs])
             ph0 = log_mean_prob([o[2] for o in outs])
         else:
-            c, lg, ph0 = bm.decode_chunked(model, x, pool, args.ctx, args.hop, input_id=input_id, device=device)
+            c, lg, ph0 = bm.decode_chunked(model, x, pool, args.ctx, args.hop, input_id=input_id, device=device,
+                                           adapter=adapter)
         if args.mode == "chunked":
             out[f"g{g}_best50"] = ph0.argmax(-1).astype(np.uint8)
             lp = ph0 - ph0.max(-1, keepdims=True)
@@ -117,7 +119,7 @@ def main(argv=None) -> int:
         out[f"g{g}_best"] = lg.argmax(-1).astype(np.uint8)
     header = {"run_name": run, "checkpoint": ",".join(str(p) for p in paths),
               "checkpoint_sha256": ",".join(hashlib.sha256(p.read_bytes()).hexdigest() for p in paths),
-              "input_id": input_id, "trials": args.trials, "gids": gids, "mode": args.mode,
+              "input_id": input_id, "adapter": adapter, "trials": args.trials, "gids": gids, "mode": args.mode,
               "data_dir": str(resolve_path(args.data_dir or b["data_dir"])),
               "window_bins": window if args.mode == "live" else None,
               "chunked": {"ctx": args.ctx, "hop": args.hop} if args.mode == "chunked" else None, "pool": pool,

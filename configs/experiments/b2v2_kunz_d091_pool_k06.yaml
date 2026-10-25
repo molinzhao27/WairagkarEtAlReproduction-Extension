@@ -1,0 +1,44 @@
+# D-091 arm `pool`, fold 06: pooled inner-speech adaptation (all four days; April's inner speech both ways (motor and auditory)). Each day its own input projection;
+# inner-speech trials also pass the shared rank-64 adapter. Tested on imagined block 7 (sentences of attempted block 6).
+#   vast-3 (gq): /workspace/envs/wvx-torch/bin/python -I scripts/train_b2v2_pool.py --config configs/experiments/b2v2_kunz_d091_pool_k06.yaml
+base_experiment: configs/experiments/b2v2_kunz_base.yaml
+
+run_name: b2v2_kunz_d091_pool_k06
+
+b2v2:
+  pool:
+    decision: D-091
+    init: data/checkpoints/b2v2_kunz_gan_f06/best.pt   # the adversarial base with F_06 (D-086)
+    adapter: {name: inner, rank: 64}
+    decode_day: march
+    validation_from: [{session: imagined, blocks: [4, 9, 12]}]   # as gan_read's split (seed 0): the same 15 trials
+    n_validation: 15
+    sampling: day_balanced
+    days:
+      - name: march                    # 2024-03-03: the sentence day (test block 7 is never used)
+        data_dir: data/processed/b2v2_kunz
+        copy_from: 1                   # F_06's attempted-speech input (as gan_read)
+        inner: [{session: imagined, blocks: [4, 9, 12]}, {session: imagined_eval, blocks: [14]}]
+      - name: april                    # 2024-04-07: isolated words
+        data_dir: data/processed/b2v2_iso
+        copy_from: 0
+        inner: [{session: imagined1stMotor}, {session: imagined1stAuditory}]
+        attempted: [{session: attempted}]   # trains April's input only (no adapter)
+      - name: dec                      # 2024-12-15: open-vocabulary sentences
+        data_dir: data/processed/b2v2_ov
+        copy_from: 0
+        inner: [{session: d1215}, {session: d1215_eval}]
+      - name: jan                      # 2025-01-05
+        data_dir: data/processed/b2v2_ov
+        copy_from: 0
+        inner: [{session: d0105}, {session: d0105_eval}]
+    training:
+      steps: 3000
+      batch_size: 8
+      lr: 1.0e-3
+      min_lr: 1.0e-5
+      warmup: 0.1
+      augment_from: 0.0              # the paper's augmentations throughout (as gan_read)
+      val_every: 100
+      ctx: 128
+      hop: 64

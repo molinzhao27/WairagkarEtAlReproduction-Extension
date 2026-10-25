@@ -179,3 +179,24 @@ def test_return_hidden_and_decode_hidden():
     # the hidden states are the ones the continuous head reads, frame by frame
     with torch.no_grad():
         np.testing.assert_allclose(m.cont(torch.as_tensor(H[10:20])).numpy(), c3[10:20], atol=1e-4)
+
+
+def test_shared_adapter_starts_as_identity_and_round_trips():
+    m = _model()
+    x = torch.randn(2, 10, 12)
+    c0, p0 = m(x)
+    m.add_adapter("inner", 4)
+    c1, p1 = m(x, adapter="inner")
+    assert torch.allclose(c0, c1) and torch.allclose(p0, p1)          # U = 0: identity at start
+    with torch.no_grad():
+        m.adapters["inner"].U.normal_()
+    c2, _ = m(x, adapter="inner")
+    assert not torch.allclose(c0, c2) and torch.allclose(m(x)[0], c0)   # only when asked for
+    m2 = bm.B2V2(m.cfg)                                                  # cfg records the adapter
+    m2.load_state_dict(m.state_dict())
+    m2.eval()
+    assert torch.allclose(m2(x, adapter="inner")[0], c2, atol=1e-6)
+    xs = np.random.default_rng(1).normal(size=(40, 12)).astype(np.float32)
+    a, _, _ = bm.decode_chunked(m, xs, pool=5, ctx=4, hop=2, adapter="inner")
+    b, _, _ = bm.decode_chunked(m, xs, pool=5, ctx=4, hop=2)
+    assert not np.allclose(a, b)

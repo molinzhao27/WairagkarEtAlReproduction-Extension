@@ -1,0 +1,31 @@
+# D-091 arm `marchonly`, fold 03: pooled inner-speech adaptation (the March day only (the control: the adapter without other days' data)). Each day its own input projection;
+# inner-speech trials also pass the shared rank-64 adapter. Tested on imagined block 4 (sentences of attempted block 3).
+#   vast-3 (gq): /workspace/envs/wvx-torch/bin/python -I scripts/train_b2v2_pool.py --config configs/experiments/b2v2_kunz_d091_marchonly_k03.yaml
+base_experiment: configs/experiments/b2v2_kunz_base.yaml
+
+run_name: b2v2_kunz_d091_marchonly_k03
+
+b2v2:
+  pool:
+    decision: D-091
+    init: data/checkpoints/b2v2_kunz_gan_f03/best.pt   # the adversarial base with F_03 (D-086)
+    adapter: {name: inner, rank: 64}
+    decode_day: march
+    validation_from: [{session: imagined, blocks: [7, 9, 12]}]   # as gan_read's split (seed 0): the same 15 trials
+    n_validation: 15
+    sampling: day_balanced
+    days:
+      - name: march                    # 2024-03-03: the sentence day (test block 4 is never used)
+        data_dir: data/processed/b2v2_kunz
+        copy_from: 1                   # F_03's attempted-speech input (as gan_read)
+        inner: [{session: imagined, blocks: [7, 9, 12]}, {session: imagined_eval, blocks: [14]}]
+    training:
+      steps: 3000
+      batch_size: 8
+      lr: 1.0e-3
+      min_lr: 1.0e-5
+      warmup: 0.1
+      augment_from: 0.0              # the paper's augmentations throughout (as gan_read)
+      val_every: 100
+      ctx: 128
+      hop: 64
