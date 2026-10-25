@@ -1,0 +1,250 @@
+{
+ "decision": "D-091",
+ "config": "configs/experiments/b2v2_kunz_d091.yaml",
+ "code_version": {
+  "source": "sync",
+  "commit": "a5c17a238718bfbfc1b650a700661a98e8a74101",
+  "dirty": false,
+  "diff_sha256": null,
+  "pushed_at": "2026-10-25T08:28:05Z"
+ },
+ "created": "2026-10-25T14:39:21",
+ "settings": {
+  "decision": "D-091",
+  "title": "D-091: the inner-speech read-out with inner speech pooled across four days (200 held-out March trials)",
+  "out": "results/b2v2/d091",
+  "reference": [
+   "b2v2_kunz_f03:heldout",
+   "b2v2_kunz_f06:heldout",
+   "b2v2_kunz_f11:heldout",
+   "b2v2_kunz_f13:heldout"
+  ],
+  "baseline": "gan_read",
+  "secondary_vs": "marchonly",
+  "primary": [
+   "pool"
+  ],
+  "rule": {
+   "kind": "per",
+   "min_points": 3.0,
+   "alpha": 0.05
+  },
+  "islands": {
+   "threshold": 0.0,
+   "smooth": 3,
+   "min_frames": 10,
+   "bridge": 8,
+   "cepstra": [
+    1,
+    18
+   ]
+  },
+  "acoustic": {
+   "attempted": [
+    "b2v2_kunz_f03:heldout",
+    "b2v2_kunz_f06:heldout",
+    "b2v2_kunz_f11:heldout",
+    "b2v2_kunz_f13:heldout"
+   ],
+   "clean": {
+    "dir": "data/processed/f5clone_work/f5_v1_day193/wav16k/kunz_50words",
+    "texts": "data/processed/f5clone_work/f5_v1_day193/texts_kunz_50words.json",
+    "qc": "data/processed/f5clone_work/f5_v1_day193/qc_kunz_50words_final.json"
+   },
+   "mel": {
+    "sr": 16000,
+    "n_fft": 512,
+    "hop": 160,
+    "n_mels": 80,
+    "fmax": 8000
+   },
+   "n_mfcc": 25,
+   "trim_db": 35,
+   "perms": 10000,
+   "seed": 20261024,
+   "workers": 14
+  },
+  "arms": {
+   "gan_read": {
+    "preds": [
+     "b2v2_kunz_d086_ganread_k03:imagined",
+     "b2v2_kunz_d086_ganread_k06:imagined",
+     "b2v2_kunz_d086_ganread_k11:imagined",
+     "b2v2_kunz_d086_ganread_k13:imagined"
+    ],
+    "identify": "d086_gan_read"
+   },
+   "pool": {
+    "preds": [
+     "b2v2_kunz_d091_pool_k03:imagined",
+     "b2v2_kunz_d091_pool_k06:imagined",
+     "b2v2_kunz_d091_pool_k11:imagined",
+     "b2v2_kunz_d091_pool_k13:imagined"
+    ],
+    "identify": "d091_pool"
+   },
+   "motor": {
+    "preds": [
+     "b2v2_kunz_d091_motor_k03:imagined",
+     "b2v2_kunz_d091_motor_k06:imagined",
+     "b2v2_kunz_d091_motor_k11:imagined",
+     "b2v2_kunz_d091_motor_k13:imagined"
+    ],
+    "identify": "d091_motor"
+   },
+   "marchonly": {
+    "preds": [
+     "b2v2_kunz_d091_marchonly_k03:imagined",
+     "b2v2_kunz_d091_marchonly_k06:imagined",
+     "b2v2_kunz_d091_marchonly_k11:imagined",
+     "b2v2_kunz_d091_marchonly_k13:imagined"
+    ],
+    "identify": "d091_marchonly"
+   }
+  }
+ },
+ "arms": {
+  "gan_read": {
+   "n": 200,
+   "wer": 0.7986942328618063,
+   "wer_sped_up": 0.7606093579978237,
+   "missing_words": 0.13166485310119697,
+   "extra_words": 0.14907508161044614,
+   "heard_right": 0.34929270946681173,
+   "movement": 1.2408691048622131,
+   "n_islands": 954,
+   "top1": 0.78,
+   "mean_rank": 3.315,
+   "per": 0.5186037591100883,
+   "words_read_right": 0.3797606093579978
+  },
+  "pool": {
+   "n": 200,
+   "wer": 0.8204570184983678,
+   "wer_sped_up": 0.7812840043525572,
+   "missing_words": 0.13710554951033732,
+   "extra_words": 0.1425462459194777,
+   "heard_right": 0.32100108813928185,
+   "movement": 1.230104386806488,
+   "n_islands": 980,
+   "top1": 0.81,
+   "mean_rank": 3.22,
+   "per": 0.5385500575373993,
+   "words_read_right": 0.34929270946681173,
+   "vs_baseline": {
+    "n": 200,
+    "mean_diff": 0.023095238095238103,
+    "p": 0.6260192575529864
+   },
+   "extra_words_vs_baseline": {
+    "n": 200,
+    "mean_diff": 0.0006964285714285734,
+    "p": 0.9324700116275517
+   },
+   "heard_right_vs_baseline": {
+    "n": 200,
+    "mean_diff": -0.02281547619047619,
+    "p": 0.38105024622778993
+   },
+   "per_vs_baseline": {
+    "n": 200,
+    "mean_diff": 0.018351537269919626,
+    "p": 0.10888406565090188
+   },
+   "words_read_right_vs_baseline": {
+    "n": 200,
+    "mean_diff": -0.029190476190476194,
+    "p": 0.09706264345188587
+   },
+   "vs_marchonly": {
+    "n": 200,
+    "mean_diff": 0.043988095238095236,
+    "p": 0.07392883192459604
+   },
+   "rule_met": false
+  },
+  "motor": {
+   "n": 200,
+   "wer": 0.7986942328618063,
+   "wer_sped_up": 0.7671381936887922,
+   "missing_words": 0.11534276387377584,
+   "extra_words": 0.13275299238302501,
+   "heard_right": 0.3340587595212187,
+   "movement": 1.2410008907318115,
+   "n_islands": 958,
+   "top1": 0.835,
+   "mean_rank": 2.88,
+   "per": 0.5205216724204066,
+   "words_read_right": 0.37431991294885747,
+   "vs_baseline": {
+    "n": 200,
+    "mean_diff": -0.004190476190476196,
+    "p": 0.9486740376554675
+   },
+   "extra_words_vs_baseline": {
+    "n": 200,
+    "mean_diff": -0.01639880952380952,
+    "p": 0.592630462023132
+   },
+   "heard_right_vs_baseline": {
+    "n": 200,
+    "mean_diff": -0.011375,
+    "p": 0.8497246065548594
+   },
+   "per_vs_baseline": {
+    "n": 200,
+    "mean_diff": 0.0008734850651360248,
+    "p": 0.9216371196405679
+   },
+   "words_read_right_vs_baseline": {
+    "n": 200,
+    "mean_diff": -0.005625000000000002,
+    "p": 0.5449805320106005
+   },
+   "vs_marchonly": {
+    "n": 200,
+    "mean_diff": 0.016702380952380955,
+    "p": 0.38729113391474046
+   }
+  },
+  "marchonly": {
+   "n": 200,
+   "wer": 0.7704026115342764,
+   "wer_sped_up": 0.7072905331882481,
+   "missing_words": 0.10663764961915125,
+   "extra_words": 0.13928182807399347,
+   "heard_right": 0.36670293797606096,
+   "movement": 1.2386412024497986,
+   "n_islands": 970,
+   "top1": 0.85,
+   "mean_rank": 3.04,
+   "per": 0.48484848484848486,
+   "words_read_right": 0.4134929270946681,
+   "vs_baseline": {
+    "n": 200,
+    "mean_diff": -0.020892857142857144,
+    "p": 0.7297464139375106
+   },
+   "extra_words_vs_baseline": {
+    "n": 200,
+    "mean_diff": 0.0002559523809523778,
+    "p": 0.5552765491554894
+   },
+   "heard_right_vs_baseline": {
+    "n": 200,
+    "mean_diff": 0.020553571428571428,
+    "p": 0.21849790881282682
+   },
+   "per_vs_baseline": {
+    "n": 200,
+    "mean_diff": -0.034765978203008766,
+    "p": 0.0005766308702656225
+   },
+   "words_read_right_vs_baseline": {
+    "n": 200,
+    "mean_diff": 0.031553571428571424,
+    "p": 0.0686103950666221
+   }
+  }
+ }
+}
