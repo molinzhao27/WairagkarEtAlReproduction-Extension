@@ -1,0 +1,31 @@
+{
+ "name": "vast3",
+ "decision": "D-042 (parity smoke)",
+ "torch": "2.14.0+cu132",
+ "cuda": "13.2",
+ "python": "3.12.14",
+ "device": "NVIDIA GeForce RTX 5090",
+ "capability": [
+  12,
+  0
+ ],
+ "created": "2026-10-25T07:57:20",
+ "fingerprint_cpu": {
+  "loss": 3.7340128421783447,
+  "cont_sum": 28.162368877558038,
+  "logit_sum": 49.342972813232336,
+  "grad_abs_sum": 1155.4032524445247
+ },
+ "fingerprint_gpu": {
+  "loss": 3.7340128421783447,
+  "cont_sum": 28.16237657360034,
+  "logit_sum": 49.342950151185505,
+  "grad_abs_sum": 1155.4031440420406
+ },
+ "max_abs_diff": {
+  "cont": 2.086162567138672e-07,
+  "logits": 2.1979212760925293e-07,
+  "loss": 0.0,
+  "grad_rel": 1.251591938999736e-06
+ }
+}

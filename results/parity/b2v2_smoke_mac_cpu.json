@@ -1,0 +1,16 @@
+{
+ "name": "mac_cpu",
+ "decision": "D-042 (parity smoke)",
+ "torch": "2.5.1",
+ "cuda": null,
+ "python": "3.12.15",
+ "device": null,
+ "capability": null,
+ "created": "2026-10-25T00:27:21",
+ "fingerprint_cpu": {
+  "loss": 3.7340128421783447,
+  "cont_sum": 28.16236650092101,
+  "logit_sum": 49.34293711287819,
+  "grad_abs_sum": 1155.4032384744946
+ }
+}
