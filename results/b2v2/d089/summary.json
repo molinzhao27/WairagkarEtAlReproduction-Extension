@@ -1,0 +1,254 @@
+{
+ "decision": "D-089",
+ "config": "configs/experiments/b2v2_kunz_d089.yaml",
+ "code_version": {
+  "source": "sync",
+  "commit": "429a14058f80a12b8d592cbafc074ba741b8b49d",
+  "dirty": false,
+  "diff_sha256": null,
+  "pushed_at": "2026-10-25T07:31:56Z"
+ },
+ "created": "2026-10-25T07:33:08",
+ "settings": {
+  "decision": "D-089",
+  "title": "D-089: the inner-speech read-out on the adversarial base (200 held-out trials)",
+  "out": "results/b2v2/d089",
+  "reference": [
+   "b2v2_kunz_f03:heldout",
+   "b2v2_kunz_f06:heldout",
+   "b2v2_kunz_f11:heldout",
+   "b2v2_kunz_f13:heldout"
+  ],
+  "baseline": "gan_read",
+  "secondary_vs": "ens_read",
+  "primary": [
+   "hid",
+   "ens_read",
+   "ens_hid"
+  ],
+  "rule": {
+   "kind": "per",
+   "min_points": 3.0,
+   "alpha": 0.0167
+  },
+  "islands": {
+   "threshold": 0.0,
+   "smooth": 3,
+   "min_frames": 10,
+   "bridge": 8,
+   "cepstra": [
+    1,
+    18
+   ]
+  },
+  "acoustic": {
+   "attempted": [
+    "b2v2_kunz_f03:heldout",
+    "b2v2_kunz_f06:heldout",
+    "b2v2_kunz_f11:heldout",
+    "b2v2_kunz_f13:heldout"
+   ],
+   "clean": {
+    "dir": "data/processed/f5clone_work/f5_v1_day193/wav16k/kunz_50words",
+    "texts": "data/processed/f5clone_work/f5_v1_day193/texts_kunz_50words.json",
+    "qc": "data/processed/f5clone_work/f5_v1_day193/qc_kunz_50words_final.json"
+   },
+   "mel": {
+    "sr": 16000,
+    "n_fft": 512,
+    "hop": 160,
+    "n_mels": 80,
+    "fmax": 8000
+   },
+   "n_mfcc": 25,
+   "trim_db": 35,
+   "perms": 10000,
+   "seed": 20261024,
+   "workers": 14
+  },
+  "arms": {
+   "gan_read": {
+    "preds": [
+     "b2v2_kunz_d086_ganread_k03:imagined",
+     "b2v2_kunz_d086_ganread_k06:imagined",
+     "b2v2_kunz_d086_ganread_k11:imagined",
+     "b2v2_kunz_d086_ganread_k13:imagined"
+    ],
+    "identify": "d086_gan_read"
+   },
+   "hid": {
+    "preds": [
+     "b2v2_kunz_d089_hid_s1_k03:imagined",
+     "b2v2_kunz_d089_hid_s1_k06:imagined",
+     "b2v2_kunz_d089_hid_s1_k11:imagined",
+     "b2v2_kunz_d089_hid_s1_k13:imagined"
+    ],
+    "identify": "d089_hid"
+   },
+   "ens_read": {
+    "preds": [
+     "b2v2_kunz_d089_ensread_k03:imagined",
+     "b2v2_kunz_d089_ensread_k06:imagined",
+     "b2v2_kunz_d089_ensread_k11:imagined",
+     "b2v2_kunz_d089_ensread_k13:imagined"
+    ],
+    "identify": "d089_ens_read"
+   },
+   "ens_hid": {
+    "preds": [
+     "b2v2_kunz_d089_enshid_k03:imagined",
+     "b2v2_kunz_d089_enshid_k06:imagined",
+     "b2v2_kunz_d089_enshid_k11:imagined",
+     "b2v2_kunz_d089_enshid_k13:imagined"
+    ],
+    "identify": "d089_ens_hid"
+   }
+  }
+ },
+ "arms": {
+  "gan_read": {
+   "n": 200,
+   "wer": 0.7986942328618063,
+   "wer_sped_up": 0.7606093579978237,
+   "missing_words": 0.13166485310119697,
+   "extra_words": 0.14907508161044614,
+   "heard_right": 0.34929270946681173,
+   "movement": 1.2408691048622131,
+   "n_islands": 954,
+   "top1": 0.78,
+   "mean_rank": 3.315,
+   "per": 0.5186037591100883,
+   "words_read_right": 0.3797606093579978
+  },
+  "hid": {
+   "n": 200,
+   "wer": 0.7867247007616975,
+   "wer_sped_up": 0.7323177366702938,
+   "missing_words": 0.13492927094668117,
+   "extra_words": 0.12731229597388466,
+   "heard_right": 0.3394994559303591,
+   "movement": 1.2432194948196411,
+   "n_islands": 932,
+   "top1": 0.8,
+   "mean_rank": 3.41,
+   "per": 0.5308784042961258,
+   "words_read_right": 0.3590859630032644,
+   "vs_baseline": {
+    "n": 200,
+    "mean_diff": -0.0033690476190476205,
+    "p": 0.9210697499676803
+   },
+   "extra_words_vs_baseline": {
+    "n": 200,
+    "mean_diff": -0.012059523809523808,
+    "p": 0.49869512932179993
+   },
+   "heard_right_vs_baseline": {
+    "n": 200,
+    "mean_diff": -0.008273809523809524,
+    "p": 0.3996737949676735
+   },
+   "per_vs_baseline": {
+    "n": 200,
+    "mean_diff": 0.011489949168740054,
+    "p": 0.28578220091473017
+   },
+   "words_read_right_vs_baseline": {
+    "n": 200,
+    "mean_diff": -0.02119047619047619,
+    "p": 0.12152355489323605
+   },
+   "vs_ens_read": {
+    "n": 200,
+    "mean_diff": 0.035166666666666666,
+    "p": 0.4245783328168612
+   },
+   "rule_met": false
+  },
+  "ens_read": {
+   "n": 200,
+   "wer": 0.763873775843308,
+   "wer_sped_up": 0.7486398258977149,
+   "missing_words": 0.11860718171926006,
+   "extra_words": 0.1088139281828074,
+   "heard_right": 0.3438520130576714,
+   "movement": 1.0655675530433655,
+   "n_islands": 920,
+   "top1": 0.76,
+   "mean_rank": 3.45,
+   "per": 0.5523590333716916,
+   "words_read_right": 0.28726877040261156,
+   "vs_baseline": {
+    "n": 200,
+    "mean_diff": -0.038535714285714284,
+    "p": 0.17275460870004444
+   },
+   "extra_words_vs_baseline": {
+    "n": 200,
+    "mean_diff": -0.03706547619047619,
+    "p": 0.03681731501593571
+   },
+   "heard_right_vs_baseline": {
+    "n": 200,
+    "mean_diff": 0.0013035714285714295,
+    "p": 0.9606687452005843
+   },
+   "per_vs_baseline": {
+    "n": 200,
+    "mean_diff": 0.03043547850722437,
+    "p": 0.00018607866781161458
+   },
+   "words_read_right_vs_baseline": {
+    "n": 200,
+    "mean_diff": -0.08928571428571427,
+    "p": 1.5409134869548005e-11
+   },
+   "rule_met": false
+  },
+  "ens_hid": {
+   "n": 200,
+   "wer": 0.7823721436343852,
+   "wer_sped_up": 0.7323177366702938,
+   "missing_words": 0.1425462459194777,
+   "extra_words": 0.11643090315560392,
+   "heard_right": 0.33297062023939067,
+   "movement": 1.0874401926994324,
+   "n_islands": 916,
+   "top1": 0.78,
+   "mean_rank": 3.41,
+   "per": 0.5446873801304181,
+   "words_read_right": 0.30903155603917304,
+   "vs_baseline": {
+    "n": 200,
+    "mean_diff": -0.017630952380952372,
+    "p": 0.33011796187378184
+   },
+   "extra_words_vs_baseline": {
+    "n": 200,
+    "mean_diff": -0.02394047619047619,
+    "p": 0.12049643756666602
+   },
+   "heard_right_vs_baseline": {
+    "n": 200,
+    "mean_diff": -0.006726190476190476,
+    "p": 0.8550442146653938
+   },
+   "per_vs_baseline": {
+    "n": 200,
+    "mean_diff": 0.02278805497366037,
+    "p": 0.004037348585984176
+   },
+   "words_read_right_vs_baseline": {
+    "n": 200,
+    "mean_diff": -0.06669047619047619,
+    "p": 4.118122955368809e-06
+   },
+   "vs_ens_read": {
+    "n": 200,
+    "mean_diff": 0.020904761904761905,
+    "p": 0.7437041808622367
+   },
+   "rule_met": false
+  }
+ }
+}
