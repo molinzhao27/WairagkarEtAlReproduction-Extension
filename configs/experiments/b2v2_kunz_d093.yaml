@@ -1,0 +1,22 @@
+# D-093 analysis (PC CPU, gq): the 2 x 2 of the March-only shared adapter x training length, 2 seeds each.
+#   PC: CUDA_VISIBLE_DEVICES= .venv/bin/python -I scripts/d093_factorial.py --config configs/experiments/b2v2_kunz_d093.yaml
+base_experiment: configs/experiments/b2v2_kunz_base.yaml
+
+run_name: b2v2_kunz_d093
+
+b2v2:
+  d093:
+    out: results/b2v2/d093
+    baseline: {runs: [b2v2_kunz_d091_ganreadv3_k03, b2v2_kunz_d091_ganreadv3_k06, b2v2_kunz_d091_ganreadv3_k11, b2v2_kunz_d091_ganreadv3_k13], identify: d091_ganreadv3}
+    factors: {adapter: [ad1k, ad3k], no_adapter: [noad1k, noad3k], short: [noad1k, ad1k], long: [noad3k, ad3k]}
+    seeds: [s0, s1]
+    alpha: 0.05
+    cells:
+      noad1k_s0: {runs: [b2v2_kunz_d093_noad1k_s0_k03, b2v2_kunz_d093_noad1k_s0_k06, b2v2_kunz_d093_noad1k_s0_k11, b2v2_kunz_d093_noad1k_s0_k13], identify: d093_noad1k_s0}
+      noad1k_s1: {runs: [b2v2_kunz_d093_noad1k_s1_k03, b2v2_kunz_d093_noad1k_s1_k06, b2v2_kunz_d093_noad1k_s1_k11, b2v2_kunz_d093_noad1k_s1_k13], identify: d093_noad1k_s1}
+      noad3k_s0: {runs: [b2v2_kunz_d093_noad3k_s0_k03, b2v2_kunz_d093_noad3k_s0_k06, b2v2_kunz_d093_noad3k_s0_k11, b2v2_kunz_d093_noad3k_s0_k13], identify: d093_noad3k_s0}
+      noad3k_s1: {runs: [b2v2_kunz_d093_noad3k_s1_k03, b2v2_kunz_d093_noad3k_s1_k06, b2v2_kunz_d093_noad3k_s1_k11, b2v2_kunz_d093_noad3k_s1_k13], identify: d093_noad3k_s1}
+      ad1k_s0: {runs: [b2v2_kunz_d093_ad1k_s0_k03, b2v2_kunz_d093_ad1k_s0_k06, b2v2_kunz_d093_ad1k_s0_k11, b2v2_kunz_d093_ad1k_s0_k13], identify: d093_ad1k_s0}
+      ad1k_s1: {runs: [b2v2_kunz_d093_ad1k_s1_k03, b2v2_kunz_d093_ad1k_s1_k06, b2v2_kunz_d093_ad1k_s1_k11, b2v2_kunz_d093_ad1k_s1_k13], identify: d093_ad1k_s1}
+      ad3k_s0: {runs: [b2v2_kunz_d091_marchonly_k03, b2v2_kunz_d091_marchonly_k06, b2v2_kunz_d091_marchonly_k11, b2v2_kunz_d091_marchonly_k13], identify: d091_marchonly}
+      ad3k_s1: {runs: [b2v2_kunz_d093_ad3k_s1_k03, b2v2_kunz_d093_ad3k_s1_k06, b2v2_kunz_d093_ad3k_s1_k11, b2v2_kunz_d093_ad3k_s1_k13], identify: d093_ad3k_s1}

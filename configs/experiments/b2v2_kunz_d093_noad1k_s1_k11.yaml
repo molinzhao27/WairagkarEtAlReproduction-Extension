@@ -1,0 +1,14 @@
+# D-093 cell `noad1k` (adapter no, 1000 steps), seed 1, fold 11: D-091 `marchonly` with one factor changed
+# (the 2 x 2 of adapter x training length; `ad3k` seed 0 is `marchonly` itself).
+#   vast-3 (gq): /workspace/envs/wvx-torch/bin/python -I scripts/train_b2v2_pool.py --config configs/experiments/b2v2_kunz_d093_noad1k_s1_k11.yaml
+base_experiment: configs/experiments/b2v2_kunz_d091_marchonly_k11.yaml
+
+run_name: b2v2_kunz_d093_noad1k_s1_k11
+
+b2v2:
+  pool:
+    decision: D-093
+    adapter: null                  # no shared adapter: the March input alone
+    training:
+      steps: 1000
+      seed: 1
