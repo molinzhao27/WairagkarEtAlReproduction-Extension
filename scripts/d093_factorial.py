@@ -33,6 +33,47 @@ _d086 = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(_d086)
 
 
+def per_trial(spec, data) -> dict:
+    """{gid: (PER, words read right, top-1, phoneme errors, reference phonemes)} for one cell x seed (or a
+    baseline): ``spec`` = {runs, identify}. Stops if a run has no split.json or decoded a trial of its own training or
+    validation split (D-093 scoring error)."""
+    import numpy as np
+
+    from wvx import phonemes as ph
+
+    SIL = ph.ID["SIL"]
+    ids = {int(r["gid"]): r for r in json.loads(
+        (resolve_path("results/b2v2/identify") / f"{spec['identify']}.json").read_text())["rows"]}
+    out = {}
+    for run in spec["runs"]:
+        sp = resolve_path("results/b2v2") / run / "split.json"
+        if sp.is_file():                            # never score a trial the run trained or validated on
+            sj = json.loads(sp.read_text())
+            seen = set(sj.get("val", [])) | set(sj.get("train", []))
+            for d in (sj.get("days") or {}).values():
+                seen |= set(d.get("inner", [])) | set(d.get("attempted", []))
+        else:
+            raise SystemExit(f"{run}: no split.json to check the decoded trials against")
+        with np.load(resolve_path("data/processed/b2v2_preds") / run / "imagined.npz", allow_pickle=False) as z:
+            gids_run = [int(g) for g in json.loads(str(z["header"]))["gids"]]
+            if set(gids_run) & seen:
+                raise SystemExit(f"{run}: {len(set(gids_run) & seen)} decoded trials are in its training split")
+            for g in gids_run:
+                if g in out:
+                    raise SystemExit(f"{run}: trial {g} also decoded by another run of this cell (wrong test block?)")
+                lab = data.by_gid[int(g)]["label"]
+                hyp = [x for x in ph.ctc_greedy(z[f"g{g}_lp50"].astype(np.float64).argmax(1)) if x != SIL]
+                ref = [x for x in lab if x != SIL]
+                wid = np.cumsum([0] + [x == SIL for x in lab])[:-1]
+                ok = {}
+                for w_, op in zip([int(wid[i]) for i, x in enumerate(lab) if x != SIL], _d086.phone_ops(ref, hyp)):
+                    ok[w_] = ok.get(w_, True) and op == "hit"
+                r = ids[int(g)]
+                out[int(g)] = (r["phone_errors"] / max(1, r["ref_phones"]), sum(ok.values()) / max(1, len(ok)),
+                               float(r["rank"] == 1), r["phone_errors"], r["ref_phones"])
+    return out
+
+
 def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--config", required=True)
@@ -41,49 +82,16 @@ def main(argv=None) -> int:
     import numpy as np
     from scipy.stats import wilcoxon
 
-    from wvx import b2v2_data as bd, phonemes as ph
+    from wvx import b2v2_data as bd
     from wvx.provenance import code_version
 
     S = cfg["b2v2"]["d093"]
     data = bd.B2V2Data(resolve_path(cfg["b2v2"]["data_dir"]))
-    SIL = ph.ID["SIL"]
 
-    def per_trial(spec):
-        """{gid: (per, words_read_right, top1)} for one cell x seed (or the baseline)."""
-        ids = {int(r["gid"]): r for r in json.loads(
-            (resolve_path("results/b2v2/identify") / f"{spec['identify']}.json").read_text())["rows"]}
-        out = {}
-        for run in spec["runs"]:
-            sp = resolve_path("results/b2v2") / run / "split.json"
-            if sp.is_file():                            # never score a trial the run trained or validated on
-                sj = json.loads(sp.read_text())
-                seen = set(sj.get("val", [])) | set(sj.get("train", []))
-                for d in (sj.get("days") or {}).values():
-                    seen |= set(d.get("inner", [])) | set(d.get("attempted", []))
-            else:
-                seen = None
-            with np.load(resolve_path("data/processed/b2v2_preds") / run / "imagined.npz", allow_pickle=False) as z:
-                gids_run = [int(g) for g in json.loads(str(z["header"]))["gids"]]
-                if seen is None and "d093" in run:
-                    raise SystemExit(f"{run}: no split.json to check the decoded trials against")
-                if seen and set(gids_run) & seen:
-                    raise SystemExit(f"{run}: {len(set(gids_run) & seen)} decoded trials are in its training split")
-                for g in gids_run:
-                    lab = data.by_gid[int(g)]["label"]
-                    hyp = [x for x in ph.ctc_greedy(z[f"g{g}_lp50"].astype(np.float64).argmax(1)) if x != SIL]
-                    ref = [x for x in lab if x != SIL]
-                    wid = np.cumsum([0] + [x == SIL for x in lab])[:-1]
-                    ok = {}
-                    for w_, op in zip([int(wid[i]) for i, x in enumerate(lab) if x != SIL], _d086.phone_ops(ref, hyp)):
-                        ok[w_] = ok.get(w_, True) and op == "hit"
-                    r = ids[int(g)]
-                    out[int(g)] = (r["phone_errors"] / max(1, r["ref_phones"]), sum(ok.values()) / max(1, len(ok)),
-                                   float(r["rank"] == 1), r["phone_errors"], r["ref_phones"])
-        return out
 
     cells = sorted({k.rsplit("_", 1)[0] for k in S["cells"]})
-    raw = {k: per_trial(v) for k, v in S["cells"].items()}
-    bases = {n: per_trial(v) for n, v in S["baselines"].items()}
+    raw = {k: per_trial(v, data) for k, v in S["cells"].items()}
+    bases = {n: per_trial(v, data) for n, v in S["baselines"].items()}
     gids = sorted(set.intersection(*[set(v) for v in [*raw.values(), *bases.values()]]))
     if S.get("n_trials") and len(gids) != int(S["n_trials"]):
         raise SystemExit(f"{len(gids)} trials common to every cell and baseline, expected {S['n_trials']}")

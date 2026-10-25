@@ -1,0 +1,24 @@
+# D-094 analysis (PC CPU, gq): the inner-speech read-out vs training length (no adapter), 2 seeds each.
+#   PC: CUDA_VISIBLE_DEVICES= .venv/bin/python -I scripts/d094_length.py --config configs/experiments/b2v2_kunz_d094.yaml
+base_experiment: configs/experiments/b2v2_kunz_base.yaml
+
+run_name: b2v2_kunz_d094
+
+b2v2:
+  d094:
+    out: results/b2v2/d094
+    n_trials: 200                  # the 4 folds' test blocks (imagined 4, 7, 9, 12)
+    alpha: 0.025                   # two primary contrasts (Bonferroni)
+    seeds: [s0, s1]
+    lengths: [len3k, len6k, len10k]
+    primary: [{a: len6k, b: len3k}, {a: len10k, b: len3k}]
+    secondary: [{a: len10k, b: len6k}]
+    baselines:
+      gan_read: {runs: [b2v2_kunz_d086_ganread_k03, b2v2_kunz_d086_ganread_k06, b2v2_kunz_d086_ganread_k11, b2v2_kunz_d086_ganread_k13], identify: d086_gan_read}
+    cells:                         # len3k = D-093 `noad3k` (same PC, same trainer code), reused
+      len3k_s0: {runs: [b2v2_kunz_d093_noad3k_s0_k03, b2v2_kunz_d093_noad3k_s0_k06, b2v2_kunz_d093_noad3k_s0_k11, b2v2_kunz_d093_noad3k_s0_k13], identify: d093_noad3k_s0}
+      len3k_s1: {runs: [b2v2_kunz_d093_noad3k_s1_k03, b2v2_kunz_d093_noad3k_s1_k06, b2v2_kunz_d093_noad3k_s1_k11, b2v2_kunz_d093_noad3k_s1_k13], identify: d093_noad3k_s1}
+      len6k_s0: {runs: [b2v2_kunz_d094_len6k_s0_k03, b2v2_kunz_d094_len6k_s0_k06, b2v2_kunz_d094_len6k_s0_k11, b2v2_kunz_d094_len6k_s0_k13], identify: d094_len6k_s0}
+      len6k_s1: {runs: [b2v2_kunz_d094_len6k_s1_k03, b2v2_kunz_d094_len6k_s1_k06, b2v2_kunz_d094_len6k_s1_k11, b2v2_kunz_d094_len6k_s1_k13], identify: d094_len6k_s1}
+      len10k_s0: {runs: [b2v2_kunz_d094_len10k_s0_k03, b2v2_kunz_d094_len10k_s0_k06, b2v2_kunz_d094_len10k_s0_k11, b2v2_kunz_d094_len10k_s0_k13], identify: d094_len10k_s0}
+      len10k_s1: {runs: [b2v2_kunz_d094_len10k_s1_k03, b2v2_kunz_d094_len10k_s1_k06, b2v2_kunz_d094_len10k_s1_k11, b2v2_kunz_d094_len10k_s1_k13], identify: d094_len10k_s1}
