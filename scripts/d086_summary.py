@@ -91,7 +91,7 @@ def main(argv=None) -> int:
     S = cfg["b2v2"]["d086"]
     isl = S["islands"]
     lo, hi = (int(x) for x in isl["cepstra"])
-    bo = cfg["b2v2"]["postproc"]["boost"]
+    bo = cfg["b2v2"]["postproc"].get("boost")                  # only for arms with ``boost: true``
 
     def conts(specs, boost=False):
         out = {}
