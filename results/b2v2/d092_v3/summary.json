@@ -1,0 +1,305 @@
+{
+ "decision": "D-092",
+ "config": "configs/experiments/b2v2_kunz_d092_v3.yaml",
+ "code_version": {
+  "source": "sync",
+  "commit": "a5c17a238718bfbfc1b650a700661a98e8a74101",
+  "dirty": false,
+  "diff_sha256": null,
+  "pushed_at": "2026-10-25T08:28:05Z"
+ },
+ "created": "2026-10-25T15:12:13",
+ "settings": {
+  "decision": "D-092",
+  "title": "(same-hardware control: baseline gan_read re-run on vast-3) D-092: pooled inner speech in two stages, other days first, then March (200 held-out March trials)",
+  "out": "results/b2v2/d092_v3",
+  "reference": [
+   "b2v2_kunz_f03:heldout",
+   "b2v2_kunz_f06:heldout",
+   "b2v2_kunz_f11:heldout",
+   "b2v2_kunz_f13:heldout"
+  ],
+  "baseline": "gan_read_v3",
+  "secondary_vs": "pool",
+  "primary": [
+   "stagedft",
+   "stagedfrozen"
+  ],
+  "rule": {
+   "kind": "per",
+   "min_points": 3.0,
+   "alpha": 0.025
+  },
+  "islands": {
+   "threshold": 0.0,
+   "smooth": 3,
+   "min_frames": 10,
+   "bridge": 8,
+   "cepstra": [
+    1,
+    18
+   ]
+  },
+  "acoustic": {
+   "attempted": [
+    "b2v2_kunz_f03:heldout",
+    "b2v2_kunz_f06:heldout",
+    "b2v2_kunz_f11:heldout",
+    "b2v2_kunz_f13:heldout"
+   ],
+   "clean": {
+    "dir": "data/processed/f5clone_work/f5_v1_day193/wav16k/kunz_50words",
+    "texts": "data/processed/f5clone_work/f5_v1_day193/texts_kunz_50words.json",
+    "qc": "data/processed/f5clone_work/f5_v1_day193/qc_kunz_50words_final.json"
+   },
+   "mel": {
+    "sr": 16000,
+    "n_fft": 512,
+    "hop": 160,
+    "n_mels": 80,
+    "fmax": 8000
+   },
+   "n_mfcc": 25,
+   "trim_db": 35,
+   "perms": 10000,
+   "seed": 20261024,
+   "workers": 14
+  },
+  "arms": {
+   "gan_read_v3": {
+    "preds": [
+     "b2v2_kunz_d091_ganreadv3_k03:imagined",
+     "b2v2_kunz_d091_ganreadv3_k06:imagined",
+     "b2v2_kunz_d091_ganreadv3_k11:imagined",
+     "b2v2_kunz_d091_ganreadv3_k13:imagined"
+    ],
+    "identify": "d091_ganreadv3"
+   },
+   "gan_read": {
+    "preds": [
+     "b2v2_kunz_d086_ganread_k03:imagined",
+     "b2v2_kunz_d086_ganread_k06:imagined",
+     "b2v2_kunz_d086_ganread_k11:imagined",
+     "b2v2_kunz_d086_ganread_k13:imagined"
+    ],
+    "identify": "d086_gan_read"
+   },
+   "pool": {
+    "preds": [
+     "b2v2_kunz_d091_pool_k03:imagined",
+     "b2v2_kunz_d091_pool_k06:imagined",
+     "b2v2_kunz_d091_pool_k11:imagined",
+     "b2v2_kunz_d091_pool_k13:imagined"
+    ],
+    "identify": "d091_pool"
+   },
+   "stagedft": {
+    "preds": [
+     "b2v2_kunz_d092_stagedft_k03:imagined",
+     "b2v2_kunz_d092_stagedft_k06:imagined",
+     "b2v2_kunz_d092_stagedft_k11:imagined",
+     "b2v2_kunz_d092_stagedft_k13:imagined"
+    ],
+    "identify": "d092_stagedft"
+   },
+   "stagedfrozen": {
+    "preds": [
+     "b2v2_kunz_d092_stagedfrozen_k03:imagined",
+     "b2v2_kunz_d092_stagedfrozen_k06:imagined",
+     "b2v2_kunz_d092_stagedfrozen_k11:imagined",
+     "b2v2_kunz_d092_stagedfrozen_k13:imagined"
+    ],
+    "identify": "d092_stagedfrozen"
+   }
+  }
+ },
+ "arms": {
+  "gan_read_v3": {
+   "n": 200,
+   "wer": 0.8258977149075082,
+   "wer_sped_up": 0.7899891186071817,
+   "missing_words": 0.13275299238302501,
+   "extra_words": 0.14036996735582155,
+   "heard_right": 0.3133841131664853,
+   "movement": 1.2286590933799744,
+   "n_islands": 946,
+   "top1": 0.77,
+   "mean_rank": 3.385,
+   "per": 0.5397008055235903,
+   "words_read_right": 0.338411316648531
+  },
+  "gan_read": {
+   "n": 200,
+   "wer": 0.7986942328618063,
+   "wer_sped_up": 0.7606093579978237,
+   "missing_words": 0.13166485310119697,
+   "extra_words": 0.14907508161044614,
+   "heard_right": 0.34929270946681173,
+   "movement": 1.2408691048622131,
+   "n_islands": 954,
+   "top1": 0.78,
+   "mean_rank": 3.315,
+   "per": 0.5186037591100883,
+   "words_read_right": 0.3797606093579978,
+   "vs_baseline": {
+    "n": 200,
+    "mean_diff": -0.013863095238095235,
+    "p": 0.2414161917687927
+   },
+   "extra_words_vs_baseline": {
+    "n": 200,
+    "mean_diff": 0.00663095238095238,
+    "p": 1.0
+   },
+   "heard_right_vs_baseline": {
+    "n": 200,
+    "mean_diff": 0.020660714285714286,
+    "p": 0.23737384567833608
+   },
+   "per_vs_baseline": {
+    "n": 200,
+    "mean_diff": -0.01364953292022884,
+    "p": 0.24316947589059812
+   },
+   "words_read_right_vs_baseline": {
+    "n": 200,
+    "mean_diff": 0.03413095238095238,
+    "p": 0.006032087222125193
+   },
+   "vs_pool": {
+    "n": 200,
+    "mean_diff": -0.023095238095238103,
+    "p": 0.6260192575529864
+   }
+  },
+  "pool": {
+   "n": 200,
+   "wer": 0.8204570184983678,
+   "wer_sped_up": 0.7812840043525572,
+   "missing_words": 0.13710554951033732,
+   "extra_words": 0.1425462459194777,
+   "heard_right": 0.32100108813928185,
+   "movement": 1.230104386806488,
+   "n_islands": 980,
+   "top1": 0.81,
+   "mean_rank": 3.22,
+   "per": 0.5385500575373993,
+   "words_read_right": 0.34929270946681173,
+   "vs_baseline": {
+    "n": 200,
+    "mean_diff": 0.009232142857142855,
+    "p": 0.9771034035772699
+   },
+   "extra_words_vs_baseline": {
+    "n": 200,
+    "mean_diff": 0.007327380952380957,
+    "p": 0.9810709053360427
+   },
+   "heard_right_vs_baseline": {
+    "n": 200,
+    "mean_diff": -0.0021547619047618993,
+    "p": 0.8100892572356119
+   },
+   "per_vs_baseline": {
+    "n": 200,
+    "mean_diff": 0.0047020043496907825,
+    "p": 0.6958699708394995
+   },
+   "words_read_right_vs_baseline": {
+    "n": 200,
+    "mean_diff": 0.0049404761904761904,
+    "p": 0.6858658030947484
+   }
+  },
+  "stagedft": {
+   "n": 200,
+   "wer": 0.8411316648531012,
+   "wer_sped_up": 0.7932535364526659,
+   "missing_words": 0.1458106637649619,
+   "extra_words": 0.15233949945593037,
+   "heard_right": 0.31229597388465724,
+   "movement": 1.222642183303833,
+   "n_islands": 999,
+   "top1": 0.785,
+   "mean_rank": 3.3,
+   "per": 0.55427694668201,
+   "words_read_right": 0.3253536452665941,
+   "vs_baseline": {
+    "n": 200,
+    "mean_diff": 0.02918452380952381,
+    "p": 0.4088889314497667
+   },
+   "extra_words_vs_baseline": {
+    "n": 200,
+    "mean_diff": 0.014940476190476192,
+    "p": 0.7158693475115154
+   },
+   "heard_right_vs_baseline": {
+    "n": 200,
+    "mean_diff": -0.011577380952380952,
+    "p": 0.7481663514753929
+   },
+   "per_vs_baseline": {
+    "n": 200,
+    "mean_diff": 0.024283911098137437,
+    "p": 0.0317411899303573
+   },
+   "words_read_right_vs_baseline": {
+    "n": 200,
+    "mean_diff": -0.02034523809523809,
+    "p": 0.1575106549419132
+   },
+   "vs_pool": {
+    "n": 200,
+    "mean_diff": 0.019952380952380947,
+    "p": 0.6222149763435794
+   },
+   "rule_met": false
+  },
+  "stagedfrozen": {
+   "n": 200,
+   "wer": 0.8117519042437432,
+   "wer_sped_up": 0.7845484221980413,
+   "missing_words": 0.13492927094668117,
+   "extra_words": 0.15560391730141457,
+   "heard_right": 0.3405875952121872,
+   "movement": 1.2056353092193604,
+   "n_islands": 974,
+   "top1": 0.75,
+   "mean_rank": 3.635,
+   "per": 0.5646336785577292,
+   "words_read_right": 0.30359085963003263,
+   "vs_baseline": {
+    "n": 200,
+    "mean_diff": 0.009166666666666665,
+    "p": 0.7623550237183638
+   },
+   "extra_words_vs_baseline": {
+    "n": 200,
+    "mean_diff": 0.02844642857142857,
+    "p": 0.5138004078904038
+   },
+   "heard_right_vs_baseline": {
+    "n": 200,
+    "mean_diff": 0.016529761904761905,
+    "p": 0.2861106588601635
+   },
+   "per_vs_baseline": {
+    "n": 200,
+    "mean_diff": 0.02913979989925272,
+    "p": 0.00517133399636757
+   },
+   "words_read_right_vs_baseline": {
+    "n": 200,
+    "mean_diff": -0.03905952380952381,
+    "p": 0.017076498777686015
+   },
+   "vs_pool": {
+    "n": 200,
+    "mean_diff": -6.547619047619246e-05,
+    "p": 0.8638393920732652
+   },
+   "rule_met": false
+  }
+ }
+}
