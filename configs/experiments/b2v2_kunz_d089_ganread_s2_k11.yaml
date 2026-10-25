@@ -1,0 +1,11 @@
+# D-089: `gan_read` (D-086) again with another seed (1), for the 3-member average `ens_read`.
+#   PC: ~/wvx/envs/wvx-f5/bin/python -I scripts/train_b2v2.py --config configs/experiments/b2v2_kunz_d089_ganread_s2_k11.yaml
+base_experiment: configs/experiments/b2v2_kunz_d086_ganread_k11.yaml
+
+run_name: b2v2_kunz_d089_ganread_s2_k11
+
+b2v2:
+  adapt:
+    decision: D-089
+    training:
+      seed: 1

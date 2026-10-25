@@ -1,0 +1,21 @@
+# D-089 arm `hid` (seed 2), fold 03: `gan_read` + hidden-state distillation: this map's encoder output is pulled
+# (cosine) toward the encoder output of the adversarial base's F_03 on the ATTEMPTED version of the same sentence (other
+# blocks), warped onto the imagined trial by forced alignment.
+#   PC: ~/wvx/envs/wvx-f5/bin/python -I scripts/build_distill_targets.py --config configs/experiments/b2v2_kunz_d089_hid_s3_k03.yaml  (GPU; once per fold)
+#       ~/wvx/envs/wvx-f5/bin/python -I scripts/train_b2v2.py --config configs/experiments/b2v2_kunz_d089_hid_s3_k03.yaml
+base_experiment: configs/experiments/b2v2_kunz_d086_ganread_k03.yaml
+
+run_name: b2v2_kunz_d089_hid_s3_k03
+
+b2v2:
+  adapt:
+    decision: D-089
+    distill:
+      kind: hidden
+      teacher: data/checkpoints/b2v2_kunz_gan_f03/best.pt
+      attempted: b2v2_kunz_gan_f03:attempted_train
+      inner: b2v2_kunz_d086_ganread_k03:imagined_train
+      targets: data/processed/b2v2_distill/b2v2_kunz_d089_hid_k03.npz   # shared by the three seeds
+      weight: 3.0                    # the paper's cosine (SSL) weight 0.3 next to its phoneme weight 0.1
+    training:
+      seed: 2

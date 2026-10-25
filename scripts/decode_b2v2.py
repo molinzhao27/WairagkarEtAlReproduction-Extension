@@ -59,6 +59,9 @@ def main(argv=None) -> int:
     ap.add_argument("--data-dir", default=None, help="override b2v2.data_dir (e.g. projected Kunz data, D-077)")
     ap.add_argument("--ctx", type=int, default=128, help="chunked: tokens per window")
     ap.add_argument("--hop", type=int, default=64, help="chunked: kept outputs per window after the first")
+    ap.add_argument("--ensemble", default=None,
+                    help="D-089, chunked only: comma-separated checkpoints decoded and averaged (continuous outputs "
+                         "averaged, phoneme probabilities averaged); the output goes under this config's run name")
     args = ap.parse_args(argv)
     cfg = load_experiment_config(args.config)
     import numpy as np
@@ -71,10 +74,21 @@ def main(argv=None) -> int:
     ckpt = resolve_path(cfg["paths"]["checkpoints"]) / run / f"{args.checkpoint}.pt" \
         if args.checkpoint in ("final", "best") else resolve_path(args.checkpoint)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    ck = torch.load(ckpt, map_location=device)
-    model = bm.B2V2(ck["model_cfg"]).to(device)
-    model.load_state_dict(ck["state"])
-    input_id = int(ck.get("input_id", 0))
+    paths = [resolve_path(p) for p in args.ensemble.split(",")] if args.ensemble else [ckpt]
+    models = []
+    for cp in paths:
+        ck = torch.load(cp, map_location=device)
+        m = bm.B2V2(ck["model_cfg"]).to(device)
+        m.load_state_dict(ck["state"])
+        models.append((m, int(ck.get("input_id", 0))))
+    model, input_id = models[0]
+    if args.ensemble and args.mode != "chunked":
+        raise SystemExit("--ensemble needs --mode chunked")
+
+    def softmax(z):
+        z = z - z.max(-1, keepdims=True)
+        e = np.exp(z)
+        return e / e.sum(-1, keepdims=True)
     data = bd.B2V2Data(resolve_path(args.data_dir or b["data_dir"]))
     gids = select(data, args.trials, resolve_path("results/b2v2") / run)
     window = int(args.window_bins or b["decode"]["window_bins"])
@@ -86,6 +100,11 @@ def main(argv=None) -> int:
         x, _ = data.trial_arrays(data.by_gid[g])
         if args.mode == "live":
             c, lg = bm.decode_live(model, x, window, pool, input_id=input_id, device=device)
+        elif len(models) > 1:                                  # D-089: average the members
+            outs = [bm.decode_chunked(m, x, pool, args.ctx, args.hop, input_id=i, device=device) for m, i in models]
+            c = np.mean([o[0] for o in outs], 0)
+            lg = np.log(np.mean([softmax(o[1]) for o in outs], 0) + 1e-12)
+            ph0 = np.log(np.mean([softmax(o[2]) for o in outs], 0) + 1e-12)
         else:
             c, lg, ph0 = bm.decode_chunked(model, x, pool, args.ctx, args.hop, input_id=input_id, device=device)
             out[f"g{g}_best50"] = ph0.argmax(-1).astype(np.uint8)
@@ -93,7 +112,8 @@ def main(argv=None) -> int:
             out[f"g{g}_lp50"] = (lp - np.log(np.exp(lp).sum(-1, keepdims=True))).astype(np.float16)   # log-softmax
         out[f"g{g}_cont"] = c.astype(np.float32)
         out[f"g{g}_best"] = lg.argmax(-1).astype(np.uint8)
-    header = {"run_name": run, "checkpoint": str(ckpt), "checkpoint_sha256": hashlib.sha256(ckpt.read_bytes()).hexdigest(),
+    header = {"run_name": run, "checkpoint": ",".join(str(p) for p in paths),
+              "checkpoint_sha256": ",".join(hashlib.sha256(p.read_bytes()).hexdigest() for p in paths),
               "input_id": input_id, "trials": args.trials, "gids": gids, "mode": args.mode,
               "data_dir": str(resolve_path(args.data_dir or b["data_dir"])),
               "window_bins": window if args.mode == "live" else None,

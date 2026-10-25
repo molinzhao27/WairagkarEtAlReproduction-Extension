@@ -17,7 +17,8 @@ Per arm (``b2v2.d086.arms``: ``preds`` = RUN:NAME decodes, ``identify`` = an ide
 - movement inside words (D-084): sound islands (c0 smoothed over ``smooth`` frames above ``threshold``, at least
   ``min_frames``, gaps under ``bridge`` frames bridged); per island the s.d. over time of the cepstra ``cepstra``,
   in units of the attempted held-out decodes' (``reference``) per-feature island s.d.; median over islands;
-- identification top-1 / mean rank and PER (from ``identify``).
+- identification top-1 / mean rank and PER (from ``identify``); per-trial PER and words read right (all of a word's
+  phonemes right in the greedy 50 ms read-out) paired vs the baseline; ``rule.kind: per`` (D-089) judges the read-out.
 Writes ``out`` (default results/b2v2/d086)/summary.json / .md.
 """
 
@@ -62,6 +63,28 @@ def word_ops(ref: list, hyp: list) -> tuple:
     return sb, dl, ins, hit
 
 
+def phone_ops(ref: list, hyp: list) -> list:
+    """Per reference position: "hit", "sub" or "del" in a minimum-edit alignment (D-089)."""
+    import numpy as np
+
+    n, m = len(ref), len(hyp)
+    D = np.zeros((n + 1, m + 1), int)
+    D[:, 0], D[0, :] = range(n + 1), range(m + 1)
+    for i in range(1, n + 1):
+        for j in range(1, m + 1):
+            D[i, j] = min(D[i - 1, j] + 1, D[i, j - 1] + 1, D[i - 1, j - 1] + (ref[i - 1] != hyp[j - 1]))
+    out, i, j = [None] * n, n, m
+    while i or j:
+        if i and j and D[i, j] == D[i - 1, j - 1] + (ref[i - 1] != hyp[j - 1]):
+            out[i - 1] = "hit" if ref[i - 1] == hyp[j - 1] else "sub"
+            i, j = i - 1, j - 1
+        elif i and D[i, j] == D[i - 1, j] + 1:
+            out[i - 1], i = "del", i - 1
+        else:
+            j -= 1
+    return out
+
+
 def islands(c0, isl):
     import numpy as np
 
@@ -85,13 +108,13 @@ def main(argv=None) -> int:
     import numpy as np
     from scipy.stats import wilcoxon
 
-    from wvx import postproc as pp
+    from wvx import b2v2_data as bd, phonemes as ph, postproc as pp
     from wvx.provenance import code_version
 
     S = cfg["b2v2"]["d086"]
     isl = S["islands"]
     lo, hi = (int(x) for x in isl["cepstra"])
-    bo = cfg["b2v2"]["postproc"].get("boost")                  # only for arms with ``boost: true``
+    bo = (cfg["b2v2"].get("postproc") or {}).get("boost")       # only for arms with ``boost: true``
 
     def conts(specs, boost=False):
         out = {}
@@ -109,6 +132,27 @@ def main(argv=None) -> int:
     def movement(cs):
         v = [float(np.mean(c[s:e, lo:hi].std(0) / sd)) for c in cs.values() for s, e in islands(c[:, 0], isl)]
         return float(np.median(v)), len(v)
+
+    data = bd.B2V2Data(resolve_path(cfg["b2v2"]["data_dir"]))
+    SIL = ph.ID["SIL"]
+
+    def words_read_right(specs):
+        """Per trial, (words whose phonemes the greedy 50 ms read-out gets all right, words) (D-089)."""
+        out = {}
+        for spec in specs:
+            run, name = spec.split(":")
+            with np.load(resolve_path("data/processed/b2v2_preds") / run / f"{name}.npz", allow_pickle=False) as z:
+                for g in json.loads(str(z["header"]))["gids"]:
+                    lab = data.by_gid[int(g)]["label"]
+                    hyp = [x for x in ph.ctc_greedy(z[f"g{g}_lp50"].astype(np.float64).argmax(1)) if x != SIL]
+                    ref = [x for x in lab if x != SIL]
+                    wid = np.cumsum([0] + [x == SIL for x in lab])[:-1]
+                    wid_ref = [int(wid[i]) for i, x in enumerate(lab) if x != SIL]
+                    ok = {}
+                    for w_, op in zip(wid_ref, phone_ops(ref, hyp)):
+                        ok[w_] = ok.get(w_, True) and op == "hit"
+                    out[int(g)] = (sum(ok.values()), len(ok))
+        return out
 
     def whisper_rows(arm):
         rows = {}
@@ -141,12 +185,16 @@ def main(argv=None) -> int:
             ins, hits = ins + i_, hits + h_
             per_ins[g], per_hit[g] = i_ / max(1, len(ref)), h_ / max(1, len(ref))
         mv, n_isl = movement(conts(arm["preds"], bool(arm.get("boost"))))
+        wr = words_read_right(arm["preds"])
         res[an] = {"n": len(W), "wer": nerr / nw, "wer_sped_up": nerr_f / nw, "missing_words": dl / nw,
                    "extra_words": ins / nw, "heard_right": hits / nw, "_trial_ins": per_ins, "_trial_hit": per_hit,
                    "movement": mv, "n_islands": n_isl,
                    "top1": float(np.mean([ids[g]["rank"] == 1 for g in W])),
                    "mean_rank": float(np.mean([ids[g]["rank"] for g in W])),
                    "per": sum(ids[g]["phone_errors"] for g in W) / sum(ids[g]["ref_phones"] for g in W),
+                   "words_read_right": sum(wr[g][0] for g in W) / sum(wr[g][1] for g in W),
+                   "_trial_per": {g: ids[g]["phone_errors"] / max(1, ids[g]["ref_phones"]) for g in W},
+                   "_trial_wrr": {g: wr[g][0] / max(1, wr[g][1]) for g in W},
                    "_trial_wer": {g: w[1]["wer"] for g, w in W.items()}}
 
     def paired(a, b, key="_trial_wer"):
@@ -163,6 +211,8 @@ def main(argv=None) -> int:
             res[an]["vs_baseline"] = paired(an, base)
             res[an]["extra_words_vs_baseline"] = paired(an, base, "_trial_ins")
             res[an]["heard_right_vs_baseline"] = paired(an, base, "_trial_hit")
+            res[an]["per_vs_baseline"] = paired(an, base, "_trial_per")
+            res[an]["words_read_right_vs_baseline"] = paired(an, base, "_trial_wrr")
         if an not in (base, sec):
             res[an]["vs_" + sec] = paired(an, sec)
         if an in S["primary"]:
@@ -170,13 +220,17 @@ def main(argv=None) -> int:
                 pb = res[an]["vs_baseline"]
                 res[an]["rule_met"] = bool(res[base]["wer"] - res[an]["wer"] >= float(rule["min_points"]) / 100
                                            and pb["p"] < float(rule["alpha"]) and pb["mean_diff"] < 0)
+            elif rule["kind"] == "per":                           # D-089: the read-out
+                pb = res[an]["per_vs_baseline"]
+                res[an]["rule_met"] = bool(res[base]["per"] - res[an]["per"] >= float(rule["min_points"]) / 100
+                                           and pb["p"] < float(rule["alpha"]) and pb["mean_diff"] < 0)
             else:                                                 # D-088: fewer extra words, words heard right kept
                 pe = res[an]["extra_words_vs_baseline"]
                 res[an]["rule_met"] = bool(pe["mean_diff"] < 0 and pe["p"] < float(rule["alpha"])
                                            and res[base]["heard_right"] - res[an]["heard_right"]
                                            <= float(rule["max_heard_right_drop"]) / 100)
     for an in res:
-        for k in ("_trial_wer", "_trial_ins", "_trial_hit"):
+        for k in ("_trial_wer", "_trial_ins", "_trial_hit", "_trial_per", "_trial_wrr"):
             res[an].pop(k)
     out = {"decision": S.get("decision", "D-086"), "config": args.config, "code_version": code_version(),
            "created": datetime.datetime.now().isoformat(timespec="seconds"), "settings": S, "arms": res}
@@ -185,6 +239,8 @@ def main(argv=None) -> int:
     (dst / "summary.json").write_text(json.dumps(out, indent=1) + "\n")
     rule_txt = (f"pooled WER >= {rule['min_points']} points lower, paired p < {rule['alpha']}"
                 if rule.get("kind", "wer") == "wer" else
+                f"pooled PER >= {rule['min_points']} points lower, paired per-trial p < {rule['alpha']}"
+                if rule["kind"] == "per" else
                 f"extra words lower (paired per-trial p < {rule['alpha']}) and words heard right down by at most "
                 f"{rule['max_heard_right_drop']} points")
     lines = [f"# {S.get('title', 'D-086: making inner-speech voice less muddy (200 held-out imagined trials)')}", "",
@@ -192,7 +248,8 @@ def main(argv=None) -> int:
              "by construction of the units (median over islands differs). Extra words and words heard right: per "
              "reference word, the raw transcript (change vs baseline, p).", "",
              "| arm | WER | vs baseline (p) | vs " + sec + " (p) | WER sped up | missing words | extra words | heard right | "
-             "movement | top-1 | mean rank | PER | rule |", "|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
+             "movement | top-1 | mean rank | PER | words read right | rule |",
+             "|---|---|---|---|---|---|---|---|---|---|---|---|---|---|"]
     for an, r in res.items():
         vb, vs = r.get("vs_baseline"), r.get("vs_" + sec)
         lines.append(
@@ -205,7 +262,10 @@ def main(argv=None) -> int:
             + (f" ({100 * r['heard_right_vs_baseline']['mean_diff']:+.1f}, {r['heard_right_vs_baseline']['p']:.2g})"
                if "heard_right_vs_baseline" in r else "")
             + f" | {r['movement']:.2f} | "
-            f"{100 * r['top1']:.1f}% | {r['mean_rank']:.1f} | {100 * r['per']:.1f}% | "
+            f"{100 * r['top1']:.1f}% | {r['mean_rank']:.1f} | {100 * r['per']:.1f}%"
+            + (f" ({100 * r['per_vs_baseline']['mean_diff']:+.1f}, {r['per_vs_baseline']['p']:.2g})"
+               if "per_vs_baseline" in r else "")
+            + f" | {100 * r['words_read_right']:.1f}% | "
             + ("met" if r.get("rule_met") else ("not met" if an in S["primary"] else "–")) + " |")
     (dst / "summary.md").write_text("\n".join(lines) + "\n")
     print("\n".join(lines))

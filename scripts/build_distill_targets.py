@@ -10,6 +10,9 @@ imagined blocks repeat (continuous features and phase-0 phoneme log-probabilitie
 of those imagined trials (only its phoneme stream is used, for the alignment); ``targets`` = the npz written here
 (``g<gid>``: (T, 20) per imagined trial, 10 ms frames, the trial's length; header: provenance and anchor counts).
 Each imagined trial's partner is the attempted trial of its ``paired_block`` with the same text.
+``kind: hidden`` (D-089): instead of the decoded voice, the TEACHER's encoder output on the attempted trial
+(``teacher``: a checkpoint, run on the attempted neural data exactly as decoding runs, all 50 ms phases;
+``wvx.b2v2_model.decode_hidden``), warped the same way and stored as float16 (T, d). Needs PyTorch (GPU if present).
 """
 
 from __future__ import annotations
@@ -48,6 +51,18 @@ def main(argv=None) -> int:
 
     za, ga = load(d["attempted"])
     zi, gi = load(d["inner"])
+    teacher = None
+    if d.get("kind", "voice") == "hidden":
+        import torch
+
+        from wvx import b2v2_model as bm
+
+        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+        ck = torch.load(resolve_path(d["teacher"]), map_location=device)
+        teacher = bm.B2V2(ck["model_cfg"]).to(device)
+        teacher.load_state_dict(ck["state"])
+        t_in = int(ck.get("input_id", 0))
+        tt = b["adapt"]["training"]
     partner = {(data.by_gid[g]["block"], data.by_gid[g]["text"]): g for g in ga}
     out, info, missing = {}, {}, []
     for g in gi:
@@ -57,13 +72,17 @@ def main(argv=None) -> int:
             missing.append(g)
             continue
         att = za[f"g{p}_cont"].astype(np.float32)
+        if teacher is not None:
+            x, _ = data.trial_arrays(data.by_gid[p])
+            att = bm.decode_hidden(teacher, x, pool, int(tt["ctx"]), int(tt["hop"]), input_id=t_in)
         f = distill.warp_map(zi[f"g{g}_lp50"].astype(np.float64), za[f"g{p}_lp50"].astype(np.float64), tr["label"],
                              int(tr["length"]), len(att), pool)
-        out[f"g{g}"] = distill.warp_features(att, f)
+        out[f"g{g}"] = distill.warp_features(att, f).astype(np.float16 if teacher is not None else np.float32)
         info[int(g)] = {"partner": int(p), "inner_s": int(tr["length"]) / 100, "attempted_s": len(att) / 100}
     dst = resolve_path(d["targets"])
     dst.parent.mkdir(parents=True, exist_ok=True)
-    header = {"config": args.config, "decision": "D-086", "attempted": d["attempted"], "inner": d["inner"],
+    header = {"config": args.config, "decision": b["adapt"].get("decision", "D-086"), "kind": d.get("kind", "voice"),
+              "teacher": d.get("teacher"), "attempted": d["attempted"], "inner": d["inner"],
               "n": len(out), "missing_partner": missing, "trials": info, "code_version": code_version(),
               "created": datetime.datetime.now().isoformat(timespec="seconds")}
     np.savez(dst, header=json.dumps(header), **out)

@@ -164,3 +164,18 @@ def test_adversarial_weight_schedule():
     assert np.isclose(bm.adversarial_weight(10, a), 0.01)
     assert np.isclose(bm.adversarial_weight(20, a), 0.055)
     assert np.isclose(bm.adversarial_weight(100, a), 0.1)
+
+
+def test_return_hidden_and_decode_hidden():
+    m = _model()
+    x = torch.randn(2, 10, 12)
+    c, p, h = m(x, return_hidden=True)
+    c2, p2 = m(x)
+    assert h.shape == (2, 10, 32) and torch.allclose(c, c2) and torch.allclose(p, p2)
+    xs = np.random.default_rng(0).normal(size=(53, 12)).astype(np.float32)
+    H = bm.decode_hidden(m, xs, pool=5, ctx=4, hop=2)
+    c3, _, _ = bm.decode_chunked(m, xs, pool=5, ctx=4, hop=2)
+    assert H.shape == (53, 32) and not np.isnan(H).any()
+    # the hidden states are the ones the continuous head reads, frame by frame
+    with torch.no_grad():
+        np.testing.assert_allclose(m.cont(torch.as_tensor(H[10:20])).numpy(), c3[10:20], atol=1e-4)

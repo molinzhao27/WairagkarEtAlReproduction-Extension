@@ -90,14 +90,14 @@ class B2V2(nn.Module):
         m = self.inputs[input_id]
         return [m.U, m.V, m.base.bias] if isinstance(m, LowRankLinear) else list(m.parameters())
 
-    def forward(self, x: torch.Tensor, input_id: int = 0) -> tuple[torch.Tensor, torch.Tensor]:
-        """x (B, L, F) -> (continuous (B, L, 20), phoneme logits (B, L, 41)). Causal: position i sees 0..i only, so
-        right padding never reaches a real token."""
+    def forward(self, x: torch.Tensor, input_id: int = 0, return_hidden: bool = False):
+        """x (B, L, F) -> (continuous (B, L, 20), phoneme logits (B, L, 41)[, encoder output (B, L, d)]). Causal:
+        position i sees 0..i only, so right padding never reaches a real token."""
         L = x.shape[1]
         h = self.inputs[input_id](x) + self.pe[:L]
         causal = torch.triu(torch.ones(L, L, dtype=torch.bool, device=x.device), 1)
         h = self.encoder(h, mask=causal, is_causal=True)
-        return self.cont(h), self.phon(h)
+        return (self.cont(h), self.phon(h), h) if return_hidden else (self.cont(h), self.phon(h))
 
 
 # ----------------------------------------------------------------------------------------- discriminator
@@ -257,19 +257,19 @@ def decode_live(model: B2V2, x: np.ndarray, window_bins: int, pool: int, input_i
     return np.concatenate([np.repeat(c[:1], lead, 0), c]), np.concatenate([np.repeat(lg[:1], lead, 0), lg])
 
 
-def chunked_forward(model: B2V2, tok: torch.Tensor, ctx: int, hop: int, input_id: int = 0
-                    ) -> tuple[torch.Tensor, torch.Tensor]:
+def chunked_forward(model: B2V2, tok: torch.Tensor, ctx: int, hop: int, input_id: int = 0,
+                    return_hidden: bool = False):
     """One token sequence (n_tok, F) -> (continuous (n_tok, 20), phoneme logits (n_tok, 41)) by long-context chunks:
     windows of ``ctx`` tokens every ``hop``, run as one batch; the first window keeps all its outputs, later ones
     their last ``hop`` (each output then sees >= ctx - hop tokens, except at the start). Differentiable: text-only
-    adaptation on whole trials trains through exactly what decoding runs (D-076)."""
+    adaptation on whole trials trains through exactly what decoding runs (D-076). ``return_hidden`` (D-089) adds
+    the encoder output (n_tok, d)."""
     n = tok.shape[0]
     starts = [0] + list(range(hop, max(1, n - ctx + hop), hop))
     segs = [tok[s: s + ctx] for s in starts]
-    c, lg = model(nn.utils.rnn.pad_sequence(segs, batch_first=True), input_id)
+    outs = model(nn.utils.rnn.pad_sequence(segs, batch_first=True), input_id, return_hidden=return_hidden)
     keep = [0 if s == 0 else ctx - hop for s in starts]
-    return (torch.cat([c[i, k: len(x)] for i, (k, x) in enumerate(zip(keep, segs))]),
-            torch.cat([lg[i, k: len(x)] for i, (k, x) in enumerate(zip(keep, segs))]))
+    return tuple(torch.cat([o[i, k: len(x)] for i, (k, x) in enumerate(zip(keep, segs))]) for o in outs)
 
 
 @torch.no_grad()
@@ -300,3 +300,26 @@ def decode_chunked(model: B2V2, x: np.ndarray, pool: int, ctx: int, hop: int, in
     first = int(np.argmax(~np.isnan(cont[:, 0])))
     cont[:first], logit[:first] = cont[first], logit[first]
     return cont, logit, phase0
+
+
+@torch.no_grad()
+def decode_hidden(model: B2V2, x: np.ndarray, pool: int, ctx: int, hop: int, input_id: int = 0,
+                  device: Optional[torch.device] = None) -> np.ndarray:
+    """The encoder output per 10 ms frame (T, d), assembled over the ``pool`` phases exactly as ``decode_chunked``
+    assembles its outputs (D-089: the teacher's internal state for hidden-state distillation)."""
+    from wvx.b2v2_data import pool_tokens
+
+    device = device or next(model.parameters()).device
+    model.eval()
+    T = x.shape[0]
+    out = np.full((T, int(model.cfg["d_model"])), np.nan, np.float32)
+    for p in range(pool):
+        n_tok = (T - p) // pool
+        if n_tok <= 0:
+            continue
+        tok = torch.as_tensor(pool_tokens(x[p: p + pool * n_tok], pool), device=device)
+        _, _, h = chunked_forward(model, tok, ctx, hop, input_id, return_hidden=True)
+        out[p + pool * np.arange(n_tok) + pool - 1] = h.float().cpu().numpy()
+    first = int(np.argmax(~np.isnan(out[:, 0])))
+    out[:first] = out[first]
+    return out

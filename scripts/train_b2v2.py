@@ -88,7 +88,8 @@ def adapt_full_trials(model, input_id, params, opt, data, split, b, t, run, ckpt
     D-086 options. ``adapt.distill`` {targets, weight}: trials with a target (an npz of 10 ms (T, 20) arrays,
     ``g<gid>``; ``scripts/build_distill_targets.py``) add ``weight`` x the speech-weighted squared error of the
     continuous output against it (``speech_weight`` / ``silence_weight``; speech = target c0 above the threshold); it
-    also enters the validation loss. ``adapt.adversarial`` {real, start, ramp, w_from, w_to, d_lr, d_weight_decay,
+    also enters the validation loss. With ``kind: hidden`` (D-089) the targets are (T, d) encoder outputs of a
+    teacher and the term is ``weight`` x the mean cosine dissimilarity of this model's encoder output to them. ``adapt.adversarial`` {real, start, ramp, w_from, w_to, d_lr, d_weight_decay,
     d_every, scales, channels, kernel}: a multiscale discriminator (``wvx.b2v2_model.MultiScaleDiscriminator``)
     learns to tell the continuous output on these trials from ``real`` sequences (the decoder's attempted-speech
     voice: decode files ``RUN:NAME``, read at a random 50 ms phase), updated every ``d_every`` steps; from step
@@ -138,7 +139,7 @@ def adapt_full_trials(model, input_id, params, opt, data, split, b, t, run, ckpt
             tk = bd.augment_batch(tk[None], np.ones((1, n_tok), bool), rng, b["augmentation"])[0]
         tok = torch.as_tensor(tk, device=device)
         with torch.autocast(device.type, dtype=torch.bfloat16, enabled=bf16):
-            c, lg = bm.chunked_forward(model, tok, ctx, hop, input_id)
+            c, lg, h = bm.chunked_forward(model, tok, ctx, hop, input_id, return_hidden=True)
         lp = F.log_softmax(lg.float(), -1)[:, None]
         lab = torch.as_tensor([tr["label"]], dtype=torch.long, device=device)
         loss = F.ctc_loss(lp, lab, torch.tensor([n_tok]), torch.tensor([len(tr["label"])]), blank=0,
@@ -146,9 +147,12 @@ def adapt_full_trials(model, input_id, params, opt, data, split, b, t, run, ckpt
         y = targets.get(int(tr["gid"]))
         if y is not None:
             frames = phase + pool * np.arange(n_tok) + pool - 1
-            yt = torch.as_tensor(y[np.minimum(frames, len(y) - 1)], device=device)
-            w = torch.where(yt[:, c0i] > thr, w_sp, w_sil)
-            loss = loss + float(dcfg["weight"]) * (w * ((c.float() - yt) ** 2).mean(-1)).mean()
+            yt = torch.as_tensor(y[np.minimum(frames, len(y) - 1)].astype(np.float32), device=device)
+            if dcfg.get("kind", "voice") == "hidden":            # D-089: the teacher's encoder output, cosine
+                loss = loss + float(dcfg["weight"]) * (1 - F.cosine_similarity(h.float(), yt, dim=-1)).mean()
+            else:
+                w = torch.where(yt[:, c0i] > thr, w_sp, w_sil)
+                loss = loss + float(dcfg["weight"]) * (w * ((c.float() - yt) ** 2).mean(-1)).mean()
         return loss, c
 
     def real_batch(n):
