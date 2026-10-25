@@ -36,7 +36,8 @@ def test_floor_and_verdict(tmp_path):
     v1 = _run(tmp_path / "v1", "vast3", [1.0, 2.001], [0, 3, 0, 0, 5], 1)
     doc = gc.build_floor([p1, v1], tmp_path / "floor.json")
     f = doc["floor"]
-    assert doc["floor_from"] == "cross-machine pairs"
+    assert doc["floor_from"].startswith("cross-machine pairs")
+    assert f["continuous"]["base/w"]["source"] == "cross-machine"
     assert abs(f["continuous"]["base/w"]["max_abs"] - 0.001) < 1e-5
     assert f["discrete"]["disc/dec_ref/best50"]["mismatches"] == 1
     assert f["discrete"]["disc/dec_ref/best50"]["sequences_differing"] == 0      # (3, 5) either way
@@ -45,3 +46,16 @@ def test_floor_and_verdict(tmp_path):
     big = _run(tmp_path / "big", "pc", [1.0, 2.01], [0, 3, 3, 0, 5], 2)
     v = gc.verdict(gc.pair(big, p1), doc)
     assert not v["pass"] and any("base/w" in x for x in v["reasons"]) and any("id_ref/rank" in x for x in v["reasons"])
+
+
+def test_floor_falls_back_to_repeat_runs_for_one_machine_outputs(tmp_path):
+    p1 = _run(tmp_path / "p1", "pc", [1.0, 2.0], [0, 3], 1)
+    p2 = _run(tmp_path / "p2", "pc", [1.0, 2.0], [0, 3], 1)
+    v1 = _run(tmp_path / "v1", "vast3", [1.0, 2.001], [0, 3], 1)
+    for d, wer in ((p1, 0.5), (p2, 0.25)):             # only the PC scores with Whisper
+        z = dict(np.load(d / "golden.npz"))
+        z["asr_ref/wer_orig"] = np.asarray([wer], np.float32)
+        np.savez_compressed(d / "golden.npz", **z)
+    f = gc.build_floor([p1, p2, v1], tmp_path / "floor.json")["floor"]["continuous"]
+    assert f["base/w"]["source"] == "cross-machine" and abs(f["base/w"]["max_abs"] - 0.001) < 1e-5
+    assert f["asr_ref/wer_orig"]["source"] == "same-machine" and f["asr_ref/wer_orig"]["max_abs"] == 0.25
