@@ -9,8 +9,11 @@ Per set (``b2v2.postproc.sets``: decode runs + prediction name) and trial, every
 uniformly (``wvx.postproc``): ``orig`` = the saved decoder audio (results/audio/b2v2/<run>/<name>/g<gid>.wav);
 ``denoise`` / ``pitch2`` = that audio processed; ``sharpen`` = the saved features with each cepstral deviation scaled
 by ``sharpen_alpha``, re-vocoded; ``all`` = sharpen -> denoise -> pitch2; ``boost`` (D-086) = the saved features with
-only their fast part (deviation from a ``boost.window``-frame moving average) scaled by ``boost.beta``, re-vocoded.
-Whisper WER at the original speed and sped up (D-073 factor). Writes results/b2v2/postproc/<set>.json / .md (pooled WER, paired per-trial tests vs ``orig``) and the
+only their fast part (deviation from a ``boost.window``-frame moving average) scaled by ``boost.beta``, re-vocoded;
+``gates`` (D-088): named confidence gates on the saved audio: where the phoneme read-out's confidence
+(``wvx.postproc.frame_confidence``) is below a threshold calibrated on the set's other folds, the voice is attenuated
+by ``atten_db``. Whisper WER at the original speed and sped up (D-073 factor). Writes results/b2v2/postproc/<set>.json
+/ .md (pooled WER, paired per-trial tests vs ``orig``) and the
 processed audio to results/audio/b2v2_postproc/<set>/<variant>/ (gitignored).
 """
 
@@ -48,11 +51,13 @@ def one(job):
 
     cfg = CFG
     b, p = cfg["b2v2"], cfg["b2v2"]["postproc"]
-    run, name, gid, text, set_name = job
+    run, name, gid, text, set_name = job[:5]
+    thr = job[5] if len(job) > 5 else {}                       # D-088: gate threshold per variant (this run's fold)
     sr = int(cfg["synthesis"]["sample_rate"])
     base, _ = sf.read(str(resolve_path("results/audio/b2v2") / run / name / f"g{gid}.wav"), dtype="float32")
     with np.load(resolve_path("data/processed/b2v2_preds") / run / f"{name}.npz", allow_pickle=False) as z:
         cont = z[f"g{gid}_cont"]
+        lp = z[f"g{gid}_lp50"].astype(np.float64)
     def denoise(w):
         return pp.spectral_gate(w, sr, **p["denoise"])
 
@@ -71,6 +76,12 @@ def one(job):
         elif v == "boost":                                         # D-086: fast part only
             bo = p["boost"]
             w = synthesis.decoder_output_to_waveform(pp.movement_boost(cont, float(bo["beta"]), int(bo["window"])), cfg)
+        elif v in (p.get("gates") or {}):                          # D-088: confidence-gated voice
+            gc = p["gates"][v]
+            conf = pp.frame_confidence(lp, len(cont), int(b["data"]["pool"]), int(gc["window"]),
+                                       bool(gc.get("centered", False)))
+            gain = pp.confidence_gain(conf, thr[v], float(gc["atten_db"]), int(gc["smooth"]))
+            w = pp.apply_frame_gain(base, gain, sr // 100)
         elif v in ("sharpen", "all"):
             if sharp is None:
                 sharp = synthesis.decoder_output_to_waveform(pp.sharpen(cont, float(p["sharpen_alpha"])), cfg)
@@ -85,6 +96,37 @@ def one(job):
                 rec[k] = {"hyp": r.get("hyp_raw"), "errors": r.get("word_errors"), "words": r.get("ref_words"),
                           "wer": r.get("wer")}
         out[v] = rec
+    return out
+
+
+def gate_thresholds(p, s, b) -> dict:
+    """D-088: per run of the set and gate variant, the gate threshold = the ``quantile`` of the frame confidence over
+    the speech frames (c0 > ``speech_c0``) of the set's OTHER runs (other folds), so no fold is calibrated on itself."""
+    import numpy as np
+
+    from wvx import postproc as pp
+
+    gates = p.get("gates") or {}
+    gv = [v for v in p["variants"] if v in gates]
+    out = {run: {} for run in s["runs"]}
+    if not gv:
+        return out
+    conf = {}
+    for run in s["runs"]:
+        with np.load(resolve_path("data/processed/b2v2_preds") / run / f"{s['name']}.npz", allow_pickle=False) as z:
+            gids = json.loads(str(z["header"]))["gids"]
+            for v in gv:
+                gc, vals = gates[v], []
+                for g in gids:
+                    c = z[f"g{g}_cont"]
+                    cf = pp.frame_confidence(z[f"g{g}_lp50"].astype(np.float64), len(c), int(b["data"]["pool"]),
+                                             int(gc["window"]), bool(gc.get("centered", False)))
+                    vals.append(cf[c[:, 0] > float(gc["speech_c0"])])
+                conf.setdefault(run, {})[v] = np.concatenate(vals)
+    for run in s["runs"]:
+        for v in gv:
+            other = np.concatenate([conf[r][v] for r in s["runs"] if r != run])
+            out[run][v] = float(np.quantile(other, float(gates[v]["quantile"])))
     return out
 
 
@@ -113,9 +155,11 @@ def main(argv=None) -> int:
             with np.load(resolve_path("data/processed/b2v2_preds") / run / f"{s['name']}.npz", allow_pickle=False) as z:
                 for g in json.loads(str(z["header"]))["gids"]:
                     jobs.append((run, s["name"], g, data.by_gid[g]["text"], set_name))
+        thr_by_run = gate_thresholds(p, s, b)
+        jobs = [j + (thr_by_run[j[0]],) for j in jobs]
         if args.limit:
             jobs, set_name = jobs[: args.limit], f"{set_name}_smoke"
-            jobs = [j[:4] + (set_name,) for j in jobs]
+            jobs = [j[:4] + (set_name,) + j[5:] for j in jobs]
         with ProcessPoolExecutor(int(p["workers"]), initializer=_init, initargs=(args.config,)) as ex:
             rows = list(ex.map(one, jobs))
 
@@ -140,7 +184,7 @@ def main(argv=None) -> int:
         out = {"set": set_name, "decision": p.get("decision", "D-078"), "config": args.config,
                "code_version": code_version(),
                "created": datetime.datetime.now().isoformat(timespec="seconds"), "settings": p, "n": len(rows),
-               "summary": summary, "rows": rows, "wall_time_s": time.time() - t0}
+               "summary": summary, "gate_thresholds": thr_by_run, "rows": rows, "wall_time_s": time.time() - t0}
         (res / f"{set_name}.json").write_text(json.dumps(out, indent=1, default=float) + "\n")
         lines = [f"# {p.get('decision', 'D-078')} post-processing: `{set_name}` ({len(rows)} trials)", "",
                  "| variant | WER | vs orig (p) | WER sped up | vs orig (p) | rule |", "|---|---|---|---|---|---|"]

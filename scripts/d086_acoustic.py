@@ -15,7 +15,7 @@ attempted audio of the same sentence (``acoustic.attempted``: RUN:NAME per fold,
 - acoustic identification: MCD to each of the 50 references of the trial's block; top-1 / mean rank of its own
   sentence; null: a random candidate per trial as the true one (``perms`` draws); length-only baseline: rank by the
   difference in speech-frame count.
-Writes results/b2v2/d086/acoustic.json / .md.
+Writes ``b2v2.d086.out`` (default results/b2v2/d086)/acoustic.json / .md.
 """
 
 from __future__ import annotations
@@ -222,10 +222,10 @@ def main(argv=None) -> int:
                                                "p": float(wilcoxon(d).pvalue) if np.any(d) else 1.0}
     for an in res:
         res[an].pop("_per_trial")
-    dst = resolve_path("results/b2v2/d086")
+    dst = resolve_path(S.get("out", "results/b2v2/d086"))
     dst.mkdir(parents=True, exist_ok=True)
     (dst / "acoustic.json").write_text(json.dumps({
-        "decision": "D-086 (amendment)", "config": args.config, "code_version": code_version(),
+        "decision": S.get("decision", "D-086") + " (sound-only measures)", "config": args.config, "code_version": code_version(),
         "created": datetime.datetime.now().isoformat(timespec="seconds"), "settings": A, "arms": res}, indent=1) + "\n")
 
     def f(x, k, fmt):
@@ -235,7 +235,8 @@ def main(argv=None) -> int:
         v = x.get(f"{k}_vs_baseline")
         return f" ({v['mean_diff']:+.2f}, p {v['p']:.2g})" if v else ""
 
-    lines = ["# D-086 sound-only measures (decoded audio; 200 held-out inner-speech trials per arm)", "",
+    lines = [f"# {S.get('decision', 'D-086')} sound-only measures (decoded audio; 200 held-out inner-speech trials per "
+             "arm)", "",
              "MCD = mel-cepstral distortion (dB, lower = closer); r = spectral correlation (higher = closer); "
              "both DTW-aligned, speech frames only. In brackets: per-trial change vs the baseline (p). Acoustic "
              "identification: the own sentence's rank among the block's 50 by MCD (chance top-1 2%, mean rank 25.5).",

@@ -55,3 +55,20 @@ def test_movement_boost_scales_only_the_fast_part():
     np.testing.assert_allclose(y[mid, 3], (slow + 2 * fast)[mid], atol=0.01)
     assert np.all(y[:, 19] == x[:, 19])
     assert y.min() >= -1.0 and y.max() <= 1.0
+
+
+def test_frame_confidence_causal_and_centered():
+    lp = np.log(np.full((4, 5), 1e-6))
+    lp[:, 0] = 0.0                                              # blank everywhere ...
+    lp[2, 0], lp[2, 3] = np.log(0.1), np.log(0.9)               # ... except token 2: phoneme 3 at 0.9 (output frame 14)
+    c = pp.frame_confidence(lp, 20, 5, window=2)
+    assert np.all(c[:14] < 0.01) and np.all(c[14:20] > 0.89)    # causal: only from the frame the token is output
+    cc = pp.frame_confidence(lp, 20, 5, window=2, centered=True)
+    assert cc[9] > 0.89 and cc[3] < 0.01                        # centered: 5 frames either side of frame 14
+
+
+def test_confidence_gain_and_apply():
+    g = pp.confidence_gain(np.array([1, 1, 0, 0, 0, 1], float), 0.5, 20.0, 1)
+    np.testing.assert_allclose(g, [1, 1, 0.1, 0.1, 0.1, 1], rtol=1e-6)
+    w = pp.apply_frame_gain(np.ones(600, np.float32), g, 100)
+    assert w[50] == 1.0 and abs(w[350] - 0.1) < 1e-6 and 0.1 < w[200] < 1.0

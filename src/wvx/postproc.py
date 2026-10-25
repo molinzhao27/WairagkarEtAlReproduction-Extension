@@ -79,3 +79,39 @@ def movement_boost(pred: np.ndarray, beta: float, window: int, n_cepstral: int =
     slow = np.stack([np.convolve(cp[:, j], k, mode="valid") for j in range(c.shape[1])], 1)
     out[:, :n_cepstral] = np.clip(slow + beta * (c - slow), lo, hi)
     return out
+
+
+def frame_confidence(lp50: np.ndarray, n_frames: int, pool: int, window: int, centered: bool = False,
+                     first_class: int = 2) -> np.ndarray:
+    """Label-free read-out confidence per 10 ms frame (D-088): per 50 ms token (phase 0, output at frame
+    ``pool * k + pool - 1``) the highest phoneme probability (classes from ``first_class``: not blank, not SIL); per
+    frame the max over the last ``window`` tokens already output (causal), or over the tokens within ``window / 2``
+    tokens of the frame (``centered``: needs lookahead)."""
+    tok = np.exp(lp50[:, first_class:]).max(1)
+    t_out = pool * np.arange(len(tok)) + pool - 1
+    out = np.zeros(n_frames, np.float32)
+    for f in range(n_frames):
+        if centered:
+            m = np.abs(t_out - f) <= window * pool / 2
+        else:
+            m = (t_out <= f) & (t_out > f - window * pool)
+        out[f] = tok[m].max() if m.any() else 0.0
+    return out
+
+
+def confidence_gain(conf: np.ndarray, threshold: float, atten_db: float, smooth: int) -> np.ndarray:
+    """Per-frame amplitude gain (D-088): 1 where ``conf`` >= ``threshold``, 10^(-atten_db / 20) below, smoothed by a
+    ``smooth``-frame moving average (no clicks)."""
+    g = np.where(conf >= threshold, 1.0, 10 ** (-float(atten_db) / 20)).astype(np.float32)
+    if smooth > 1:
+        g = np.convolve(np.pad(g, (smooth // 2, smooth - 1 - smooth // 2), mode="edge"), np.ones(smooth) / smooth,
+                        mode="valid").astype(np.float32)
+    return g
+
+
+def apply_frame_gain(wav: np.ndarray, gain: np.ndarray, hop: int) -> np.ndarray:
+    """Multiply ``wav`` by a per-frame gain (``hop`` samples per frame), linearly interpolated between frame centres;
+    samples past the last frame keep its gain."""
+    centres = hop * np.arange(len(gain)) + hop / 2
+    g = np.interp(np.arange(len(wav)), centres, gain)
+    return (wav * g).astype(np.float32)
