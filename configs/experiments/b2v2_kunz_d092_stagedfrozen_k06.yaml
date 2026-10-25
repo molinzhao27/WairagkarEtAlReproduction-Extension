@@ -1,0 +1,14 @@
+# D-092 arm `stagedfrozen`, fold 06 (user: "train on further-in-time data first, and then adapt on closer in time data"):
+# D-091 `pool`'s days and adapter, trained in two stages: first the other days (April, Dec, Jan: their inputs and the
+# shared adapter), then March alone (its input; the adapter frozen), best step by March validation.
+#   vast-3 (gq): /workspace/envs/wvx-torch/bin/python -I scripts/train_b2v2_pool.py --config configs/experiments/b2v2_kunz_d092_stagedfrozen_k06.yaml
+base_experiment: configs/experiments/b2v2_kunz_d091_pool_k06.yaml
+
+run_name: b2v2_kunz_d092_stagedfrozen_k06
+
+b2v2:
+  pool:
+    decision: D-092
+    stages:
+      - {name: pretrain, days: [april, dec, jan], steps: 2000, adapter: train, select: final}
+      - {name: march, days: [march], steps: 1000, adapter: freeze, select: best}

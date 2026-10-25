@@ -9,7 +9,8 @@
 new input projection (initialized as ``copy_from``), trained on that day's whole trials with whole-trial CTC (as
 D-076). ``inner`` trials (inner speech, any strategy) also pass the optional shared ``adapter`` (a residual low-rank
 map on the input embedding, ``wvx.b2v2_model.SharedAdapter``, identity at start), which every day trains together:
-the learned "inner -> attempted" correction. ``attempted`` trials (if any) train their day's input only, without the
+the learned "inner -> attempted" correction. Optional ``stages`` (D-092): train some days first, then others (e.g.
+pretrain on the other days, then fine-tune on the decode day). ``attempted`` trials (if any) train their day's input only, without the
 adapter. Each step draws ``batch_size`` trials, each from a day chosen uniformly (``sampling: day_balanced``) and a
 trial chosen uniformly within it; one random 50 ms phase per trial; the paper's augmentations from ``augment_from``.
 Validation: ``n_validation`` inner trials of the ``decode_day`` drawn from its ``validation_blocks`` exactly as
@@ -89,14 +90,36 @@ def main(argv=None) -> int:
     ad = P.get("adapter")
     if ad:
         model.add_adapter(ad["name"], int(ad["rank"]))
-    for d in days:
-        for p in model.inputs[d["input_id"]].parameters():
-            p.requires_grad_(True)
-    if ad:
-        for p in model.adapters[ad["name"]].parameters():
-            p.requires_grad_(True)
-    params = [p for p in model.parameters() if p.requires_grad]
-    opt = torch.optim.AdamW(params, lr=float(t["lr"]), weight_decay=float(t["weight_decay"]))
+    aname = ad["name"] if ad else None
+    # stages (D-092): each trains the named days' inputs and, if ``adapter: train``, the adapter (its lr scaled by
+    # ``adapter_lr_scale``), for ``steps``; ``select: best`` keeps the step with the lowest validation CTC. Without
+    # ``stages``: one stage, every day, adapter trained, best step (D-091).
+    stages = P.get("stages") or [{"name": "all", "days": [d["name"] for d in days], "steps": steps,
+                                  "adapter": "train", "select": "best"}]
+
+    def stage_params(st):
+        for p in model.parameters():
+            p.requires_grad_(False)
+        names = set(st["days"])
+        for d in days:
+            if d["name"] in names:
+                for p in model.inputs[d["input_id"]].parameters():
+                    p.requires_grad_(True)
+        if ad and st.get("adapter", "train") == "train":
+            for p in model.adapters[aname].parameters():
+                p.requires_grad_(True)
+        ps = [p for p in model.parameters() if p.requires_grad]
+        aset = {id(p) for p in model.adapters[aname].parameters()} if ad else set()
+        scale = float(st.get("adapter_lr_scale", 1.0))
+        if scale == 1.0:
+            groups = [{"params": ps, "scale": 1.0}]
+        else:
+            groups = [{"params": [p for p in ps if id(p) not in aset], "scale": 1.0},
+                      {"params": [p for p in ps if id(p) in aset], "scale": scale}]
+        return ps, torch.optim.AdamW([g for g in groups if g["params"]], lr=float(t["lr"]),
+                                     weight_decay=float(t["weight_decay"]))
+
+    params, opt = stage_params(stages[0])
 
     # validation: the decode day's held-out inner trials, drawn as train_b2v2.split_trials draws them
     dec = next(d for d in days if d["name"] == P["decode_day"])
@@ -110,8 +133,6 @@ def main(argv=None) -> int:
             f"attempted training trials")
     log(f"{run}: {len(val)} validation trials ({P['decode_day']}); adapter {ad}; {len(params)} trainable tensors, "
         f"{sum(p.numel() for p in params):,} values; device {device}")
-    aug_from = int(float(t["augment_from"]) * steps)
-    aname = ad["name"] if ad else None
 
     def trial_loss(day, gid, inner, phase, augment=False):
         tr = day["data"].by_gid[gid]
@@ -154,44 +175,57 @@ def main(argv=None) -> int:
             {"val": val, "days": {d["name"]: {"inner": d["inner"], "attempted": d["attempted"]} for d in days}}) + "\n")
         logf = open(res_dir / "log.jsonl", "a")
     t0, hist = time.time(), []
-    best = validate()
-    log(f"{run}: validation CTC before adaptation {best:.4f}")
-    hist.append({"step": 0, "val_ctc": best})
-    if not args.smoke:
-        save("best.pt", 0, best)
-    model.train()
-    for step in range(steps):
-        for g in opt.param_groups:
-            g["lr"] = bm.lr_at(step, dict(t, steps=steps))
-        loss = 0.0
-        for _ in range(B):
-            if P.get("sampling", "day_balanced") == "day_balanced":
-                d = days[int(rng.integers(0, len(days)))]
-            else:
-                raise ValueError(f"unknown sampling {P.get('sampling')}")
-            gid, inner = d["items"][int(rng.integers(0, len(d["items"])))]
-            loss = loss + trial_loss(d, gid, inner, int(rng.integers(0, pool)), augment=step >= aug_from)
-        loss = loss / B
-        opt.zero_grad(set_to_none=True)
-        loss.backward()
-        torch.nn.utils.clip_grad_norm_(params, float(t["grad_clip"]))
-        opt.step()
-        last = step + 1 == steps
-        if (step + 1) % int(t["val_every"]) == 0 or last:
-            v = validate()
-            rec = {"step": step + 1, "train_ctc": float(loss), "val_ctc": v, "lr": bm.lr_at(step, dict(t, steps=steps)),
-                   "s": time.time() - t0}
-            if ad:
-                rec["adapter_norm"] = float(model.adapters[aname].U.norm() * model.adapters[aname].V.norm())
-            hist.append(rec)
-            log(json.dumps({k: (round(x, 5) if isinstance(x, float) else x) for k, x in rec.items()}))
-            if logf:
-                logf.write(json.dumps(rec) + "\n")
-                logf.flush()
-            if v < best:
-                best = v
-                if not args.smoke:
-                    save("best.pt", step + 1, best)
+    best, total = None, 0
+    for si, st in enumerate(stages):
+        n_steps = int(args.smoke or st["steps"])
+        if si:
+            params, opt = stage_params(st)
+        st_days = [d for d in days if d["name"] in set(st["days"])]
+        aug_from = int(float(t["augment_from"]) * n_steps)
+        selecting = st.get("select", "best") == "best"
+        v0 = validate()
+        log(f"{run}: stage {st['name']} ({', '.join(d['name'] for d in st_days)}; adapter {st.get('adapter', 'train')}; "
+            f"{n_steps} steps): validation CTC at start {v0:.4f}")
+        hist.append({"stage": st["name"], "step": 0, "val_ctc": v0})
+        if selecting:
+            best = v0
+            if not args.smoke:
+                save("best.pt", total, best)
+        model.train()
+        for step in range(n_steps):
+            for g in opt.param_groups:
+                g["lr"] = bm.lr_at(step, dict(t, steps=n_steps)) * g.get("scale", 1.0)
+            loss = 0.0
+            for _ in range(B):
+                if P.get("sampling", "day_balanced") == "day_balanced":
+                    d = st_days[int(rng.integers(0, len(st_days)))]
+                else:
+                    raise ValueError(f"unknown sampling {P.get('sampling')}")
+                gid, inner = d["items"][int(rng.integers(0, len(d["items"])))]
+                loss = loss + trial_loss(d, gid, inner, int(rng.integers(0, pool)), augment=step >= aug_from)
+            loss = loss / B
+            opt.zero_grad(set_to_none=True)
+            loss.backward()
+            torch.nn.utils.clip_grad_norm_(params, float(t["grad_clip"]))
+            opt.step()
+            total += 1
+            last = step + 1 == n_steps
+            if (step + 1) % int(t["val_every"]) == 0 or last:
+                v = validate()
+                rec = {"stage": st["name"], "step": step + 1, "train_ctc": float(loss.detach()), "val_ctc": v,
+                       "lr": bm.lr_at(step, dict(t, steps=n_steps)), "s": time.time() - t0}
+                if ad:
+                    rec["adapter_norm"] = float(model.adapters[aname].U.norm() * model.adapters[aname].V.norm())
+                hist.append(rec)
+                log(json.dumps({k: (round(x, 5) if isinstance(x, float) else x) for k, x in rec.items()}))
+                if logf:
+                    logf.write(json.dumps(rec) + "\n")
+                    logf.flush()
+                if selecting and v < best:
+                    best = v
+                    if not args.smoke:
+                        save("best.pt", total, best)
+    steps = total
     if args.smoke:
         log(f"smoke test: {steps} steps in {time.time() - t0:.0f} s; nothing written")
         return 0
@@ -200,7 +234,7 @@ def main(argv=None) -> int:
                "code_version": code_version(), "created": datetime.datetime.now().isoformat(timespec="seconds"),
                "steps": steps, "days": {d["name"]: {"input_id": d["input_id"], "n_inner": len(d["inner"]),
                                                     "n_attempted": len(d["attempted"])} for d in days},
-               "adapter": ad, "n_val": len(val), "best_val_ctc": best, "history": hist,
+               "adapter": ad, "stages": stages, "n_val": len(val), "best_val_ctc": best, "history": hist,
                "n_trainable": sum(p.numel() for p in params), "wall_time_s": time.time() - t0, "device": str(device)}
     (res_dir / "summary.json").write_text(json.dumps(summary, indent=1) + "\n")
     log(f"done: {steps} steps in {(time.time() - t0) / 60:.1f} min, best validation CTC {best:.4f}")
