@@ -1,0 +1,6674 @@
+{
+ "set": "d086_all",
+ "decision": "D-086",
+ "config": "configs/experiments/b2v2_kunz_d086.yaml",
+ "code_version": {
+  "source": "sync",
+  "commit": "7fa14760ba678a66f0b71a59dfdbde62a97ca4d5",
+  "dirty": false,
+  "diff_sha256": null,
+  "pushed_at": "2026-10-25T03:48:34Z"
+ },
+ "created": "2026-10-25T04:02:12",
+ "settings": {
+  "decision": "D-086",
+  "sets": {
+   "d086_learned": {
+    "runs": [
+     "b2v2_kunz_im03",
+     "b2v2_kunz_im06",
+     "b2v2_kunz_im11",
+     "b2v2_kunz_im13"
+    ],
+    "name": "imagined"
+   },
+   "d086_all": {
+    "runs": [
+     "b2v2_kunz_d086_all_k03",
+     "b2v2_kunz_d086_all_k06",
+     "b2v2_kunz_d086_all_k11",
+     "b2v2_kunz_d086_all_k13"
+    ],
+    "name": "imagined"
+   }
+  },
+  "variants": [
+   "orig",
+   "boost"
+  ],
+  "boost": {
+   "beta": 1.35,
+   "window": 15
+  },
+  "rule": {
+   "min_points": 5.0,
+   "alpha": 0.0083
+  },
+  "workers": 4
+ },
+ "n": 200,
+ "summary": {
+  "orig": {
+   "orig_speed": 0.8454842219804135,
+   "sped_up": 0.7769314472252449
+  },
+  "boost": {
+   "orig_speed": 0.8193688792165397,
+   "sped_up": 0.7377584330794341,
+   "orig_speed_paired": {
+    "mean_diff": -0.03570238095238095,
+    "n": 200,
+    "p": 0.31012951241164544
+   },
+   "sped_up_paired": {
+    "mean_diff": -0.04882738095238095,
+    "n": 200,
+    "p": 0.07046119366223415
+   },
+   "helps": false
+  }
+ },
+ "rows": [
+  {
+   "gid": 200,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "I hope it is you.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I Am Is Is You",
+     "errors": 2,
+     "words": 5,
+     "wer": 0.4
+    },
+    "sped_up": {
+     "hyp": "I have it is you",
+     "errors": 1,
+     "words": 5,
+     "wer": 0.2
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I. Am. Is. Is. You.",
+     "errors": 2,
+     "words": 5,
+     "wer": 0.4
+    },
+    "sped_up": {
+     "hyp": "I have it is you",
+     "errors": 1,
+     "words": 5,
+     "wer": 0.2
+    }
+   }
+  },
+  {
+   "gid": 201,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "You up?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "Man, how?",
+     "errors": 2,
+     "words": 2,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "There, help.",
+     "errors": 2,
+     "words": 2,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "Man, help!",
+     "errors": 2,
+     "words": 2,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "And help.",
+     "errors": 2,
+     "words": 2,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 202,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "Is my nurse very hungry?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "In my office.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    },
+    "sped_up": {
+     "hyp": "It's not of this.",
+     "errors": 5,
+     "words": 5,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "In my heart, I miss.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    },
+    "sped_up": {
+     "hyp": "in my honest",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    }
+   }
+  },
+  {
+   "gid": 203,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "They need it coming.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "You know, I know it is coming.",
+     "errors": 5,
+     "words": 4,
+     "wer": 1.25
+    },
+    "sped_up": {
+     "hyp": "Your record is coming.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "You know, I wonder if his coming.",
+     "errors": 6,
+     "words": 4,
+     "wer": 1.5
+    },
+    "sped_up": {
+     "hyp": "Oh, I wonder if he's coming.",
+     "errors": 5,
+     "words": 4,
+     "wer": 1.25
+    }
+   }
+  },
+  {
+   "gid": 204,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "I need good glasses.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I... need... me... to... see...",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    },
+    "sped_up": {
+     "hyp": "I-I-I need my passion.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I... need... my... heart...",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    },
+    "sped_up": {
+     "hyp": "I need my glasses.",
+     "errors": 1,
+     "words": 4,
+     "wer": 0.25
+    }
+   }
+  },
+  {
+   "gid": 205,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "Bring my music here, please.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I'm on my closest care.",
+     "errors": 5,
+     "words": 5,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "Hi, hi, from this care.",
+     "errors": 5,
+     "words": 5,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "God. Am I. Don't you care.",
+     "errors": 6,
+     "words": 5,
+     "wer": 1.2
+    },
+    "sped_up": {
+     "hyp": "Ron, I don't care.",
+     "errors": 5,
+     "words": 5,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 206,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "Am I right?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "How? I-I... Right...",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    },
+    "sped_up": {
+     "hyp": "How I write.",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "How am I right?",
+     "errors": 1,
+     "words": 3,
+     "wer": 0.3333333333333333
+    },
+    "sped_up": {
+     "hyp": "Ow, I cried.",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    }
+   }
+  },
+  {
+   "gid": 207,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "I do feel it.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I. You. Should. It.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    },
+    "sped_up": {
+     "hyp": "Aye, you can hear it.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I... knew... she... had...",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    },
+    "sped_up": {
+     "hyp": "I do care, Ed.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    }
+   }
+  },
+  {
+   "gid": 208,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "I am coming right up.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I am coming. Wait. Hold.",
+     "errors": 2,
+     "words": 5,
+     "wer": 0.4
+    },
+    "sped_up": {
+     "hyp": "I am coming late.",
+     "errors": 2,
+     "words": 5,
+     "wer": 0.4
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I am... Simon... Ray... Alt.",
+     "errors": 3,
+     "words": 5,
+     "wer": 0.6
+    },
+    "sped_up": {
+     "hyp": "I am coming late.",
+     "errors": 2,
+     "words": 5,
+     "wer": 0.4
+    }
+   }
+  },
+  {
+   "gid": 209,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "Yes, it is good.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "A-h-h-h-h-h-n-n. In-In-In.",
+     "errors": 11,
+     "words": 4,
+     "wer": 2.75
+    },
+    "sped_up": {
+     "hyp": "It is.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "Ahhh...",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "Okay.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 210,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "I need my music.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "Why are... me... nice to take... kisses... huh?",
+     "errors": 8,
+     "words": 4,
+     "wer": 2.0
+    },
+    "sped_up": {
+     "hyp": "Fire me, Mr. Kirchhoff!",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I... mean... nice... yes... huh...",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "Fire me, mister, get it up.",
+     "errors": 6,
+     "words": 4,
+     "wer": 1.5
+    }
+   }
+  },
+  {
+   "gid": 211,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "I do need you.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I. You. Me. You.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    },
+    "sped_up": {
+     "hyp": "I do, we do.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I. You. Me. You.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    },
+    "sped_up": {
+     "hyp": "I do meet you.",
+     "errors": 1,
+     "words": 4,
+     "wer": 0.25
+    }
+   }
+  },
+  {
+   "gid": 212,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "Do not clean it.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "Are you dead, please? Yes.",
+     "errors": 5,
+     "words": 4,
+     "wer": 1.25
+    },
+    "sped_up": {
+     "hyp": "I'm not playing bad.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "Are you dead, please?",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "I am not playing that.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 213,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "How is that going?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I'll end.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "How in the...",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I'll end.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "I'll end.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 214,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "I hope my family is closer.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I hope my family is history.",
+     "errors": 1,
+     "words": 6,
+     "wer": 0.16666666666666666
+    },
+    "sped_up": {
+     "hyp": "I put my Santa's cushion.",
+     "errors": 4,
+     "words": 6,
+     "wer": 0.6666666666666666
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I... hope... my... family is... frustrated.",
+     "errors": 1,
+     "words": 6,
+     "wer": 0.16666666666666666
+    },
+    "sped_up": {
+     "hyp": "I hope my family is patient.",
+     "errors": 1,
+     "words": 6,
+     "wer": 0.16666666666666666
+    }
+   }
+  },
+  {
+   "gid": 215,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "What do you do here?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "What? You! You! You here!",
+     "errors": 2,
+     "words": 5,
+     "wer": 0.4
+    },
+    "sped_up": {
+     "hyp": "What, you, you, you here?",
+     "errors": 2,
+     "words": 5,
+     "wer": 0.4
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "What? You! You! You here!",
+     "errors": 2,
+     "words": 5,
+     "wer": 0.4
+    },
+    "sped_up": {
+     "hyp": "What you, you, you here?",
+     "errors": 2,
+     "words": 5,
+     "wer": 0.4
+    }
+   }
+  },
+  {
+   "gid": 216,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "I do not have hope.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I. You. Why. How. How.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    },
+    "sped_up": {
+     "hyp": "I did not have help.",
+     "errors": 2,
+     "words": 5,
+     "wer": 0.4
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I do not come out.",
+     "errors": 2,
+     "words": 5,
+     "wer": 0.4
+    },
+    "sped_up": {
+     "hyp": "I did not have help.",
+     "errors": 2,
+     "words": 5,
+     "wer": 0.4
+    }
+   }
+  },
+  {
+   "gid": 217,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "It is right.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "He is right.",
+     "errors": 1,
+     "words": 3,
+     "wer": 0.3333333333333333
+    },
+    "sped_up": {
+     "hyp": "He is right.",
+     "errors": 1,
+     "words": 3,
+     "wer": 0.3333333333333333
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "He is right.",
+     "errors": 1,
+     "words": 3,
+     "wer": 0.3333333333333333
+    },
+    "sped_up": {
+     "hyp": "It is right.",
+     "errors": 0,
+     "words": 3,
+     "wer": 0.0
+    }
+   }
+  },
+  {
+   "gid": 218,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "I do not like glasses.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I want you with me like a princess.",
+     "errors": 6,
+     "words": 5,
+     "wer": 1.2
+    },
+    "sped_up": {
+     "hyp": "I like you, me, like, hustlers.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I knew me like a princess.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    },
+    "sped_up": {
+     "hyp": "I like you, me, like, a circus.",
+     "errors": 5,
+     "words": 5,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 219,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "Bring my nurse.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "Hey... My... This...",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    },
+    "sped_up": {
+     "hyp": "Clean it like this.",
+     "errors": 4,
+     "words": 3,
+     "wer": 1.3333333333333333
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "Hey... My... This...",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    },
+    "sped_up": {
+     "hyp": "Take my piss.",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    }
+   }
+  },
+  {
+   "gid": 220,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "Are you coming up here.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "Are you home out here?",
+     "errors": 2,
+     "words": 5,
+     "wer": 0.4
+    },
+    "sped_up": {
+     "hyp": "Are you all out here?",
+     "errors": 2,
+     "words": 5,
+     "wer": 0.4
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "Are you calling out here?",
+     "errors": 2,
+     "words": 5,
+     "wer": 0.4
+    },
+    "sped_up": {
+     "hyp": "Are you in public health care?",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    }
+   }
+  },
+  {
+   "gid": 221,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "I feel bad here.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I feel bad here.",
+     "errors": 0,
+     "words": 4,
+     "wer": 0.0
+    },
+    "sped_up": {
+     "hyp": "I kill that here.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I feel bad here.",
+     "errors": 0,
+     "words": 4,
+     "wer": 0.0
+    },
+    "sped_up": {
+     "hyp": "I feel bad here.",
+     "errors": 0,
+     "words": 4,
+     "wer": 0.0
+    }
+   }
+  },
+  {
+   "gid": 222,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "You are not okay.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "You are my only heir.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    },
+    "sped_up": {
+     "hyp": "You are my lawyer.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "You are my only heir.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    },
+    "sped_up": {
+     "hyp": "You are my father.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    }
+   }
+  },
+  {
+   "gid": 223,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "You have it like that.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "You have it like that.",
+     "errors": 0,
+     "words": 5,
+     "wer": 0.0
+    },
+    "sped_up": {
+     "hyp": "You have it like that.",
+     "errors": 0,
+     "words": 5,
+     "wer": 0.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "You have it like that.",
+     "errors": 0,
+     "words": 5,
+     "wer": 0.0
+    },
+    "sped_up": {
+     "hyp": "You have it like that.",
+     "errors": 0,
+     "words": 5,
+     "wer": 0.0
+    }
+   }
+  },
+  {
+   "gid": 224,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "I hope I have good family.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I... help... out... me... family...",
+     "errors": 4,
+     "words": 6,
+     "wer": 0.6666666666666666
+    },
+    "sped_up": {
+     "hyp": "I hope you have me friendly.",
+     "errors": 3,
+     "words": 6,
+     "wer": 0.5
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I... help... me... family...",
+     "errors": 4,
+     "words": 6,
+     "wer": 0.6666666666666666
+    },
+    "sped_up": {
+     "hyp": "I hope you have me, family.",
+     "errors": 2,
+     "words": 6,
+     "wer": 0.3333333333333333
+    }
+   }
+  },
+  {
+   "gid": 225,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "Not coming up.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "What? How? How?",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "Look, how in hell...",
+     "errors": 4,
+     "words": 3,
+     "wer": 1.3333333333333333
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "What? How? How?",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "What happened, help?",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 226,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "You do not need glasses.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "Mayor, do not need office.",
+     "errors": 2,
+     "words": 5,
+     "wer": 0.4
+    },
+    "sped_up": {
+     "hyp": "You do not need office.",
+     "errors": 1,
+     "words": 5,
+     "wer": 0.2
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "Rare do not need office.",
+     "errors": 2,
+     "words": 5,
+     "wer": 0.4
+    },
+    "sped_up": {
+     "hyp": "You do not need office.",
+     "errors": 1,
+     "words": 5,
+     "wer": 0.2
+    }
+   }
+  },
+  {
+   "gid": 227,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "Is my nurse closer?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "You. My. You. Usher.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    },
+    "sped_up": {
+     "hyp": "You're my new author.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "You! Mike! You! Officer!",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "You're my new customer.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    }
+   }
+  },
+  {
+   "gid": 228,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "You are what?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "You are right.",
+     "errors": 1,
+     "words": 3,
+     "wer": 0.3333333333333333
+    },
+    "sped_up": {
+     "hyp": "You are right.",
+     "errors": 1,
+     "words": 3,
+     "wer": 0.3333333333333333
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "You are right.",
+     "errors": 1,
+     "words": 3,
+     "wer": 0.3333333333333333
+    },
+    "sped_up": {
+     "hyp": "You are right.",
+     "errors": 1,
+     "words": 3,
+     "wer": 0.3333333333333333
+    }
+   }
+  },
+  {
+   "gid": 229,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "They hope they have my faith.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "Yay! Dude! I have more fate!",
+     "errors": 5,
+     "words": 6,
+     "wer": 0.8333333333333334
+    },
+    "sped_up": {
+     "hyp": "Yay, Tim, I have your fate.",
+     "errors": 5,
+     "words": 6,
+     "wer": 0.8333333333333334
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "Yay! Dude! I have your fate!",
+     "errors": 5,
+     "words": 6,
+     "wer": 0.8333333333333334
+    },
+    "sped_up": {
+     "hyp": "No, no, I am not afraid.",
+     "errors": 6,
+     "words": 6,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 230,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "You are no good.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "You. Are. New. Good.",
+     "errors": 1,
+     "words": 4,
+     "wer": 0.25
+    },
+    "sped_up": {
+     "hyp": "You are no good.",
+     "errors": 0,
+     "words": 4,
+     "wer": 0.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "You are no good.",
+     "errors": 0,
+     "words": 4,
+     "wer": 0.0
+    },
+    "sped_up": {
+     "hyp": "You are no good.",
+     "errors": 0,
+     "words": 4,
+     "wer": 0.0
+    }
+   }
+  },
+  {
+   "gid": 231,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "What is it you need?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "Why is... why... you... tell... you...",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    },
+    "sped_up": {
+     "hyp": "Where is IU, sir?",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "Where is I? You tell me.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    },
+    "sped_up": {
+     "hyp": "That is not you, Tony.",
+     "errors": 3,
+     "words": 5,
+     "wer": 0.6
+    }
+   }
+  },
+  {
+   "gid": 232,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "They are not thirsty.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "This may be our... N-a-a-a-a-a-b. Er-she.",
+     "errors": 13,
+     "words": 4,
+     "wer": 3.25
+    },
+    "sped_up": {
+     "hyp": "You are not Hershey.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "You are not Gertrude.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    },
+    "sped_up": {
+     "hyp": "We are not Gershi.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    }
+   }
+  },
+  {
+   "gid": 233,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "I hope my nurse is here.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I hope my place is here.",
+     "errors": 1,
+     "words": 6,
+     "wer": 0.16666666666666666
+    },
+    "sped_up": {
+     "hyp": "I hope my place is here.",
+     "errors": 1,
+     "words": 6,
+     "wer": 0.16666666666666666
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I hope my place is here.",
+     "errors": 1,
+     "words": 6,
+     "wer": 0.16666666666666666
+    },
+    "sped_up": {
+     "hyp": "I hope my place is here.",
+     "errors": 1,
+     "words": 6,
+     "wer": 0.16666666666666666
+    }
+   }
+  },
+  {
+   "gid": 234,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "Is my music good?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "And my patience good.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    },
+    "sped_up": {
+     "hyp": "Is my cushions good?",
+     "errors": 1,
+     "words": 4,
+     "wer": 0.25
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "And, my, he sounds good.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    },
+    "sped_up": {
+     "hyp": "Is my occlusion good?",
+     "errors": 1,
+     "words": 4,
+     "wer": 0.25
+    }
+   }
+  },
+  {
+   "gid": 235,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "Where are my glasses?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "Where are my horses?",
+     "errors": 1,
+     "words": 4,
+     "wer": 0.25
+    },
+    "sped_up": {
+     "hyp": "There are my horses.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "Bear! Arrrr! Lamb! What's this?",
+     "errors": 5,
+     "words": 4,
+     "wer": 1.25
+    },
+    "sped_up": {
+     "hyp": "There are more buses.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    }
+   }
+  },
+  {
+   "gid": 236,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "They are coming closer.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "They. Are. Calling. Us.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    },
+    "sped_up": {
+     "hyp": "N-N-N-N-N-N-O-R-A-M-H-O-M-H-O-S.",
+     "errors": 16,
+     "words": 4,
+     "wer": 4.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "They are common thoughts.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    },
+    "sped_up": {
+     "hyp": "Then our home sucks.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 237,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "They do not have faith.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "Why? So, that, they, you, not, have, fluff.",
+     "errors": 5,
+     "words": 5,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "What? It's so good that you want to have fun.",
+     "errors": 9,
+     "words": 5,
+     "wer": 1.8
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "Why? How could that make you my half-life?",
+     "errors": 9,
+     "words": 5,
+     "wer": 1.8
+    },
+    "sped_up": {
+     "hyp": "I felt that you might have gone.",
+     "errors": 6,
+     "words": 5,
+     "wer": 1.2
+    }
+   }
+  },
+  {
+   "gid": 238,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "Bring my family here, please.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "",
+     "errors": 5,
+     "words": 5,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "",
+     "errors": 5,
+     "words": 5,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "",
+     "errors": 5,
+     "words": 5,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "",
+     "errors": 5,
+     "words": 5,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 239,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "I am here.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I... am... your... own.",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    },
+    "sped_up": {
+     "hyp": "I am your girl.",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I. Am. Your. Your.",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    },
+    "sped_up": {
+     "hyp": "I have carer.",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    }
+   }
+  },
+  {
+   "gid": 240,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "My family is not very tired.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "My... family... is... not... their... health. I'm... heavy.",
+     "errors": 4,
+     "words": 6,
+     "wer": 0.6666666666666666
+    },
+    "sped_up": {
+     "hyp": "My time is not there.",
+     "errors": 3,
+     "words": 6,
+     "wer": 0.5
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "My... family... is... not... their girl. I'm... really...",
+     "errors": 4,
+     "words": 6,
+     "wer": 0.6666666666666666
+    },
+    "sped_up": {
+     "hyp": "My family is not there, I'm dead.",
+     "errors": 3,
+     "words": 6,
+     "wer": 0.5
+    }
+   }
+  },
+  {
+   "gid": 241,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "I am going outside.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I have raised this.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    },
+    "sped_up": {
+     "hyp": "I can't mix that.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I have raised this.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    },
+    "sped_up": {
+     "hyp": "I am rich, but...",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    }
+   }
+  },
+  {
+   "gid": 242,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "How do you have it?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "How. You. You. Had. It.",
+     "errors": 2,
+     "words": 5,
+     "wer": 0.4
+    },
+    "sped_up": {
+     "hyp": "How did you have it?",
+     "errors": 1,
+     "words": 5,
+     "wer": 0.2
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "How... you... you... had... a...",
+     "errors": 3,
+     "words": 5,
+     "wer": 0.6
+    },
+    "sped_up": {
+     "hyp": "How did you have it?",
+     "errors": 1,
+     "words": 5,
+     "wer": 0.2
+    }
+   }
+  },
+  {
+   "gid": 243,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "They do okay.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "L-a-a-a-a-a-a",
+     "errors": 7,
+     "words": 3,
+     "wer": 2.3333333333333335
+    },
+    "sped_up": {
+     "hyp": "They need my help, am I?",
+     "errors": 5,
+     "words": 3,
+     "wer": 1.6666666666666667
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I... I...",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "They need help, am I?",
+     "errors": 4,
+     "words": 3,
+     "wer": 1.3333333333333333
+    }
+   }
+  },
+  {
+   "gid": 244,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "That is like success.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "That. Is. Like. S-s-s-sigh.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "That is like suicide.",
+     "errors": 1,
+     "words": 4,
+     "wer": 0.25
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "That meat is like suicide.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    },
+    "sped_up": {
+     "hyp": "That meat is like suicide.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    }
+   }
+  },
+  {
+   "gid": 245,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "How am I going outside?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "How... am... I... wrong...",
+     "errors": 2,
+     "words": 5,
+     "wer": 0.4
+    },
+    "sped_up": {
+     "hyp": "How can I run this?",
+     "errors": 3,
+     "words": 5,
+     "wer": 0.6
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "How am I? Fine.",
+     "errors": 2,
+     "words": 5,
+     "wer": 0.4
+    },
+    "sped_up": {
+     "hyp": "How am I gonna test?",
+     "errors": 2,
+     "words": 5,
+     "wer": 0.4
+    }
+   }
+  },
+  {
+   "gid": 246,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "You need it right here.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "You. Need. Have. My. Day.",
+     "errors": 3,
+     "words": 5,
+     "wer": 0.6
+    },
+    "sped_up": {
+     "hyp": "You need help, right?",
+     "errors": 2,
+     "words": 5,
+     "wer": 0.4
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "You need help. Bye. Bye.",
+     "errors": 3,
+     "words": 5,
+     "wer": 0.6
+    },
+    "sped_up": {
+     "hyp": "You need help, right?",
+     "errors": 2,
+     "words": 5,
+     "wer": 0.4
+    }
+   }
+  },
+  {
+   "gid": 247,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "You have no computer.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "No, I'm not.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "No, not me.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "No, no, no, no, no!",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "They will come, they...",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 248,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "Do you have success?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "MMMMMMMMMMMMMMMMMMMMMM",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "Then, that's it.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "Man. Ass. Ass. Ass.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "Man, ass, let's...",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 249,
+   "run": "b2v2_kunz_d086_all_k03",
+   "text": "I hope my nurse is comfortable.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I hope my nerves have come true.",
+     "errors": 4,
+     "words": 6,
+     "wer": 0.6666666666666666
+    },
+    "sped_up": {
+     "hyp": "I hope my nerves have come true.",
+     "errors": 4,
+     "words": 6,
+     "wer": 0.6666666666666666
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I hope my nerves have come true.",
+     "errors": 4,
+     "words": 6,
+     "wer": 0.6666666666666666
+    },
+    "sped_up": {
+     "hyp": "I hope my nerves have come true.",
+     "errors": 4,
+     "words": 6,
+     "wer": 0.6666666666666666
+    }
+   }
+  },
+  {
+   "gid": 250,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "Do it please.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "You. And. Please.",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    },
+    "sped_up": {
+     "hyp": "You. A.L.E. Pause.",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "You! You! Please!",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    },
+    "sped_up": {
+     "hyp": "Do you have a place?",
+     "errors": 4,
+     "words": 3,
+     "wer": 1.3333333333333333
+    }
+   }
+  },
+  {
+   "gid": 251,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "They hope I am closer.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I love you.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    },
+    "sped_up": {
+     "hyp": "Oh, hey, huh? Love you.",
+     "errors": 5,
+     "words": 5,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I am off here.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    },
+    "sped_up": {
+     "hyp": "Oh, hey, hey, hey. Love you.",
+     "errors": 6,
+     "words": 5,
+     "wer": 1.2
+    }
+   }
+  },
+  {
+   "gid": 252,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "Where is my hope?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I am what is my home.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "I come as my boy.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I got what is on my own.",
+     "errors": 5,
+     "words": 4,
+     "wer": 1.25
+    },
+    "sped_up": {
+     "hyp": "I kinda is gonna go.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 253,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "I like that here.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I like my care.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    },
+    "sped_up": {
+     "hyp": "I let my care.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I like my care.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    },
+    "sped_up": {
+     "hyp": "I like my care.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    }
+   }
+  },
+  {
+   "gid": 254,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "They hope it is okay.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I. M.S.S.S.S.S.S.S.S.S.S.S.S Ssssssssssss...",
+     "errors": 5,
+     "words": 5,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "The car is busy.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "The color is...",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    },
+    "sped_up": {
+     "hyp": "It is.",
+     "errors": 3,
+     "words": 5,
+     "wer": 0.6
+    }
+   }
+  },
+  {
+   "gid": 255,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "Please tell my nurse I am good.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "Did you miss his eye?",
+     "errors": 7,
+     "words": 7,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "Do you miss his eye?",
+     "errors": 7,
+     "words": 7,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I-I-I-I-I-I-I-I",
+     "errors": 7,
+     "words": 7,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "Do they know what this is? I am good.",
+     "errors": 6,
+     "words": 7,
+     "wer": 0.8571428571428571
+    }
+   }
+  },
+  {
+   "gid": 256,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "Tell my family they feel hungry.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "You know, my family is too powery.",
+     "errors": 5,
+     "words": 6,
+     "wer": 0.8333333333333334
+    },
+    "sped_up": {
+     "hyp": "They'll like any video too, hurry.",
+     "errors": 6,
+     "words": 6,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "You know why family is too powery?",
+     "errors": 6,
+     "words": 6,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "They don't like that they really do hurry.",
+     "errors": 7,
+     "words": 6,
+     "wer": 1.1666666666666667
+    }
+   }
+  },
+  {
+   "gid": 257,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "No, you are not going.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "You, you, I, why?",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    },
+    "sped_up": {
+     "hyp": "You, you, I, night.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "You... you... I... like...",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    },
+    "sped_up": {
+     "hyp": "You, you, I, I.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    }
+   }
+  },
+  {
+   "gid": 258,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "You have music.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "You have faced me.",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    },
+    "sped_up": {
+     "hyp": "You'll have Disney.",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "You have finished me.",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    },
+    "sped_up": {
+     "hyp": "You have this.",
+     "errors": 1,
+     "words": 3,
+     "wer": 0.3333333333333333
+    }
+   }
+  },
+  {
+   "gid": 259,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "You clean it up.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "YOU. LEAVE. HAHA.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    },
+    "sped_up": {
+     "hyp": "You cleaved at it.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "You clean your face.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    },
+    "sped_up": {
+     "hyp": "You clean that.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    }
+   }
+  },
+  {
+   "gid": 260,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "Do you like music?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "Do. You. Lies.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    },
+    "sped_up": {
+     "hyp": "Do you like Patrick?",
+     "errors": 1,
+     "words": 4,
+     "wer": 0.25
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "Do you rise further?",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    },
+    "sped_up": {
+     "hyp": "Do you, my stranger?",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    }
+   }
+  },
+  {
+   "gid": 261,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "Do you need help here?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "V-U-M-A-L",
+     "errors": 5,
+     "words": 5,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "V-U-N-L",
+     "errors": 5,
+     "words": 5,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "Thank you!",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    },
+    "sped_up": {
+     "hyp": "Did you know how?",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    }
+   }
+  },
+  {
+   "gid": 262,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "I feel very tired.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I have to be very, very happy.",
+     "errors": 5,
+     "words": 4,
+     "wer": 1.25
+    },
+    "sped_up": {
+     "hyp": "I feel very bad.",
+     "errors": 1,
+     "words": 4,
+     "wer": 0.25
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I have to do this very, very often.",
+     "errors": 6,
+     "words": 4,
+     "wer": 1.5
+    },
+    "sped_up": {
+     "hyp": "Are you very grand?",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    }
+   }
+  },
+  {
+   "gid": 263,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "What do they have?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "What do I have?",
+     "errors": 1,
+     "words": 4,
+     "wer": 0.25
+    },
+    "sped_up": {
+     "hyp": "What do I have?",
+     "errors": 1,
+     "words": 4,
+     "wer": 0.25
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "What do I have?",
+     "errors": 1,
+     "words": 4,
+     "wer": 0.25
+    },
+    "sped_up": {
+     "hyp": "What do I have?",
+     "errors": 1,
+     "words": 4,
+     "wer": 0.25
+    }
+   }
+  },
+  {
+   "gid": 264,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "That is it.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "This is...",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    },
+    "sped_up": {
+     "hyp": "It is.",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "It's this.",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "Yes.",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 265,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "What do you have?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "You.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    },
+    "sped_up": {
+     "hyp": "When you are",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I love you. I love you.",
+     "errors": 5,
+     "words": 4,
+     "wer": 1.25
+    },
+    "sped_up": {
+     "hyp": "I'm gonna kill you.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 266,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "That is yes.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "That is... yours.",
+     "errors": 1,
+     "words": 3,
+     "wer": 0.3333333333333333
+    },
+    "sped_up": {
+     "hyp": "That is youth.",
+     "errors": 1,
+     "words": 3,
+     "wer": 0.3333333333333333
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "That is... yours.",
+     "errors": 1,
+     "words": 3,
+     "wer": 0.3333333333333333
+    },
+    "sped_up": {
+     "hyp": "That is youth.",
+     "errors": 1,
+     "words": 3,
+     "wer": 0.3333333333333333
+    }
+   }
+  },
+  {
+   "gid": 267,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "My family is good.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "My family is good. My friends is good.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "My fan is good. This patch is good.",
+     "errors": 5,
+     "words": 4,
+     "wer": 1.25
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "My family is good. My friends is good.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "My fan is good. My trash is good.",
+     "errors": 5,
+     "words": 4,
+     "wer": 1.25
+    }
+   }
+  },
+  {
+   "gid": 268,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "Are you right here?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "Are you not here?",
+     "errors": 1,
+     "words": 4,
+     "wer": 0.25
+    },
+    "sped_up": {
+     "hyp": "Are you not here?",
+     "errors": 1,
+     "words": 4,
+     "wer": 0.25
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "How are you now here?",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    },
+    "sped_up": {
+     "hyp": "Are you not here?",
+     "errors": 1,
+     "words": 4,
+     "wer": 0.25
+    }
+   }
+  },
+  {
+   "gid": 269,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "You feel very bad.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "You. Say. Merry. Day.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    },
+    "sped_up": {
+     "hyp": "You take me away.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "You. Say. Very. Low.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    },
+    "sped_up": {
+     "hyp": "You say very good.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    }
+   }
+  },
+  {
+   "gid": 270,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "I need that.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I'm... N-a-a-a-a-a-a-a-a...",
+     "errors": 10,
+     "words": 3,
+     "wer": 3.3333333333333335
+    },
+    "sped_up": {
+     "hyp": "Oh, yeah.",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I knew that.",
+     "errors": 1,
+     "words": 3,
+     "wer": 0.3333333333333333
+    },
+    "sped_up": {
+     "hyp": "Oh, yeah.",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 271,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "I hope they are closer.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I... know... that... you... ...hauser.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    },
+    "sped_up": {
+     "hyp": "I hope that you suffer.",
+     "errors": 3,
+     "words": 5,
+     "wer": 0.6
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I... know... that... game... ...hauser.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    },
+    "sped_up": {
+     "hyp": "I hope that you suffer.",
+     "errors": 3,
+     "words": 5,
+     "wer": 0.6
+    }
+   }
+  },
+  {
+   "gid": 272,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "I am clean.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "Hi. Hello.",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "Bye.",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "Bye!",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "I thought...",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    }
+   }
+  },
+  {
+   "gid": 273,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "No, I am not hungry.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "There. I. Am. Not. Hers.",
+     "errors": 2,
+     "words": 5,
+     "wer": 0.4
+    },
+    "sped_up": {
+     "hyp": "There I am not hers.",
+     "errors": 2,
+     "words": 5,
+     "wer": 0.4
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "There. I. Am. Not. Hers.",
+     "errors": 2,
+     "words": 5,
+     "wer": 0.4
+    },
+    "sped_up": {
+     "hyp": "There I am, nutters.",
+     "errors": 3,
+     "words": 5,
+     "wer": 0.6
+    }
+   }
+  },
+  {
+   "gid": 274,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "Are they very thirsty?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I'm a very hot guy.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "I'll be married for a minute.",
+     "errors": 6,
+     "words": 4,
+     "wer": 1.5
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I'm... me... very... hot... gay... crazy...",
+     "errors": 5,
+     "words": 4,
+     "wer": 1.25
+    },
+    "sped_up": {
+     "hyp": "I'll be there in a second.",
+     "errors": 6,
+     "words": 4,
+     "wer": 1.5
+    }
+   }
+  },
+  {
+   "gid": 275,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "You hope they are not here.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "Eeee, aaaah, eeee, oh!",
+     "errors": 6,
+     "words": 6,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "We have hope.",
+     "errors": 6,
+     "words": 6,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "Yee-ha-ha-ha-ho!",
+     "errors": 6,
+     "words": 6,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "Hee hee hee!",
+     "errors": 6,
+     "words": 6,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 276,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "How is my nurse?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "Owls is my nurse.",
+     "errors": 1,
+     "words": 4,
+     "wer": 0.25
+    },
+    "sped_up": {
+     "hyp": "How is my nurse?",
+     "errors": 0,
+     "words": 4,
+     "wer": 0.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "How is my nurse?",
+     "errors": 0,
+     "words": 4,
+     "wer": 0.0
+    },
+    "sped_up": {
+     "hyp": "How is my nurse?",
+     "errors": 0,
+     "words": 4,
+     "wer": 0.0
+    }
+   }
+  },
+  {
+   "gid": 277,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "I hope that you are.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I'll show you my eyes.",
+     "errors": 5,
+     "words": 5,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "I'll tell you. Bye.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I am sorry. I am sorry.",
+     "errors": 5,
+     "words": 5,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "All right, all right.",
+     "errors": 5,
+     "words": 5,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 278,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "You do not like my nurse.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I am hungry. You never ate me.",
+     "errors": 7,
+     "words": 6,
+     "wer": 1.1666666666666667
+    },
+    "sped_up": {
+     "hyp": "Hi, hi, hi.",
+     "errors": 6,
+     "words": 6,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I am lazy. Never. I am.",
+     "errors": 6,
+     "words": 6,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "Okay.",
+     "errors": 6,
+     "words": 6,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 279,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "They need it right here.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "This is my chair.",
+     "errors": 5,
+     "words": 5,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "He is not here.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "It is not here.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    },
+    "sped_up": {
+     "hyp": "It's not here.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    }
+   }
+  },
+  {
+   "gid": 280,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "Do they have family?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 281,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "Are you coming up?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "Why, you? How in it?",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "Ah, you, how in it?",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "Why, you, how in it?",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "Why you having it?",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    }
+   }
+  },
+  {
+   "gid": 282,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "Not here please.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "No, please.",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    },
+    "sped_up": {
+     "hyp": "You, please.",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "No, please.",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    },
+    "sped_up": {
+     "hyp": "Yeah, please.",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    }
+   }
+  },
+  {
+   "gid": 283,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "Are you very hungry?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I-A-M-Pharaoh.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "Aye aye, n'ha.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I... a... mmm... hmm... hmm...",
+     "errors": 5,
+     "words": 4,
+     "wer": 1.25
+    },
+    "sped_up": {
+     "hyp": "Aye aye.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 284,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "I feel you.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I'm high.",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "Bye.",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I'm high.",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "Bye.",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 285,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "Tell my nurse you are not hungry.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "You are my ace. You are not hungry.",
+     "errors": 3,
+     "words": 7,
+     "wer": 0.42857142857142855
+    },
+    "sped_up": {
+     "hyp": "You are nice. You are not sorry.",
+     "errors": 4,
+     "words": 7,
+     "wer": 0.5714285714285714
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "Do not lie. You are not coming.",
+     "errors": 4,
+     "words": 7,
+     "wer": 0.5714285714285714
+    },
+    "sped_up": {
+     "hyp": "You are nice. You are not sorry.",
+     "errors": 4,
+     "words": 7,
+     "wer": 0.5714285714285714
+    }
+   }
+  },
+  {
+   "gid": 286,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "I hope they are here.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I... hope... me...",
+     "errors": 3,
+     "words": 5,
+     "wer": 0.6
+    },
+    "sped_up": {
+     "hyp": "I hope that...",
+     "errors": 3,
+     "words": 5,
+     "wer": 0.6
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I hope they will.",
+     "errors": 2,
+     "words": 5,
+     "wer": 0.4
+    },
+    "sped_up": {
+     "hyp": "I hope they can.",
+     "errors": 2,
+     "words": 5,
+     "wer": 0.4
+    }
+   }
+  },
+  {
+   "gid": 287,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "Not bad, right?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "No.",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "No.",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "N-na-na-na-na-na-na-na-na-na",
+     "errors": 10,
+     "words": 3,
+     "wer": 3.3333333333333335
+    },
+    "sped_up": {
+     "hyp": "Next.",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 288,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "They are not tired.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "Why? Why?",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "I'm not mad",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I'm not mine.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    },
+    "sped_up": {
+     "hyp": "Hi, my hi.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 289,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "It is what they have.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "Hail is M-A-L.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    },
+    "sped_up": {
+     "hyp": "It is a",
+     "errors": 3,
+     "words": 5,
+     "wer": 0.6
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "Hail is V-A-L.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    },
+    "sped_up": {
+     "hyp": "It is okay.",
+     "errors": 3,
+     "words": 5,
+     "wer": 0.6
+    }
+   }
+  },
+  {
+   "gid": 290,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "My nurse is not going.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "Aight. This is it. Alright.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    },
+    "sped_up": {
+     "hyp": "All right. All right.",
+     "errors": 5,
+     "words": 5,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "Alright. This is it. Alright.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    },
+    "sped_up": {
+     "hyp": "Alright, this is great.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    }
+   }
+  },
+  {
+   "gid": 291,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "Yes, I am very good.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "Yes.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    },
+    "sped_up": {
+     "hyp": "Yes.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "Yes.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    },
+    "sped_up": {
+     "hyp": "Yes.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    }
+   }
+  },
+  {
+   "gid": 292,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "How do they do it right?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "How. You. They. Me. Is. They.",
+     "errors": 4,
+     "words": 6,
+     "wer": 0.6666666666666666
+    },
+    "sped_up": {
+     "hyp": "I knew that they would die.",
+     "errors": 6,
+     "words": 6,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "How do they deal with life?",
+     "errors": 3,
+     "words": 6,
+     "wer": 0.5
+    },
+    "sped_up": {
+     "hyp": "How do they do it like?",
+     "errors": 1,
+     "words": 6,
+     "wer": 0.16666666666666666
+    }
+   }
+  },
+  {
+   "gid": 293,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "They like my glasses like that.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "",
+     "errors": 6,
+     "words": 6,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "",
+     "errors": 6,
+     "words": 6,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "",
+     "errors": 6,
+     "words": 6,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "",
+     "errors": 6,
+     "words": 6,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 294,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "They feel comfortable.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "You'll still love me.",
+     "errors": 4,
+     "words": 3,
+     "wer": 1.3333333333333333
+    },
+    "sped_up": {
+     "hyp": "You're too hot, buddy.",
+     "errors": 4,
+     "words": 3,
+     "wer": 1.3333333333333333
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "You'll still love crying.",
+     "errors": 4,
+     "words": 3,
+     "wer": 1.3333333333333333
+    },
+    "sped_up": {
+     "hyp": "You'll feel off going.",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 295,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "My computer is not good.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "My spirit is not good.",
+     "errors": 1,
+     "words": 5,
+     "wer": 0.2
+    },
+    "sped_up": {
+     "hyp": "My skin is not good.",
+     "errors": 1,
+     "words": 5,
+     "wer": 0.2
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "My school is not good.",
+     "errors": 1,
+     "words": 5,
+     "wer": 0.2
+    },
+    "sped_up": {
+     "hyp": "My sleep is not good.",
+     "errors": 1,
+     "words": 5,
+     "wer": 0.2
+    }
+   }
+  },
+  {
+   "gid": 296,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "They are right outside.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "Oh",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "Oh.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "Oh",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "Oh",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 297,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "Tell my nurse you are not comfortable.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "Q.I. Miss. Me. Nah.",
+     "errors": 7,
+     "words": 7,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "You like this game? Nah.",
+     "errors": 7,
+     "words": 7,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "It's too high. This. Too. Nah.",
+     "errors": 7,
+     "words": 7,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "It's too high, it's too high, not too high",
+     "errors": 8,
+     "words": 7,
+     "wer": 1.1428571428571428
+    }
+   }
+  },
+  {
+   "gid": 298,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "They are coming right up.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "They, I, can, want, help.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    },
+    "sped_up": {
+     "hyp": "They I can't walk out.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "Baby, I, am, want, help.",
+     "errors": 5,
+     "words": 5,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "They I can't walk up.",
+     "errors": 3,
+     "words": 5,
+     "wer": 0.6
+    }
+   }
+  },
+  {
+   "gid": 299,
+   "run": "b2v2_kunz_d086_all_k06",
+   "text": "Do I have success?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I have the size.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    },
+    "sped_up": {
+     "hyp": "I... Do I have success?",
+     "errors": 1,
+     "words": 4,
+     "wer": 0.25
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "Yeah, I have.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    },
+    "sped_up": {
+     "hyp": "I... ...and I have the size.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 300,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "You hope you have my faith.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "Do how you have tried this.",
+     "errors": 4,
+     "words": 6,
+     "wer": 0.6666666666666666
+    },
+    "sped_up": {
+     "hyp": "We hope you have tried that.",
+     "errors": 3,
+     "words": 6,
+     "wer": 0.5
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "You help. You... have... tried... this.",
+     "errors": 3,
+     "words": 6,
+     "wer": 0.5
+    },
+    "sped_up": {
+     "hyp": "You hope you have tried that.",
+     "errors": 2,
+     "words": 6,
+     "wer": 0.3333333333333333
+    }
+   }
+  },
+  {
+   "gid": 301,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "You hope my nurse is good.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "female oak my nurse is good",
+     "errors": 2,
+     "words": 6,
+     "wer": 0.3333333333333333
+    },
+    "sped_up": {
+     "hyp": "You know how my nurse is good.",
+     "errors": 2,
+     "words": 6,
+     "wer": 0.3333333333333333
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "You will... hope... my... nurse... is... good.",
+     "errors": 1,
+     "words": 6,
+     "wer": 0.16666666666666666
+    },
+    "sped_up": {
+     "hyp": "You know how my nest is good.",
+     "errors": 3,
+     "words": 6,
+     "wer": 0.5
+    }
+   }
+  },
+  {
+   "gid": 302,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "My family is okay.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "They. Why. Family. Is. Family.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    },
+    "sped_up": {
+     "hyp": "They. Why. Family. Is. The.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "My family is a girl.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    },
+    "sped_up": {
+     "hyp": "That my family is better.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    }
+   }
+  },
+  {
+   "gid": 303,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "What do you need?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I heard... you... you... who... made me shh.",
+     "errors": 7,
+     "words": 4,
+     "wer": 1.75
+    },
+    "sped_up": {
+     "hyp": "I've learned. You, you put me in each.",
+     "errors": 7,
+     "words": 4,
+     "wer": 1.75
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I never... knew... you... to... my knees.",
+     "errors": 6,
+     "words": 4,
+     "wer": 1.5
+    },
+    "sped_up": {
+     "hyp": "I'm sorry, you, you poor image.",
+     "errors": 5,
+     "words": 4,
+     "wer": 1.25
+    }
+   }
+  },
+  {
+   "gid": 304,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "Please bring my family here.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "My face. My brain. My eye. My family. My hair.",
+     "errors": 8,
+     "words": 5,
+     "wer": 1.6
+    },
+    "sped_up": {
+     "hyp": "Hives, marine, my, fanny, fair.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "My face is burning. My eye is standing there.",
+     "errors": 8,
+     "words": 5,
+     "wer": 1.6
+    },
+    "sped_up": {
+     "hyp": "Hives bring my fending flair.",
+     "errors": 3,
+     "words": 5,
+     "wer": 0.6
+    }
+   }
+  },
+  {
+   "gid": 305,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "They are not coming.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "They. Are. My. God.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    },
+    "sped_up": {
+     "hyp": "They are my guide.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "They are mad. Go ahead.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    },
+    "sped_up": {
+     "hyp": "They are my guide.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    }
+   }
+  },
+  {
+   "gid": 306,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "I do not like music.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I... You... My... Life... Musist.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    },
+    "sped_up": {
+     "hyp": "I, you, may, like, use.",
+     "errors": 3,
+     "words": 5,
+     "wer": 0.6
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I... knew... my... my... music.",
+     "errors": 3,
+     "words": 5,
+     "wer": 0.6
+    },
+    "sped_up": {
+     "hyp": "I do not like news.",
+     "errors": 1,
+     "words": 5,
+     "wer": 0.2
+    }
+   }
+  },
+  {
+   "gid": 307,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "You need glasses.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I... have... you... with you... lost...",
+     "errors": 5,
+     "words": 3,
+     "wer": 1.6666666666666667
+    },
+    "sped_up": {
+     "hyp": "I never knew you knew Russia.",
+     "errors": 5,
+     "words": 3,
+     "wer": 1.6666666666666667
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I... have... I... knew... that you... lost...",
+     "errors": 7,
+     "words": 3,
+     "wer": 2.3333333333333335
+    },
+    "sped_up": {
+     "hyp": "I'm going to leave Russia.",
+     "errors": 5,
+     "words": 3,
+     "wer": 1.6666666666666667
+    }
+   }
+  },
+  {
+   "gid": 308,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "I do have hope.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "Why... you... are... out?",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "My. You. Are. Up.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "Why do I have power?",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    },
+    "sped_up": {
+     "hyp": "Why you have up?",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    }
+   }
+  },
+  {
+   "gid": 309,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "They have no faith.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "T-T-T-T-T-T",
+     "errors": 6,
+     "words": 4,
+     "wer": 1.5
+    },
+    "sped_up": {
+     "hyp": "May I do this?",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "hmm",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "They aren't good at this.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 310,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "Hope you do good.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "You! You!",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    },
+    "sped_up": {
+     "hyp": "You, you, what?",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "God. You. You. God.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    },
+    "sped_up": {
+     "hyp": "You, you, what?",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    }
+   }
+  },
+  {
+   "gid": 311,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "What do I tell my family?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "What? You are now my family.",
+     "errors": 3,
+     "words": 6,
+     "wer": 0.5
+    },
+    "sped_up": {
+     "hyp": "What? You are your wife. Tell me.",
+     "errors": 6,
+     "words": 6,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "What? You are... your... wife... family...",
+     "errors": 4,
+     "words": 6,
+     "wer": 0.6666666666666666
+    },
+    "sped_up": {
+     "hyp": "What? You are your wife. Tell me.",
+     "errors": 6,
+     "words": 6,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 312,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "It is not bad.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "And he is now dead.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "And the idea is not bad.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "He is now dead.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    },
+    "sped_up": {
+     "hyp": "Yeah, it is not bad.",
+     "errors": 1,
+     "words": 4,
+     "wer": 0.25
+    }
+   }
+  },
+  {
+   "gid": 313,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "Please tell my nurse I am hungry.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "Hey. Please. Kill. My. Yours. I. Am. Every.",
+     "errors": 4,
+     "words": 7,
+     "wer": 0.5714285714285714
+    },
+    "sped_up": {
+     "hyp": "I eat flames, kill my nerves, I hate every-",
+     "errors": 7,
+     "words": 7,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "Hey. Please. Kill. My. Yours. I. Am. Happy.",
+     "errors": 4,
+     "words": 7,
+     "wer": 0.5714285714285714
+    },
+    "sped_up": {
+     "hyp": "Hey, please, kill my nurse. I hate having...",
+     "errors": 4,
+     "words": 7,
+     "wer": 0.5714285714285714
+    }
+   }
+  },
+  {
+   "gid": 314,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "I hope my family is good.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I hope my family is good.",
+     "errors": 0,
+     "words": 6,
+     "wer": 0.0
+    },
+    "sped_up": {
+     "hyp": "I hope my family is good.",
+     "errors": 0,
+     "words": 6,
+     "wer": 0.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I... Oh... My... Family... Is... Good.",
+     "errors": 1,
+     "words": 6,
+     "wer": 0.16666666666666666
+    },
+    "sped_up": {
+     "hyp": "I hope my family is good.",
+     "errors": 0,
+     "words": 6,
+     "wer": 0.0
+    }
+   }
+  },
+  {
+   "gid": 315,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "What do you have here?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "You. You. Are. Have. Here.",
+     "errors": 3,
+     "words": 5,
+     "wer": 0.6
+    },
+    "sped_up": {
+     "hyp": "Hey, I, you, you have care.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I love you. You are here.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    },
+    "sped_up": {
+     "hyp": "It's not enough. You don't have care.",
+     "errors": 5,
+     "words": 5,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 316,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "How do you like that?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "You! You!",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    },
+    "sped_up": {
+     "hyp": "No, you, you. Okay, what's that?",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "You! You!",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    },
+    "sped_up": {
+     "hyp": "No, you, you. Who is that?",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    }
+   }
+  },
+  {
+   "gid": 317,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "I tell you I am thirsty.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "My. You. You. A-A. A-A. There she is.",
+     "errors": 9,
+     "words": 6,
+     "wer": 1.5
+    },
+    "sped_up": {
+     "hyp": "My you you hey, hey there she",
+     "errors": 6,
+     "words": 6,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "My. New. You. At eight. Eight. Hershey.",
+     "errors": 6,
+     "words": 6,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "My. You. You. A. A. A. Hershey.",
+     "errors": 6,
+     "words": 6,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 318,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "Are they very hungry?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "Oh, you very hungry.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    },
+    "sped_up": {
+     "hyp": "How are you very hungry?",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "Wow, you look very lovely.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "How are you? Very lovely.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    }
+   }
+  },
+  {
+   "gid": 319,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "Is my family coming?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "That's my family.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    },
+    "sped_up": {
+     "hyp": "That's my family.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "That's. My. My.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    },
+    "sped_up": {
+     "hyp": "That's my family money.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    }
+   }
+  },
+  {
+   "gid": 320,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "I hope you have good glasses.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "My hope. There. And here. Right. There. The lesson.",
+     "errors": 8,
+     "words": 6,
+     "wer": 1.3333333333333333
+    },
+    "sped_up": {
+     "hyp": "I hope they're at it, right?",
+     "errors": 4,
+     "words": 6,
+     "wer": 0.6666666666666666
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "My hope will add a little pride in the lesson.",
+     "errors": 9,
+     "words": 6,
+     "wer": 1.5
+    },
+    "sped_up": {
+     "hyp": "I hope they're at it right now.",
+     "errors": 5,
+     "words": 6,
+     "wer": 0.8333333333333334
+    }
+   }
+  },
+  {
+   "gid": 321,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "Clean up it.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "Yes.",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "You did it. You did it. You did it.",
+     "errors": 8,
+     "words": 3,
+     "wer": 2.6666666666666665
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "Yeah.",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "Yeah.",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 322,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "Hope you have it.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "You is it.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    },
+    "sped_up": {
+     "hyp": "But nor you is it.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "Of course. You. Is. It.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    },
+    "sped_up": {
+     "hyp": "Or you is it.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    }
+   }
+  },
+  {
+   "gid": 323,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "I hope my nurse is closer.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I hope they may nurse their culture.",
+     "errors": 4,
+     "words": 6,
+     "wer": 0.6666666666666666
+    },
+    "sped_up": {
+     "hyp": "My God, they, me, nurse, they hover.",
+     "errors": 6,
+     "words": 6,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I hope they may nurse their culture.",
+     "errors": 4,
+     "words": 6,
+     "wer": 0.6666666666666666
+    },
+    "sped_up": {
+     "hyp": "I thought they may nurse the author.",
+     "errors": 5,
+     "words": 6,
+     "wer": 0.8333333333333334
+    }
+   }
+  },
+  {
+   "gid": 324,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "What music is it?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "What do you mean? Is it?",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    },
+    "sped_up": {
+     "hyp": "You got to use it.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "Oh, God. He knows them. It's it.",
+     "errors": 6,
+     "words": 4,
+     "wer": 1.5
+    },
+    "sped_up": {
+     "hyp": "That music is it.",
+     "errors": 1,
+     "words": 4,
+     "wer": 0.25
+    }
+   }
+  },
+  {
+   "gid": 325,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "I do not like that.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I... know... why... lies... that...",
+     "errors": 3,
+     "words": 5,
+     "wer": 0.6
+    },
+    "sped_up": {
+     "hyp": "I know what it looked like.",
+     "errors": 5,
+     "words": 5,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I... know... my... life... past.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    },
+    "sped_up": {
+     "hyp": "I know what life is.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    }
+   }
+  },
+  {
+   "gid": 326,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "Yes, my family is going here.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "Yes, my family is from here.",
+     "errors": 1,
+     "words": 6,
+     "wer": 0.16666666666666666
+    },
+    "sped_up": {
+     "hyp": "Yes, my family, it got here.",
+     "errors": 2,
+     "words": 6,
+     "wer": 0.3333333333333333
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "Hm? Yes. My family is here.",
+     "errors": 2,
+     "words": 6,
+     "wer": 0.3333333333333333
+    },
+    "sped_up": {
+     "hyp": "Yes, my family is here.",
+     "errors": 1,
+     "words": 6,
+     "wer": 0.16666666666666666
+    }
+   }
+  },
+  {
+   "gid": 327,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "Where they are going.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "You. You. You. You. You.",
+     "errors": 5,
+     "words": 4,
+     "wer": 1.25
+    },
+    "sped_up": {
+     "hyp": "You, you, you, this, you, you.",
+     "errors": 6,
+     "words": 4,
+     "wer": 1.5
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "You. You. You.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "You! You! You! You! You! You!",
+     "errors": 6,
+     "words": 4,
+     "wer": 1.5
+    }
+   }
+  },
+  {
+   "gid": 328,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "I hope you are here.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I'm new. You are new.",
+     "errors": 3,
+     "words": 5,
+     "wer": 0.6
+    },
+    "sped_up": {
+     "hyp": "I know you are, Bill.",
+     "errors": 2,
+     "words": 5,
+     "wer": 0.4
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I knew you are too.",
+     "errors": 2,
+     "words": 5,
+     "wer": 0.4
+    },
+    "sped_up": {
+     "hyp": "I knew you are new.",
+     "errors": 2,
+     "words": 5,
+     "wer": 0.4
+    }
+   }
+  },
+  {
+   "gid": 329,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "Please bring it.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "W w w w. yee!",
+     "errors": 5,
+     "words": 3,
+     "wer": 1.6666666666666667
+    },
+    "sped_up": {
+     "hyp": "Let's clear it.",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "Let's play it.",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    },
+    "sped_up": {
+     "hyp": "Let's clean it.",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    }
+   }
+  },
+  {
+   "gid": 330,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "Where it is?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "Now, is, is...",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    },
+    "sped_up": {
+     "hyp": "Now is is.",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "Yeah, it's... it's...",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "Now is is.",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    }
+   }
+  },
+  {
+   "gid": 331,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "I hope you like my family.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I love you! I love you!",
+     "errors": 4,
+     "words": 6,
+     "wer": 0.6666666666666666
+    },
+    "sped_up": {
+     "hyp": "I hope you like what's going on.",
+     "errors": 3,
+     "words": 6,
+     "wer": 0.5
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I love you! I love you!",
+     "errors": 4,
+     "words": 6,
+     "wer": 0.6666666666666666
+    },
+    "sped_up": {
+     "hyp": "I hope you like what I have.",
+     "errors": 3,
+     "words": 6,
+     "wer": 0.5
+    }
+   }
+  },
+  {
+   "gid": 332,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "Where you going?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "They. You. I.",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    },
+    "sped_up": {
+     "hyp": "Thank you, bye.",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "Then... You! Bye!",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    },
+    "sped_up": {
+     "hyp": "Thank you, bye.",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    }
+   }
+  },
+  {
+   "gid": 333,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "Bring my glasses here, please.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "Thank you. My love is here. Hello.",
+     "errors": 5,
+     "words": 5,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "Thank you very much.",
+     "errors": 5,
+     "words": 5,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "Thank you, my naughty hammer.",
+     "errors": 5,
+     "words": 5,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "Thank my nutted hair.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    }
+   }
+  },
+  {
+   "gid": 334,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "I hope that you like it.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I hope that you like it.",
+     "errors": 0,
+     "words": 6,
+     "wer": 0.0
+    },
+    "sped_up": {
+     "hyp": "I hope that you like it.",
+     "errors": 0,
+     "words": 6,
+     "wer": 0.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I hope that you like it.",
+     "errors": 0,
+     "words": 6,
+     "wer": 0.0
+    },
+    "sped_up": {
+     "hyp": "I hope that you like it.",
+     "errors": 0,
+     "words": 6,
+     "wer": 0.0
+    }
+   }
+  },
+  {
+   "gid": 335,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "I hope they are coming.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I... I... Oh... Hey... I... Hungry...",
+     "errors": 5,
+     "words": 5,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "I, I, thought they, I, hungry.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I... I... thought... they... like... hovering.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    },
+    "sped_up": {
+     "hyp": "I, I, book, they, I, country.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    }
+   }
+  },
+  {
+   "gid": 336,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "You do not need that.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "You. You. That. That. That.",
+     "errors": 3,
+     "words": 5,
+     "wer": 0.6
+    },
+    "sped_up": {
+     "hyp": "You did not like that.",
+     "errors": 2,
+     "words": 5,
+     "wer": 0.4
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "You! You!",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    },
+    "sped_up": {
+     "hyp": "You did not like that.",
+     "errors": 2,
+     "words": 5,
+     "wer": 0.4
+    }
+   }
+  },
+  {
+   "gid": 337,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "Tell my nurse you do not feel thirsty.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "Ny Ally Nurse You You Now Now Finish Him",
+     "errors": 7,
+     "words": 8,
+     "wer": 0.875
+    },
+    "sped_up": {
+     "hyp": "I might nurse you. Yeah, not now. Thank you.",
+     "errors": 6,
+     "words": 8,
+     "wer": 0.75
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I'm a nurse. You. You. Now. Now. Now. Now.",
+     "errors": 7,
+     "words": 8,
+     "wer": 0.875
+    },
+    "sped_up": {
+     "hyp": "I'm not a nurse. You. Yeah. No. No. No. No.",
+     "errors": 8,
+     "words": 8,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 338,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "They do not have my faith.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "They... me... and I... I... have... them... like... those.",
+     "errors": 7,
+     "words": 6,
+     "wer": 1.1666666666666667
+    },
+    "sped_up": {
+     "hyp": "Baby and I... I had a good health.",
+     "errors": 8,
+     "words": 6,
+     "wer": 1.3333333333333333
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "They... live... and lie. Lying... has... been... lost.",
+     "errors": 7,
+     "words": 6,
+     "wer": 1.1666666666666667
+    },
+    "sped_up": {
+     "hyp": "They, they, and I. My head is like that.",
+     "errors": 7,
+     "words": 6,
+     "wer": 1.1666666666666667
+    }
+   }
+  },
+  {
+   "gid": 339,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "I do not need it.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I do not need it.",
+     "errors": 0,
+     "words": 5,
+     "wer": 0.0
+    },
+    "sped_up": {
+     "hyp": "I did not need it.",
+     "errors": 1,
+     "words": 5,
+     "wer": 0.2
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I... You... Not... Me... Is...",
+     "errors": 3,
+     "words": 5,
+     "wer": 0.6
+    },
+    "sped_up": {
+     "hyp": "I do not need it.",
+     "errors": 0,
+     "words": 5,
+     "wer": 0.0
+    }
+   }
+  },
+  {
+   "gid": 340,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "My hope is my success.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "My hope is I say something.",
+     "errors": 3,
+     "words": 5,
+     "wer": 0.6
+    },
+    "sped_up": {
+     "hyp": "My help is mine. Say something.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "My hope is mine. Say something.",
+     "errors": 3,
+     "words": 5,
+     "wer": 0.6
+    },
+    "sped_up": {
+     "hyp": "My hope is my say something.",
+     "errors": 2,
+     "words": 5,
+     "wer": 0.4
+    }
+   }
+  },
+  {
+   "gid": 341,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "They hope my family is okay.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "They worked my family in a way.",
+     "errors": 4,
+     "words": 6,
+     "wer": 0.6666666666666666
+    },
+    "sped_up": {
+     "hyp": "They woke. My. Family. It. A guy.",
+     "errors": 4,
+     "words": 6,
+     "wer": 0.6666666666666666
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "They walked my family in the rain.",
+     "errors": 4,
+     "words": 6,
+     "wer": 0.6666666666666666
+    },
+    "sped_up": {
+     "hyp": "They will, my, family, it, am I.",
+     "errors": 4,
+     "words": 6,
+     "wer": 0.6666666666666666
+    }
+   }
+  },
+  {
+   "gid": 342,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "You are not very hungry.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "You are that very hairy.",
+     "errors": 2,
+     "words": 5,
+     "wer": 0.4
+    },
+    "sped_up": {
+     "hyp": "You are with Mary Perry.",
+     "errors": 3,
+     "words": 5,
+     "wer": 0.6
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "You are not very, very...",
+     "errors": 1,
+     "words": 5,
+     "wer": 0.2
+    },
+    "sped_up": {
+     "hyp": "You are very very...",
+     "errors": 2,
+     "words": 5,
+     "wer": 0.4
+    }
+   }
+  },
+  {
+   "gid": 343,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "No, I do not feel very tired.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I... I... may... not... feel... very... very...",
+     "errors": 3,
+     "words": 7,
+     "wer": 0.42857142857142855
+    },
+    "sped_up": {
+     "hyp": "Then I, I, may not feel very nice.",
+     "errors": 4,
+     "words": 7,
+     "wer": 0.5714285714285714
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I'm still dying, dying, dying, dying, dying.",
+     "errors": 7,
+     "words": 7,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "I'm dying, I'm dying, I'm dying, I'm dying",
+     "errors": 8,
+     "words": 7,
+     "wer": 1.1428571428571428
+    }
+   }
+  },
+  {
+   "gid": 344,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "I like how comfortable you are.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I will know how to say the word.",
+     "errors": 6,
+     "words": 6,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "And I didn't know how to set the clock.",
+     "errors": 7,
+     "words": 6,
+     "wer": 1.1666666666666667
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I... will... know... how to say... the... power.",
+     "errors": 6,
+     "words": 6,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "Night, night, you know, how does that thing work?",
+     "errors": 8,
+     "words": 6,
+     "wer": 1.3333333333333333
+    }
+   }
+  },
+  {
+   "gid": 345,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "Please tell my family I am coming.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "Please, you are my family. And what have you been doing?",
+     "errors": 8,
+     "words": 7,
+     "wer": 1.1428571428571428
+    },
+    "sped_up": {
+     "hyp": "These are my family.",
+     "errors": 5,
+     "words": 7,
+     "wer": 0.7142857142857143
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "This is where my family is helping.",
+     "errors": 6,
+     "words": 7,
+     "wer": 0.8571428571428571
+    },
+    "sped_up": {
+     "hyp": "These were my family.",
+     "errors": 5,
+     "words": 7,
+     "wer": 0.7142857142857143
+    }
+   }
+  },
+  {
+   "gid": 346,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "I like my success.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I am not my semi.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    },
+    "sped_up": {
+     "hyp": "I am of day 70.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I... am not... my... semi.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    },
+    "sped_up": {
+     "hyp": "I am of day 70.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 347,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "Is my family coming outside?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "How are you and my family? How are you and your friends?",
+     "errors": 10,
+     "words": 5,
+     "wer": 2.0
+    },
+    "sped_up": {
+     "hyp": "Who is my family? How are you?",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "How is my family? How many of them?",
+     "errors": 5,
+     "words": 5,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "And I was my funny galley or fan.",
+     "errors": 7,
+     "words": 5,
+     "wer": 1.4
+    }
+   }
+  },
+  {
+   "gid": 348,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "Please tell my nurse I am comfortable.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I'm a... I'm a... I'm a... I'm a... nurse. I'm a... nurse.",
+     "errors": 11,
+     "words": 7,
+     "wer": 1.5714285714285714
+    },
+    "sped_up": {
+     "hyp": "No, no, no, no, no, no, no, no, no.",
+     "errors": 9,
+     "words": 7,
+     "wer": 1.2857142857142858
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "No, no, no, no, no, no, no, no.",
+     "errors": 8,
+     "words": 7,
+     "wer": 1.1428571428571428
+    },
+    "sped_up": {
+     "hyp": "No, no, no, no, no, no, no.",
+     "errors": 7,
+     "words": 7,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 349,
+   "run": "b2v2_kunz_d086_all_k11",
+   "text": "Goodbye, I am going.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "And now I am a little bear.",
+     "errors": 5,
+     "words": 4,
+     "wer": 1.25
+    },
+    "sped_up": {
+     "hyp": "An ugly alley and a mirror.",
+     "errors": 6,
+     "words": 4,
+     "wer": 1.5
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "Hello Harry, Harry, and little bear.",
+     "errors": 6,
+     "words": 4,
+     "wer": 1.5
+    },
+    "sped_up": {
+     "hyp": "No, no, no, no.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 350,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "I like how you tell it.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I'm not here. You. I'm here.",
+     "errors": 5,
+     "words": 6,
+     "wer": 0.8333333333333334
+    },
+    "sped_up": {
+     "hyp": "I'm not here, you are here.",
+     "errors": 5,
+     "words": 6,
+     "wer": 0.8333333333333334
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I love you, you. I hate you.",
+     "errors": 5,
+     "words": 6,
+     "wer": 0.8333333333333334
+    },
+    "sped_up": {
+     "hyp": "I could not hear you, thank you.",
+     "errors": 5,
+     "words": 6,
+     "wer": 0.8333333333333334
+    }
+   }
+  },
+  {
+   "gid": 351,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "My family is coming closer.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "My army is on the chain.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    },
+    "sped_up": {
+     "hyp": "My penny is on fortune.",
+     "errors": 3,
+     "words": 5,
+     "wer": 0.6
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "My army is going marching.",
+     "errors": 3,
+     "words": 5,
+     "wer": 0.6
+    },
+    "sped_up": {
+     "hyp": "My penny is on auction.",
+     "errors": 3,
+     "words": 5,
+     "wer": 0.6
+    }
+   }
+  },
+  {
+   "gid": 352,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "They do not have hope.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "Very. Little. All. Yet. All.",
+     "errors": 5,
+     "words": 5,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "They blew up it all.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I love you. I love you.",
+     "errors": 6,
+     "words": 5,
+     "wer": 1.2
+    },
+    "sped_up": {
+     "hyp": "They killed all of it all.",
+     "errors": 5,
+     "words": 5,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 353,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "How do you have that?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I... do... you... here... right...",
+     "errors": 3,
+     "words": 5,
+     "wer": 0.6
+    },
+    "sped_up": {
+     "hyp": "I will you if that",
+     "errors": 3,
+     "words": 5,
+     "wer": 0.6
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "Bye. You. You. You. Right.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    },
+    "sped_up": {
+     "hyp": "I know you get that.",
+     "errors": 3,
+     "words": 5,
+     "wer": 0.6
+    }
+   }
+  },
+  {
+   "gid": 354,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "I do not need my computer.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I do not get my outfit.",
+     "errors": 2,
+     "words": 6,
+     "wer": 0.3333333333333333
+    },
+    "sped_up": {
+     "hyp": "I do not get my option.",
+     "errors": 2,
+     "words": 6,
+     "wer": 0.3333333333333333
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I'm a human, not yet my own human.",
+     "errors": 6,
+     "words": 6,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "I threw my yet my potion.",
+     "errors": 4,
+     "words": 6,
+     "wer": 0.6666666666666666
+    }
+   }
+  },
+  {
+   "gid": 355,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "I hope they are comfortable.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "My... help... me... our... national...",
+     "errors": 5,
+     "words": 5,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "My God, they are fashionable.",
+     "errors": 3,
+     "words": 5,
+     "wer": 0.6
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "My. Help. They. Our. Passion. At all.",
+     "errors": 6,
+     "words": 5,
+     "wer": 1.2
+    },
+    "sped_up": {
+     "hyp": "I like them, they are fashionable.",
+     "errors": 3,
+     "words": 5,
+     "wer": 0.6
+    }
+   }
+  },
+  {
+   "gid": 356,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "They like my nurse.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "My nurse.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    },
+    "sped_up": {
+     "hyp": "I like my nurse.",
+     "errors": 1,
+     "words": 4,
+     "wer": 0.25
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "My, my, my, nurse.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    },
+    "sped_up": {
+     "hyp": "My, my, my, nurse.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    }
+   }
+  },
+  {
+   "gid": 357,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "It is bad.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "Finally! Nailed! Nailed!",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "I will know.",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "And why are they... musicals? Then why?",
+     "errors": 7,
+     "words": 3,
+     "wer": 2.3333333333333335
+    },
+    "sped_up": {
+     "hyp": "I want you to know.",
+     "errors": 5,
+     "words": 3,
+     "wer": 1.6666666666666667
+    }
+   }
+  },
+  {
+   "gid": 358,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "How thirsty are you?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "Then, let's see if I love you.",
+     "errors": 6,
+     "words": 4,
+     "wer": 1.5
+    },
+    "sped_up": {
+     "hyp": "Hmm, let's see if they are you.",
+     "errors": 5,
+     "words": 4,
+     "wer": 1.25
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "Hmm... Let's see... Who are you?",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "Then, let me tell you.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 359,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "I do not need help.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "My. You. My. Me. And you.",
+     "errors": 6,
+     "words": 5,
+     "wer": 1.2
+    },
+    "sped_up": {
+     "hyp": "My, you, hi, me, and you.",
+     "errors": 6,
+     "words": 5,
+     "wer": 1.2
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "My. You. My. Me. And you.",
+     "errors": 6,
+     "words": 5,
+     "wer": 1.2
+    },
+    "sped_up": {
+     "hyp": "Might you fuck me and you?",
+     "errors": 6,
+     "words": 5,
+     "wer": 1.2
+    }
+   }
+  },
+  {
+   "gid": 360,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "Are you coming closer?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "How are you? I don't think he loves your hair.",
+     "errors": 8,
+     "words": 4,
+     "wer": 2.0
+    },
+    "sped_up": {
+     "hyp": "Are. You. Dobby. Lusher me.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "How are you? I love you. Let's share.",
+     "errors": 6,
+     "words": 4,
+     "wer": 1.5
+    },
+    "sped_up": {
+     "hyp": "Are you the pleasure?",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    }
+   }
+  },
+  {
+   "gid": 361,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "How tired are they?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "Am I very proud of me?",
+     "errors": 6,
+     "words": 4,
+     "wer": 1.5
+    },
+    "sped_up": {
+     "hyp": "Am I very happy?",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "Oh my, very, very, very...",
+     "errors": 5,
+     "words": 4,
+     "wer": 1.25
+    },
+    "sped_up": {
+     "hyp": "My very happy day.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 362,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "How hungry are they?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I'm hungry. I love you. Thank you.",
+     "errors": 6,
+     "words": 4,
+     "wer": 1.5
+    },
+    "sped_up": {
+     "hyp": "Hi, Henry! Hey! Hey!",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I'm hungry. I love you. Thanks.",
+     "errors": 5,
+     "words": 4,
+     "wer": 1.25
+    },
+    "sped_up": {
+     "hyp": "Hi, Henry, hey, hey, thanks.",
+     "errors": 5,
+     "words": 4,
+     "wer": 1.25
+    }
+   }
+  },
+  {
+   "gid": 363,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "I hope you do not need faith.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I hope you do like me.",
+     "errors": 3,
+     "words": 7,
+     "wer": 0.42857142857142855
+    },
+    "sped_up": {
+     "hyp": "I hope you do like me.",
+     "errors": 3,
+     "words": 7,
+     "wer": 0.42857142857142855
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I hope you do like me.",
+     "errors": 3,
+     "words": 7,
+     "wer": 0.42857142857142855
+    },
+    "sped_up": {
+     "hyp": "I hope you like me.",
+     "errors": 4,
+     "words": 7,
+     "wer": 0.5714285714285714
+    }
+   }
+  },
+  {
+   "gid": 364,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "You have it here.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "Me. Me. You. Player.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "Make me appear.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "Hey! Hey! Play here!",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    },
+    "sped_up": {
+     "hyp": "Make me in here.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    }
+   }
+  },
+  {
+   "gid": 365,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "I do not have my computer.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I... did... my... faith... made... sure.",
+     "errors": 5,
+     "words": 6,
+     "wer": 0.8333333333333334
+    },
+    "sped_up": {
+     "hyp": "I can't make it here.",
+     "errors": 5,
+     "words": 6,
+     "wer": 0.8333333333333334
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "Why? Why? Why? Why? Why?",
+     "errors": 6,
+     "words": 6,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "I-I-I-I-I-I-I-I",
+     "errors": 7,
+     "words": 6,
+     "wer": 1.1666666666666667
+    }
+   }
+  },
+  {
+   "gid": 366,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "Do that right.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "Lie. Lie.",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "Mm-hmm, that guy.",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "Why? Why?",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "Hey, that guy.",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    }
+   }
+  },
+  {
+   "gid": 367,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "I hope you have family.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I... help... you... cause you... suck.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    },
+    "sped_up": {
+     "hyp": "My, how, new, ideal, giant.",
+     "errors": 5,
+     "words": 5,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I hope you guys feel safe.",
+     "errors": 3,
+     "words": 5,
+     "wer": 0.6
+    },
+    "sped_up": {
+     "hyp": "I hope you got it fine.",
+     "errors": 3,
+     "words": 5,
+     "wer": 0.6
+    }
+   }
+  },
+  {
+   "gid": 368,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "Yes, I am hungry.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "Merry. Bye. Oh. Hooray.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "May I help you? Hurry.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "No... I... am... hungry.",
+     "errors": 1,
+     "words": 4,
+     "wer": 0.25
+    },
+    "sped_up": {
+     "hyp": "May I? I'm hungry.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    }
+   }
+  },
+  {
+   "gid": 369,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "Success is good.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "My hair... My hair...",
+     "errors": 4,
+     "words": 3,
+     "wer": 1.3333333333333333
+    },
+    "sped_up": {
+     "hyp": "No, no, no, no.",
+     "errors": 4,
+     "words": 3,
+     "wer": 1.3333333333333333
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "My face...",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "Blah, blah, blah.",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 370,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "That is okay.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "May I? Is... out of here?",
+     "errors": 5,
+     "words": 3,
+     "wer": 1.6666666666666667
+    },
+    "sped_up": {
+     "hyp": "It is over.",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "My name is Alpha.",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "Heh, heh, heh.",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 371,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "Is that it you?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "My. May. New. New.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "I. May. You. You.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I... may... you... you...",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    },
+    "sped_up": {
+     "hyp": "I. May. New. New.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 372,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "I hope they do not need my music.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I know I know you. I know you. I know you. I know you.",
+     "errors": 13,
+     "words": 8,
+     "wer": 1.625
+    },
+    "sped_up": {
+     "hyp": "No, no, no, no, no, no.",
+     "errors": 8,
+     "words": 8,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I... don't... die... do... die... play... die... this way...",
+     "errors": 7,
+     "words": 8,
+     "wer": 0.875
+    },
+    "sped_up": {
+     "hyp": "No, no, no, no, no, no, no, no, no.",
+     "errors": 9,
+     "words": 8,
+     "wer": 1.125
+    }
+   }
+  },
+  {
+   "gid": 373,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "I hope you like music.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "My... book... knew... my... tools.",
+     "errors": 5,
+     "words": 5,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "My book knew right to it.",
+     "errors": 6,
+     "words": 5,
+     "wer": 1.2
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "My voice blew my tears.",
+     "errors": 5,
+     "words": 5,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "like, what, you, mine, do it.",
+     "errors": 5,
+     "words": 5,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 374,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "You do not need faith.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "They. You. My. Me. Sign.",
+     "errors": 5,
+     "words": 5,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "Like you, my, me, say.",
+     "errors": 5,
+     "words": 5,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "May... you... my... me... side.",
+     "errors": 5,
+     "words": 5,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "Like you might need saying.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    }
+   }
+  },
+  {
+   "gid": 375,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "I hope they are okay.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "And my... food... may... pour... out here.",
+     "errors": 7,
+     "words": 5,
+     "wer": 1.4
+    },
+    "sped_up": {
+     "hyp": "I might sit next door again.",
+     "errors": 5,
+     "words": 5,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "And I feel better for a game.",
+     "errors": 6,
+     "words": 5,
+     "wer": 1.2
+    },
+    "sped_up": {
+     "hyp": "I might see the next door again.",
+     "errors": 6,
+     "words": 5,
+     "wer": 1.2
+    }
+   }
+  },
+  {
+   "gid": 376,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "That is not okay.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "Nay is nigh lion.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    },
+    "sped_up": {
+     "hyp": "That is not right.",
+     "errors": 1,
+     "words": 4,
+     "wer": 0.25
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "May is nigh.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    },
+    "sped_up": {
+     "hyp": "That is my way.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    }
+   }
+  },
+  {
+   "gid": 377,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "Yes, you are right.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "You are me.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    },
+    "sped_up": {
+     "hyp": "You are right.",
+     "errors": 1,
+     "words": 4,
+     "wer": 0.25
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "You. Are. Good.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    },
+    "sped_up": {
+     "hyp": "No, you are right.",
+     "errors": 1,
+     "words": 4,
+     "wer": 0.25
+    }
+   }
+  },
+  {
+   "gid": 378,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "I hope that you like that.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "And I hope that you try. Bye.",
+     "errors": 3,
+     "words": 6,
+     "wer": 0.5
+    },
+    "sped_up": {
+     "hyp": "And I hope that you try one.",
+     "errors": 3,
+     "words": 6,
+     "wer": 0.5
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "And I hope that you train alone.",
+     "errors": 3,
+     "words": 6,
+     "wer": 0.5
+    },
+    "sped_up": {
+     "hyp": "Am I a book that you try to run?",
+     "errors": 6,
+     "words": 6,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 379,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "How are they?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "You. Are. Saying.",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    },
+    "sped_up": {
+     "hyp": "No more pain.",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "You are staying.",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    },
+    "sped_up": {
+     "hyp": "New, more, time!",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 380,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "They are tired.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "My, my, Harry.",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "My, my, sorry.",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "My, my, my.",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "My, my, sorry.",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 381,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "Are you closer?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I love you. I shouldn't.",
+     "errors": 4,
+     "words": 3,
+     "wer": 1.3333333333333333
+    },
+    "sped_up": {
+     "hyp": "Are you hushin'?",
+     "errors": 1,
+     "words": 3,
+     "wer": 0.3333333333333333
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I love you. I love you.",
+     "errors": 5,
+     "words": 3,
+     "wer": 1.6666666666666667
+    },
+    "sped_up": {
+     "hyp": "Not you, Hutchy.",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    }
+   }
+  },
+  {
+   "gid": 382,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "They hope you are right here.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I love you. I like you.",
+     "errors": 5,
+     "words": 6,
+     "wer": 0.8333333333333334
+    },
+    "sped_up": {
+     "hyp": "I put you in my chair.",
+     "errors": 5,
+     "words": 6,
+     "wer": 0.8333333333333334
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I love you. I hate my chair.",
+     "errors": 6,
+     "words": 6,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "I put you by my chair.",
+     "errors": 5,
+     "words": 6,
+     "wer": 0.8333333333333334
+    }
+   }
+  },
+  {
+   "gid": 383,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "Do you like my music?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I... knew... made... my... office.",
+     "errors": 4,
+     "words": 5,
+     "wer": 0.8
+    },
+    "sped_up": {
+     "hyp": "Nay, you, nay, nay, love it.",
+     "errors": 5,
+     "words": 5,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I... knew... they... might... have this.",
+     "errors": 6,
+     "words": 5,
+     "wer": 1.2
+    },
+    "sped_up": {
+     "hyp": "No, you. No, no. I have this.",
+     "errors": 6,
+     "words": 5,
+     "wer": 1.2
+    }
+   }
+  },
+  {
+   "gid": 384,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "Do you have that?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I knew how that...",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    },
+    "sped_up": {
+     "hyp": "I do like that.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I... knew... how... that...",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    },
+    "sped_up": {
+     "hyp": "I do count that.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    }
+   }
+  },
+  {
+   "gid": 385,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "Do you feel it?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "May... my... kill... it...",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    },
+    "sped_up": {
+     "hyp": "May I heal it?",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "May... My... Google... It...",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    },
+    "sped_up": {
+     "hyp": "May I kill it?",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    }
+   }
+  },
+  {
+   "gid": 386,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "I hope I have good glasses.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "My. My. My. My. My. My. My.",
+     "errors": 7,
+     "words": 6,
+     "wer": 1.1666666666666667
+    },
+    "sped_up": {
+     "hyp": "My, my, my, my, my, my.",
+     "errors": 6,
+     "words": 6,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "My universe, my health, mine counting.",
+     "errors": 6,
+     "words": 6,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "My, my, my, my, my, such as",
+     "errors": 7,
+     "words": 6,
+     "wer": 1.1666666666666667
+    }
+   }
+  },
+  {
+   "gid": 387,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "I hope I have very good family.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I... look... out... my... very... very...",
+     "errors": 5,
+     "words": 7,
+     "wer": 0.7142857142857143
+    },
+    "sped_up": {
+     "hyp": "I look valid, my very, very, very...",
+     "errors": 5,
+     "words": 7,
+     "wer": 0.7142857142857143
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "My look only. My very, very.",
+     "errors": 6,
+     "words": 7,
+     "wer": 0.8571428571428571
+    },
+    "sped_up": {
+     "hyp": "My love, my very love, darling.",
+     "errors": 6,
+     "words": 7,
+     "wer": 0.8571428571428571
+    }
+   }
+  },
+  {
+   "gid": 388,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "I like how comfortable I am.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "My brain table has shown my body.",
+     "errors": 7,
+     "words": 6,
+     "wer": 1.1666666666666667
+    },
+    "sped_up": {
+     "hyp": "like playing video, social, and like...",
+     "errors": 6,
+     "words": 6,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "My brain feels so sore. My brain feels so sore. My brain feels so sore.",
+     "errors": 15,
+     "words": 6,
+     "wer": 2.5
+    },
+    "sped_up": {
+     "hyp": "My. Link. Feel. Social. My. Me.",
+     "errors": 6,
+     "words": 6,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 389,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "They feel very hungry.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "My... no... sorry... power...",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "My, now, very, power.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "My... Now... My... Power...",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "My. Now. Very. Power.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    }
+   }
+  },
+  {
+   "gid": 390,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "Where are you?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "My... My... You...",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    },
+    "sped_up": {
+     "hyp": "No, my, you.",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "No! No! You!",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    },
+    "sped_up": {
+     "hyp": "No, no, you.",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    }
+   }
+  },
+  {
+   "gid": 391,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "My family is tired.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "My family is I.",
+     "errors": 1,
+     "words": 4,
+     "wer": 0.25
+    },
+    "sped_up": {
+     "hyp": "My family is I.",
+     "errors": 1,
+     "words": 4,
+     "wer": 0.25
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "My family is mine.",
+     "errors": 1,
+     "words": 4,
+     "wer": 0.25
+    },
+    "sped_up": {
+     "hyp": "My belly is high.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    }
+   }
+  },
+  {
+   "gid": 392,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "They are right.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "No, no, no, no, no, no.",
+     "errors": 6,
+     "words": 3,
+     "wer": 2.0
+    },
+    "sped_up": {
+     "hyp": "night, or night.",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "My... My... My...",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "Night before night.",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 393,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "Are they okay?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "Well... They... Are here.",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "Not today, I'm gay.",
+     "errors": 4,
+     "words": 3,
+     "wer": 1.3333333333333333
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "No... very... okay...",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    },
+    "sped_up": {
+     "hyp": "No, they are gay.",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 394,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "My family is here.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "My thing is you.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    },
+    "sped_up": {
+     "hyp": "My thing is you.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "My thing is you.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    },
+    "sped_up": {
+     "hyp": "My thing is you.",
+     "errors": 2,
+     "words": 4,
+     "wer": 0.5
+    }
+   }
+  },
+  {
+   "gid": 395,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "Tell my nurse I feel thirsty.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "You. I. May. Mervs. I. Feel. The stream.",
+     "errors": 6,
+     "words": 6,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "No, no, no. Nerf, bye, fuel, party.",
+     "errors": 7,
+     "words": 6,
+     "wer": 1.1666666666666667
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "Well, now I... may... emerge... by... fuel... of our stream.",
+     "errors": 10,
+     "words": 6,
+     "wer": 1.6666666666666667
+    },
+    "sped_up": {
+     "hyp": "No, no, no. Nerf, bye, fuel, party.",
+     "errors": 7,
+     "words": 6,
+     "wer": 1.1666666666666667
+    }
+   }
+  },
+  {
+   "gid": 396,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "Are you my nurse?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "I... knew... my... movements.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    },
+    "sped_up": {
+     "hyp": "I really like meat.",
+     "errors": 4,
+     "words": 4,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "I... knew... my... movement.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    },
+    "sped_up": {
+     "hyp": "I ate my meat.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    }
+   }
+  },
+  {
+   "gid": 397,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "What is outside?",
+   "orig": {
+    "orig_speed": {
+     "hyp": "My... is... okay...",
+     "errors": 2,
+     "words": 3,
+     "wer": 0.6666666666666666
+    },
+    "sped_up": {
+     "hyp": "No, it's okay.",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "My... is... a... friend.",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    },
+    "sped_up": {
+     "hyp": "No, it's okay.",
+     "errors": 3,
+     "words": 3,
+     "wer": 1.0
+    }
+   }
+  },
+  {
+   "gid": 398,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "My family is not like that.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "My, my, is, my, my, my city.",
+     "errors": 5,
+     "words": 6,
+     "wer": 0.8333333333333334
+    },
+    "sped_up": {
+     "hyp": "My, my, my, my, my",
+     "errors": 5,
+     "words": 6,
+     "wer": 0.8333333333333334
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "My. My. Is. My. My. My city.",
+     "errors": 5,
+     "words": 6,
+     "wer": 0.8333333333333334
+    },
+    "sped_up": {
+     "hyp": "My, my, my, my, my.",
+     "errors": 5,
+     "words": 6,
+     "wer": 0.8333333333333334
+    }
+   }
+  },
+  {
+   "gid": 399,
+   "run": "b2v2_kunz_d086_all_k13",
+   "text": "They need my computer.",
+   "orig": {
+    "orig_speed": {
+     "hyp": "my my my going",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    },
+    "sped_up": {
+     "hyp": "My, not my, ow.",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    }
+   },
+   "boost": {
+    "orig_speed": {
+     "hyp": "my my my going",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    },
+    "sped_up": {
+     "hyp": "My, my, my",
+     "errors": 3,
+     "words": 4,
+     "wer": 0.75
+    }
+   }
+  }
+ ],
+ "wall_time_s": 373.9141068458557
+}

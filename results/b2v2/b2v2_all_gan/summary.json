@@ -1,0 +1,42 @@
+{
+ "run_name": "b2v2_all_gan",
+ "config": "configs/experiments/b2v2_all_gan.yaml",
+ "decision": "D-086",
+ "code_version": {
+  "source": "sync",
+  "commit": "e0a0e7486cd41d4a651f29554abaebe54c545a38",
+  "dirty": false,
+  "diff_sha256": null,
+  "pushed_at": "2026-10-25T02:45:50Z"
+ },
+ "created": "2026-10-25T03:21:26",
+ "steps": 25000,
+ "n_train": 8332,
+ "n_val": 30,
+ "n_test": 127,
+ "adapt": null,
+ "loss": "both",
+ "best_val": 0.02631976269185543,
+ "final": {
+  "loss": 0.2702823115885258,
+  "cont": 0.11592546656727791,
+  "ctc": 0.3027681729197502,
+  "speech": 0.4001682025194168,
+  "ctc_on": 0.9871875,
+  "d_loss": 1.3105674028396606,
+  "g_loss": 0.7825055432319641,
+  "fm": 0.022914734911173584,
+  "step": 25000,
+  "lr": 1.0000004825139904e-05,
+  "s": 1075.7851452827454,
+  "val": {
+   "cont": 0.026395572815090418,
+   "ctc": 0.29665855690836906
+  }
+ },
+ "n_params": 14712637,
+ "n_trainable": 14712637,
+ "wall_time_s": 1076.0051729679108,
+ "device": "cuda",
+ "torch": "2.5.1+cu124"
+}
