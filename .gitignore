@@ -111,3 +111,4 @@ scripts/remote/pc.env
 
 # Scratch run folders written by scripts/time_training.py (timing.json is kept)
 results/time_training_*_base/
+scripts/remote/vast3.env
