@@ -1,0 +1,10 @@
+# D-086: F_03 (the D-076 attempted-speech adaptation, blocks [6, 11, 13]) on the adversarially trained base model.
+#   PC: ~/wvx/envs/wvx-f5/bin/python -I scripts/train_b2v2.py --config configs/experiments/b2v2_kunz_gan_f03.yaml
+base_experiment: configs/experiments/b2v2_kunz_f03.yaml
+
+run_name: b2v2_kunz_gan_f03
+
+b2v2:
+  adapt:
+    decision: D-086
+    init: data/checkpoints/b2v2_all_gan/final.pt

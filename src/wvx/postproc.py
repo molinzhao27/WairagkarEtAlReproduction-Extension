@@ -64,3 +64,18 @@ def sharpen(pred: np.ndarray, alpha: float, n_cepstral: int = 18, lo: float = -1
     mu = c.mean(0, keepdims=True)
     out[:, :n_cepstral] = np.clip(mu + alpha * (c - mu), lo, hi)
     return out
+
+
+def movement_boost(pred: np.ndarray, beta: float, window: int, n_cepstral: int = 18, lo: float = -1.0,
+                   hi: float = 1.0) -> np.ndarray:
+    """Scale only the FAST part of the first ``n_cepstral`` features (D-086): each feature's deviation from its centered
+    ``window``-frame moving average is multiplied by ``beta`` (the slow envelope is kept), clipped to [``lo``, ``hi``].
+    Against the flattened inside of words in inner-speech decodes (D-084); pitch features untouched."""
+    out = np.array(pred, np.float32, copy=True)
+    c = out[:, :n_cepstral]
+    k = np.ones(int(window), np.float32) / int(window)
+    pad = int(window) // 2
+    cp = np.pad(c, ((pad, int(window) - 1 - pad), (0, 0)), mode="edge")
+    slow = np.stack([np.convolve(cp[:, j], k, mode="valid") for j in range(c.shape[1])], 1)
+    out[:, :n_cepstral] = np.clip(slow + beta * (c - slow), lo, hi)
+    return out

@@ -1,0 +1,43 @@
+# D-086 summary (scripts/d086_summary.py) and the movement boost (scripts/postproc_b2v2.py --config this file).
+#   PC: PATH=~/wvx/envs/wvx-tools/bin:$PATH CUDA_VISIBLE_DEVICES= nice -n 10 .venv/bin/python -I scripts/postproc_b2v2.py \
+#         --config configs/experiments/b2v2_kunz_d086.yaml
+#       CUDA_VISIBLE_DEVICES= .venv/bin/python -I scripts/d086_summary.py --config configs/experiments/b2v2_kunz_d086.yaml
+base_experiment: configs/experiments/b2v2_kunz_base.yaml
+
+run_name: b2v2_kunz_d086
+
+runtime:
+  threads: {intra_op: 4, inter_op: 1, omp: 4}
+
+b2v2:
+  postproc:
+    decision: D-086
+    sets:
+      d086_learned:                  # the D-077 learned-map decodes (the baseline)
+        runs: [b2v2_kunz_im03, b2v2_kunz_im06, b2v2_kunz_im11, b2v2_kunz_im13]
+        name: imagined
+      d086_all:                      # arm `all`
+        runs: [b2v2_kunz_d086_all_k03, b2v2_kunz_d086_all_k06, b2v2_kunz_d086_all_k11, b2v2_kunz_d086_all_k13]
+        name: imagined
+    variants: [orig, boost]
+    boost:
+      beta: 1.35                     # D-084: within-word movement attempted 0.62 / inner (learned map) 0.46
+      window: 15                     # 150 ms: the slow envelope kept, the faster (syllable and phoneme) part scaled
+    rule: {min_points: 5.0, alpha: 0.0083}
+    workers: 4
+  d086:
+    reference: [b2v2_kunz_f03:heldout, b2v2_kunz_f06:heldout, b2v2_kunz_f11:heldout, b2v2_kunz_f13:heldout]
+    baseline: learned
+    secondary_vs: read
+    primary: [boost, read, distill, adv, gan_read, all]
+    rule: {min_points: 5.0, alpha: 0.0083}  # Bonferroni over the six primary arms
+    islands: {threshold: 0.0, smooth: 3, min_frames: 10, bridge: 8, cepstra: [1, 18]}   # D-084
+    arms:
+      learned: {preds: [b2v2_kunz_im03:imagined, b2v2_kunz_im06:imagined, b2v2_kunz_im11:imagined, b2v2_kunz_im13:imagined], identify: learned_imagined}
+      boost: {preds: [b2v2_kunz_im03:imagined, b2v2_kunz_im06:imagined, b2v2_kunz_im11:imagined, b2v2_kunz_im13:imagined], identify: learned_imagined, postproc: {set: d086_learned, variant: boost}, boost: true}
+      read: {preds: [b2v2_kunz_d086_read_k03:imagined, b2v2_kunz_d086_read_k06:imagined, b2v2_kunz_d086_read_k11:imagined, b2v2_kunz_d086_read_k13:imagined], identify: d086_read}
+      distill: {preds: [b2v2_kunz_d086_distill_k03:imagined, b2v2_kunz_d086_distill_k06:imagined, b2v2_kunz_d086_distill_k11:imagined, b2v2_kunz_d086_distill_k13:imagined], identify: d086_distill}
+      adv: {preds: [b2v2_kunz_d086_adv_k03:imagined, b2v2_kunz_d086_adv_k06:imagined, b2v2_kunz_d086_adv_k11:imagined, b2v2_kunz_d086_adv_k13:imagined], identify: d086_adv}
+      gan_read: {preds: [b2v2_kunz_d086_ganread_k03:imagined, b2v2_kunz_d086_ganread_k06:imagined, b2v2_kunz_d086_ganread_k11:imagined, b2v2_kunz_d086_ganread_k13:imagined], identify: d086_gan_read}
+      all: {preds: [b2v2_kunz_d086_all_k03:imagined, b2v2_kunz_d086_all_k06:imagined, b2v2_kunz_d086_all_k11:imagined, b2v2_kunz_d086_all_k13:imagined], identify: d086_all}
+      all_boost: {preds: [b2v2_kunz_d086_all_k03:imagined, b2v2_kunz_d086_all_k06:imagined, b2v2_kunz_d086_all_k11:imagined, b2v2_kunz_d086_all_k13:imagined], identify: d086_all, postproc: {set: d086_all, variant: boost}, boost: true}

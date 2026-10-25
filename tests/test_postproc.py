@@ -40,3 +40,18 @@ def test_sharpen_scales_cepstra_only():
     assert np.allclose(out[:, :18].mean(0), pred[:, :18].mean(0), atol=1e-6)
     assert np.allclose(out[:, :18].std(0), 1.5 * pred[:, :18].std(0), rtol=1e-4)
     assert out.min() >= -1 and out.max() <= 1
+
+
+def test_movement_boost_scales_only_the_fast_part():
+    t = np.arange(400)
+    slow = 0.3 * np.sin(2 * np.pi * t / 400)                    # 4 s period: kept
+    fast = 0.1 * np.sign(np.sin(2 * np.pi * (t + 0.5) / 10))    # 100 ms period: scaled (a full period per window)
+    x = np.zeros((400, 20), np.float32)
+    x[:, 3] = slow + fast
+    x[:, 19] = 0.7                                              # pitch feature: untouched
+    np.testing.assert_allclose(pp.movement_boost(x, 1.0, 10), x, atol=1e-6)
+    y = pp.movement_boost(x, 2.0, 10)
+    mid = slice(50, 350)
+    np.testing.assert_allclose(y[mid, 3], (slow + 2 * fast)[mid], atol=0.01)
+    assert np.all(y[:, 19] == x[:, 19])
+    assert y.min() >= -1.0 and y.max() <= 1.0

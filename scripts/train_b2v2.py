@@ -12,7 +12,8 @@ input projection initialized from the trained one, everything else frozen, train
 (``train_trials_from``: their indices in the session) with the ``loss`` named there (``ctc`` = text only,
 ``cont`` = their real targets, ``both``). Kunz (D-076): ``train_blocks`` selects whole blocks of ``session`` instead
 of a trial file, and ``full_trial: true`` trains on whole trials through the long-context chunks
-(``adapt_full_trials``).
+(``adapt_full_trials``; D-086 adds ``adapt.distill`` and ``adapt.adversarial`` there). ``training.adversarial`` (D-086)
+adds the b2v2 paper's multiscale discriminator to training (adversarial and feature-matching losses after a warm-up).
 
 Writes data/checkpoints/<run_name>/{final,best,last}.pt and results/b2v2/<run_name>/{split.json, log.jsonl,
 summary.json}.
@@ -82,7 +83,17 @@ def adapt_full_trials(model, input_id, params, opt, data, split, b, t, run, ckpt
     """Text-only (CTC) adaptation on WHOLE trials (``adapt.full_trial``, D-076): each step ``batch_size`` trials, one
     random 50 ms phase each, through ``wvx.b2v2_model.chunked_forward`` (the long-context chunks the decoder runs),
     CTC against the full sentence divided by its length. Validation: the same loss at phase 0 on the held-out trials;
-    best.pt = the lowest validation loss."""
+    best.pt = the lowest validation loss.
+
+    D-086 options. ``adapt.distill`` {targets, weight}: trials with a target (an npz of 10 ms (T, 20) arrays,
+    ``g<gid>``; ``scripts/build_distill_targets.py``) add ``weight`` x the speech-weighted squared error of the
+    continuous output against it (``speech_weight`` / ``silence_weight``; speech = target c0 above the threshold); it
+    also enters the validation loss. ``adapt.adversarial`` {real, start, ramp, w_from, w_to, d_lr, d_weight_decay,
+    d_every, scales, channels, kernel}: a multiscale discriminator (``wvx.b2v2_model.MultiScaleDiscriminator``)
+    learns to tell the continuous output on these trials from ``real`` sequences (the decoder's attempted-speech
+    voice: decode files ``RUN:NAME``, read at a random 50 ms phase), updated every ``d_every`` steps; from step
+    ``start`` the generator loss (weight ramped ``w_from`` -> ``w_to`` over ``ramp`` steps) pushes the output toward
+    them. Unpaired, so no feature matching; not in the validation loss."""
     import numpy as np
     import torch
     from torch.nn import functional as F
@@ -96,8 +107,30 @@ def adapt_full_trials(model, input_id, params, opt, data, split, b, t, run, ckpt
     trials = [data.by_gid[g] for g in split["train"]]
     bf16 = bool(t["bf16"]) and device.type == "cuda"
     aug_from = int(float(t["augment_from"]) * steps)            # D-085: the paper's augmentations on the 50 ms tokens
+    a = b["adapt"]
+    dcfg, acfg = a.get("distill"), a.get("adversarial")
+    targets = {}
+    if dcfg:
+        with np.load(resolve_path(dcfg["targets"]), allow_pickle=False) as z:
+            targets = {int(k[1:]): z[k] for k in z.files if k.startswith("g")}
+        log(f"{run}: distillation targets for {sum(g in targets for g in split['train'])} of {len(trials)} training "
+            f"and {sum(g in targets for g in split['val'])} of {len(split['val'])} validation trials")
+    c0i, thr = int(b["data"]["speech_feature"]), float(b["data"]["speech_threshold"])
+    w_sp, w_sil = float(t["speech_weight"]), float(t["silence_weight"])
+    disc = dopt = None
+    reals = []
+    if acfg:
+        for spec in acfg["real"]:
+            r_run, r_name = spec.split(":")
+            with np.load(resolve_path("data/processed/b2v2_preds") / r_run / f"{r_name}.npz", allow_pickle=False) as z:
+                reals += [z[f"g{g}_cont"].astype(np.float32) for g in json.loads(str(z["header"]))["gids"]]
+        disc = bm.MultiScaleDiscriminator(int(model.cfg["n_targets"]), acfg["scales"], acfg["channels"],
+                                          int(acfg["kernel"])).to(device)
+        dopt = torch.optim.AdamW(disc.parameters(), lr=float(acfg["d_lr"]), weight_decay=float(acfg["d_weight_decay"]))
+        log(f"{run}: adversarial, {len(reals)} real sequences")
 
-    def trial_loss(tr, phase, augment=False):
+    def trial_forward(tr, phase, augment=False):
+        """(supervised loss, continuous output (n_tok, 20))."""
         x, _ = data.trial_arrays(tr)
         n_tok = (x.shape[0] - phase) // pool
         tk = bd.pool_tokens(x[phase: phase + pool * n_tok], pool)
@@ -105,24 +138,47 @@ def adapt_full_trials(model, input_id, params, opt, data, split, b, t, run, ckpt
             tk = bd.augment_batch(tk[None], np.ones((1, n_tok), bool), rng, b["augmentation"])[0]
         tok = torch.as_tensor(tk, device=device)
         with torch.autocast(device.type, dtype=torch.bfloat16, enabled=bf16):
-            _, lg = bm.chunked_forward(model, tok, ctx, hop, input_id)
+            c, lg = bm.chunked_forward(model, tok, ctx, hop, input_id)
         lp = F.log_softmax(lg.float(), -1)[:, None]
         lab = torch.as_tensor([tr["label"]], dtype=torch.long, device=device)
         loss = F.ctc_loss(lp, lab, torch.tensor([n_tok]), torch.tensor([len(tr["label"])]), blank=0,
-                          reduction="sum", zero_infinity=True)
-        return loss / max(1, len(tr["label"]))
+                          reduction="sum", zero_infinity=True) / max(1, len(tr["label"]))
+        y = targets.get(int(tr["gid"]))
+        if y is not None:
+            frames = phase + pool * np.arange(n_tok) + pool - 1
+            yt = torch.as_tensor(y[np.minimum(frames, len(y) - 1)], device=device)
+            w = torch.where(yt[:, c0i] > thr, w_sp, w_sil)
+            loss = loss + float(dcfg["weight"]) * (w * ((c.float() - yt) ** 2).mean(-1)).mean()
+        return loss, c
+
+    def real_batch(n):
+        out = []
+        for i in rng.integers(0, len(reals), n):
+            r, ph = reals[i], int(rng.integers(0, pool))
+            out.append(torch.as_tensor(r[ph + pool - 1:: pool], device=device))
+        return out
+
+    def disc_on(seqs):
+        y = torch.nn.utils.rnn.pad_sequence(seqs, batch_first=True)
+        m = torch.zeros(y.shape[:2], dtype=torch.bool, device=device)
+        for i, q in enumerate(seqs):
+            m[i, :len(q)] = True
+        return disc(y, m)
 
     def validate() -> float:
         model.eval()
         with torch.no_grad():
-            v = float(np.mean([float(trial_loss(data.by_gid[g], 0)) for g in split["val"]]))
+            v = float(np.mean([float(trial_forward(data.by_gid[g], 0)[0]) for g in split["val"]]))
         model.train()
         return v
 
     def save(name, step, best):
-        torch.save({"state": model.state_dict(), "opt": opt.state_dict(), "step": step, "best": best,
-                    "model_cfg": model.cfg, "input_id": input_id, "config": args.config, "run_name": run,
-                    "code_version": code_version()}, ckpt_dir / name)
+        ck = {"state": model.state_dict(), "opt": opt.state_dict(), "step": step, "best": best,
+              "model_cfg": model.cfg, "input_id": input_id, "config": args.config, "run_name": run,
+              "code_version": code_version()}
+        if disc is not None:
+            ck["disc"] = disc.state_dict()
+        torch.save(ck, ckpt_dir / name)
 
     logf = None
     if not args.smoke:
@@ -133,7 +189,7 @@ def adapt_full_trials(model, input_id, params, opt, data, split, b, t, run, ckpt
     t0, hist = time.time(), []
     best = validate()
     log(f"{run}: whole-trial CTC adaptation, {len(trials)} trials ({len(split['val'])} validation); "
-        f"validation CTC before adaptation {best:.4f}")
+        f"validation loss before adaptation {best:.4f}")
     hist.append({"step": 0, "val_ctc": best})
     if not args.smoke:
         save("best.pt", 0, best)
@@ -142,7 +198,27 @@ def adapt_full_trials(model, input_id, params, opt, data, split, b, t, run, ckpt
         for g in opt.param_groups:
             g["lr"] = bm.lr_at(step, t)
         pick = rng.integers(0, len(trials), B)
-        loss = sum(trial_loss(trials[i], int(rng.integers(0, pool)), augment=step >= aug_from) for i in pick) / B
+        outs = [trial_forward(trials[i], int(rng.integers(0, pool)), augment=step >= aug_from) for i in pick]
+        loss = sum(o[0] for o in outs) / B
+        rec_extra = {}
+        if disc is not None:
+            fakes = [o[1].float() for o in outs]
+            if step % int(acfg["d_every"]) == 0:
+                dl = bm.disc_loss(disc_on(real_batch(B)), disc_on([f.detach() for f in fakes]))
+                dopt.zero_grad(set_to_none=True)
+                dl.backward()
+                torch.nn.utils.clip_grad_norm_(disc.parameters(), float(t["grad_clip"]))
+                dopt.step()
+                rec_extra["d_loss"] = float(dl)
+            wa = bm.adversarial_weight(step, acfg)
+            if wa > 0:
+                for p_ in disc.parameters():
+                    p_.requires_grad_(False)
+                gl = bm.gen_loss(disc_on(fakes))
+                for p_ in disc.parameters():
+                    p_.requires_grad_(True)
+                loss = loss + wa * gl
+                rec_extra.update(g_loss=float(gl), w_adv=wa)
         opt.zero_grad(set_to_none=True)
         loss.backward()
         torch.nn.utils.clip_grad_norm_(params, float(t["grad_clip"]))
@@ -150,8 +226,8 @@ def adapt_full_trials(model, input_id, params, opt, data, split, b, t, run, ckpt
         last = step + 1 == steps
         if (step + 1) % int(t["val_every"]) == 0 or last:
             v = validate()
-            rec = {"step": step + 1, "train_ctc": float(loss), "val_ctc": v, "lr": bm.lr_at(step, t),
-                   "s": time.time() - t0}
+            rec = {"step": step + 1, "train_loss": float(loss), "val_ctc": v, "lr": bm.lr_at(step, t),
+                   "s": time.time() - t0, **rec_extra}
             hist.append(rec)
             log(json.dumps({k: (round(x, 5) if isinstance(x, float) else x) for k, x in rec.items()}))
             if logf:
@@ -165,12 +241,13 @@ def adapt_full_trials(model, input_id, params, opt, data, split, b, t, run, ckpt
         log(f"smoke test: {steps} steps in {time.time() - t0:.0f} s; nothing written")
         return 0
     save("final.pt", steps, best)
-    summary = {"run_name": run, "config": args.config, "decision": "D-076", "code_version": code_version(),
-               "created": datetime.datetime.now().isoformat(timespec="seconds"), "steps": steps, "mode": "full_trial",
-               "n_train": len(trials), "n_val": len(split["val"]), "best_val_ctc": best, "history": hist,
-               "n_trainable": sum(p.numel() for p in params), "wall_time_s": time.time() - t0, "device": str(device)}
+    summary = {"run_name": run, "config": args.config, "decision": a.get("decision", "D-076"),
+               "code_version": code_version(), "created": datetime.datetime.now().isoformat(timespec="seconds"),
+               "steps": steps, "mode": "full_trial", "n_train": len(trials), "n_val": len(split["val"]),
+               "best_val_ctc": best, "history": hist, "n_trainable": sum(p.numel() for p in params),
+               "wall_time_s": time.time() - t0, "device": str(device)}
     (res_dir / "summary.json").write_text(json.dumps(summary, indent=1) + "\n")
-    log(f"done: {steps} steps in {(time.time() - t0) / 60:.1f} min, best validation CTC {best:.4f}")
+    log(f"done: {steps} steps in {(time.time() - t0) / 60:.1f} min, best validation loss {best:.4f}")
     return 0
 
 
@@ -214,11 +291,20 @@ def main(argv=None) -> int:
             p.requires_grad_(True)
     params = [p for p in model.parameters() if p.requires_grad]
     opt = torch.optim.AdamW(params, lr=float(t["lr"]), weight_decay=float(t["weight_decay"]))
+    adv = None if (a and a.get("full_trial")) else t.get("adversarial")
+    disc = dopt = None
+    if adv:                                                     # D-086: the paper's multiscale discriminator
+        disc = bm.MultiScaleDiscriminator(int(model.cfg["n_targets"]), adv["scales"], adv["channels"],
+                                          int(adv["kernel"])).to(device)
+        dopt = torch.optim.AdamW(disc.parameters(), lr=float(adv["d_lr"]), weight_decay=float(adv["d_weight_decay"]))
     start, best, hist = 0, float("inf"), []
     if args.resume and (ckpt_dir / "last.pt").is_file():
         ck = torch.load(ckpt_dir / "last.pt", map_location=device)
         model.load_state_dict(ck["state"])
         opt.load_state_dict(ck["opt"])
+        if disc is not None and "disc" in ck:
+            disc.load_state_dict(ck["disc"])
+            dopt.load_state_dict(ck["dopt"])
         start, best = int(ck["step"]), float(ck["best"])
         log(f"resumed at step {start}")
     elif not args.smoke and (ckpt_dir / "final.pt").exists():
@@ -270,11 +356,16 @@ def main(argv=None) -> int:
         logf = open(res_dir / "log.jsonl", "a")
 
     def save(name: str, step: int):
-        torch.save({"state": model.state_dict(), "opt": opt.state_dict(), "step": step, "best": best,
-                    "model_cfg": model.cfg, "input_id": input_id, "config": args.config, "run_name": run,
-                    "code_version": code_version()}, ckpt_dir / name)
+        ck = {"state": model.state_dict(), "opt": opt.state_dict(), "step": step, "best": best,
+              "model_cfg": model.cfg, "input_id": input_id, "config": args.config, "run_name": run,
+              "code_version": code_version()}
+        if disc is not None:
+            ck.update(disc=disc.state_dict(), dopt=dopt.state_dict())
+        torch.save(ck, ckpt_dir / name)
 
     run_sum = {"loss": 0.0, "cont": 0.0, "ctc": 0.0, "speech": 0.0, "ctc_on": 0.0, "n": 0}
+    if disc is not None:
+        run_sum.update(d_loss=0.0, g_loss=0.0, fm=0.0)
     for step in range(start, steps):
         for g in opt.param_groups:
             g["lr"] = bm.lr_at(step, t)
@@ -284,6 +375,28 @@ def main(argv=None) -> int:
             c, lg = model(bt["x"], input_id)
         out = bm.losses(c, lg, bt, ws, wsil)
         loss = (out["cont"] if use_cont else 0.0) + (float(t["ctc_weight"]) * out["ctc"] if use_ctc else 0.0)
+        if disc is not None and step >= int(adv["start"]):
+            # the paper: after a warm-up, the discriminator (every d_every batches) tells the targets from the
+            # predictions; the model adds the generator loss (weight ramped) and feature matching (w_fm)
+            yt, vm = bt["y"], bt["valid"]
+            if (step - int(adv["start"])) % int(adv["d_every"]) == 0:
+                with torch.autocast(device.type, dtype=torch.bfloat16, enabled=bf16):
+                    dl = bm.disc_loss(disc(yt, vm), disc(c.detach(), vm))
+                dopt.zero_grad(set_to_none=True)
+                dl.backward()
+                torch.nn.utils.clip_grad_norm_(disc.parameters(), float(t["grad_clip"]))
+                dopt.step()
+                run_sum["d_loss"] += float(dl) * int(adv["d_every"])
+            for p_ in disc.parameters():
+                p_.requires_grad_(False)
+            with torch.autocast(device.type, dtype=torch.bfloat16, enabled=bf16):
+                real, fake = disc(yt, vm), disc(c, vm)
+                gl, fm = bm.gen_loss(fake), bm.feature_matching(real, fake)
+            for p_ in disc.parameters():
+                p_.requires_grad_(True)
+            loss = loss + bm.adversarial_weight(step, adv) * gl + float(adv["w_fm"]) * fm
+            run_sum["g_loss"] += float(gl)
+            run_sum["fm"] += float(fm)
         opt.zero_grad(set_to_none=True)
         loss.backward()
         torch.nn.utils.clip_grad_norm_(params, float(t["grad_clip"]))
@@ -294,7 +407,7 @@ def main(argv=None) -> int:
         run_sum["n"] += 1
         last = step + 1 == steps
         if (step + 1) % 100 == 0 or last:
-            rec = {k: run_sum[k] / run_sum["n"] for k in ("loss", "cont", "ctc", "speech", "ctc_on")}
+            rec = {k: run_sum[k] / run_sum["n"] for k in run_sum if k != "n"}
             rec.update(step=step + 1, lr=bm.lr_at(step, t), s=time.time() - t0)
             run_sum = dict.fromkeys(run_sum, 0.0)
             run_sum["n"] = 0
@@ -315,7 +428,8 @@ def main(argv=None) -> int:
         log(f"smoke test: {steps} steps in {time.time() - t0:.0f} s; nothing written")
         return 0
     save("final.pt", steps)
-    summary = {"run_name": run, "config": args.config, "decision": "D-075", "code_version": code_version(),
+    summary = {"run_name": run, "config": args.config, "decision": b.get("decision", "D-075"),
+               "code_version": code_version(),
                "created": datetime.datetime.now().isoformat(timespec="seconds"), "steps": steps,
                "n_train": len(split["train"]), "n_val": len(split["val"]), "n_test": len(split["test"]),
                "adapt": a, "loss": loss_kind, "best_val": best, "final": hist[-1] if hist else None,

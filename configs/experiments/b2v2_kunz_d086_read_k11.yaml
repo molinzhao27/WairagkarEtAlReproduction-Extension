@@ -1,0 +1,16 @@
+# D-086 arm `read`, fold 11: the D-077 learned map (whole-trial CTC on imagined blocks [4, 7, 12]) with the D-087
+# recipe: start from F_11's attempted-speech input, + imagined block 14 (50 new sentences) in training, the paper's
+# augmentations throughout. Tested on imagined block 9 (the sentences of attempted block 11, never seen).
+#   PC: ~/wvx/envs/wvx-f5/bin/python -I scripts/train_b2v2.py --config configs/experiments/b2v2_kunz_d086_read_k11.yaml
+base_experiment: configs/experiments/b2v2_kunz_im11.yaml
+
+run_name: b2v2_kunz_d086_read_k11
+
+b2v2:
+  adapt:
+    decision: D-086
+    init: data/checkpoints/b2v2_kunz_f11/best.pt
+    copy_from: 1
+    extra: [{session: imagined_eval, blocks: [14]}]
+    training:
+      augment_from: 0.0

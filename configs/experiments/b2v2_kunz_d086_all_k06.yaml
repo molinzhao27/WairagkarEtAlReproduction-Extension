@@ -1,0 +1,28 @@
+# D-086 arm `all`, fold 06: everything together: the adversarially trained base, `read`, `distill` (targets from the
+# adversarial base's attempted voice) and `adv`.
+#   PC: .venv/bin/python -I scripts/build_distill_targets.py --config configs/experiments/b2v2_kunz_d086_all_k06.yaml
+#       ~/wvx/envs/wvx-f5/bin/python -I scripts/train_b2v2.py --config configs/experiments/b2v2_kunz_d086_all_k06.yaml
+base_experiment: configs/experiments/b2v2_kunz_d086_ganread_k06.yaml
+
+run_name: b2v2_kunz_d086_all_k06
+
+b2v2:
+  adapt:
+    distill:                         # D-086: the decoder's own attempted voice, warped onto each imagined trial
+      targets: data/processed/b2v2_distill/b2v2_kunz_d086_all_k06.npz
+      attempted: b2v2_kunz_gan_f06:attempted_train
+      inner: b2v2_kunz_d086_ganread_k06:imagined_train
+      weight: 10.0                   # the base model's own balance: continuous 1, CTC 0.1 (CTC keeps weight 1 here)
+    adversarial:                     # [OURS] an unpaired version of the paper's multiscale discriminator, scaled to a
+                                     # 1,000-step adaptation: real = the decoder's attempted-speech voice (other blocks)
+      real: [b2v2_kunz_gan_f06:attempted_train]
+      start: 200                     # generator loss from step 200 (D trains from step 0)
+      ramp: 500
+      w_from: 0.1                    # paper 0.01 -> 0.1 next to a CTC weight of 0.1; ours next to CTC weight 1
+      w_to: 1.0
+      d_lr: 2.0e-4                   # paper 5e-5 over 25k steps; ours a common GAN default for 1,000 steps
+      d_weight_decay: 0.01           # [PAPER]
+      d_every: 1                     # paper 2; every step here (short run)
+      scales: [1, 3, 6]              # 50 / 150 / 300 ms on 50 ms tokens (paper 10 / 40 / 160 / 320 ms on 10 ms)
+      channels: [64, 128, 256]       # [PAPER]
+      kernel: 3

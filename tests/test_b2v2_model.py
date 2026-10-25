@@ -134,3 +134,33 @@ def test_low_rank_input_starts_equal_trains_little_and_reloads():
     assert torch.allclose(m2.eval()(x, k)[0], m(x, k)[0], atol=1e-6)
     k2 = m.add_input(k)                                    # copying a low-rank input copies its effective weights
     assert torch.allclose(m(x, k2)[0], m(x, k)[0], atol=1e-5)
+
+
+def test_discriminator_shapes_masks_and_losses():
+    torch.manual_seed(0)
+    d = bm.MultiScaleDiscriminator(3, (1, 3, 6), (8, 8, 8), 3)
+    y = torch.randn(2, 20, 3)
+    m = torch.ones(2, 20, dtype=torch.bool)
+    m[1, 12:] = False
+    out = d(y, m)
+    assert [o[0].shape for o in out] == [(2, 20), (2, 7), (2, 4)]
+    assert out[0][2][1].sum() == 12 and out[1][2][1].sum() == 4 and out[2][2][1].sum() == 2
+    # padding content does not change the scores of the valid positions of the finest scale's first layer input
+    y2 = y.clone()
+    y2[1, 12:] = 100.0
+    assert torch.allclose(d(y2, m)[0][0][1, :10], out[0][0][1, :10], atol=1e-5)
+    fake = torch.randn(2, 20, 3, requires_grad=True)
+    fo = d(fake, m)
+    for v in (bm.disc_loss(out, fo), bm.gen_loss(fo), bm.feature_matching(out, fo)):
+        assert torch.isfinite(v)
+    bm.gen_loss(fo).backward()
+    assert fake.grad is not None and torch.all(fake.grad[1, 12:] == 0)
+    assert float(bm.feature_matching(out, d(y, m))) == 0.0
+
+
+def test_adversarial_weight_schedule():
+    a = {"start": 10, "ramp": 20, "w_from": 0.01, "w_to": 0.1}
+    assert bm.adversarial_weight(9, a) == 0.0
+    assert np.isclose(bm.adversarial_weight(10, a), 0.01)
+    assert np.isclose(bm.adversarial_weight(20, a), 0.055)
+    assert np.isclose(bm.adversarial_weight(100, a), 0.1)

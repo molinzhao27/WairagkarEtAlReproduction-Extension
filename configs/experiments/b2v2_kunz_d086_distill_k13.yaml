@@ -1,0 +1,15 @@
+# D-086 arm `distill`, fold 13: `read` + a continuous loss toward the decoder's own voice for the ATTEMPTED speech of
+# the same sentences (F_13 on attempted blocks [3, 6, 11]), warped onto each imagined trial by forced alignment.
+#   PC: .venv/bin/python -I scripts/build_distill_targets.py --config configs/experiments/b2v2_kunz_d086_distill_k13.yaml
+#       ~/wvx/envs/wvx-f5/bin/python -I scripts/train_b2v2.py --config configs/experiments/b2v2_kunz_d086_distill_k13.yaml
+base_experiment: configs/experiments/b2v2_kunz_d086_read_k13.yaml
+
+run_name: b2v2_kunz_d086_distill_k13
+
+b2v2:
+  adapt:
+    distill:                         # D-086: the decoder's own attempted voice, warped onto each imagined trial
+      targets: data/processed/b2v2_distill/b2v2_kunz_d086_distill_k13.npz
+      attempted: b2v2_kunz_f13:attempted_train
+      inner: b2v2_kunz_d086_read_k13:imagined_train
+      weight: 10.0                   # the base model's own balance: continuous 1, CTC 0.1 (CTC keeps weight 1 here)

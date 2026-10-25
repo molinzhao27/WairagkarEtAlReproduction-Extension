@@ -100,6 +100,89 @@ class B2V2(nn.Module):
         return self.cont(h), self.phon(h)
 
 
+# ----------------------------------------------------------------------------------------- discriminator
+
+
+class _ScaleNet(nn.Module):
+    """One scale of the multiscale discriminator: four 1-D convolutions, ``n_in`` -> channels... -> 1 (a realness
+    score per position), LeakyReLU(0.2) between; returns the score and the intermediate feature maps."""
+
+    def __init__(self, n_in: int, channels, kernel: int):
+        super().__init__()
+        sizes = [n_in] + list(channels)
+        self.convs = nn.ModuleList([nn.Conv1d(a, b, kernel, padding=kernel // 2) for a, b in zip(sizes, sizes[1:])])
+        self.out = nn.Conv1d(sizes[-1], 1, kernel, padding=kernel // 2)
+
+    def forward(self, x: torch.Tensor) -> tuple[torch.Tensor, list]:
+        feats = []
+        for conv in self.convs:
+            x = F.leaky_relu(conv(x), 0.2)
+            feats.append(x)
+        return self.out(x)[:, 0], feats
+
+
+class MultiScaleDiscriminator(nn.Module):
+    """The b2v2 paper's multiscale discriminator (D-086): the continuous features average-pooled by each of ``scales``
+    (the paper: 10, 40, 160 and 320 ms of 10 ms frames; on our 50 ms tokens we use 1, 3 and 6 tokens = 50, 150 and
+    300 ms), each scored by an identical four-layer 1-D conv net (paper: channels 20 -> 64 -> 128 -> 256; kernel size
+    and activation are our choice). ``forward(y, mask)`` -> [(score (B, L_s), features, mask (B, L_s))] per scale."""
+
+    def __init__(self, n_features: int, scales=(1, 3, 6), channels=(64, 128, 256), kernel: int = 3):
+        super().__init__()
+        self.scales = [int(s) for s in scales]
+        self.nets = nn.ModuleList([_ScaleNet(n_features, channels, kernel) for _ in self.scales])
+
+    def forward(self, y: torch.Tensor, mask: torch.Tensor) -> list:
+        x, m = y.float().transpose(1, 2), mask.float()[:, None]
+        out = []
+        for s, net in zip(self.scales, self.nets):
+            if s > 1:
+                frac = F.avg_pool1d(m, s, s, ceil_mode=True)
+                xs, ms = F.avg_pool1d(x * m, s, s, ceil_mode=True) / frac.clamp_min(1e-6), frac[:, 0] > 0.5
+            else:
+                xs, ms = x * m, m[:, 0] > 0.5
+            score, feats = net(xs)
+            out.append((score, feats, ms))
+        return out
+
+
+def _masked_mean(v: torch.Tensor, m: torch.Tensor) -> torch.Tensor:
+    m = m.to(v.dtype)
+    return (v * m).sum() / m.sum().clamp_min(1)
+
+
+def disc_loss(real: list, fake: list) -> torch.Tensor:
+    """Softplus (non-saturating) discriminator loss, averaged over scales: real -> high, fake -> low."""
+    return sum(_masked_mean(F.softplus(-r[0]), r[2]) + _masked_mean(F.softplus(f[0]), f[2])
+               for r, f in zip(real, fake)) / len(real)
+
+
+def gen_loss(fake: list) -> torch.Tensor:
+    """Generator loss: the discriminator should score the predictions as real."""
+    return sum(_masked_mean(F.softplus(-f[0]), f[2]) for f in fake) / len(fake)
+
+
+def feature_matching(real: list, fake: list) -> torch.Tensor:
+    """Mean L1 distance between the discriminator's feature maps of PAIRED real and predicted sequences (same
+    shape), over layers and scales; the real side carries no gradient."""
+    tot, n = 0.0, 0
+    for r, f in zip(real, fake):
+        for a, b in zip(r[1], f[1]):
+            tot = tot + _masked_mean((a.detach() - b).abs().mean(1), f[2])
+            n += 1
+    return tot / max(1, n)
+
+
+def adversarial_weight(step: int, adv: Mapping[str, Any]) -> float:
+    """Generator-loss weight: 0 before ``start``, then linear from ``w_from`` to ``w_to`` over ``ramp`` steps (paper:
+    0.01 -> 0.1 over 10,000 steps after a 5,000-step warm-up)."""
+    s0 = int(adv["start"])
+    if step < s0:
+        return 0.0
+    f = min(1.0, (step - s0) / max(1, int(adv["ramp"])))
+    return float(adv["w_from"]) + f * (float(adv["w_to"]) - float(adv["w_from"]))
+
+
 # ------------------------------------------------------------------------------------------------ losses
 
 

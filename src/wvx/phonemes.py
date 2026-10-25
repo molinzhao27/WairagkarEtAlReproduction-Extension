@@ -114,3 +114,35 @@ def ctc_log_likelihood(logp: np.ndarray, label: Sequence[int], blank: int = 0) -
         a2[2:] = alpha[:-2]
         alpha = np.logaddexp(np.logaddexp(alpha, a1), np.where(skip, a2, -np.inf)) + logp[t, ext]
     return float(np.logaddexp(alpha[-1], alpha[-2]) if S > 1 else alpha[-1])
+
+
+def ctc_align(logp: np.ndarray, label: Sequence[int], blank: int = 0) -> np.ndarray:
+    """Viterbi forced alignment of ``label`` to ``logp`` (T, C): per frame, the index of its state in the blank-extended
+    label (blank, l_0, blank, l_1, ..., blank), so state 2i + 1 is label i (D-086)."""
+    T = logp.shape[0]
+    ext = np.array([blank] + [v for lab in label for v in (int(lab), blank)])
+    S = len(ext)
+    if T == 0:
+        return np.zeros(0, int)
+    skip = np.zeros(S, bool)
+    skip[2:] = (ext[2:] != blank) & (ext[2:] != ext[:-2])
+    a = np.full(S, -np.inf)
+    a[0] = logp[0, blank]
+    if S > 1:
+        a[1] = logp[0, ext[1]]
+    back = np.zeros((T, S), np.int64)
+    rows = np.arange(S)
+    for t in range(1, T):
+        c = np.full((3, S), -np.inf)
+        c[0] = a
+        c[1, 1:] = a[:-1]
+        c[2, 2:] = np.where(skip[2:], a[:-2], -np.inf)
+        k = c.argmax(0)
+        back[t] = rows - k
+        a = c[k, rows] + logp[t, ext]
+    s = S - 1 if S == 1 or a[S - 1] >= a[S - 2] else S - 2
+    path = np.empty(T, int)
+    path[-1] = s
+    for t in range(T - 1, 0, -1):
+        path[t - 1] = back[t, path[t]]
+    return path

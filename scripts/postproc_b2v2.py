@@ -1,5 +1,6 @@
 #!/usr/bin/env python
-"""D-078: post-processing of decoded voice (denoiser, +2 semitones, feature sharpening), scored by Whisper WER.
+"""D-078 (and D-086 ``boost``): post-processing of decoded voice (denoiser, +2 semitones, feature sharpening), scored
+by Whisper WER.
 
     PC, project venv, CPU:
     PATH=~/wvx/envs/wvx-tools/bin:$PATH CUDA_VISIBLE_DEVICES= nice -n 10 .venv/bin/python -I scripts/postproc_b2v2.py --config configs/experiments/b2v2_postproc.yaml
@@ -7,8 +8,9 @@
 Per set (``b2v2.postproc.sets``: decode runs + prediction name) and trial, every variant in ``variants``, applied
 uniformly (``wvx.postproc``): ``orig`` = the saved decoder audio (results/audio/b2v2/<run>/<name>/g<gid>.wav);
 ``denoise`` / ``pitch2`` = that audio processed; ``sharpen`` = the saved features with each cepstral deviation scaled
-by ``sharpen_alpha``, re-vocoded; ``all`` = sharpen -> denoise -> pitch2. Whisper WER at the original speed and sped up
-(D-073 factor). Writes results/b2v2/postproc/<set>.json / .md (pooled WER, paired per-trial tests vs ``orig``) and the
+by ``sharpen_alpha``, re-vocoded; ``all`` = sharpen -> denoise -> pitch2; ``boost`` (D-086) = the saved features with
+only their fast part (deviation from a ``boost.window``-frame moving average) scaled by ``boost.beta``, re-vocoded.
+Whisper WER at the original speed and sped up (D-073 factor). Writes results/b2v2/postproc/<set>.json / .md (pooled WER, paired per-trial tests vs ``orig``) and the
 processed audio to results/audio/b2v2_postproc/<set>/<variant>/ (gitignored).
 """
 
@@ -68,6 +70,9 @@ def one(job):
             w = denoise(base)
         elif v == "pitch2":
             w = pitch(base)
+        elif v == "boost":                                         # D-086: fast part only
+            bo = p["boost"]
+            w = synthesis.decoder_output_to_waveform(pp.movement_boost(cont, float(bo["beta"]), int(bo["window"])), cfg)
         elif v in ("sharpen", "all"):
             if sharp is None:
                 sharp = synthesis.decoder_output_to_waveform(pp.sharpen(cont, float(p["sharpen_alpha"])), cfg)
@@ -134,11 +139,12 @@ def main(argv=None) -> int:
                 summary[v]["helps"] = bool(summary["orig"]["orig_speed"] - summary[v]["orig_speed"]
                                            >= float(p["rule"]["min_points"]) / 100 and pr["p"] < alpha
                                            and pr["mean_diff"] < 0)
-        out = {"set": set_name, "decision": "D-078", "config": args.config, "code_version": code_version(),
+        out = {"set": set_name, "decision": p.get("decision", "D-078"), "config": args.config,
+               "code_version": code_version(),
                "created": datetime.datetime.now().isoformat(timespec="seconds"), "settings": p, "n": len(rows),
                "summary": summary, "rows": rows, "wall_time_s": time.time() - t0}
         (res / f"{set_name}.json").write_text(json.dumps(out, indent=1, default=float) + "\n")
-        lines = [f"# D-078 post-processing: `{set_name}` ({len(rows)} trials)", "",
+        lines = [f"# {p.get('decision', 'D-078')} post-processing: `{set_name}` ({len(rows)} trials)", "",
                  "| variant | WER | vs orig (p) | WER sped up | vs orig (p) | rule |", "|---|---|---|---|---|---|"]
         for v, x in summary.items():
             a = x.get("orig_speed_paired")
