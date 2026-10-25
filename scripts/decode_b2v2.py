@@ -85,10 +85,12 @@ def main(argv=None) -> int:
     if args.ensemble and args.mode != "chunked":
         raise SystemExit("--ensemble needs --mode chunked")
 
-    def softmax(z):
-        z = z - z.max(-1, keepdims=True)
-        e = np.exp(z)
-        return e / e.sum(-1, keepdims=True)
+    def log_mean_prob(zs):
+        """log of the members' mean softmax, exactly (log-sum-exp of their log-softmaxes minus log M)."""
+        ls = np.stack([z - z.max(-1, keepdims=True) for z in zs])
+        ls = ls - np.log(np.exp(ls).sum(-1, keepdims=True))
+        m = ls.max(0)
+        return m + np.log(np.exp(ls - m).sum(0)) - np.log(len(zs))
     data = bd.B2V2Data(resolve_path(args.data_dir or b["data_dir"]))
     gids = select(data, args.trials, resolve_path("results/b2v2") / run)
     window = int(args.window_bins or b["decode"]["window_bins"])
@@ -103,8 +105,8 @@ def main(argv=None) -> int:
         elif len(models) > 1:                                  # D-089: average the members
             outs = [bm.decode_chunked(m, x, pool, args.ctx, args.hop, input_id=i, device=device) for m, i in models]
             c = np.mean([o[0] for o in outs], 0)
-            lg = np.log(np.mean([softmax(o[1]) for o in outs], 0) + 1e-12)
-            ph0 = np.log(np.mean([softmax(o[2]) for o in outs], 0) + 1e-12)
+            lg = log_mean_prob([o[1] for o in outs])
+            ph0 = log_mean_prob([o[2] for o in outs])
         else:
             c, lg, ph0 = bm.decode_chunked(model, x, pool, args.ctx, args.hop, input_id=input_id, device=device)
         if args.mode == "chunked":
