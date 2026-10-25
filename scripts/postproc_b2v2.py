@@ -53,10 +53,8 @@ def one(job):
     base, _ = sf.read(str(resolve_path("results/audio/b2v2") / run / name / f"g{gid}.wav"), dtype="float32")
     with np.load(resolve_path("data/processed/b2v2_preds") / run / f"{name}.npz", allow_pickle=False) as z:
         cont = z[f"g{gid}_cont"]
-    dn = p["denoise"]
-
     def denoise(w):
-        return pp.spectral_gate(w, sr, **dn)
+        return pp.spectral_gate(w, sr, **p["denoise"])
 
     def pitch(w):
         return pp.pitch_shift(w, sr, float(p["pitch_semitones"]))
