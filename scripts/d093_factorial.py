@@ -54,8 +54,21 @@ def main(argv=None) -> int:
             (resolve_path("results/b2v2/identify") / f"{spec['identify']}.json").read_text())["rows"]}
         out = {}
         for run in spec["runs"]:
+            sp = resolve_path("results/b2v2") / run / "split.json"
+            if sp.is_file():                            # never score a trial the run trained or validated on
+                sj = json.loads(sp.read_text())
+                seen = set(sj.get("val", [])) | set(sj.get("train", []))
+                for d in (sj.get("days") or {}).values():
+                    seen |= set(d.get("inner", [])) | set(d.get("attempted", []))
+            else:
+                seen = None
             with np.load(resolve_path("data/processed/b2v2_preds") / run / "imagined.npz", allow_pickle=False) as z:
-                for g in json.loads(str(z["header"]))["gids"]:
+                gids_run = [int(g) for g in json.loads(str(z["header"]))["gids"]]
+                if seen is None and "d093" in run:
+                    raise SystemExit(f"{run}: no split.json to check the decoded trials against")
+                if seen and set(gids_run) & seen:
+                    raise SystemExit(f"{run}: {len(set(gids_run) & seen)} decoded trials are in its training split")
+                for g in gids_run:
                     lab = data.by_gid[int(g)]["label"]
                     hyp = [x for x in ph.ctc_greedy(z[f"g{g}_lp50"].astype(np.float64).argmax(1)) if x != SIL]
                     ref = [x for x in lab if x != SIL]
@@ -72,6 +85,8 @@ def main(argv=None) -> int:
     raw = {k: per_trial(v) for k, v in S["cells"].items()}
     bases = {n: per_trial(v) for n, v in S["baselines"].items()}
     gids = sorted(set.intersection(*[set(v) for v in [*raw.values(), *bases.values()]]))
+    if S.get("n_trials") and len(gids) != int(S["n_trials"]):
+        raise SystemExit(f"{len(gids)} trials common to every cell and baseline, expected {S['n_trials']}")
 
     def cell_mean(cell, j):          # per trial, the seed average of metric j
         return np.array([np.mean([raw[f"{cell}_{s}"][g][j] for s in S["seeds"]]) for g in gids])

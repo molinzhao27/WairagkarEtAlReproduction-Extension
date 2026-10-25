@@ -13,6 +13,7 @@ b2v2:
     factors: {adapter: [ad1k, ad3k], no_adapter: [noad1k, noad3k], short: [noad1k, ad1k], long: [noad3k, ad3k]}
     seeds: [s0, s1]
     alpha: 0.05
+    n_trials: 200                  # the 4 folds' test blocks (imagined 4, 7, 9, 12); the script stops otherwise
     cells:
       noad1k_s0: {runs: [b2v2_kunz_d093_noad1k_s0_k03, b2v2_kunz_d093_noad1k_s0_k06, b2v2_kunz_d093_noad1k_s0_k11, b2v2_kunz_d093_noad1k_s0_k13], identify: d093_noad1k_s0}
       noad1k_s1: {runs: [b2v2_kunz_d093_noad1k_s1_k03, b2v2_kunz_d093_noad1k_s1_k06, b2v2_kunz_d093_noad1k_s1_k11, b2v2_kunz_d093_noad1k_s1_k13], identify: d093_noad1k_s1}
