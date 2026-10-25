@@ -7,7 +7,9 @@ run_name: b2v2_kunz_d093
 b2v2:
   d093:
     out: results/b2v2/d093
-    baseline: {runs: [b2v2_kunz_d091_ganreadv3_k03, b2v2_kunz_d091_ganreadv3_k06, b2v2_kunz_d091_ganreadv3_k11, b2v2_kunz_d091_ganreadv3_k13], identify: d091_ganreadv3}
+    baselines:                     # amendment 2026-10-25: the cells train on the PC, so its gan_read is the same-hardware one
+      gan_read: {runs: [b2v2_kunz_d086_ganread_k03, b2v2_kunz_d086_ganread_k06, b2v2_kunz_d086_ganread_k11, b2v2_kunz_d086_ganread_k13], identify: d086_gan_read}
+      ganreadv3: {runs: [b2v2_kunz_d091_ganreadv3_k03, b2v2_kunz_d091_ganreadv3_k06, b2v2_kunz_d091_ganreadv3_k11, b2v2_kunz_d091_ganreadv3_k13], identify: d091_ganreadv3}
     factors: {adapter: [ad1k, ad3k], no_adapter: [noad1k, noad3k], short: [noad1k, ad1k], long: [noad3k, ad3k]}
     seeds: [s0, s1]
     alpha: 0.05
@@ -18,5 +20,5 @@ b2v2:
       noad3k_s1: {runs: [b2v2_kunz_d093_noad3k_s1_k03, b2v2_kunz_d093_noad3k_s1_k06, b2v2_kunz_d093_noad3k_s1_k11, b2v2_kunz_d093_noad3k_s1_k13], identify: d093_noad3k_s1}
       ad1k_s0: {runs: [b2v2_kunz_d093_ad1k_s0_k03, b2v2_kunz_d093_ad1k_s0_k06, b2v2_kunz_d093_ad1k_s0_k11, b2v2_kunz_d093_ad1k_s0_k13], identify: d093_ad1k_s0}
       ad1k_s1: {runs: [b2v2_kunz_d093_ad1k_s1_k03, b2v2_kunz_d093_ad1k_s1_k06, b2v2_kunz_d093_ad1k_s1_k11, b2v2_kunz_d093_ad1k_s1_k13], identify: d093_ad1k_s1}
-      ad3k_s0: {runs: [b2v2_kunz_d091_marchonly_k03, b2v2_kunz_d091_marchonly_k06, b2v2_kunz_d091_marchonly_k11, b2v2_kunz_d091_marchonly_k13], identify: d091_marchonly}
+      ad3k_s0: {runs: [b2v2_kunz_d093_ad3k_s0_k03, b2v2_kunz_d093_ad3k_s0_k06, b2v2_kunz_d093_ad3k_s0_k11, b2v2_kunz_d093_ad3k_s0_k13], identify: d093_ad3k_s0}
       ad3k_s1: {runs: [b2v2_kunz_d093_ad3k_s1_k03, b2v2_kunz_d093_ad3k_s1_k06, b2v2_kunz_d093_ad3k_s1_k11, b2v2_kunz_d093_ad3k_s1_k13], identify: d093_ad3k_s1}

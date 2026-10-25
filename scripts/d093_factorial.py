@@ -9,7 +9,8 @@
 (phoneme errors / reference phonemes) and the share of words read right (every phoneme of the word right in the greedy
 50 ms read-out) are averaged over the seeds. Effects per trial (paired Wilcoxon, two-sided, over the 200 held-out
 imagined trials): the adapter (mean of the adapter cells minus mean of the no-adapter cells), the training length
-(long minus short), their interaction ((ad long - no long) - (ad short - no short)), and each cell vs ``baseline``.
+(long minus short), their interaction ((ad long - no long) - (ad short - no short)), and each cell vs each of
+``baselines`` (name -> runs + identification, like a cell).
 Writes ``out``/factorial.json / .md.
 """
 
@@ -69,8 +70,8 @@ def main(argv=None) -> int:
 
     cells = sorted({k.rsplit("_", 1)[0] for k in S["cells"]})
     raw = {k: per_trial(v) for k, v in S["cells"].items()}
-    base = per_trial(S["baseline"])
-    gids = sorted(set(base).intersection(*[set(v) for v in raw.values()]))
+    bases = {n: per_trial(v) for n, v in S["baselines"].items()}
+    gids = sorted(set.intersection(*[set(v) for v in [*raw.values(), *bases.values()]]))
 
     def cell_mean(cell, j):          # per trial, the seed average of metric j
         return np.array([np.mean([raw[f"{cell}_{s}"][g][j] for s in S["seeds"]]) for g in gids])
@@ -78,16 +79,17 @@ def main(argv=None) -> int:
     def test(d):
         return {"mean_diff": float(d.mean()), "p": float(wilcoxon(d).pvalue) if np.any(d) else 1.0, "n": int(len(d))}
 
-    res = {"cells": {}, "effects": {}, "vs_baseline": {}}
+    res = {"cells": {}, "effects": {}, "baselines": {}, "vs_baseline": {n: {} for n in bases}}
     for c in cells:
         res["cells"][c] = {s: {"per": sum(raw[f"{c}_{s}"][g][3] for g in gids) / sum(raw[f"{c}_{s}"][g][4] for g in gids),
                                "words_read_right": float(np.mean([raw[f"{c}_{s}"][g][1] for g in gids])),
                                "top1": float(np.mean([raw[f"{c}_{s}"][g][2] for g in gids]))} for s in S["seeds"]}
         res["cells"][c]["seed_mean"] = {k: float(np.mean([res["cells"][c][s][k] for s in S["seeds"]]))
                                         for k in ("per", "words_read_right", "top1")}
-    res["baseline"] = {"per": sum(base[g][3] for g in gids) / sum(base[g][4] for g in gids),
-                       "words_read_right": float(np.mean([base[g][1] for g in gids])),
-                       "top1": float(np.mean([base[g][2] for g in gids]))}
+    for n, base in bases.items():
+        res["baselines"][n] = {"per": sum(base[g][3] for g in gids) / sum(base[g][4] for g in gids),
+                               "words_read_right": float(np.mean([base[g][1] for g in gids])),
+                               "top1": float(np.mean([base[g][2] for g in gids]))}
     F = S["factors"]
     for j, metric in ((0, "per"), (1, "words_read_right")):
         m = {c: cell_mean(c, j) for c in cells}
@@ -97,8 +99,9 @@ def main(argv=None) -> int:
             "length": test(avg(F["long"]) - avg(F["short"])),
             "interaction": test((m[F["long"][1]] - m[F["long"][0]]) - (m[F["short"][1]] - m[F["short"][0]])),
         }
-        b = np.array([base[g][j] for g in gids])
-        res["vs_baseline"][metric] = {c: test(m[c] - b) for c in cells}
+        for n, base in bases.items():
+            b = np.array([base[g][j] for g in gids])
+            res["vs_baseline"][n][metric] = {c: test(m[c] - b) for c in cells}
     a = res["effects"]["per"]["adapter"]
     res["primary_adapter_lowers_per"] = bool(a["mean_diff"] < 0 and a["p"] < float(S["alpha"]))
     out = {"decision": "D-093", "config": args.config, "code_version": code_version(),
@@ -107,16 +110,19 @@ def main(argv=None) -> int:
     dst = resolve_path(S["out"])
     dst.mkdir(parents=True, exist_ok=True)
     (dst / "factorial.json").write_text(json.dumps(out, indent=1) + "\n")
-    L = ["# D-093: the March-only shared adapter x training length (200 held-out March trials, 2 seeds per cell)", "",
-         f"Baseline ({S['baseline']['identify']}): PER {100 * res['baseline']['per']:.1f}%, words read right "
-         f"{100 * res['baseline']['words_read_right']:.1f}%, top-1 {100 * res['baseline']['top1']:.1f}%.", "",
-         "| cell | PER " + " | PER ".join(S["seeds"]) + " | PER mean | words read right (mean) | top-1 (mean) | PER vs baseline (p) |",
-         "|---|" + "---|" * (len(S["seeds"]) + 4)]
+    L = ["# D-093: the March-only shared adapter x training length (200 held-out March trials, 2 seeds per cell)", ""]
+    for n, rb in res["baselines"].items():
+        L.append(f"Baseline `{n}` ({S['baselines'][n]['identify']}): PER {100 * rb['per']:.1f}%, words read right "
+                 f"{100 * rb['words_read_right']:.1f}%, top-1 {100 * rb['top1']:.1f}%.")
+    L += ["", "| cell | PER " + " | PER ".join(S["seeds"]) + " | PER mean | words read right (mean) | top-1 (mean) | "
+          + " | ".join(f"PER vs {n} (p)" for n in bases) + " |", "|---|" + "---|" * (len(S["seeds"]) + 3 + len(bases))]
     for c in cells:
-        r, vb = res["cells"][c], res["vs_baseline"]["per"][c]
+        r = res["cells"][c]
         L.append(f"| {c} | " + " | ".join(f"{100 * r[s]['per']:.1f}%" for s in S["seeds"])
                  + f" | {100 * r['seed_mean']['per']:.1f}% | {100 * r['seed_mean']['words_read_right']:.1f}% | "
-                 f"{100 * r['seed_mean']['top1']:.1f}% | {100 * vb['mean_diff']:+.1f} ({vb['p']:.2g}) |")
+                 f"{100 * r['seed_mean']['top1']:.1f}% | " + " | ".join(
+                     f"{100 * vb['mean_diff']:+.1f} ({vb['p']:.2g})" for vb in
+                     (res["vs_baseline"][n]["per"][c] for n in bases)) + " |")
     L += ["", "Effects per trial (seed-averaged; PER in points, negative = fewer errors):", ""]
     for metric in ("per", "words_read_right"):
         e = res["effects"][metric]
