@@ -1,4 +1,4 @@
-# D-097 analysis (PC CPU, gq; scripts/d094_length.py): T15's inner speech with the decoder's first layer trained too.
+# D-097 analysis (PC CPU, gq; scripts/d094_length.py; amended 2026-10-25 23:05: all on the PC): T15's inner speech with the decoder's first layer trained too.
 #   PC: CUDA_VISIBLE_DEVICES= .venv/bin/python -I scripts/d094_length.py --config configs/experiments/b2v2_kunz_d097.yaml
 base_experiment: configs/experiments/b2v2_kunz_base.yaml
 
@@ -7,7 +7,7 @@ run_name: b2v2_kunz_d097
 b2v2:
   d094:
     decision: D-097
-    title: "D-097: T15's inner speech with the decoder's first layer trained too (vast-3; 200 held-out March trials, 2 seeds)"
+    title: "D-097: T15's inner speech with the decoder's first layer trained too (PC; 200 held-out March trials, 2 seeds)"
     out: results/b2v2/d097
     n_trials: 200
     alpha: 0.05
@@ -16,10 +16,10 @@ b2v2:
     lengths: [base, unfreeze]
     primary: [{a: unfreeze, b: base}]
     secondary: []
-    baselines:                     # context only: trained on the PC (D-094), not the same machine
-      len3k_pc_s0: {runs: [b2v2_kunz_d093_noad3k_s0_k03, b2v2_kunz_d093_noad3k_s0_k06, b2v2_kunz_d093_noad3k_s0_k11, b2v2_kunz_d093_noad3k_s0_k13], identify: d093_noad3k_s0}
+    baselines:                     # context: D-086 gan_read (PC, 1,000 steps)
+      gan_read: {runs: [b2v2_kunz_d086_ganread_k03, b2v2_kunz_d086_ganread_k06, b2v2_kunz_d086_ganread_k11, b2v2_kunz_d086_ganread_k13], identify: d086_gan_read}
     cells:
-      base_s0: {runs: [b2v2_kunz_d097_base_s0_k03, b2v2_kunz_d097_base_s0_k06, b2v2_kunz_d097_base_s0_k11, b2v2_kunz_d097_base_s0_k13], identify: d097_base_s0}
-      base_s1: {runs: [b2v2_kunz_d097_base_s1_k03, b2v2_kunz_d097_base_s1_k06, b2v2_kunz_d097_base_s1_k11, b2v2_kunz_d097_base_s1_k13], identify: d097_base_s1}
+      base_s0: {runs: [b2v2_kunz_d093_noad3k_s0_k03, b2v2_kunz_d093_noad3k_s0_k06, b2v2_kunz_d093_noad3k_s0_k11, b2v2_kunz_d093_noad3k_s0_k13], identify: d093_noad3k_s0}   # D-093 noad3k = the recipe, PC
+      base_s1: {runs: [b2v2_kunz_d093_noad3k_s1_k03, b2v2_kunz_d093_noad3k_s1_k06, b2v2_kunz_d093_noad3k_s1_k11, b2v2_kunz_d093_noad3k_s1_k13], identify: d093_noad3k_s1}   # D-093 noad3k = the recipe, PC
       unfreeze_s0: {runs: [b2v2_kunz_d097_unfreeze_s0_k03, b2v2_kunz_d097_unfreeze_s0_k06, b2v2_kunz_d097_unfreeze_s0_k11, b2v2_kunz_d097_unfreeze_s0_k13], identify: d097_unfreeze_s0}
       unfreeze_s1: {runs: [b2v2_kunz_d097_unfreeze_s1_k03, b2v2_kunz_d097_unfreeze_s1_k06, b2v2_kunz_d097_unfreeze_s1_k11, b2v2_kunz_d097_unfreeze_s1_k13], identify: d097_unfreeze_s1}
