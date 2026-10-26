@@ -1,0 +1,1810 @@
+{
+ "project": "wvx",
+ "harness": "perf/golden (run_golden.py + compare.py)",
+ "harness_code_version": [
+  {
+   "commit": "ec977abf2c767ed5cb68939349a5fcf85a2af101",
+   "diff_sha256": null,
+   "dirty": false,
+   "pushed_at": "2026-10-25T20:41:34Z"
+  },
+  {
+   "commit": "ec977abf2c767ed5cb68939349a5fcf85a2af101",
+   "diff_sha256": null,
+   "dirty": false,
+   "pushed_at": "2026-10-25T20:49:47Z"
+  }
+ ],
+ "created": "2026-10-26T01:32:07+00:00",
+ "machines": {
+  "pc": {
+   "env": {
+    "torch": "2.5.1+cu124",
+    "cuda": "12.4",
+    "device": "NVIDIA GeForce RTX 4070"
+   },
+   "runs": [
+    {
+     "run": "pc-1",
+     "created": "2026-10-25T21:48:23+00:00",
+     "total_s": 133.4,
+     "timings_s": {
+      "base_leg1": 3.04,
+      "base_leg2": 3.65,
+      "pool": 4.64,
+      "fulltrial": 4.68,
+      "dec_ref": 1.73,
+      "dec_pool": 1.67,
+      "dec_fulltrial": 1.69,
+      "dec_base_live": 11.35,
+      "id_ref": 3.83,
+      "id_pool": 3.87,
+      "id_fulltrial": 3.86,
+      "asr_ref": 89.42
+     },
+     "base_data": {
+      "source": "data/processed/b2v2",
+      "days": [
+       "t15_day069",
+       "t15_day104",
+       "t15_day132",
+       "t15_day165"
+      ],
+      "n": 120,
+      "seed": 0,
+      "sha256": {
+       "neural.f16": "acb3e667af82148d371f918f430904e8d8447a79955a4674980c8febcf5816b1",
+       "target.f32": "9d3c537341a59519f37d32b1b1ad24bf6e7c103f9cbdb72b06940b3cfcdc362f"
+      }
+     }
+    },
+    {
+     "run": "pc-2",
+     "created": "2026-10-25T21:50:43+00:00",
+     "total_s": 134.4,
+     "timings_s": {
+      "base_leg1": 2.89,
+      "base_leg2": 3.66,
+      "pool": 4.75,
+      "fulltrial": 4.63,
+      "dec_ref": 1.64,
+      "dec_pool": 1.69,
+      "dec_fulltrial": 1.64,
+      "dec_base_live": 11.32,
+      "id_ref": 3.78,
+      "id_pool": 3.84,
+      "id_fulltrial": 3.79,
+      "asr_ref": 90.74
+     },
+     "base_data": {
+      "source": "data/processed/b2v2",
+      "days": [
+       "t15_day069",
+       "t15_day104",
+       "t15_day132",
+       "t15_day165"
+      ],
+      "n": 120,
+      "seed": 0,
+      "sha256": {
+       "neural.f16": "acb3e667af82148d371f918f430904e8d8447a79955a4674980c8febcf5816b1",
+       "target.f32": "9d3c537341a59519f37d32b1b1ad24bf6e7c103f9cbdb72b06940b3cfcdc362f"
+      }
+     }
+    }
+   ]
+  },
+  "vast3": {
+   "env": {
+    "torch": "2.14.0+cu132",
+    "cuda": "13.2",
+    "device": "NVIDIA GeForce RTX 5090"
+   },
+   "runs": [
+    {
+     "run": "vast3-1",
+     "created": "2026-10-26T01:28:21+00:00",
+     "total_s": 43.5,
+     "timings_s": {
+      "base_leg1": 6.44,
+      "base_leg2": 4.22,
+      "pool": 5.65,
+      "fulltrial": 4.99,
+      "dec_ref": 1.84,
+      "dec_pool": 1.64,
+      "dec_fulltrial": 1.63,
+      "dec_base_live": 5.41,
+      "id_ref": 4.13,
+      "id_pool": 3.8,
+      "id_fulltrial": 3.73
+     },
+     "base_data": {
+      "source": "data/processed/b2v2",
+      "days": [
+       "t15_day069",
+       "t15_day104",
+       "t15_day132",
+       "t15_day165"
+      ],
+      "n": 120,
+      "seed": 0,
+      "sha256": {
+       "neural.f16": "acb3e667af82148d371f918f430904e8d8447a79955a4674980c8febcf5816b1",
+       "target.f32": "9d3c537341a59519f37d32b1b1ad24bf6e7c103f9cbdb72b06940b3cfcdc362f"
+      }
+     }
+    },
+    {
+     "run": "vast3-2",
+     "created": "2026-10-26T01:29:06+00:00",
+     "total_s": 38.8,
+     "timings_s": {
+      "base_leg1": 3.28,
+      "base_leg2": 4.1,
+      "pool": 4.98,
+      "fulltrial": 4.93,
+      "dec_ref": 1.63,
+      "dec_pool": 1.62,
+      "dec_fulltrial": 1.65,
+      "dec_base_live": 5.34,
+      "id_ref": 3.73,
+      "id_pool": 3.73,
+      "id_fulltrial": 3.76
+     },
+     "base_data": {
+      "source": "data/processed/b2v2",
+      "days": [
+       "t15_day069",
+       "t15_day104",
+       "t15_day132",
+       "t15_day165"
+      ],
+      "n": 120,
+      "seed": 0,
+      "sha256": {
+       "neural.f16": "acb3e667af82148d371f918f430904e8d8447a79955a4674980c8febcf5816b1",
+       "target.f32": "9d3c537341a59519f37d32b1b1ad24bf6e7c103f9cbdb72b06940b3cfcdc362f"
+      }
+     }
+    }
+   ]
+  }
+ },
+ "floor_from": "cross-machine pairs; groups only one machine makes: its repeat runs",
+ "floor": {
+  "continuous": {
+   "base/log": {
+    "max_abs": 0.04977059364318848,
+    "max_rel": 0.03164776396172682,
+    "finite_mismatch": 0,
+    "source": "cross-machine"
+   },
+   "base/w": {
+    "max_abs": 0.016271118773147464,
+    "max_rel": 1.1621407641562893,
+    "finite_mismatch": 0,
+    "source": "cross-machine"
+   },
+   "base_leg1/w": {
+    "max_abs": 0.014644712209701538,
+    "max_rel": 1.0546078432023949,
+    "finite_mismatch": 0,
+    "source": "cross-machine"
+   },
+   "dec_base_live/cont": {
+    "max_abs": 0.12374630570411682,
+    "max_rel": 0.27135671791086075,
+    "finite_mismatch": 0,
+    "source": "cross-machine"
+   },
+   "dec_fulltrial/cont": {
+    "max_abs": 2.12417471408844,
+    "max_rel": 1.8137213369053629,
+    "finite_mismatch": 0,
+    "source": "cross-machine"
+   },
+   "dec_fulltrial/lp50": {
+    "max_abs": 29.40625,
+    "max_rel": 0.6781891168599464,
+    "finite_mismatch": 0,
+    "source": "cross-machine"
+   },
+   "dec_pool/cont": {
+    "max_abs": 1.9931333661079407,
+    "max_rel": 1.740590103029976,
+    "finite_mismatch": 0,
+    "source": "cross-machine"
+   },
+   "dec_pool/lp50": {
+    "max_abs": 35.296875,
+    "max_rel": 0.802771855010661,
+    "finite_mismatch": 0,
+    "source": "cross-machine"
+   },
+   "dec_ref/cont": {
+    "max_abs": 4.169344902038574e-05,
+    "max_rel": 3.9062212059283876e-05,
+    "finite_mismatch": 0,
+    "source": "cross-machine"
+   },
+   "dec_ref/lp50": {
+    "max_abs": 0.03125,
+    "max_rel": 0.0005583472920156337,
+    "finite_mismatch": 0,
+    "source": "cross-machine"
+   },
+   "fulltrial/log": {
+    "max_abs": 0.39568209648132324,
+    "max_rel": 0.0936968138890774,
+    "finite_mismatch": 0,
+    "source": "cross-machine"
+   },
+   "fulltrial/w": {
+    "max_abs": 0.02447626367211342,
+    "max_rel": 0.04373526447815444,
+    "finite_mismatch": 0,
+    "source": "cross-machine"
+   },
+   "pool/log": {
+    "max_abs": 0.2497401237487793,
+    "max_rel": 0.07370523675142096,
+    "finite_mismatch": 0,
+    "source": "cross-machine"
+   },
+   "pool/w": {
+    "max_abs": 0.02503533661365509,
+    "max_rel": 1.3305006066924154,
+    "finite_mismatch": 0,
+    "source": "cross-machine"
+   },
+   "pool_best/w": {
+    "max_abs": 0.02503533661365509,
+    "max_rel": 1.3305006066924154,
+    "finite_mismatch": 0,
+    "source": "cross-machine"
+   },
+   "asr_ref/feat_r": {
+    "max_abs": 0.0,
+    "max_rel": 0.0,
+    "finite_mismatch": 0,
+    "source": "same-machine"
+   },
+   "asr_ref/wer_fixed": {
+    "max_abs": 0.0,
+    "max_rel": 0.0,
+    "finite_mismatch": 0,
+    "source": "same-machine"
+   },
+   "asr_ref/wer_orig": {
+    "max_abs": 0.0,
+    "max_rel": 0.0,
+    "finite_mismatch": 0,
+    "source": "same-machine"
+   }
+  },
+  "discrete": {
+   "disc/dec_base_live/best": {
+    "mismatches": 0,
+    "sequences_differing": 0,
+    "total": 18238,
+    "source": "cross-machine"
+   },
+   "disc/dec_fulltrial/best": {
+    "mismatches": 4707,
+    "sequences_differing": 49,
+    "total": 61695,
+    "source": "cross-machine"
+   },
+   "disc/dec_fulltrial/best50": {
+    "mismatches": 945,
+    "sequences_differing": 49,
+    "total": 12318,
+    "source": "cross-machine"
+   },
+   "disc/dec_pool/best": {
+    "mismatches": 5572,
+    "sequences_differing": 49,
+    "total": 61695,
+    "source": "cross-machine"
+   },
+   "disc/dec_pool/best50": {
+    "mismatches": 1100,
+    "sequences_differing": 49,
+    "total": 12318,
+    "source": "cross-machine"
+   },
+   "disc/dec_ref/best": {
+    "mismatches": 0,
+    "sequences_differing": 0,
+    "total": 61695,
+    "source": "cross-machine"
+   },
+   "disc/dec_ref/best50": {
+    "mismatches": 0,
+    "sequences_differing": 0,
+    "total": 12318,
+    "source": "cross-machine"
+   },
+   "id_fulltrial/null_rank": {
+    "mismatches": 32,
+    "sequences_differing": 0,
+    "total": 50,
+    "source": "cross-machine"
+   },
+   "id_fulltrial/phone_errors": {
+    "mismatches": 31,
+    "sequences_differing": 0,
+    "total": 50,
+    "source": "cross-machine"
+   },
+   "id_fulltrial/rank": {
+    "mismatches": 16,
+    "sequences_differing": 0,
+    "total": 50,
+    "source": "cross-machine"
+   },
+   "id_pool/null_rank": {
+    "mismatches": 39,
+    "sequences_differing": 0,
+    "total": 50,
+    "source": "cross-machine"
+   },
+   "id_pool/phone_errors": {
+    "mismatches": 36,
+    "sequences_differing": 0,
+    "total": 50,
+    "source": "cross-machine"
+   },
+   "id_pool/rank": {
+    "mismatches": 21,
+    "sequences_differing": 0,
+    "total": 50,
+    "source": "cross-machine"
+   },
+   "id_ref/null_rank": {
+    "mismatches": 0,
+    "sequences_differing": 0,
+    "total": 50,
+    "source": "cross-machine"
+   },
+   "id_ref/phone_errors": {
+    "mismatches": 0,
+    "sequences_differing": 0,
+    "total": 50,
+    "source": "cross-machine"
+   },
+   "id_ref/rank": {
+    "mismatches": 0,
+    "sequences_differing": 0,
+    "total": 50,
+    "source": "cross-machine"
+   },
+   "asr_ref/hyp": {
+    "mismatches": 0,
+    "sequences_differing": 0,
+    "total": 50,
+    "source": "same-machine"
+   },
+   "asr_ref/hyp_fixed": {
+    "mismatches": 0,
+    "sequences_differing": 0,
+    "total": 50,
+    "source": "same-machine"
+   },
+   "asr_ref/phone_errors": {
+    "mismatches": 0,
+    "sequences_differing": 0,
+    "total": 50,
+    "source": "same-machine"
+   }
+  }
+ },
+ "floor_same_machine": {
+  "continuous": {
+   "asr_ref/feat_r": {
+    "max_abs": 0.0,
+    "max_rel": 0.0,
+    "finite_mismatch": 0
+   },
+   "asr_ref/wer_fixed": {
+    "max_abs": 0.0,
+    "max_rel": 0.0,
+    "finite_mismatch": 0
+   },
+   "asr_ref/wer_orig": {
+    "max_abs": 0.0,
+    "max_rel": 0.0,
+    "finite_mismatch": 0
+   },
+   "base/log": {
+    "max_abs": 0.0,
+    "max_rel": 0.0,
+    "finite_mismatch": 0
+   },
+   "base/w": {
+    "max_abs": 0.0,
+    "max_rel": 0.0,
+    "finite_mismatch": 0
+   },
+   "base_leg1/w": {
+    "max_abs": 0.0,
+    "max_rel": 0.0,
+    "finite_mismatch": 0
+   },
+   "dec_base_live/cont": {
+    "max_abs": 0.0,
+    "max_rel": 0.0,
+    "finite_mismatch": 0
+   },
+   "dec_fulltrial/cont": {
+    "max_abs": 0.0,
+    "max_rel": 0.0,
+    "finite_mismatch": 0
+   },
+   "dec_fulltrial/lp50": {
+    "max_abs": 0.0,
+    "max_rel": 0.0,
+    "finite_mismatch": 0
+   },
+   "dec_pool/cont": {
+    "max_abs": 0.0,
+    "max_rel": 0.0,
+    "finite_mismatch": 0
+   },
+   "dec_pool/lp50": {
+    "max_abs": 0.0,
+    "max_rel": 0.0,
+    "finite_mismatch": 0
+   },
+   "dec_ref/cont": {
+    "max_abs": 0.0,
+    "max_rel": 0.0,
+    "finite_mismatch": 0
+   },
+   "dec_ref/lp50": {
+    "max_abs": 0.0,
+    "max_rel": 0.0,
+    "finite_mismatch": 0
+   },
+   "fulltrial/log": {
+    "max_abs": 0.0,
+    "max_rel": 0.0,
+    "finite_mismatch": 0
+   },
+   "fulltrial/w": {
+    "max_abs": 0.0,
+    "max_rel": 0.0,
+    "finite_mismatch": 0
+   },
+   "pool/log": {
+    "max_abs": 0.0,
+    "max_rel": 0.0,
+    "finite_mismatch": 0
+   },
+   "pool/w": {
+    "max_abs": 0.0,
+    "max_rel": 0.0,
+    "finite_mismatch": 0
+   },
+   "pool_best/w": {
+    "max_abs": 0.0,
+    "max_rel": 0.0,
+    "finite_mismatch": 0
+   }
+  },
+  "discrete": {
+   "disc/dec_base_live/best": {
+    "mismatches": 0,
+    "sequences_differing": 0,
+    "total": 18238
+   },
+   "disc/dec_fulltrial/best": {
+    "mismatches": 0,
+    "sequences_differing": 0,
+    "total": 61695
+   },
+   "disc/dec_fulltrial/best50": {
+    "mismatches": 0,
+    "sequences_differing": 0,
+    "total": 12318
+   },
+   "disc/dec_pool/best": {
+    "mismatches": 0,
+    "sequences_differing": 0,
+    "total": 61695
+   },
+   "disc/dec_pool/best50": {
+    "mismatches": 0,
+    "sequences_differing": 0,
+    "total": 12318
+   },
+   "disc/dec_ref/best": {
+    "mismatches": 0,
+    "sequences_differing": 0,
+    "total": 61695
+   },
+   "disc/dec_ref/best50": {
+    "mismatches": 0,
+    "sequences_differing": 0,
+    "total": 12318
+   },
+   "asr_ref/hyp": {
+    "mismatches": 0,
+    "sequences_differing": 0,
+    "total": 50
+   },
+   "asr_ref/hyp_fixed": {
+    "mismatches": 0,
+    "sequences_differing": 0,
+    "total": 50
+   },
+   "asr_ref/phone_errors": {
+    "mismatches": 0,
+    "sequences_differing": 0,
+    "total": 50
+   },
+   "id_fulltrial/null_rank": {
+    "mismatches": 0,
+    "sequences_differing": 0,
+    "total": 50
+   },
+   "id_fulltrial/phone_errors": {
+    "mismatches": 0,
+    "sequences_differing": 0,
+    "total": 50
+   },
+   "id_fulltrial/rank": {
+    "mismatches": 0,
+    "sequences_differing": 0,
+    "total": 50
+   },
+   "id_pool/null_rank": {
+    "mismatches": 0,
+    "sequences_differing": 0,
+    "total": 50
+   },
+   "id_pool/phone_errors": {
+    "mismatches": 0,
+    "sequences_differing": 0,
+    "total": 50
+   },
+   "id_pool/rank": {
+    "mismatches": 0,
+    "sequences_differing": 0,
+    "total": 50
+   },
+   "id_ref/null_rank": {
+    "mismatches": 0,
+    "sequences_differing": 0,
+    "total": 50
+   },
+   "id_ref/phone_errors": {
+    "mismatches": 0,
+    "sequences_differing": 0,
+    "total": 50
+   },
+   "id_ref/rank": {
+    "mismatches": 0,
+    "sequences_differing": 0,
+    "total": 50
+   }
+  }
+ },
+ "forward_only_groups": [
+  "asr_ref/feat_r",
+  "asr_ref/hyp",
+  "asr_ref/hyp_fixed",
+  "asr_ref/phone_errors",
+  "asr_ref/wer_fixed",
+  "asr_ref/wer_orig",
+  "dec_ref/cont",
+  "dec_ref/lp50",
+  "disc/dec_ref/best",
+  "disc/dec_ref/best50",
+  "id_ref/null_rank",
+  "id_ref/phone_errors",
+  "id_ref/rank"
+ ],
+ "rule": "wvx (perf/golden/README.md): for work that feeds an ongoing comparison, every group downstream of training must be within floor_same_machine (bit-identical on wvx's hosts); the cross-machine floor applies to forward-only groups, and to training only for experiments not yet started (compare.py pair --mode new).",
+ "pairs": {
+  "pc:pc-1~pc:pc-2": {
+   "continuous": {
+    "asr_ref/feat_r": {
+     "max_abs": 0.0,
+     "max_rel": 0.0,
+     "n_values": 50,
+     "n_tensors": 1,
+     "finite_mismatch": 0
+    },
+    "asr_ref/wer_fixed": {
+     "max_abs": 0.0,
+     "max_rel": 0.0,
+     "n_values": 50,
+     "n_tensors": 1,
+     "finite_mismatch": 0
+    },
+    "asr_ref/wer_orig": {
+     "max_abs": 0.0,
+     "max_rel": 0.0,
+     "n_values": 50,
+     "n_tensors": 1,
+     "finite_mismatch": 0
+    },
+    "base/log": {
+     "max_abs": 0.0,
+     "max_rel": 0.0,
+     "n_values": 22,
+     "n_tensors": 11,
+     "finite_mismatch": 0
+    },
+    "base/w": {
+     "max_abs": 0.0,
+     "max_rel": 0.0,
+     "n_values": 14712637,
+     "n_tensors": 108,
+     "finite_mismatch": 0
+    },
+    "base_leg1/w": {
+     "max_abs": 0.0,
+     "max_rel": 0.0,
+     "n_values": 14712637,
+     "n_tensors": 108,
+     "finite_mismatch": 0
+    },
+    "dec_base_live/cont": {
+     "max_abs": 0.0,
+     "max_rel": 0.0,
+     "n_values": 364760,
+     "n_tensors": 10,
+     "finite_mismatch": 0
+    },
+    "dec_fulltrial/cont": {
+     "max_abs": 0.0,
+     "max_rel": 0.0,
+     "n_values": 1233900,
+     "n_tensors": 50,
+     "finite_mismatch": 0
+    },
+    "dec_fulltrial/lp50": {
+     "max_abs": 0.0,
+     "max_rel": 0.0,
+     "n_values": 505038,
+     "n_tensors": 50,
+     "finite_mismatch": 0
+    },
+    "dec_pool/cont": {
+     "max_abs": 0.0,
+     "max_rel": 0.0,
+     "n_values": 1233900,
+     "n_tensors": 50,
+     "finite_mismatch": 0
+    },
+    "dec_pool/lp50": {
+     "max_abs": 0.0,
+     "max_rel": 0.0,
+     "n_values": 505038,
+     "n_tensors": 50,
+     "finite_mismatch": 0
+    },
+    "dec_ref/cont": {
+     "max_abs": 0.0,
+     "max_rel": 0.0,
+     "n_values": 1233900,
+     "n_tensors": 50,
+     "finite_mismatch": 0
+    },
+    "dec_ref/lp50": {
+     "max_abs": 0.0,
+     "max_rel": 0.0,
+     "n_values": 505038,
+     "n_tensors": 50,
+     "finite_mismatch": 0
+    },
+    "fulltrial/log": {
+     "max_abs": 0.0,
+     "max_rel": 0.0,
+     "n_values": 12,
+     "n_tensors": 3,
+     "finite_mismatch": 0
+    },
+    "fulltrial/w": {
+     "max_abs": 0.0,
+     "max_rel": 0.0,
+     "n_values": 196992,
+     "n_tensors": 2,
+     "finite_mismatch": 0
+    },
+    "pool/log": {
+     "max_abs": 0.0,
+     "max_rel": 0.0,
+     "n_values": 16,
+     "n_tensors": 4,
+     "finite_mismatch": 0
+    },
+    "pool/w": {
+     "max_abs": 0.0,
+     "max_rel": 0.0,
+     "n_values": 246144,
+     "n_tensors": 4,
+     "finite_mismatch": 0
+    },
+    "pool_best/w": {
+     "max_abs": 0.0,
+     "max_rel": 0.0,
+     "n_values": 246144,
+     "n_tensors": 4,
+     "finite_mismatch": 0
+    }
+   },
+   "discrete": {
+    "disc/dec_base_live/best": {
+     "mismatches": 0,
+     "total": 18238,
+     "sequences_differing": 0,
+     "sequences": 10
+    },
+    "disc/dec_fulltrial/best": {
+     "mismatches": 0,
+     "total": 61695,
+     "sequences_differing": 0,
+     "sequences": 50
+    },
+    "disc/dec_fulltrial/best50": {
+     "mismatches": 0,
+     "total": 12318,
+     "sequences_differing": 0,
+     "sequences": 50
+    },
+    "disc/dec_pool/best": {
+     "mismatches": 0,
+     "total": 61695,
+     "sequences_differing": 0,
+     "sequences": 50
+    },
+    "disc/dec_pool/best50": {
+     "mismatches": 0,
+     "total": 12318,
+     "sequences_differing": 0,
+     "sequences": 50
+    },
+    "disc/dec_ref/best": {
+     "mismatches": 0,
+     "total": 61695,
+     "sequences_differing": 0,
+     "sequences": 50
+    },
+    "disc/dec_ref/best50": {
+     "mismatches": 0,
+     "total": 12318,
+     "sequences_differing": 0,
+     "sequences": 50
+    },
+    "asr_ref/hyp": {
+     "mismatches": 0,
+     "total": 50
+    },
+    "asr_ref/hyp_fixed": {
+     "mismatches": 0,
+     "total": 50
+    },
+    "asr_ref/phone_errors": {
+     "mismatches": 0,
+     "total": 50
+    },
+    "id_fulltrial/null_rank": {
+     "mismatches": 0,
+     "total": 50
+    },
+    "id_fulltrial/phone_errors": {
+     "mismatches": 0,
+     "total": 50
+    },
+    "id_fulltrial/rank": {
+     "mismatches": 0,
+     "total": 50
+    },
+    "id_pool/null_rank": {
+     "mismatches": 0,
+     "total": 50
+    },
+    "id_pool/phone_errors": {
+     "mismatches": 0,
+     "total": 50
+    },
+    "id_pool/rank": {
+     "mismatches": 0,
+     "total": 50
+    },
+    "id_ref/null_rank": {
+     "mismatches": 0,
+     "total": 50
+    },
+    "id_ref/phone_errors": {
+     "mismatches": 0,
+     "total": 50
+    },
+    "id_ref/rank": {
+     "mismatches": 0,
+     "total": 50
+    }
+   },
+   "missing_in_a": [],
+   "missing_in_b": []
+  },
+  "pc:pc-1~vast3:vast3-1": {
+   "continuous": {
+    "base/log": {
+     "max_abs": 0.04977059364318848,
+     "max_rel": 0.03164776396172682,
+     "n_values": 22,
+     "n_tensors": 11,
+     "finite_mismatch": 0
+    },
+    "base/w": {
+     "max_abs": 0.016271118773147464,
+     "max_rel": 1.1621407641562893,
+     "n_values": 14712637,
+     "n_tensors": 108,
+     "finite_mismatch": 0
+    },
+    "base_leg1/w": {
+     "max_abs": 0.014644712209701538,
+     "max_rel": 1.0546078432023949,
+     "n_values": 14712637,
+     "n_tensors": 108,
+     "finite_mismatch": 0
+    },
+    "dec_base_live/cont": {
+     "max_abs": 0.12374630570411682,
+     "max_rel": 0.27135671791086075,
+     "n_values": 364760,
+     "n_tensors": 10,
+     "finite_mismatch": 0
+    },
+    "dec_fulltrial/cont": {
+     "max_abs": 2.12417471408844,
+     "max_rel": 1.8137213369053629,
+     "n_values": 1233900,
+     "n_tensors": 50,
+     "finite_mismatch": 0
+    },
+    "dec_fulltrial/lp50": {
+     "max_abs": 29.40625,
+     "max_rel": 0.6781891168599464,
+     "n_values": 505038,
+     "n_tensors": 50,
+     "finite_mismatch": 0
+    },
+    "dec_pool/cont": {
+     "max_abs": 1.9931333661079407,
+     "max_rel": 1.740590103029976,
+     "n_values": 1233900,
+     "n_tensors": 50,
+     "finite_mismatch": 0
+    },
+    "dec_pool/lp50": {
+     "max_abs": 35.296875,
+     "max_rel": 0.802771855010661,
+     "n_values": 505038,
+     "n_tensors": 50,
+     "finite_mismatch": 0
+    },
+    "dec_ref/cont": {
+     "max_abs": 4.169344902038574e-05,
+     "max_rel": 3.9062212059283876e-05,
+     "n_values": 1233900,
+     "n_tensors": 50,
+     "finite_mismatch": 0
+    },
+    "dec_ref/lp50": {
+     "max_abs": 0.03125,
+     "max_rel": 0.0005583472920156337,
+     "n_values": 505038,
+     "n_tensors": 50,
+     "finite_mismatch": 0
+    },
+    "fulltrial/log": {
+     "max_abs": 0.39568209648132324,
+     "max_rel": 0.0936968138890774,
+     "n_values": 12,
+     "n_tensors": 3,
+     "finite_mismatch": 0
+    },
+    "fulltrial/w": {
+     "max_abs": 0.02447626367211342,
+     "max_rel": 0.04373526447815444,
+     "n_values": 196992,
+     "n_tensors": 2,
+     "finite_mismatch": 0
+    },
+    "pool/log": {
+     "max_abs": 0.2497401237487793,
+     "max_rel": 0.07370523675142096,
+     "n_values": 16,
+     "n_tensors": 4,
+     "finite_mismatch": 0
+    },
+    "pool/w": {
+     "max_abs": 0.02503533661365509,
+     "max_rel": 1.3305006066924154,
+     "n_values": 246144,
+     "n_tensors": 4,
+     "finite_mismatch": 0
+    },
+    "pool_best/w": {
+     "max_abs": 0.02503533661365509,
+     "max_rel": 1.3305006066924154,
+     "n_values": 246144,
+     "n_tensors": 4,
+     "finite_mismatch": 0
+    }
+   },
+   "discrete": {
+    "disc/dec_base_live/best": {
+     "mismatches": 0,
+     "total": 18238,
+     "sequences_differing": 0,
+     "sequences": 10
+    },
+    "disc/dec_fulltrial/best": {
+     "mismatches": 4707,
+     "total": 61695,
+     "sequences_differing": 49,
+     "sequences": 50
+    },
+    "disc/dec_fulltrial/best50": {
+     "mismatches": 945,
+     "total": 12318,
+     "sequences_differing": 49,
+     "sequences": 50
+    },
+    "disc/dec_pool/best": {
+     "mismatches": 5572,
+     "total": 61695,
+     "sequences_differing": 49,
+     "sequences": 50
+    },
+    "disc/dec_pool/best50": {
+     "mismatches": 1100,
+     "total": 12318,
+     "sequences_differing": 49,
+     "sequences": 50
+    },
+    "disc/dec_ref/best": {
+     "mismatches": 0,
+     "total": 61695,
+     "sequences_differing": 0,
+     "sequences": 50
+    },
+    "disc/dec_ref/best50": {
+     "mismatches": 0,
+     "total": 12318,
+     "sequences_differing": 0,
+     "sequences": 50
+    },
+    "id_fulltrial/null_rank": {
+     "mismatches": 32,
+     "total": 50
+    },
+    "id_fulltrial/phone_errors": {
+     "mismatches": 31,
+     "total": 50
+    },
+    "id_fulltrial/rank": {
+     "mismatches": 16,
+     "total": 50
+    },
+    "id_pool/null_rank": {
+     "mismatches": 39,
+     "total": 50
+    },
+    "id_pool/phone_errors": {
+     "mismatches": 36,
+     "total": 50
+    },
+    "id_pool/rank": {
+     "mismatches": 21,
+     "total": 50
+    },
+    "id_ref/null_rank": {
+     "mismatches": 0,
+     "total": 50
+    },
+    "id_ref/phone_errors": {
+     "mismatches": 0,
+     "total": 50
+    },
+    "id_ref/rank": {
+     "mismatches": 0,
+     "total": 50
+    }
+   },
+   "missing_in_a": [],
+   "missing_in_b": [
+    "asr_ref/feat_r",
+    "asr_ref/wer_fixed",
+    "asr_ref/wer_orig",
+    "discrete:asr_ref"
+   ]
+  },
+  "pc:pc-1~vast3:vast3-2": {
+   "continuous": {
+    "base/log": {
+     "max_abs": 0.04977059364318848,
+     "max_rel": 0.03164776396172682,
+     "n_values": 22,
+     "n_tensors": 11,
+     "finite_mismatch": 0
+    },
+    "base/w": {
+     "max_abs": 0.016271118773147464,
+     "max_rel": 1.1621407641562893,
+     "n_values": 14712637,
+     "n_tensors": 108,
+     "finite_mismatch": 0
+    },
+    "base_leg1/w": {
+     "max_abs": 0.014644712209701538,
+     "max_rel": 1.0546078432023949,
+     "n_values": 14712637,
+     "n_tensors": 108,
+     "finite_mismatch": 0
+    },
+    "dec_base_live/cont": {
+     "max_abs": 0.12374630570411682,
+     "max_rel": 0.27135671791086075,
+     "n_values": 364760,
+     "n_tensors": 10,
+     "finite_mismatch": 0
+    },
+    "dec_fulltrial/cont": {
+     "max_abs": 2.12417471408844,
+     "max_rel": 1.8137213369053629,
+     "n_values": 1233900,
+     "n_tensors": 50,
+     "finite_mismatch": 0
+    },
+    "dec_fulltrial/lp50": {
+     "max_abs": 29.40625,
+     "max_rel": 0.6781891168599464,
+     "n_values": 505038,
+     "n_tensors": 50,
+     "finite_mismatch": 0
+    },
+    "dec_pool/cont": {
+     "max_abs": 1.9931333661079407,
+     "max_rel": 1.740590103029976,
+     "n_values": 1233900,
+     "n_tensors": 50,
+     "finite_mismatch": 0
+    },
+    "dec_pool/lp50": {
+     "max_abs": 35.296875,
+     "max_rel": 0.802771855010661,
+     "n_values": 505038,
+     "n_tensors": 50,
+     "finite_mismatch": 0
+    },
+    "dec_ref/cont": {
+     "max_abs": 4.169344902038574e-05,
+     "max_rel": 3.9062212059283876e-05,
+     "n_values": 1233900,
+     "n_tensors": 50,
+     "finite_mismatch": 0
+    },
+    "dec_ref/lp50": {
+     "max_abs": 0.03125,
+     "max_rel": 0.0005583472920156337,
+     "n_values": 505038,
+     "n_tensors": 50,
+     "finite_mismatch": 0
+    },
+    "fulltrial/log": {
+     "max_abs": 0.39568209648132324,
+     "max_rel": 0.0936968138890774,
+     "n_values": 12,
+     "n_tensors": 3,
+     "finite_mismatch": 0
+    },
+    "fulltrial/w": {
+     "max_abs": 0.02447626367211342,
+     "max_rel": 0.04373526447815444,
+     "n_values": 196992,
+     "n_tensors": 2,
+     "finite_mismatch": 0
+    },
+    "pool/log": {
+     "max_abs": 0.2497401237487793,
+     "max_rel": 0.07370523675142096,
+     "n_values": 16,
+     "n_tensors": 4,
+     "finite_mismatch": 0
+    },
+    "pool/w": {
+     "max_abs": 0.02503533661365509,
+     "max_rel": 1.3305006066924154,
+     "n_values": 246144,
+     "n_tensors": 4,
+     "finite_mismatch": 0
+    },
+    "pool_best/w": {
+     "max_abs": 0.02503533661365509,
+     "max_rel": 1.3305006066924154,
+     "n_values": 246144,
+     "n_tensors": 4,
+     "finite_mismatch": 0
+    }
+   },
+   "discrete": {
+    "disc/dec_base_live/best": {
+     "mismatches": 0,
+     "total": 18238,
+     "sequences_differing": 0,
+     "sequences": 10
+    },
+    "disc/dec_fulltrial/best": {
+     "mismatches": 4707,
+     "total": 61695,
+     "sequences_differing": 49,
+     "sequences": 50
+    },
+    "disc/dec_fulltrial/best50": {
+     "mismatches": 945,
+     "total": 12318,
+     "sequences_differing": 49,
+     "sequences": 50
+    },
+    "disc/dec_pool/best": {
+     "mismatches": 5572,
+     "total": 61695,
+     "sequences_differing": 49,
+     "sequences": 50
+    },
+    "disc/dec_pool/best50": {
+     "mismatches": 1100,
+     "total": 12318,
+     "sequences_differing": 49,
+     "sequences": 50
+    },
+    "disc/dec_ref/best": {
+     "mismatches": 0,
+     "total": 61695,
+     "sequences_differing": 0,
+     "sequences": 50
+    },
+    "disc/dec_ref/best50": {
+     "mismatches": 0,
+     "total": 12318,
+     "sequences_differing": 0,
+     "sequences": 50
+    },
+    "id_fulltrial/null_rank": {
+     "mismatches": 32,
+     "total": 50
+    },
+    "id_fulltrial/phone_errors": {
+     "mismatches": 31,
+     "total": 50
+    },
+    "id_fulltrial/rank": {
+     "mismatches": 16,
+     "total": 50
+    },
+    "id_pool/null_rank": {
+     "mismatches": 39,
+     "total": 50
+    },
+    "id_pool/phone_errors": {
+     "mismatches": 36,
+     "total": 50
+    },
+    "id_pool/rank": {
+     "mismatches": 21,
+     "total": 50
+    },
+    "id_ref/null_rank": {
+     "mismatches": 0,
+     "total": 50
+    },
+    "id_ref/phone_errors": {
+     "mismatches": 0,
+     "total": 50
+    },
+    "id_ref/rank": {
+     "mismatches": 0,
+     "total": 50
+    }
+   },
+   "missing_in_a": [],
+   "missing_in_b": [
+    "asr_ref/feat_r",
+    "asr_ref/wer_fixed",
+    "asr_ref/wer_orig",
+    "discrete:asr_ref"
+   ]
+  },
+  "pc:pc-2~vast3:vast3-1": {
+   "continuous": {
+    "base/log": {
+     "max_abs": 0.04977059364318848,
+     "max_rel": 0.03164776396172682,
+     "n_values": 22,
+     "n_tensors": 11,
+     "finite_mismatch": 0
+    },
+    "base/w": {
+     "max_abs": 0.016271118773147464,
+     "max_rel": 1.1621407641562893,
+     "n_values": 14712637,
+     "n_tensors": 108,
+     "finite_mismatch": 0
+    },
+    "base_leg1/w": {
+     "max_abs": 0.014644712209701538,
+     "max_rel": 1.0546078432023949,
+     "n_values": 14712637,
+     "n_tensors": 108,
+     "finite_mismatch": 0
+    },
+    "dec_base_live/cont": {
+     "max_abs": 0.12374630570411682,
+     "max_rel": 0.27135671791086075,
+     "n_values": 364760,
+     "n_tensors": 10,
+     "finite_mismatch": 0
+    },
+    "dec_fulltrial/cont": {
+     "max_abs": 2.12417471408844,
+     "max_rel": 1.8137213369053629,
+     "n_values": 1233900,
+     "n_tensors": 50,
+     "finite_mismatch": 0
+    },
+    "dec_fulltrial/lp50": {
+     "max_abs": 29.40625,
+     "max_rel": 0.6781891168599464,
+     "n_values": 505038,
+     "n_tensors": 50,
+     "finite_mismatch": 0
+    },
+    "dec_pool/cont": {
+     "max_abs": 1.9931333661079407,
+     "max_rel": 1.740590103029976,
+     "n_values": 1233900,
+     "n_tensors": 50,
+     "finite_mismatch": 0
+    },
+    "dec_pool/lp50": {
+     "max_abs": 35.296875,
+     "max_rel": 0.802771855010661,
+     "n_values": 505038,
+     "n_tensors": 50,
+     "finite_mismatch": 0
+    },
+    "dec_ref/cont": {
+     "max_abs": 4.169344902038574e-05,
+     "max_rel": 3.9062212059283876e-05,
+     "n_values": 1233900,
+     "n_tensors": 50,
+     "finite_mismatch": 0
+    },
+    "dec_ref/lp50": {
+     "max_abs": 0.03125,
+     "max_rel": 0.0005583472920156337,
+     "n_values": 505038,
+     "n_tensors": 50,
+     "finite_mismatch": 0
+    },
+    "fulltrial/log": {
+     "max_abs": 0.39568209648132324,
+     "max_rel": 0.0936968138890774,
+     "n_values": 12,
+     "n_tensors": 3,
+     "finite_mismatch": 0
+    },
+    "fulltrial/w": {
+     "max_abs": 0.02447626367211342,
+     "max_rel": 0.04373526447815444,
+     "n_values": 196992,
+     "n_tensors": 2,
+     "finite_mismatch": 0
+    },
+    "pool/log": {
+     "max_abs": 0.2497401237487793,
+     "max_rel": 0.07370523675142096,
+     "n_values": 16,
+     "n_tensors": 4,
+     "finite_mismatch": 0
+    },
+    "pool/w": {
+     "max_abs": 0.02503533661365509,
+     "max_rel": 1.3305006066924154,
+     "n_values": 246144,
+     "n_tensors": 4,
+     "finite_mismatch": 0
+    },
+    "pool_best/w": {
+     "max_abs": 0.02503533661365509,
+     "max_rel": 1.3305006066924154,
+     "n_values": 246144,
+     "n_tensors": 4,
+     "finite_mismatch": 0
+    }
+   },
+   "discrete": {
+    "disc/dec_base_live/best": {
+     "mismatches": 0,
+     "total": 18238,
+     "sequences_differing": 0,
+     "sequences": 10
+    },
+    "disc/dec_fulltrial/best": {
+     "mismatches": 4707,
+     "total": 61695,
+     "sequences_differing": 49,
+     "sequences": 50
+    },
+    "disc/dec_fulltrial/best50": {
+     "mismatches": 945,
+     "total": 12318,
+     "sequences_differing": 49,
+     "sequences": 50
+    },
+    "disc/dec_pool/best": {
+     "mismatches": 5572,
+     "total": 61695,
+     "sequences_differing": 49,
+     "sequences": 50
+    },
+    "disc/dec_pool/best50": {
+     "mismatches": 1100,
+     "total": 12318,
+     "sequences_differing": 49,
+     "sequences": 50
+    },
+    "disc/dec_ref/best": {
+     "mismatches": 0,
+     "total": 61695,
+     "sequences_differing": 0,
+     "sequences": 50
+    },
+    "disc/dec_ref/best50": {
+     "mismatches": 0,
+     "total": 12318,
+     "sequences_differing": 0,
+     "sequences": 50
+    },
+    "id_fulltrial/null_rank": {
+     "mismatches": 32,
+     "total": 50
+    },
+    "id_fulltrial/phone_errors": {
+     "mismatches": 31,
+     "total": 50
+    },
+    "id_fulltrial/rank": {
+     "mismatches": 16,
+     "total": 50
+    },
+    "id_pool/null_rank": {
+     "mismatches": 39,
+     "total": 50
+    },
+    "id_pool/phone_errors": {
+     "mismatches": 36,
+     "total": 50
+    },
+    "id_pool/rank": {
+     "mismatches": 21,
+     "total": 50
+    },
+    "id_ref/null_rank": {
+     "mismatches": 0,
+     "total": 50
+    },
+    "id_ref/phone_errors": {
+     "mismatches": 0,
+     "total": 50
+    },
+    "id_ref/rank": {
+     "mismatches": 0,
+     "total": 50
+    }
+   },
+   "missing_in_a": [],
+   "missing_in_b": [
+    "asr_ref/feat_r",
+    "asr_ref/wer_fixed",
+    "asr_ref/wer_orig",
+    "discrete:asr_ref"
+   ]
+  },
+  "pc:pc-2~vast3:vast3-2": {
+   "continuous": {
+    "base/log": {
+     "max_abs": 0.04977059364318848,
+     "max_rel": 0.03164776396172682,
+     "n_values": 22,
+     "n_tensors": 11,
+     "finite_mismatch": 0
+    },
+    "base/w": {
+     "max_abs": 0.016271118773147464,
+     "max_rel": 1.1621407641562893,
+     "n_values": 14712637,
+     "n_tensors": 108,
+     "finite_mismatch": 0
+    },
+    "base_leg1/w": {
+     "max_abs": 0.014644712209701538,
+     "max_rel": 1.0546078432023949,
+     "n_values": 14712637,
+     "n_tensors": 108,
+     "finite_mismatch": 0
+    },
+    "dec_base_live/cont": {
+     "max_abs": 0.12374630570411682,
+     "max_rel": 0.27135671791086075,
+     "n_values": 364760,
+     "n_tensors": 10,
+     "finite_mismatch": 0
+    },
+    "dec_fulltrial/cont": {
+     "max_abs": 2.12417471408844,
+     "max_rel": 1.8137213369053629,
+     "n_values": 1233900,
+     "n_tensors": 50,
+     "finite_mismatch": 0
+    },
+    "dec_fulltrial/lp50": {
+     "max_abs": 29.40625,
+     "max_rel": 0.6781891168599464,
+     "n_values": 505038,
+     "n_tensors": 50,
+     "finite_mismatch": 0
+    },
+    "dec_pool/cont": {
+     "max_abs": 1.9931333661079407,
+     "max_rel": 1.740590103029976,
+     "n_values": 1233900,
+     "n_tensors": 50,
+     "finite_mismatch": 0
+    },
+    "dec_pool/lp50": {
+     "max_abs": 35.296875,
+     "max_rel": 0.802771855010661,
+     "n_values": 505038,
+     "n_tensors": 50,
+     "finite_mismatch": 0
+    },
+    "dec_ref/cont": {
+     "max_abs": 4.169344902038574e-05,
+     "max_rel": 3.9062212059283876e-05,
+     "n_values": 1233900,
+     "n_tensors": 50,
+     "finite_mismatch": 0
+    },
+    "dec_ref/lp50": {
+     "max_abs": 0.03125,
+     "max_rel": 0.0005583472920156337,
+     "n_values": 505038,
+     "n_tensors": 50,
+     "finite_mismatch": 0
+    },
+    "fulltrial/log": {
+     "max_abs": 0.39568209648132324,
+     "max_rel": 0.0936968138890774,
+     "n_values": 12,
+     "n_tensors": 3,
+     "finite_mismatch": 0
+    },
+    "fulltrial/w": {
+     "max_abs": 0.02447626367211342,
+     "max_rel": 0.04373526447815444,
+     "n_values": 196992,
+     "n_tensors": 2,
+     "finite_mismatch": 0
+    },
+    "pool/log": {
+     "max_abs": 0.2497401237487793,
+     "max_rel": 0.07370523675142096,
+     "n_values": 16,
+     "n_tensors": 4,
+     "finite_mismatch": 0
+    },
+    "pool/w": {
+     "max_abs": 0.02503533661365509,
+     "max_rel": 1.3305006066924154,
+     "n_values": 246144,
+     "n_tensors": 4,
+     "finite_mismatch": 0
+    },
+    "pool_best/w": {
+     "max_abs": 0.02503533661365509,
+     "max_rel": 1.3305006066924154,
+     "n_values": 246144,
+     "n_tensors": 4,
+     "finite_mismatch": 0
+    }
+   },
+   "discrete": {
+    "disc/dec_base_live/best": {
+     "mismatches": 0,
+     "total": 18238,
+     "sequences_differing": 0,
+     "sequences": 10
+    },
+    "disc/dec_fulltrial/best": {
+     "mismatches": 4707,
+     "total": 61695,
+     "sequences_differing": 49,
+     "sequences": 50
+    },
+    "disc/dec_fulltrial/best50": {
+     "mismatches": 945,
+     "total": 12318,
+     "sequences_differing": 49,
+     "sequences": 50
+    },
+    "disc/dec_pool/best": {
+     "mismatches": 5572,
+     "total": 61695,
+     "sequences_differing": 49,
+     "sequences": 50
+    },
+    "disc/dec_pool/best50": {
+     "mismatches": 1100,
+     "total": 12318,
+     "sequences_differing": 49,
+     "sequences": 50
+    },
+    "disc/dec_ref/best": {
+     "mismatches": 0,
+     "total": 61695,
+     "sequences_differing": 0,
+     "sequences": 50
+    },
+    "disc/dec_ref/best50": {
+     "mismatches": 0,
+     "total": 12318,
+     "sequences_differing": 0,
+     "sequences": 50
+    },
+    "id_fulltrial/null_rank": {
+     "mismatches": 32,
+     "total": 50
+    },
+    "id_fulltrial/phone_errors": {
+     "mismatches": 31,
+     "total": 50
+    },
+    "id_fulltrial/rank": {
+     "mismatches": 16,
+     "total": 50
+    },
+    "id_pool/null_rank": {
+     "mismatches": 39,
+     "total": 50
+    },
+    "id_pool/phone_errors": {
+     "mismatches": 36,
+     "total": 50
+    },
+    "id_pool/rank": {
+     "mismatches": 21,
+     "total": 50
+    },
+    "id_ref/null_rank": {
+     "mismatches": 0,
+     "total": 50
+    },
+    "id_ref/phone_errors": {
+     "mismatches": 0,
+     "total": 50
+    },
+    "id_ref/rank": {
+     "mismatches": 0,
+     "total": 50
+    }
+   },
+   "missing_in_a": [],
+   "missing_in_b": [
+    "asr_ref/feat_r",
+    "asr_ref/wer_fixed",
+    "asr_ref/wer_orig",
+    "discrete:asr_ref"
+   ]
+  },
+  "vast3:vast3-1~vast3:vast3-2": {
+   "continuous": {
+    "base/log": {
+     "max_abs": 0.0,
+     "max_rel": 0.0,
+     "n_values": 22,
+     "n_tensors": 11,
+     "finite_mismatch": 0
+    },
+    "base/w": {
+     "max_abs": 0.0,
+     "max_rel": 0.0,
+     "n_values": 14712637,
+     "n_tensors": 108,
+     "finite_mismatch": 0
+    },
+    "base_leg1/w": {
+     "max_abs": 0.0,
+     "max_rel": 0.0,
+     "n_values": 14712637,
+     "n_tensors": 108,
+     "finite_mismatch": 0
+    },
+    "dec_base_live/cont": {
+     "max_abs": 0.0,
+     "max_rel": 0.0,
+     "n_values": 364760,
+     "n_tensors": 10,
+     "finite_mismatch": 0
+    },
+    "dec_fulltrial/cont": {
+     "max_abs": 0.0,
+     "max_rel": 0.0,
+     "n_values": 1233900,
+     "n_tensors": 50,
+     "finite_mismatch": 0
+    },
+    "dec_fulltrial/lp50": {
+     "max_abs": 0.0,
+     "max_rel": 0.0,
+     "n_values": 505038,
+     "n_tensors": 50,
+     "finite_mismatch": 0
+    },
+    "dec_pool/cont": {
+     "max_abs": 0.0,
+     "max_rel": 0.0,
+     "n_values": 1233900,
+     "n_tensors": 50,
+     "finite_mismatch": 0
+    },
+    "dec_pool/lp50": {
+     "max_abs": 0.0,
+     "max_rel": 0.0,
+     "n_values": 505038,
+     "n_tensors": 50,
+     "finite_mismatch": 0
+    },
+    "dec_ref/cont": {
+     "max_abs": 0.0,
+     "max_rel": 0.0,
+     "n_values": 1233900,
+     "n_tensors": 50,
+     "finite_mismatch": 0
+    },
+    "dec_ref/lp50": {
+     "max_abs": 0.0,
+     "max_rel": 0.0,
+     "n_values": 505038,
+     "n_tensors": 50,
+     "finite_mismatch": 0
+    },
+    "fulltrial/log": {
+     "max_abs": 0.0,
+     "max_rel": 0.0,
+     "n_values": 12,
+     "n_tensors": 3,
+     "finite_mismatch": 0
+    },
+    "fulltrial/w": {
+     "max_abs": 0.0,
+     "max_rel": 0.0,
+     "n_values": 196992,
+     "n_tensors": 2,
+     "finite_mismatch": 0
+    },
+    "pool/log": {
+     "max_abs": 0.0,
+     "max_rel": 0.0,
+     "n_values": 16,
+     "n_tensors": 4,
+     "finite_mismatch": 0
+    },
+    "pool/w": {
+     "max_abs": 0.0,
+     "max_rel": 0.0,
+     "n_values": 246144,
+     "n_tensors": 4,
+     "finite_mismatch": 0
+    },
+    "pool_best/w": {
+     "max_abs": 0.0,
+     "max_rel": 0.0,
+     "n_values": 246144,
+     "n_tensors": 4,
+     "finite_mismatch": 0
+    }
+   },
+   "discrete": {
+    "disc/dec_base_live/best": {
+     "mismatches": 0,
+     "total": 18238,
+     "sequences_differing": 0,
+     "sequences": 10
+    },
+    "disc/dec_fulltrial/best": {
+     "mismatches": 0,
+     "total": 61695,
+     "sequences_differing": 0,
+     "sequences": 50
+    },
+    "disc/dec_fulltrial/best50": {
+     "mismatches": 0,
+     "total": 12318,
+     "sequences_differing": 0,
+     "sequences": 50
+    },
+    "disc/dec_pool/best": {
+     "mismatches": 0,
+     "total": 61695,
+     "sequences_differing": 0,
+     "sequences": 50
+    },
+    "disc/dec_pool/best50": {
+     "mismatches": 0,
+     "total": 12318,
+     "sequences_differing": 0,
+     "sequences": 50
+    },
+    "disc/dec_ref/best": {
+     "mismatches": 0,
+     "total": 61695,
+     "sequences_differing": 0,
+     "sequences": 50
+    },
+    "disc/dec_ref/best50": {
+     "mismatches": 0,
+     "total": 12318,
+     "sequences_differing": 0,
+     "sequences": 50
+    },
+    "id_fulltrial/null_rank": {
+     "mismatches": 0,
+     "total": 50
+    },
+    "id_fulltrial/phone_errors": {
+     "mismatches": 0,
+     "total": 50
+    },
+    "id_fulltrial/rank": {
+     "mismatches": 0,
+     "total": 50
+    },
+    "id_pool/null_rank": {
+     "mismatches": 0,
+     "total": 50
+    },
+    "id_pool/phone_errors": {
+     "mismatches": 0,
+     "total": 50
+    },
+    "id_pool/rank": {
+     "mismatches": 0,
+     "total": 50
+    },
+    "id_ref/null_rank": {
+     "mismatches": 0,
+     "total": 50
+    },
+    "id_ref/phone_errors": {
+     "mismatches": 0,
+     "total": 50
+    },
+    "id_ref/rank": {
+     "mismatches": 0,
+     "total": 50
+    }
+   },
+   "missing_in_a": [],
+   "missing_in_b": []
+  }
+ }
+}
