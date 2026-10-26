@@ -1,0 +1,10 @@
+# D-098 T16 arm `l4`, fold a01: D-096 `unfreeze` with the decoder's first 4 Transformer layers trained (lr x0.1).
+#   PC (gq): /home/molin/wvx/envs/wvx-f5/bin/python -I scripts/train_b2v2_pool.py --config configs/experiments/b2v2_d098_t16_l4_a01.yaml
+base_experiment: configs/experiments/b2v2_d096_t16_unfreeze_a01.yaml
+
+run_name: b2v2_d098_t16_l4_a01
+
+b2v2:
+  pool:
+    decision: D-098
+    train_encoder_layers: [0, 1, 2, 3]

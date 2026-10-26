@@ -200,7 +200,7 @@ def adapt_full_trials(model, input_id, params, opt, data, split, b, t, run, ckpt
     model.train()
     for step in range(steps):
         for g in opt.param_groups:
-            g["lr"] = bm.lr_at(step, t)
+            g["lr"] = bm.lr_at(step, t) * g.get("scale", 1.0)
         pick = rng.integers(0, len(trials), B)
         outs = [trial_forward(trials[i], int(rng.integers(0, pool)), augment=step >= aug_from) for i in pick]
         loss = sum(o[0] for o in outs) / B
@@ -297,8 +297,18 @@ def main(argv=None) -> int:
             p.requires_grad_(False)
         for p in model.trainable_input_parameters(input_id):
             p.requires_grad_(True)
+    eset = set()
+    for i in (a or {}).get("train_encoder_layers") or []:   # D-098: encoder layers trained too, at encoder_lr_scale
+        for p in model.encoder.layers[int(i)].parameters():
+            p.requires_grad_(True)
+            eset.add(id(p))
     params = [p for p in model.parameters() if p.requires_grad]
-    opt = torch.optim.AdamW(params, lr=float(t["lr"]), weight_decay=float(t["weight_decay"]))
+    if eset:
+        groups = [{"params": [p for p in params if id(p) not in eset], "scale": 1.0},
+                  {"params": [p for p in params if id(p) in eset], "scale": float(a.get("encoder_lr_scale", 1.0))}]
+        opt = torch.optim.AdamW(groups, lr=float(t["lr"]), weight_decay=float(t["weight_decay"]))
+    else:
+        opt = torch.optim.AdamW(params, lr=float(t["lr"]), weight_decay=float(t["weight_decay"]))
     adv = None if (a and a.get("full_trial")) else t.get("adversarial")
     disc = dopt = None
     if adv:                                                     # D-086: the paper's multiscale discriminator
@@ -376,7 +386,7 @@ def main(argv=None) -> int:
         run_sum.update(d_loss=0.0, g_loss=0.0, fm=0.0)
     for step in range(start, steps):
         for g in opt.param_groups:
-            g["lr"] = bm.lr_at(step, t)
+            g["lr"] = bm.lr_at(step, t) * g.get("scale", 1.0)
         bt = bm.to_torch(q.get(), device)
         ws, wsil = bm.speech_weights(step, steps, t)
         with torch.autocast(device.type, dtype=torch.bfloat16, enabled=bf16):

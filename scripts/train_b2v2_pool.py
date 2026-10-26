@@ -147,6 +147,15 @@ def main(argv=None) -> int:
     log(f"{run}: {len(val)} validation trials ({P['decode_day']}); adapter {ad}; {len(params)} trainable tensors, "
         f"{sum(p.numel() for p in params):,} values; device {device}")
 
+    dcfg = P.get("distill")                             # D-099: D-086's voice target on inner trials
+    dtargets = {}
+    if dcfg:
+        with np.load(resolve_path(dcfg["targets"]), allow_pickle=False) as z:
+            dtargets = {int(k[1:]): z[k] for k in z.files if k.startswith("g")}
+        log(f"{run}: distillation targets for {len(dtargets)} trials (weight {dcfg['weight']})")
+    c0i, thr = int(b["data"]["speech_feature"]), float(b["data"]["speech_threshold"])
+    w_sp, w_sil = float(t["speech_weight"]), float(t["silence_weight"])
+
     def trial_loss(day, gid, inner, phase, augment=False):
         tr = day["data"].by_gid[gid]
         x, _ = day["data"].trial_arrays(tr)
@@ -156,12 +165,19 @@ def main(argv=None) -> int:
             tk = bd.augment_batch(tk[None], np.ones((1, n_tok), bool), rng, b["augmentation"])[0]
         tok = torch.as_tensor(tk, device=device)
         with torch.autocast(device.type, dtype=torch.bfloat16, enabled=bf16):
-            _, lg = bm.chunked_forward(model, tok, ctx, hop, day["input_id"], adapter=aname if inner else None)
+            c, lg = bm.chunked_forward(model, tok, ctx, hop, day["input_id"], adapter=aname if inner else None)
         lp = F.log_softmax(lg.float(), -1)[:, None]
         lab = torch.as_tensor([tr["label"]], dtype=torch.long, device=device).reshape(1, -1)
         loss = F.ctc_loss(lp, lab, torch.tensor([n_tok]), torch.tensor([len(tr["label"])]), blank=0,
                           reduction="sum", zero_infinity=True)
-        return loss / max(1, len(tr["label"]))
+        loss = loss / max(1, len(tr["label"]))
+        y = dtargets.get(int(gid)) if inner else None
+        if y is not None:                               # speech-weighted squared error to the target voice (D-086)
+            frames = phase + pool * np.arange(n_tok) + pool - 1
+            yt = torch.as_tensor(y[np.minimum(frames, len(y) - 1)].astype(np.float32), device=device)
+            w = torch.where(yt[:, c0i] > thr, w_sp, w_sil)
+            loss = loss + float(dcfg["weight"]) * (w * ((c.float() - yt) ** 2).mean(-1)).mean()
+        return loss
 
     def validate() -> float:
         model.eval()

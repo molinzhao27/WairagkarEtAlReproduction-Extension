@@ -93,20 +93,21 @@ def main(argv=None) -> int:
                 "per_points": 100 * (pooled_per(a, [p]) - pooled_per(b, [p])),
                 "p_per": wx(col(a, 0, [p]) - col(b, 0, [p])),
                 "rank_diff": float((col(a, 5, [p]) - col(b, 5, [p])).mean()), "p_rank": wx(col(a, 5, [p]) - col(b, 5, [p]))}
-    F = S["factors"]                                    # cells: base (no, no), joint (data), unfreeze (capacity), both
+    F = S.get("factors")                                # D-096's 2 x 2 (optional: D-098 has plain arms)
     m = {a: col(a, 0) for a in arms}
-    res["effects"] = {"data": wx((m[F["data_yes"][0]] + m[F["data_yes"][1]]) - (m[F["data_no"][0]] + m[F["data_no"][1]])),
+    res["effects"] = {} if not F else {"data": wx((m[F["data_yes"][0]] + m[F["data_yes"][1]]) - (m[F["data_no"][0]] + m[F["data_no"][1]])),
                       "data_points": 50 * float(((m[F["data_yes"][0]] + m[F["data_yes"][1]]) - (m[F["data_no"][0]] + m[F["data_no"][1]])).mean()),
                       "capacity": wx((m[F["cap_yes"][0]] + m[F["cap_yes"][1]]) - (m[F["cap_no"][0]] + m[F["cap_no"][1]])),
                       "capacity_points": 50 * float(((m[F["cap_yes"][0]] + m[F["cap_yes"][1]]) - (m[F["cap_no"][0]] + m[F["cap_no"][1]])).mean())}
-    out = {"decision": "D-096", "config": args.config, "code_version": code_version(),
+    out = {"decision": S.get("decision", "D-096"), "config": args.config, "code_version": code_version(),
            "created": datetime.datetime.now().isoformat(timespec="seconds"), "n_trials": len(keys), "settings": S,
            "results": res}
     dst = resolve_path(S["out"])
     dst.mkdir(parents=True, exist_ok=True)
     (dst / "strengthen.json").write_text(json.dumps(out, indent=1) + "\n")
     ps = list(parts)
-    L = ["# D-096: strengthening the other participants' inner-speech adaptation (held-out imagined blocks; "
+    title = S.get("title", "D-096: strengthening the other participants' inner-speech adaptation (held-out imagined blocks")
+    L = [f"# {title}; "
          f"{len(keys)} trials: " + ", ".join(f"{p} {parts[p]['n_trials']}" for p in ps) + ")", "",
          "| arm | PER | words read right | top-1 of 40 | mean rank | " + " | ".join(f"{p} PER / top-1" for p in ps)
          + " | PER vs baseline (p) | rank vs baseline (p) | primary |", "|---|" + "---|" * (7 + len(ps))]
@@ -118,9 +119,10 @@ def main(argv=None) -> int:
                  + (f" | {vb['per_points']:+.1f} ({vb['p_per']:.2g}) | {vb['rank_diff']:+.1f} ({vb['p_rank']:.2g}) | "
                     f"{'met' if vb['primary_met'] else 'not met'} |" if vb else " | – | – | – |"))
     e = res["effects"]
-    L += ["", f"2 x 2 (PER points, per trial): more data {e['data_points']:+.2f} (p {e['data']:.2g}); "
-          f"more capacity {e['capacity_points']:+.2f} (p {e['capacity']:.2g}).", "",
-          f"Primary (each arm vs `{b}`: pooled PER >= {S['min_gain']} points lower, paired p < {S['alpha']})."]
+    if e:
+        L += ["", f"2 x 2 (PER points, per trial): more data {e['data_points']:+.2f} (p {e['data']:.2g}); "
+              f"more capacity {e['capacity_points']:+.2f} (p {e['capacity']:.2g})."]
+    L += ["", f"Primary (each arm vs `{b}`: pooled PER >= {S['min_gain']} points lower, paired p < {S['alpha']})."]
     (dst / "strengthen.md").write_text("\n".join(L) + "\n")
     print("\n".join(L))
     return 0

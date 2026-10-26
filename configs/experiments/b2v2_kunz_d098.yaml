@@ -1,0 +1,26 @@
+# D-098 T15 analysis (PC CPU, gq; scripts/d094_length.py): deeper adaptation of T15's inner speech.
+base_experiment: configs/experiments/b2v2_kunz_base.yaml
+
+run_name: b2v2_kunz_d098
+
+b2v2:
+  d094:
+    decision: D-098
+    title: "D-098: T15's inner speech, 1 vs 2 vs 4 decoder layers trained (PC; 200 held-out March trials, 2 seeds)"
+    out: results/b2v2/d098_t15
+    n_trials: 200
+    alpha: 0.025
+    min_gain: 3.0
+    seeds: [s0, s1]
+    lengths: [l1, l2, l4]
+    primary: [{a: l2, b: l1}, {a: l4, b: l1}]
+    secondary: [{a: l4, b: l2}]
+    baselines:
+      gan_read: {runs: [b2v2_kunz_d086_ganread_k03, b2v2_kunz_d086_ganread_k06, b2v2_kunz_d086_ganread_k11, b2v2_kunz_d086_ganread_k13], identify: d086_gan_read}
+    cells:
+      l1_s0: {runs: [b2v2_kunz_d097_unfreeze_s0_k03, b2v2_kunz_d097_unfreeze_s0_k06, b2v2_kunz_d097_unfreeze_s0_k11, b2v2_kunz_d097_unfreeze_s0_k13], identify: d097_unfreeze_s0}
+      l1_s1: {runs: [b2v2_kunz_d097_unfreeze_s1_k03, b2v2_kunz_d097_unfreeze_s1_k06, b2v2_kunz_d097_unfreeze_s1_k11, b2v2_kunz_d097_unfreeze_s1_k13], identify: d097_unfreeze_s1}
+      l2_s0: {runs: [b2v2_kunz_d098_l2_s0_k03, b2v2_kunz_d098_l2_s0_k06, b2v2_kunz_d098_l2_s0_k11, b2v2_kunz_d098_l2_s0_k13], identify: d098_l2_s0}
+      l2_s1: {runs: [b2v2_kunz_d098_l2_s1_k03, b2v2_kunz_d098_l2_s1_k06, b2v2_kunz_d098_l2_s1_k11, b2v2_kunz_d098_l2_s1_k13], identify: d098_l2_s1}
+      l4_s0: {runs: [b2v2_kunz_d098_l4_s0_k03, b2v2_kunz_d098_l4_s0_k06, b2v2_kunz_d098_l4_s0_k11, b2v2_kunz_d098_l4_s0_k13], identify: d098_l4_s0}
+      l4_s1: {runs: [b2v2_kunz_d098_l4_s1_k03, b2v2_kunz_d098_l4_s1_k06, b2v2_kunz_d098_l4_s1_k11, b2v2_kunz_d098_l4_s1_k13], identify: d098_l4_s1}

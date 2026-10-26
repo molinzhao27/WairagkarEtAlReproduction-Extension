@@ -1,0 +1,18 @@
+# D-098 T12/T16 analysis (PC CPU, gq; scripts/d096_strengthen.py): deeper adaptation and stage A with the first layer.
+base_experiment: configs/experiments/b2v2_kunz_base.yaml
+
+run_name: b2v2_d098
+
+b2v2:
+  d096:
+    out: results/b2v2/d098
+    title: "D-098: T12/T16 inner speech, deeper adaptation (held-out imagined blocks)"
+    alpha: 0.0167                    # three arms (Bonferroni)
+    min_gain: 3.0
+    baseline: l1
+    arms: [l2, l4, stagea]
+    run_pattern: {l1: "b2v2_d096_{p}_unfreeze_{f}", l2: "b2v2_d098_{p}_l2_{f}", l4: "b2v2_d098_{p}_l4_{f}", stagea: "b2v2_d098_{p}_stagea_{f}"}
+    identify_pattern: {l1: "d096_{p}_unfreeze", l2: "d098_{p}_l2", l4: "d098_{p}_l4", stagea: "d098_{p}_stagea"}
+    participants:
+      t12: {data_dir: data/processed/b2v2_t12, folds: [1, 4, 6, 8, 10], n_trials: 200}
+      t16: {data_dir: data/processed/b2v2_t16, folds: [1, 4, 6], n_trials: 120}

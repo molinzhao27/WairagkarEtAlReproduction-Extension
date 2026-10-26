@@ -1,0 +1,11 @@
+# D-098 T16 arm `stagea`, fold a06: D-096 `unfreeze` (inner speech, input + first layer) started from the stage A model
+# that also trained the first layer (b2v2_d098_t16_transfer1_a06) instead of D-095's input-only one.
+#   PC (gq): /home/molin/wvx/envs/wvx-f5/bin/python -I scripts/train_b2v2_pool.py --config configs/experiments/b2v2_d098_t16_stagea_a06.yaml
+base_experiment: configs/experiments/b2v2_d096_t16_unfreeze_a06.yaml
+
+run_name: b2v2_d098_t16_stagea_a06
+
+b2v2:
+  pool:
+    decision: D-098
+    init: data/checkpoints/b2v2_d098_t16_transfer1_a06/best.pt
