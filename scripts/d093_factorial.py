@@ -35,7 +35,7 @@ _spec.loader.exec_module(_d086)
 
 def per_trial(spec, data) -> dict:
     """{gid: (PER, words read right, top-1, phoneme errors, reference phonemes)} for one cell x seed (or a
-    baseline): ``spec`` = {runs, identify}. Stops if a run has no split.json or decoded a trial of its own training or
+    baseline): ``spec`` = {runs, identify[, pred: the decode's name, default imagined]}. Stops if a run has no split.json or decoded a trial of its own training or
     validation split (D-093 scoring error)."""
     import numpy as np
 
@@ -54,7 +54,8 @@ def per_trial(spec, data) -> dict:
                 seen |= set(d.get("inner", [])) | set(d.get("attempted", []))
         else:
             raise SystemExit(f"{run}: no split.json to check the decoded trials against")
-        with np.load(resolve_path("data/processed/b2v2_preds") / run / "imagined.npz", allow_pickle=False) as z:
+        with np.load(resolve_path("data/processed/b2v2_preds") / run / f"{spec.get('pred', 'imagined')}.npz",
+                     allow_pickle=False) as z:
             gids_run = [int(g) for g in json.loads(str(z["header"]))["gids"]]
             if set(gids_run) & seen:
                 raise SystemExit(f"{run}: {len(set(gids_run) & seen)} decoded trials are in its training split")

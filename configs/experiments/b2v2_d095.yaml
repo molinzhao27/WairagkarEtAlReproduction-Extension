@@ -1,0 +1,15 @@
+# D-095 analysis (PC CPU, gq): T15's voice decoder for T12 and T16, stage A (attempted) and B (inner speech).
+#   PC: CUDA_VISIBLE_DEVICES= .venv/bin/python -I scripts/d095_generalize.py --config configs/experiments/b2v2_d095.yaml
+base_experiment: configs/experiments/b2v2_kunz_base.yaml
+
+run_name: b2v2_d095
+
+b2v2:
+  d095:
+    out: results/b2v2/d095
+    alpha_a: 0.05                    # stage A primary: transfer ranks the true sentence better than random
+    alpha_gate: 0.01                 # stage B runs for a participant only if transfer beats its length-matched null
+    alpha_b: 0.01                    # stage B primary: adapted inner speech beats its null
+    participants:
+      t12: {data_dir: data/processed/b2v2_t12, folds: [1, 4, 6, 8, 10]}
+      t16: {data_dir: data/processed/b2v2_t16, folds: [1, 4, 6]}
