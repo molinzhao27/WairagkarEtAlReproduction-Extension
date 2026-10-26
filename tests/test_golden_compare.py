@@ -59,3 +59,15 @@ def test_floor_falls_back_to_repeat_runs_for_one_machine_outputs(tmp_path):
     f = gc.build_floor([p1, p2, v1], tmp_path / "floor.json")["floor"]["continuous"]
     assert f["base/w"]["source"] == "cross-machine" and abs(f["base/w"]["max_abs"] - 0.001) < 1e-5
     assert f["asr_ref/wer_orig"]["source"] == "same-machine" and f["asr_ref/wer_orig"]["max_abs"] == 0.25
+
+
+def test_ongoing_mode_holds_training_to_the_same_machine_floor(tmp_path):
+    p1 = _run(tmp_path / "p1", "pc", [1.0, 2.0], [0, 3], 1)
+    p2 = _run(tmp_path / "p2", "pc", [1.0, 2.0], [0, 3], 1)
+    v1 = _run(tmp_path / "v1", "vast3", [1.0, 2.001], [0, 3], 1)
+    doc = gc.build_floor([p1, p2, v1], tmp_path / "floor.json")
+    assert doc["floor_same_machine"]["continuous"]["base/w"]["max_abs"] == 0
+    assert "dec_ref/cont" in doc["forward_only_groups"] and "base/w" not in doc["forward_only_groups"]
+    cand = _run(tmp_path / "c", "pc", [1.0, 2.0005], [0, 3], 1)          # a training change within the cross floor
+    assert not gc.verdict(gc.pair(cand, p1), doc, "ongoing")["pass"]
+    assert gc.verdict(gc.pair(cand, p1), doc, "new")["pass"]
