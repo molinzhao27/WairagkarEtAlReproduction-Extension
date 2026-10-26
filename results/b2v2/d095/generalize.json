@@ -1,0 +1,160 @@
+{
+ "decision": "D-095",
+ "config": "configs/experiments/b2v2_d095.yaml",
+ "code_version": {
+  "source": "sync",
+  "commit": "f47aed743ec9a8b55ad85f1b2fccc6ed0accc744",
+  "dirty": false,
+  "diff_sha256": null,
+  "pushed_at": "2026-10-26T03:02:12Z"
+ },
+ "created": "2026-10-26T04:07:43",
+ "settings": {
+  "out": "results/b2v2/d095",
+  "alpha_a": 0.05,
+  "alpha_gate": 0.01,
+  "alpha_b": 0.01,
+  "participants": {
+   "t12": {
+    "data_dir": "data/processed/b2v2_t12",
+    "folds": [
+     1,
+     4,
+     6,
+     8,
+     10
+    ]
+   },
+   "t16": {
+    "data_dir": "data/processed/b2v2_t16",
+    "folds": [
+     1,
+     4,
+     6
+    ]
+   }
+  }
+ },
+ "results": {
+  "t12": {
+   "A": {
+    "transfer": {
+     "n": 200,
+     "top1": 0.115,
+     "mean_rank": 15.135,
+     "null_mean_rank": 20.415,
+     "p_vs_null": 1.1264518213808143e-24,
+     "per": 0.8762802130274477,
+     "words_read_right": 0.046934523809523815
+    },
+    "random": {
+     "n": 200,
+     "top1": 0.025,
+     "mean_rank": 20.005,
+     "null_mean_rank": 20.515,
+     "p_vs_null": 3.536793303920184e-05,
+     "per": 0.9852519459238017,
+     "words_read_right": 0.0
+    },
+    "n_candidates": 40,
+    "transfer_minus_random_rank": -4.87,
+    "p_transfer_vs_random": 1.4752723509855956e-19,
+    "whisper_transfer": {
+     "wer": 1.0214030915576695,
+     "wer_sped_up": 0.9750297265160524,
+     "words": 841
+    },
+    "primary_met": true,
+    "gate_met": true
+   },
+   "inner_zero_shot": {
+    "n": 200,
+    "top1": 0.03,
+    "mean_rank": 19.785,
+    "null_mean_rank": 20.275,
+    "p_vs_null": 0.006099790112158228,
+    "per": 0.9709135600163867,
+    "words_read_right": 0.0034999999999999996
+   },
+   "B": {
+    "adapted": {
+     "n": 200,
+     "top1": 0.24,
+     "mean_rank": 10.76,
+     "null_mean_rank": 19.735,
+     "p_vs_null": 3.406334488527092e-27,
+     "per": 0.8086849651782057,
+     "words_read_right": 0.08800595238095238
+    },
+    "whisper": {
+     "wer": 1.1200951248513675,
+     "wer_sped_up": 1.0035671819262781,
+     "words": 841
+    },
+    "primary_met": true,
+    "adapted_minus_zero_shot_rank": -9.025,
+    "p_vs_zero_shot": 2.2681735882867198e-26
+   }
+  },
+  "t16": {
+   "A": {
+    "transfer": {
+     "n": 120,
+     "top1": 0.55,
+     "mean_rank": 5.391666666666667,
+     "null_mean_rank": 18.683333333333334,
+     "p_vs_null": 8.762300444645564e-21,
+     "per": 0.6432432432432432,
+     "words_read_right": 0.27415674603174606
+    },
+    "random": {
+     "n": 120,
+     "top1": 0.025,
+     "mean_rank": 20.4,
+     "null_mean_rank": 20.216666666666665,
+     "p_vs_null": 0.7751696676573507,
+     "per": 0.95,
+     "words_read_right": 0.0
+    },
+    "n_candidates": 40,
+    "transfer_minus_random_rank": -15.008333333333333,
+    "p_transfer_vs_random": 1.3763723775941393e-20,
+    "whisper_transfer": {
+     "wer": 0.8003731343283582,
+     "wer_sped_up": 0.789179104477612,
+     "words": 536
+    },
+    "primary_met": true,
+    "gate_met": true
+   },
+   "inner_zero_shot": {
+    "n": 120,
+    "top1": 0.025,
+    "mean_rank": 19.533333333333335,
+    "null_mean_rank": 20.725,
+    "p_vs_null": 5.416052273597319e-07,
+    "per": 0.9743243243243244,
+    "words_read_right": 0.014444444444444444
+   },
+   "B": {
+    "adapted": {
+     "n": 120,
+     "top1": 0.125,
+     "mean_rank": 13.875,
+     "null_mean_rank": 20.933333333333334,
+     "p_vs_null": 2.5473822896780065e-16,
+     "per": 0.8074324324324325,
+     "words_read_right": 0.11710317460317458
+    },
+    "whisper": {
+     "wer": 0.9533582089552238,
+     "wer_sped_up": 0.917910447761194,
+     "words": 536
+    },
+    "primary_met": true,
+    "adapted_minus_zero_shot_rank": -5.658333333333333,
+    "p_vs_zero_shot": 2.0989253767951173e-15
+   }
+  }
+ }
+}
