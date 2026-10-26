@@ -189,7 +189,7 @@ def adapt_full_trials(model, input_id, params, opt, data, split, b, t, run, ckpt
         res_dir.mkdir(parents=True, exist_ok=True)
         ckpt_dir.mkdir(parents=True, exist_ok=True)
         (res_dir / "split.json").write_text(json.dumps(split) + "\n")
-        logf = open(res_dir / "log.jsonl", "a")
+        logf = open(res_dir / "log.jsonl", "w")            # no resume here: a restarted run starts its log over
     t0, hist = time.time(), []
     best = validate()
     log(f"{run}: whole-trial CTC adaptation, {len(trials)} trials ({len(split['val'])} validation); "
@@ -371,7 +371,7 @@ def main(argv=None) -> int:
         res_dir.mkdir(parents=True, exist_ok=True)
         ckpt_dir.mkdir(parents=True, exist_ok=True)
         (res_dir / "split.json").write_text(json.dumps(split) + "\n")
-        logf = open(res_dir / "log.jsonl", "a")
+        logf = open(res_dir / "log.jsonl", "a" if start else "w")   # append only when resuming
 
     def save(name: str, step: int):
         ck = {"state": model.state_dict(), "opt": opt.state_dict(), "step": step, "best": best,

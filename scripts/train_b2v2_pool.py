@@ -202,7 +202,7 @@ def main(argv=None) -> int:
         ckpt_dir.mkdir(parents=True, exist_ok=True)
         (res_dir / "split.json").write_text(json.dumps(
             {"val": val, "days": {d["name"]: {"inner": d["inner"], "attempted": d["attempted"]} for d in days}}) + "\n")
-        logf = open(res_dir / "log.jsonl", "a")
+        logf = open(res_dir / "log.jsonl", "w")            # never resumes: a restarted run starts its log over
     t0, hist = time.time(), []
     best, total = None, 0
     for si, st in enumerate(stages):
