@@ -1,17 +1,18 @@
 {
- "decision": "D-096",
+ "decision": "D-098",
  "config": "configs/experiments/b2v2_d098.yaml",
  "code_version": {
   "source": "sync",
-  "commit": "c1d69f0c83c31203160947dbaa6d7246d3e2cbdc",
+  "commit": "6e26c1f45e093d7e04837b7f3f5f92175b2b3f91",
   "dirty": false,
   "diff_sha256": null,
-  "pushed_at": "2026-10-26T07:16:34Z"
+  "pushed_at": "2026-10-26T19:15:42Z"
  },
- "created": "2026-10-26T13:15:46",
+ "created": "2026-10-26T19:15:43",
  "n_trials": 320,
  "settings": {
   "out": "results/b2v2/d098",
+  "decision": "D-098",
   "title": "D-098: T12/T16 inner speech, deeper adaptation (held-out imagined blocks)",
   "alpha": 0.0167,
   "min_gain": 3.0,
