@@ -66,6 +66,20 @@ def _normalize(x: np.ndarray, blocks: np.ndarray, feature: str, norm: dict, bin_
     raise ValueError(f"unknown normalization method {method!r}")
 
 
+def resample_raw(sp, tx, blocks, go, delay, src_ms: int, dst_ms: int):
+    """Raw Kunz arrays at ``src_ms`` bins -> ``dst_ms`` bins (D-095: T12/T16 record 20 ms, T16's eval block 33 ms):
+    bin i takes the source bin covering its start; threshold-crossing counts are scaled to a per-``dst_ms`` rate
+    (spike-band power is a mean, unchanged). Epochs (1-based, inclusive) map to the bins covering the same time."""
+    n = int(round(sp.shape[0] * src_ms / dst_ms))
+    idx = np.minimum((np.arange(n) * dst_ms) // src_ms, sp.shape[0] - 1)
+
+    def ep(e):
+        a, b = e[:, 0].astype(np.int64), e[:, 1].astype(np.int64)
+        return np.stack([-(-(a - 1) * src_ms // dst_ms) + 1, np.minimum(-(-b * src_ms // dst_ms), n)], axis=1)
+
+    return sp[idx], tx[idx] * (dst_ms / src_ms), blocks[idx], ep(go), ep(delay)
+
+
 def load_condition(path, name: str, layer: int, adapter: dict) -> SessionData:
     """Load one Kunz file (e.g. the attempted or imagined 50-word file) as a SessionData.
 
@@ -76,11 +90,14 @@ def load_condition(path, name: str, layer: int, adapter: dict) -> SessionData:
     tx = m["binnedTX"].astype(np.float64)
     if sp.shape != tx.shape:
         raise ValueError(f"spikePow {sp.shape} and binnedTX {tx.shape} differ")
-    if int(np.asarray(m["binSize"]).squeeze()) != adapter["bin_ms"]:
+    src_ms = int(np.asarray(m["binSize"]).squeeze())
+    if src_ms != adapter["bin_ms"] and not adapter.get("resample"):
         raise ValueError(f"binSize {m['binSize']} != configured {adapter['bin_ms']} ms")
     blocks = m["blockNum"].ravel().astype(int)
     go = m["goTrialEpochs"].astype(int)
     delay = m["delayTrialEpochs"].astype(int)
+    if src_ms != adapter["bin_ms"]:                             # adapter["resample"]: other participants (D-095)
+        sp, tx, blocks, go, delay = resample_raw(sp, tx, blocks, go, delay, src_ms, int(adapter["bin_ms"]))
     cues = _cellstr(m["sentenceText"])
     decoded = _cellstr(m["decodedSentenceText"])
 

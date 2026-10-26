@@ -6,11 +6,11 @@
         --out data/processed/b2v2_t12
 
 Reads ``<raw>/<session>_{attempted_50words,imagined_50words,imagined_50words_eval}.mat`` (Kunz et al., Dryad
-doi:10.5061/dryad.gf1vhhn1j) with T15's preprocessing (``wvx.kunz.load_condition``, configs/data/kunz.yaml: log,
-rolling 10 s z-score, causal smoothing; all its parameters are in ms, so each file is processed at its own bin size,
-20 ms for T12/T16, 33 ms for T16's eval block). Then, per trial (the go window), the features are brought to T15's
-10 ms bins (bin i <- the source bin covering its start, i.e. repetition for 20 ms) and each feature type is zero-padded
-to 256 channels (T12 has 128: [spike-band power, 0, threshold crossings, 0]), so the 512-wide input of T15's decoder
+doi:10.5061/dryad.gf1vhhn1j). The raw arrays are first brought to T15's 10 ms bins (20 ms for T12/T16, 33 ms for
+T16's eval block; ``wvx.kunz.resample_raw``: bin i <- the source bin covering its start, threshold crossings scaled
+to a per-10 ms rate), then processed exactly as T15's (``wvx.kunz.load_condition``, configs/data/kunz.yaml: log,
+rolling 10 s z-score, causal smoothing, its 10 ms parameters). Per trial (the go window) each feature type is
+zero-padded to 256 channels (T12 has 128: [spike-band power, 0, threshold crossings, 0]), so the 512-wide input of T15's decoder
 takes them; a new, freshly initialized input projection learns the mapping (D-095). Channels do not correspond to
 T15's. Labels: each word's phonemes as in T15's table (``--lexicon``; all CMUdict first pronunciations), else its
 CMUdict first pronunciation (stress removed). Writes ``neural.f16``, ``target.f32`` (zeros), ``meta.json`` (trials as
@@ -31,15 +31,6 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 from wvx.config import load_yaml, resolve_path  # noqa: E402
 
 CONDITIONS = {"attempted": "attempted_50words", "imagined": "imagined_50words", "imagined_eval": "imagined_50words_eval"}
-
-
-def to_10ms(x, bin_ms: float):
-    """(T, F) at ``bin_ms`` -> (round(T * bin_ms / 10), F): each 10 ms bin takes the source bin covering its start."""
-    import numpy as np
-
-    n = int(round(x.shape[0] * bin_ms / 10))
-    idx = np.minimum((np.arange(n) * 10) // bin_ms, x.shape[0] - 1).astype(int)
-    return x[idx]
 
 
 def main(argv=None) -> int:
@@ -82,7 +73,7 @@ def main(argv=None) -> int:
     for cond, suffix in CONDITIONS.items():
         path = resolve_path(args.raw) / f"{args.session}_{suffix}.mat"
         bms = int(np.asarray(scipy.io.loadmat(path, variable_names=["binSize"])["binSize"]).squeeze())
-        sess[cond] = kunz.load_condition(path, f"{args.session}_{cond}", 1, dict(adapter, bin_ms=bms))
+        sess[cond] = kunz.load_condition(path, f"{args.session}_{cond}", 1, dict(adapter, resample=True))
         bins[cond] = bms
     attempted = {}
     for t in sess["attempted"].trials:
@@ -98,7 +89,7 @@ def main(argv=None) -> int:
             if f > C:
                 raise SystemExit(f"{f} channels > {C}")
             pad = np.zeros((x.shape[0], C - f), np.float32)
-            x = to_10ms(np.concatenate([x[:, :f], pad, x[:, f:], pad], axis=1), bins[cond])
+            x = np.concatenate([x[:, :f], pad, x[:, f:], pad], axis=1)
             n = x.shape[0]
             fn.write(x.astype(np.float16).tobytes())
             ft.write(np.zeros((n, 20), np.float32).tobytes())

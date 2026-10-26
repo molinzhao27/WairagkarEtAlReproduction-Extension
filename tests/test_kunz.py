@@ -133,3 +133,22 @@ def test_wairagkar_normalization_runs_per_block_before_slicing(kunz_file):
     alt = wairagkar_transform(sp2, blocks, "spikepow", norm["params"], 10)
     np.testing.assert_array_equal(alt[~b3], exp_sp[~b3])
     assert not np.allclose(alt[b3], exp_sp[b3])
+
+
+def test_resample_raw_20ms_and_33ms_to_10ms():
+    """D-095: other participants' 20/33 ms bins -> 10 ms; epochs cover the same time, counts become a 10 ms rate."""
+    import numpy as np
+
+    from wvx.kunz import resample_raw
+
+    sp = np.arange(6, dtype=float)[:, None]
+    tx = np.full((6, 1), 4.0)
+    blocks = np.array([1, 1, 1, 2, 2, 2])
+    go = np.array([[2, 3], [4, 6]])                      # 1-based inclusive source bins
+    s, t, b, g, d = resample_raw(sp, tx, blocks, go, go, 20, 10)
+    assert s.ravel().tolist() == [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5] and (t == 2.0).all()
+    assert b.tolist() == [1] * 6 + [2] * 6
+    assert g.tolist() == [[3, 6], [7, 12]] and (b[2:6] == 1).all() and (b[6:12] == 2).all()
+    s, t, b, g, d = resample_raw(sp, tx, blocks, np.array([[1, 3]]), np.array([[1, 3]]), 33, 10)
+    assert len(s) == 20 and g.tolist() == [[1, 10]]      # 3 bins x 33 ms = 99 ms -> 10 ms bins 1..10
+    assert s[:10].ravel().tolist() == [0, 0, 0, 0, 1, 1, 1, 2, 2, 2]
