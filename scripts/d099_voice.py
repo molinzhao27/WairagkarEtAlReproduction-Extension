@@ -54,9 +54,9 @@ def main(argv=None) -> int:
         for spec in seeds:
             w = {}
             for run in spec["runs"]:
-                for r in json.loads((resolve_path("results/b2v2") / run / "scores_imagined.json").read_text())["rows"]:
+                for r in json.loads((resolve_path("results/b2v2") / run / f"scores_{spec.get('score', 'imagined')}.json").read_text())["rows"]:
                     w[int(r["gid"])] = (r["orig"]["errors"], r["fixed"]["errors"], r["orig"]["words"])
-            pt = _d093.per_trial({"runs": spec["runs"], "identify": spec["identify"], "pred": "imagined"}, data)
+            pt = _d093.per_trial({"runs": spec["runs"], "identify": spec["identify"], "pred": spec.get("pred", "imagined")}, data)
             if set(w) != set(pt):
                 raise SystemExit(f"{c}: Whisper and decodes cover different trials")
             per_seed.append({g: w[g] + pt[g] for g in pt})
@@ -87,13 +87,13 @@ def main(argv=None) -> int:
                        "p_per": wx(trial(a, 3) - trial(b, 3))}
     k = res["contrast"]
     res["primary_met"] = bool(k["wer_points"] <= -float(S["min_gain"]) and k["p_wer"] < float(S["alpha"]))
-    out = {"decision": "D-099", "config": args.config, "code_version": code_version(),
+    out = {"decision": S.get("decision", "D-099"), "config": args.config, "code_version": code_version(),
            "created": datetime.datetime.now().isoformat(timespec="seconds"), "n_trials": len(gids), "settings": S,
            "results": res}
     dst = resolve_path(S["out"])
     dst.mkdir(parents=True, exist_ok=True)
     (dst / "voice.json").write_text(json.dumps(out, indent=1) + "\n")
-    L = [f"# D-099: T15's inner-speech voice with D-086's voice target ({len(gids)} held-out trials, "
+    L = [f"# {S.get('title', 'D-099: T15 inner-speech voice with the D-086 voice target')} ({len(gids)} held-out trials, "
          f"{len(cells[a])} seeds)", "", "| cell | Whisper WER | WER sped up | PER | words read right | top-1 of 50 |",
          "|---|---|---|---|---|---|"]
     for c, r in res["cells"].items():

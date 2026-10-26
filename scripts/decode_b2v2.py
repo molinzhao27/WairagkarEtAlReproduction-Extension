@@ -59,6 +59,8 @@ def main(argv=None) -> int:
     ap.add_argument("--data-dir", default=None, help="override b2v2.data_dir (e.g. projected Kunz data, D-077)")
     ap.add_argument("--ctx", type=int, default=128, help="chunked: tokens per window")
     ap.add_argument("--hop", type=int, default=64, help="chunked: kept outputs per window after the first")
+    ap.add_argument("--save-logits", action="store_true",
+                    help="chunked: also store each 10 ms bin's phoneme log-probabilities (g<gid>_lp10, float16; D-200)")
     ap.add_argument("--ensemble", default=None,
                     help="D-089, chunked only: comma-separated checkpoints decoded and averaged (continuous outputs "
                          "averaged, phoneme probabilities averaged); the output goes under this config's run name")
@@ -117,6 +119,9 @@ def main(argv=None) -> int:
             out[f"g{g}_lp50"] = (lp - np.log(np.exp(lp).sum(-1, keepdims=True))).astype(np.float16)   # log-softmax
         out[f"g{g}_cont"] = c.astype(np.float32)
         out[f"g{g}_best"] = lg.argmax(-1).astype(np.uint8)
+        if args.save_logits and args.mode == "chunked":
+            l10 = lg - lg.max(-1, keepdims=True)
+            out[f"g{g}_lp10"] = (l10 - np.log(np.exp(l10).sum(-1, keepdims=True))).astype(np.float16)
     header = {"run_name": run, "checkpoint": ",".join(str(p) for p in paths),
               "checkpoint_sha256": ",".join(hashlib.sha256(p.read_bytes()).hexdigest() for p in paths),
               "input_id": input_id, "adapter": adapter, "trials": args.trials, "gids": gids, "mode": args.mode,

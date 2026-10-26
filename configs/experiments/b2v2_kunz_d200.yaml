@@ -1,0 +1,18 @@
+# D-200 analysis (PC CPU, gq; scripts/d099_voice.py): T15's inner-speech voice through the post-net vs the same decodes raw.
+base_experiment: configs/experiments/b2v2_kunz_base.yaml
+
+run_name: b2v2_kunz_d200
+
+b2v2:
+  d099:
+    decision: D-200
+    title: "D-200: T15's inner-speech voice through the causal post-net (voice from the read-out)"
+    out: results/b2v2/d200
+    n_trials: 200
+    alpha: 0.05
+    min_gain: 3.0
+    arm: postnet
+    baseline: raw
+    cells:
+      raw: [{runs: [b2v2_kunz_d097_unfreeze_s0_k03, b2v2_kunz_d097_unfreeze_s0_k06, b2v2_kunz_d097_unfreeze_s0_k11, b2v2_kunz_d097_unfreeze_s0_k13], identify: d097_unfreeze_s0, score: imagined_l10, pred: imagined_l10}, {runs: [b2v2_kunz_d097_unfreeze_s1_k03, b2v2_kunz_d097_unfreeze_s1_k06, b2v2_kunz_d097_unfreeze_s1_k11, b2v2_kunz_d097_unfreeze_s1_k13], identify: d097_unfreeze_s1, score: imagined_l10, pred: imagined_l10}]
+      postnet: [{runs: [b2v2_kunz_d097_unfreeze_s0_k03, b2v2_kunz_d097_unfreeze_s0_k06, b2v2_kunz_d097_unfreeze_s0_k11, b2v2_kunz_d097_unfreeze_s0_k13], identify: d097_unfreeze_s0, score: imagined_postnet, pred: imagined_l10}, {runs: [b2v2_kunz_d097_unfreeze_s1_k03, b2v2_kunz_d097_unfreeze_s1_k06, b2v2_kunz_d097_unfreeze_s1_k11, b2v2_kunz_d097_unfreeze_s1_k13], identify: d097_unfreeze_s1, score: imagined_postnet, pred: imagined_l10}]
