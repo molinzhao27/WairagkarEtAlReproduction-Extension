@@ -1,0 +1,7 @@
+# D-095: Kunz participant T16's 50-word session (scripts/build_b2v2_kunz_other.py) for identification / scoring.
+base_experiment: configs/experiments/b2v2_kunz_base.yaml
+
+run_name: b2v2_t16_z
+
+b2v2:
+  data_dir: data/processed/b2v2_t16

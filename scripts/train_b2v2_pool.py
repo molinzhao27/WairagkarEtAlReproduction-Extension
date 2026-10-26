@@ -79,14 +79,21 @@ def main(argv=None) -> int:
     for p in model.parameters():
         p.requires_grad_(False)
     cache, days = {}, []
+    drop_texts = set()                                  # D-095: never train on a sentence of the test block
+    for ex in P.get("exclude_sentences_of") or []:
+        dd = resolve_path(ex.get("data_dir") or P["days"][0]["data_dir"])
+        ds = cache.setdefault(dd, bd.B2V2Data(dd))
+        drop_texts |= {ds.by_gid[g]["text"] for g in select(ds, [ex])}
     for d in P["days"]:
         dd = resolve_path(d["data_dir"])
         if dd not in cache:
             cache[dd] = bd.B2V2Data(dd)
         data = cache[dd]
         iid = model.add_input(int(d.get("copy_from", 0)))
+        keep = (lambda gs, data=data: [g for g in gs if data.by_gid[g]["text"] not in drop_texts]) if drop_texts \
+            else (lambda gs: gs)
         days.append({"name": d["name"], "data": data, "input_id": iid,
-                     "inner": select(data, d.get("inner")), "attempted": select(data, d.get("attempted"))})
+                     "inner": keep(select(data, d.get("inner"))), "attempted": keep(select(data, d.get("attempted")))})
     ad = P.get("adapter")
     if ad:
         model.add_adapter(ad["name"], int(ad["rank"]))
@@ -123,7 +130,7 @@ def main(argv=None) -> int:
 
     # validation: the decode day's held-out inner trials, drawn as train_b2v2.split_trials draws them
     dec = next(d for d in days if d["name"] == P["decode_day"])
-    vpool = select(dec["data"], P["validation_from"])
+    vpool = [g for g in select(dec["data"], P["validation_from"]) if dec["data"].by_gid[g]["text"] not in drop_texts]
     vrng = np.random.default_rng(int(t["seed"]))
     val = sorted(int(g) for g in vrng.choice(vpool, size=int(P["n_validation"]), replace=False))
     dec["inner"] = [g for g in dec["inner"] if g not in set(val)]

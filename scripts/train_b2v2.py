@@ -289,6 +289,10 @@ def main(argv=None) -> int:
         model = bm.B2V2(init["model_cfg"]).to(device)
         model.load_state_dict(init["state"])
         input_id = model.add_input(int(a.get("copy_from", 0)), a.get("rank"))
+        if a.get("input_init") == "fresh":              # D-095: another participant's channels map to nothing of T15's
+            if a.get("rank") is not None:
+                raise SystemExit("input_init: fresh needs a full-rank input")
+            model.inputs[input_id].reset_parameters()
         for p in model.parameters():
             p.requires_grad_(False)
         for p in model.trainable_input_parameters(input_id):
