@@ -42,9 +42,10 @@ def test_floor_and_verdict(tmp_path):
     assert f["discrete"]["disc/dec_ref/best50"]["mismatches"] == 1
     assert f["discrete"]["disc/dec_ref/best50"]["sequences_differing"] == 0      # (3, 5) either way
     ok = _run(tmp_path / "ok", "pc", [1.0, 2.0005], [0, 3, 3, 0, 5], 1)
-    assert gc.verdict(gc.pair(ok, p1), doc)["pass"]
+    assert gc.verdict(gc.pair(ok, p1), doc, "new")["pass"]
+    assert not gc.verdict(gc.pair(ok, p1), doc)["pass"]               # ongoing: no repeat runs -> bit-identical
     big = _run(tmp_path / "big", "pc", [1.0, 2.01], [0, 3, 3, 0, 5], 2)
-    v = gc.verdict(gc.pair(big, p1), doc)
+    v = gc.verdict(gc.pair(big, p1), doc, "new")
     assert not v["pass"] and any("base/w" in x for x in v["reasons"]) and any("id_ref/rank" in x for x in v["reasons"])
 
 
