@@ -3,12 +3,12 @@
  "config": "configs/experiments/b2v2_kunz_d093.yaml",
  "code_version": {
   "source": "sync",
-  "commit": "fe2f2f1406762ae2069472e16cd4681f8f3295a7",
+  "commit": "2a73f423fb54c64597fba83e591888148ab26556",
   "dirty": false,
   "diff_sha256": null,
-  "pushed_at": "2026-10-25T21:49:19Z"
+  "pushed_at": "2026-10-25T22:15:26Z"
  },
- "created": "2026-10-25T21:52:48",
+ "created": "2026-10-25T22:15:43",
  "n_trials": 200,
  "settings": {
   "out": "results/b2v2/d093",
