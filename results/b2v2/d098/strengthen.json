@@ -1,0 +1,185 @@
+{
+ "decision": "D-096",
+ "config": "configs/experiments/b2v2_d098.yaml",
+ "code_version": {
+  "source": "sync",
+  "commit": "c1d69f0c83c31203160947dbaa6d7246d3e2cbdc",
+  "dirty": false,
+  "diff_sha256": null,
+  "pushed_at": "2026-10-26T07:16:34Z"
+ },
+ "created": "2026-10-26T13:15:46",
+ "n_trials": 320,
+ "settings": {
+  "out": "results/b2v2/d098",
+  "title": "D-098: T12/T16 inner speech, deeper adaptation (held-out imagined blocks)",
+  "alpha": 0.0167,
+  "min_gain": 3.0,
+  "baseline": "l1",
+  "arms": [
+   "l2",
+   "l4",
+   "stagea"
+  ],
+  "run_pattern": {
+   "l1": "b2v2_d096_{p}_unfreeze_{f}",
+   "l2": "b2v2_d098_{p}_l2_{f}",
+   "l4": "b2v2_d098_{p}_l4_{f}",
+   "stagea": "b2v2_d098_{p}_stagea_{f}"
+  },
+  "identify_pattern": {
+   "l1": "d096_{p}_unfreeze",
+   "l2": "d098_{p}_l2",
+   "l4": "d098_{p}_l4",
+   "stagea": "d098_{p}_stagea"
+  },
+  "participants": {
+   "t12": {
+    "data_dir": "data/processed/b2v2_t12",
+    "folds": [
+     1,
+     4,
+     6,
+     8,
+     10
+    ],
+    "n_trials": 200
+   },
+   "t16": {
+    "data_dir": "data/processed/b2v2_t16",
+    "folds": [
+     1,
+     4,
+     6
+    ],
+    "n_trials": 120
+   }
+  }
+ },
+ "results": {
+  "arms": {
+   "l1": {
+    "per": 0.697271104310125,
+    "words_read_right": 0.1886904761904762,
+    "top1": 0.40625,
+    "mean_rank": 7.053125,
+    "t12_per": 0.6661204424416223,
+    "t12_top1": 0.525,
+    "t12_mean_rank": 4.385,
+    "t16_per": 0.7486486486486487,
+    "t16_top1": 0.20833333333333334,
+    "t16_mean_rank": 11.5
+   },
+   "l2": {
+    "per": 0.7049222137209895,
+    "words_read_right": 0.17853422619047618,
+    "top1": 0.384375,
+    "mean_rank": 7.14375,
+    "t12_per": 0.668578451454322,
+    "t12_top1": 0.5,
+    "t12_mean_rank": 4.45,
+    "t16_per": 0.7648648648648648,
+    "t16_top1": 0.19166666666666668,
+    "t16_mean_rank": 11.633333333333333
+   },
+   "l4": {
+    "per": 0.6850293292527416,
+    "words_read_right": 0.19590401785714287,
+    "top1": 0.465625,
+    "mean_rank": 6.834375,
+    "t12_per": 0.6288406390823433,
+    "t12_top1": 0.615,
+    "t12_mean_rank": 3.585,
+    "t16_per": 0.7777027027027027,
+    "t16_top1": 0.21666666666666667,
+    "t16_mean_rank": 12.25
+   },
+   "stagea": {
+    "per": 0.6993114001530222,
+    "words_read_right": 0.1886049107142857,
+    "top1": 0.43125,
+    "mean_rank": 6.75,
+    "t12_per": 0.6698074559606718,
+    "t12_top1": 0.52,
+    "t12_mean_rank": 4.365,
+    "t16_per": 0.7479729729729729,
+    "t16_top1": 0.2833333333333333,
+    "t16_mean_rank": 10.725
+   }
+  },
+  "vs_baseline": {
+   "l2": {
+    "per_points": 0.7651109410864554,
+    "p_per": 0.7471440997683967,
+    "rank_diff": 0.090625,
+    "p_rank": 0.508502435692629,
+    "wrr_points": -1.015625,
+    "p_wrr": 0.4263670968547031,
+    "primary_met": false
+   },
+   "l4": {
+    "per_points": -1.224177505738333,
+    "p_per": 0.01835906571974471,
+    "rank_diff": -0.21875,
+    "p_rank": 0.1059913664504764,
+    "wrr_points": 0.7213541666666667,
+    "p_wrr": 0.47658125466647216,
+    "primary_met": false
+   },
+   "stagea": {
+    "per_points": 0.20402958428972218,
+    "p_per": 0.8107581417764431,
+    "rank_diff": -0.303125,
+    "p_rank": 0.10379464159133431,
+    "wrr_points": -0.008556547619047901,
+    "p_wrr": 0.8783632487032088,
+    "primary_met": false
+   }
+  },
+  "per_participant": {
+   "l2": {
+    "t12": {
+     "per_points": 0.2458009012699769,
+     "p_per": 0.8954809938432158,
+     "rank_diff": 0.065,
+     "p_rank": 0.8866443654501697
+    },
+    "t16": {
+     "per_points": 1.6216216216216162,
+     "p_per": 0.35949387610039085,
+     "rank_diff": 0.13333333333333333,
+     "p_rank": 0.24580366787033592
+    }
+   },
+   "l4": {
+    "t12": {
+     "per_points": -3.727980335927894,
+     "p_per": 5.761446196094843e-05,
+     "rank_diff": -0.8,
+     "p_rank": 0.0006487519247139971
+    },
+    "t16": {
+     "per_points": 2.9054054054054035,
+     "p_per": 0.05725031726739568,
+     "rank_diff": 0.75,
+     "p_rank": 0.1707340616916342
+    }
+   },
+   "stagea": {
+    "t12": {
+     "per_points": 0.36870135190495423,
+     "p_per": 0.8518893703166973,
+     "rank_diff": -0.02,
+     "p_rank": 0.6269538282735647
+    },
+    "t16": {
+     "per_points": -0.06756756756757243,
+     "p_per": 0.8274277508771845,
+     "rank_diff": -0.775,
+     "p_rank": 0.062240556365754686
+    }
+   }
+  },
+  "effects": {}
+ }
+}

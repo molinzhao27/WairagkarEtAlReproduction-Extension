@@ -1,0 +1,90 @@
+{
+ "decision": "D-099",
+ "config": "configs/experiments/b2v2_kunz_d099.yaml",
+ "code_version": {
+  "source": "sync",
+  "commit": "c1d69f0c83c31203160947dbaa6d7246d3e2cbdc",
+  "dirty": false,
+  "diff_sha256": null,
+  "pushed_at": "2026-10-26T07:16:34Z"
+ },
+ "created": "2026-10-26T07:52:12",
+ "n_trials": 200,
+ "settings": {
+  "out": "results/b2v2/d099",
+  "n_trials": 200,
+  "alpha": 0.05,
+  "min_gain": 3.0,
+  "arm": "voice",
+  "baseline": "base",
+  "cells": {
+   "base": [
+    {
+     "runs": [
+      "b2v2_kunz_d097_unfreeze_s0_k03",
+      "b2v2_kunz_d097_unfreeze_s0_k06",
+      "b2v2_kunz_d097_unfreeze_s0_k11",
+      "b2v2_kunz_d097_unfreeze_s0_k13"
+     ],
+     "identify": "d097_unfreeze_s0"
+    },
+    {
+     "runs": [
+      "b2v2_kunz_d097_unfreeze_s1_k03",
+      "b2v2_kunz_d097_unfreeze_s1_k06",
+      "b2v2_kunz_d097_unfreeze_s1_k11",
+      "b2v2_kunz_d097_unfreeze_s1_k13"
+     ],
+     "identify": "d097_unfreeze_s1"
+    }
+   ],
+   "voice": [
+    {
+     "runs": [
+      "b2v2_kunz_d099_voice_s0_k03",
+      "b2v2_kunz_d099_voice_s0_k06",
+      "b2v2_kunz_d099_voice_s0_k11",
+      "b2v2_kunz_d099_voice_s0_k13"
+     ],
+     "identify": "d099_voice_s0"
+    },
+    {
+     "runs": [
+      "b2v2_kunz_d099_voice_s1_k03",
+      "b2v2_kunz_d099_voice_s1_k06",
+      "b2v2_kunz_d099_voice_s1_k11",
+      "b2v2_kunz_d099_voice_s1_k13"
+     ],
+     "identify": "d099_voice_s1"
+    }
+   ]
+  }
+ },
+ "results": {
+  "cells": {
+   "base": {
+    "wer": 0.7334058759521218,
+    "wer_sped_up": 0.661044613710555,
+    "per": 0.4512850019179133,
+    "words_read_right": 0.4411934523809524,
+    "top1": 0.8525
+   },
+   "voice": {
+    "wer": 0.7431991294885745,
+    "wer_sped_up": 0.7045701849836778,
+    "per": 0.4543536632144227,
+    "words_read_right": 0.44184821428571425,
+    "top1": 0.8575
+   }
+  },
+  "contrast": {
+   "wer_points": 0.9793253536452662,
+   "p_wer": 0.5747652036223501,
+   "wer_sped_up_points": 4.352557127312284,
+   "p_wer_sped_up": 0.06329264752880649,
+   "per_points": 0.30686612965094007,
+   "p_per": 0.5160675590869421
+  },
+  "primary_met": false
+ }
+}

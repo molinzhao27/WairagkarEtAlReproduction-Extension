@@ -6,6 +6,7 @@ run_name: b2v2_d098
 b2v2:
   d096:
     out: results/b2v2/d098
+    decision: D-098
     title: "D-098: T12/T16 inner speech, deeper adaptation (held-out imagined blocks)"
     alpha: 0.0167                    # three arms (Bonferroni)
     min_gain: 3.0
