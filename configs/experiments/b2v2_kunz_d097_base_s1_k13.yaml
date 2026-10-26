@@ -1,0 +1,10 @@
+# D-097 cell `base`, seed 1, fold 13: D-093 `noad3k` (D-094's best T15 inner recipe: 3,000 steps, no adapter) re-run
+# unchanged on vast-3, so both D-097 cells share a machine.
+#   vast-3 (gq): /workspace/envs/wvx-torch/bin/python -I scripts/train_b2v2_pool.py --config configs/experiments/b2v2_kunz_d097_base_s1_k13.yaml
+base_experiment: configs/experiments/b2v2_kunz_d093_noad3k_s1_k13.yaml
+
+run_name: b2v2_kunz_d097_base_s1_k13
+
+b2v2:
+  pool:
+    decision: D-097

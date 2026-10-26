@@ -83,16 +83,17 @@ def main(argv=None) -> int:
         res["vs_baseline"][metric] = {n: {c: test(m[c] - np.array([x[g][j] for g in gids])) for c in lengths}
                                       for n, x in bases.items()}
     alpha = float(S["alpha"])
-    res["primary"] = {f"{k['a']}-{k['b']}": bool(res["contrasts"]["per"][f"{k['a']}-{k['b']}"]["mean_diff"] < 0
+    gain = float(S.get("min_gain", 0.0)) / 100        # D-097: at least this many PER points lower (D-094: 0)
+    res["primary"] = {f"{k['a']}-{k['b']}": bool(res["contrasts"]["per"][f"{k['a']}-{k['b']}"]["mean_diff"] < -gain
                                                   and res["contrasts"]["per"][f"{k['a']}-{k['b']}"]["p"] < alpha)
                       for k in S["primary"]}
-    out = {"decision": "D-094", "config": args.config, "code_version": code_version(),
+    out = {"decision": S.get("decision", "D-094"), "config": args.config, "code_version": code_version(),
            "created": datetime.datetime.now().isoformat(timespec="seconds"), "n_trials": len(gids), "settings": S,
            "results": res}
     dst = resolve_path(S["out"])
     dst.mkdir(parents=True, exist_ok=True)
-    (dst / "length.json").write_text(json.dumps(out, indent=1) + "\n")
-    L = ["# D-094: the inner-speech read-out vs training length (no adapter; 200 held-out March trials, 2 seeds)", "",
+    (dst / "length.json").write_text(json.dumps(out, indent=1) + "\n")   # (D-097 reuses this script)
+    L = [f"# {S.get('title', 'D-094: the inner-speech read-out vs training length (no adapter; 200 held-out March trials, 2 seeds)')}", "",
          "Baselines: " + "; ".join(f"`{n}` PER {100 * b['per']:.1f}%" for n, b in res["baselines"].items()) + ".", "",
          "| steps | PER " + " | PER ".join(S["seeds"]) + " | PER mean | words read right | top-1 | validation's step (per fold) | "
          + " | ".join(f"PER vs {n} (p)" for n in bases) + " |", "|---|" + "---|" * (len(S["seeds"]) + 4 + len(bases))]
@@ -110,7 +111,7 @@ def main(argv=None) -> int:
         tag = " (primary)" if name in res["primary"] else ""
         L.append(f"- {name}{tag}: PER {100 * cp['mean_diff']:+.2f} (p {cp['p']:.2g}); words read right "
                  f"{100 * cw['mean_diff']:+.2f} (p {cw['p']:.2g})")
-    L += ["", f"Primary (each counts if PER is lower with p < {alpha}): "
+    L += ["", f"Primary (each counts if PER is at least {100 * gain:.0f} points lower with p < {alpha}): "
           + "; ".join(f"{k} {'met' if v else 'not met'}" for k, v in res["primary"].items())]
     (dst / "length.md").write_text("\n".join(L) + "\n")
     print("\n".join(L))
