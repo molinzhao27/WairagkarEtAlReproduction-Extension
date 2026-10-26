@@ -1,0 +1,202 @@
+{
+ "decision": "D-097",
+ "config": "configs/experiments/b2v2_kunz_d097.yaml",
+ "code_version": {
+  "source": "sync",
+  "commit": "8fb5786a582b8656f4c935966a00a4985a156d65",
+  "dirty": false,
+  "diff_sha256": null,
+  "pushed_at": "2026-10-26T06:01:58Z"
+ },
+ "created": "2026-10-26T06:33:49",
+ "n_trials": 200,
+ "settings": {
+  "decision": "D-097",
+  "title": "D-097: T15's inner speech with the decoder's first layer trained too (PC; 200 held-out March trials, 2 seeds)",
+  "out": "results/b2v2/d097",
+  "n_trials": 200,
+  "alpha": 0.05,
+  "min_gain": 3.0,
+  "seeds": [
+   "s0",
+   "s1"
+  ],
+  "lengths": [
+   "base",
+   "unfreeze"
+  ],
+  "primary": [
+   {
+    "a": "unfreeze",
+    "b": "base"
+   }
+  ],
+  "secondary": [],
+  "baselines": {
+   "gan_read": {
+    "runs": [
+     "b2v2_kunz_d086_ganread_k03",
+     "b2v2_kunz_d086_ganread_k06",
+     "b2v2_kunz_d086_ganread_k11",
+     "b2v2_kunz_d086_ganread_k13"
+    ],
+    "identify": "d086_gan_read"
+   }
+  },
+  "cells": {
+   "base_s0": {
+    "runs": [
+     "b2v2_kunz_d093_noad3k_s0_k03",
+     "b2v2_kunz_d093_noad3k_s0_k06",
+     "b2v2_kunz_d093_noad3k_s0_k11",
+     "b2v2_kunz_d093_noad3k_s0_k13"
+    ],
+    "identify": "d093_noad3k_s0"
+   },
+   "base_s1": {
+    "runs": [
+     "b2v2_kunz_d093_noad3k_s1_k03",
+     "b2v2_kunz_d093_noad3k_s1_k06",
+     "b2v2_kunz_d093_noad3k_s1_k11",
+     "b2v2_kunz_d093_noad3k_s1_k13"
+    ],
+    "identify": "d093_noad3k_s1"
+   },
+   "unfreeze_s0": {
+    "runs": [
+     "b2v2_kunz_d097_unfreeze_s0_k03",
+     "b2v2_kunz_d097_unfreeze_s0_k06",
+     "b2v2_kunz_d097_unfreeze_s0_k11",
+     "b2v2_kunz_d097_unfreeze_s0_k13"
+    ],
+    "identify": "d097_unfreeze_s0"
+   },
+   "unfreeze_s1": {
+    "runs": [
+     "b2v2_kunz_d097_unfreeze_s1_k03",
+     "b2v2_kunz_d097_unfreeze_s1_k06",
+     "b2v2_kunz_d097_unfreeze_s1_k11",
+     "b2v2_kunz_d097_unfreeze_s1_k13"
+    ],
+    "identify": "d097_unfreeze_s1"
+   }
+  }
+ },
+ "results": {
+  "cells": {
+   "base": {
+    "s0": {
+     "per": 0.48484848484848486,
+     "words_read_right": 0.3958154761904762,
+     "top1": 0.86,
+     "best_steps": [
+      1600,
+      2600,
+      1100,
+      1000
+     ]
+    },
+    "s1": {
+     "per": 0.48676639815880324,
+     "words_read_right": 0.3935,
+     "top1": 0.84,
+     "best_steps": [
+      1300,
+      1700,
+      800,
+      2000
+     ]
+    },
+    "seed_mean": {
+     "per": 0.4858074415036441,
+     "words_read_right": 0.3946577380952381,
+     "top1": 0.85
+    }
+   },
+   "unfreeze": {
+    "s0": {
+     "per": 0.45301112389719983,
+     "words_read_right": 0.43837500000000007,
+     "top1": 0.845,
+     "best_steps": [
+      2900,
+      1500,
+      1100,
+      2400
+     ]
+    },
+    "s1": {
+     "per": 0.44955887993862675,
+     "words_read_right": 0.4440119047619048,
+     "top1": 0.86,
+     "best_steps": [
+      2000,
+      900,
+      2200,
+      1800
+     ]
+    },
+    "seed_mean": {
+     "per": 0.4512850019179133,
+     "words_read_right": 0.4411934523809524,
+     "top1": 0.8525
+    }
+   }
+  },
+  "contrasts": {
+   "per": {
+    "unfreeze-base": {
+     "mean_diff": -0.03249151880429138,
+     "p": 1.0076304207261945e-05,
+     "n": 200
+    }
+   },
+   "words_read_right": {
+    "unfreeze-base": {
+     "mean_diff": 0.046535714285714284,
+     "p": 1.4835462148780417e-05,
+     "n": 200
+    }
+   }
+  },
+  "vs_baseline": {
+   "per": {
+    "gan_read": {
+     "base": {
+      "mean_diff": -0.03371218021118664,
+      "p": 0.00016662458217492525,
+      "n": 200
+     },
+     "unfreeze": {
+      "mean_diff": -0.06620369901547803,
+      "p": 3.1294106920931303e-09,
+      "n": 200
+     }
+    }
+   },
+   "words_read_right": {
+    "gan_read": {
+     "base": {
+      "mean_diff": 0.020895833333333332,
+      "p": 0.07347990353304551,
+      "n": 200
+     },
+     "unfreeze": {
+      "mean_diff": 0.06743154761904763,
+      "p": 1.2315666085052628e-06,
+      "n": 200
+     }
+    }
+   }
+  },
+  "baselines": {
+   "gan_read": {
+    "per": 0.5186037591100883,
+    "words_read_right": 0.37376190476190474
+   }
+  },
+  "primary": {
+   "unfreeze-base": true
+  }
+ }
+}
