@@ -1,0 +1,19 @@
+# D-096 analysis (PC CPU, gq): strengthening T12's and T16's inner-speech adaptation (2 x 2 around D-095 stage B).
+#   PC: CUDA_VISIBLE_DEVICES= .venv/bin/python -I scripts/d096_strengthen.py --config configs/experiments/b2v2_d096.yaml
+base_experiment: configs/experiments/b2v2_kunz_base.yaml
+
+run_name: b2v2_d096
+
+b2v2:
+  d096:
+    out: results/b2v2/d096
+    alpha: 0.0167                    # three arms (Bonferroni)
+    min_gain: 3.0                    # PER points, as D-089 / D-091
+    baseline: base
+    arms: [joint, unfreeze, both]
+    run_pattern: {base: "b2v2_d095_{p}_inner_{f}", joint: "b2v2_d096_{p}_joint_{f}", unfreeze: "b2v2_d096_{p}_unfreeze_{f}", both: "b2v2_d096_{p}_both_{f}"}
+    identify_pattern: {base: "d095_{p}_inner", joint: "d096_{p}_joint", unfreeze: "d096_{p}_unfreeze", both: "d096_{p}_both"}
+    factors: {data_yes: [joint, both], data_no: [base, unfreeze], cap_yes: [unfreeze, both], cap_no: [base, joint]}
+    participants:
+      t12: {data_dir: data/processed/b2v2_t12, folds: [1, 4, 6, 8, 10], n_trials: 200}
+      t16: {data_dir: data/processed/b2v2_t16, folds: [1, 4, 6], n_trials: 120}

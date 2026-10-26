@@ -115,14 +115,20 @@ def main(argv=None) -> int:
         if ad and st.get("adapter", "train") == "train":
             for p in model.adapters[aname].parameters():
                 p.requires_grad_(True)
+        eset = set()                                    # D-096: encoder layers trained too, at encoder_lr_scale
+        for i in P.get("train_encoder_layers") or []:
+            for p in model.encoder.layers[int(i)].parameters():
+                p.requires_grad_(True)
+                eset.add(id(p))
         ps = [p for p in model.parameters() if p.requires_grad]
         aset = {id(p) for p in model.adapters[aname].parameters()} if ad else set()
         scale = float(st.get("adapter_lr_scale", 1.0))
-        if scale == 1.0:
+        if scale == 1.0 and not eset:
             groups = [{"params": ps, "scale": 1.0}]
         else:
-            groups = [{"params": [p for p in ps if id(p) not in aset], "scale": 1.0},
-                      {"params": [p for p in ps if id(p) in aset], "scale": scale}]
+            groups = [{"params": [p for p in ps if id(p) not in aset and id(p) not in eset], "scale": 1.0},
+                      {"params": [p for p in ps if id(p) in aset], "scale": scale},
+                      {"params": [p for p in ps if id(p) in eset], "scale": float(P.get("encoder_lr_scale", 1.0))}]
         return ps, torch.optim.AdamW([g for g in groups if g["params"]], lr=float(t["lr"]),
                                      weight_decay=float(t["weight_decay"]))
 
