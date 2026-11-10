@@ -1,9 +1,11 @@
 """wvx.postnet (D-200): identity at initialization, causality, the degradation."""
 
 import numpy as np
-import torch
+import pytest
 
-from wvx import postnet as pn
+torch = pytest.importorskip("torch")  # not in the TF env ``wvx``; as tests/test_b2v2_model.py
+
+from wvx import postnet as pn  # noqa: E402
 
 
 def test_identity_at_init_and_causal():
